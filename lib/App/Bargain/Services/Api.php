@@ -12,14 +12,10 @@ class Api
 
     private $modelAlphaUser;
 
-    private $_rtnMsgType = 'json';
-
     private $_isInstance = false;
 
-    public function __construct($rtnMsgType = 'json')
+    public function __construct()
     {
-        $this->_rtnMsgType = $rtnMsgType;
-        
         $this->modelBargain = new \App\Bargain\Models\Bargain();
         $this->modelLog = new \App\Bargain\Models\Log();
         $this->modelAlphaUser = new \App\Bargain\Models\AlphaUser();
@@ -78,19 +74,31 @@ class Api
     /**
      * 砍价
      *
-     * @param array $bargainInfo            
      * @param string $user_id            
-     * @param array $userInfo            
-     * @return array
+     * @param string $user_name            
+     * @param string $user_headimgurl            
+     * @param string $bargain_id            
+     * @param array $memo            
+     * @param boolean $isSystemDo            
      */
-    public function bargain($user_id, $user_name, $user_headimgurl, array $bargainInfo, array $memo = array('memo'=>''), $isSystemDo = false)
+    public function bargain($user_id, $user_name, $user_headimgurl, $bargain_id, array $memo = array('memo'=>''), $isSystemDo = false)
     {
         if ($this->_isInstance) {
             return $this->error(- 1, '每个实例只能执行一次砍价，如需反复砍价，请分别实例化\App\Bargain\Services\Api类');
         }
         $this->_isInstance = true;
         
+        // 锁定防止高并发,必须用的，否则就会砍穿的危险
+        $objLock = new \iLock($bargain_id);
+        if ($objLock->lock()) {
+            $ret['error_code'] = - 99;
+            $ret['error_msg'] = '处于锁定状态，请稍后尝试';
+            return $ret;
+        }
+        
         try {
+            // 获取砍价物
+            $bargainInfo = $this->modelBargain->getInfoById($bargain_id);
             // 人为砍价处理
             $ret = $this->doBargain($user_id, $user_name, $user_headimgurl, $bargainInfo, $memo, false);
             if (! empty($ret['error_code'])) {
@@ -179,19 +187,6 @@ class Api
             'result' => array()
         );
         
-        // 锁定防止高并发
-        $lockKey = cacheKey(__FILE__, __CLASS__, __METHOD__, $user_id);
-        $objLock = new \iLock($lockKey);
-        // 不能随便设置过期时间,只能设置成脚本执行时间
-        // 如果过期时间设置的过小的话,上个请求的写数据库操作还未完成,但是锁已经过期,所以另一个请求可以进来了,
-        // 这样在判断限制条件的时候,由于数据库的写操作还未完成,获取不到数据,通过了检查.导致出现了多发砍价实物的记录
-        // $objLock->setExpire(30);
-        if ($objLock->lock()) {
-            $ret['error_code'] = - 99;
-            $ret['error_msg'] = '处于锁定状态，请稍后尝试';
-            return $ret;
-        }
-        
         // 检查砍价物信息
         $bargainCheckResult = $this->checkBargain($bargainInfo);
         if (! empty($bargainCheckResult['error_code'])) {
@@ -254,11 +249,7 @@ class Api
             'message' => $msg,
             'result' => $result
         );
-        if ($this->_rtnMsgType == 'json') {
-            return json_encode($rst);
-        } else {
-            return $rst;
-        }
+        return $rst;
     }
 
     private function error($code, $msg)
@@ -268,12 +259,7 @@ class Api
             'error_code' => $code,
             'error_msg' => $msg
         );
-        
-        if ($this->_rtnMsgType == 'json') {
-            return json_encode($rst);
-        } else {
-            return $rst;
-        }
+        return $rst;
     }
 
     /**

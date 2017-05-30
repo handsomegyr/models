@@ -41,28 +41,8 @@ class Job extends \App\Common\Models\Cronjob\Job
                 '$gte' => $now
             )
         ));
-        $rst = array();
-        foreach ($cmds as $cmd) {
-            if (isset($cmd['last_execute_time']) && $cmd['last_execute_time'] instanceof \MongoDate) {
-                if (! empty($cmd['cron'])) {
-                    try {
-                        $cron = Cron\CronExpression::factory($cmd['cron']);
-                        if (! $cron->isDue()) {
-                            continue;
-                        }
-                    } catch (\Exception $e) {
-                        continue;
-                    }
-                } else {
-                    $cycle = isset($cmd['cycle']) ? $cmd['cycle'] : 0;
-                    if ($cmd['last_execute_time']->sec + $cycle * 60 > $nowTime) {
-                        continue;
-                    }
-                }
-            }
-            $rst[] = $cmd;
-        }
-        return $rst;
+        
+        return $cmds;
     }
 
     /**
