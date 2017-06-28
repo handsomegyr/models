@@ -20,7 +20,8 @@ class Base implements \App\Common\Models\Base\IBase
 
     public function __construct()
     {
-        $this->impl = new \App\Common\Models\Base\Mysql\Phalcon\Impl2($this);
+        // $this->impl = new \App\Common\Models\Base\Mysql\Phalcon\Impl2($this);
+        $this->impl = new \App\Common\Models\Base\Mysql\Pdo\Impl($this);
     }
 
     public function setPhql($isPhql)
