@@ -11,7 +11,6 @@ class User extends Base
      */
     public function getSource()
     {
-        die('getSource'.uniqid());
         return 'user';
     }
 }
