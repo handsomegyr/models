@@ -352,4 +352,54 @@ class ComponentApplication extends \App\Common\Models\Weixin\ComponentApplicatio
         }
         return $token;
     }
+	
+	
+    private function refreshComponentAccessTokenInfo($cacheKey, $token)
+    {
+        $cache = $this->getDI()->get('cache');
+        if (isset($token['component_access_token_expire'])) {
+            if ($token['component_access_token_expire']->sec <= time()) {
+                if (! empty($token['appid']) && ! empty($token['secret']) && ! empty($token['component_verify_ticket'])) {
+                    $lockKey = cacheKey(__FILE__, __CLASS__, __METHOD__, __LINE__);
+                    $objLock = new \iLock($lockKey);
+                    if (! $objLock->lock()) {
+                        $objToken = new \Weixin\Component($token['appid'], $token['secret']);
+                        $arrToken = $objToken->apiComponentToken($token['component_verify_ticket']);
+                        
+                        if (! isset($arrToken['component_access_token'])) {
+                            throw new \Exception(json_encode($arrToken));
+                        }
+                        
+                        $cmd = array();
+                        $cmd['query'] = array(
+                            '_id' => $token['_id']
+                        );
+                        $cmd['update'] = array(
+                            '$set' => array(
+                                'component_access_token' => $arrToken['component_access_token'],
+                                'component_access_token_expire' => new \MongoDate(time() + intval($arrToken['expires_in']))
+                            )
+                        );
+                        $cmd['new'] = true;
+                        $cmd['upsert'] = true;
+                        $rst = $this->findAndModify($cmd);
+                        if ($rst['ok'] == 1) {
+                            $expire_time = $this->getExpireTime($rst['value']);
+							$cache->save($cacheKey, $rst['value'], $expire_time);
+                            $objLock->release();
+                            $token = $rst['value'];
+                        } else {
+                            throw new \Exception(json_encode($rst));
+                        }
+                    }
+                }
+            }
+            
+            // 缓存有效期不能超过token过期时间
+            if ((time() + $this->_expire) > $token['component_access_token_expire']->sec) {
+                $this->_expire = $token['component_access_token_expire']->sec - time();
+            }
+        }
+        return $token;
+    }
 }
