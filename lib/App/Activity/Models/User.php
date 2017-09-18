@@ -97,7 +97,7 @@ class User extends \App\Common\Models\Activity\User
      */
     public function getOrCreateByUserId($user_id, $nickname, $headimgurl, $redpack_user, $thirdparty_user, $worth = 0, $worth2 = 0, $activity_id, array $memo = array())
     {
-        $info = $this->getInfoByuserid($user_id, $activity_id);
+        $info = $this->getInfoByUserid($user_id, $activity_id);
         if (empty($info)) {
             $info = $this->create($user_id, $nickname, $headimgurl, $redpack_user, $thirdparty_user, $worth, $worth2, $activity_id, $memo);
         }
