@@ -4,12 +4,6 @@ namespace App\Weixin\Models;
 class Callbackurls extends \App\Common\Models\Weixin\Callbackurls
 {
 
-    protected $name = 'iWeixin_callbackurls';
-
-    protected $dbName = 'weixin';
-
-    protected $secondary = true;
-
     public function getValidCallbackUrlList()
     {
         $cache = $this->getDI()->get('cache');
