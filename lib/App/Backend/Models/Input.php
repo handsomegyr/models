@@ -98,6 +98,15 @@ class Input extends \stdClass
                             if (! empty($datatimeArr[1])) {
                                 $where[$key]['$lte'] = getCurrentTime(strtotime($datatimeArr[1]));
                             }
+                        } elseif ($field['data']['type'] == "integer") {
+                            $num = urldecode($filter[$key]);
+                            $numArr = explode('|', $num);
+                            if (! empty($numArr[0])) {
+                                $where[$key]['$gte'] = $numArr[0];
+                            }
+                            if (! empty($numArr[1])) {
+                                $where[$key]['$lte'] = $numArr[1];
+                            }
                         } else {
                             $where[$key] = urldecode($filter[$key]);
                         }
