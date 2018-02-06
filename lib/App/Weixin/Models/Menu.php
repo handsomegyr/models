@@ -65,60 +65,21 @@ class Menu extends \App\Common\Models\Weixin\Menu
             $type = $l['type'];
             if (isset($menus[$l['_id']])) {
                 $l['sub_button'] = $this->buildTree($menus, $menus[$l['_id']]);
-                unset($l['type'], $l['key'], $l['url'], $l['media_id'], $l['appid'], $l['pagepath'], $l['_id']);
+                unset($l['type'], $l['key'], $l['url'], $l['_id']);
             }
             if (in_array($type, array(
                 'media_id',
                 'view_limited'
             ))) {
-                // "type": "media_id",
-                // "name": "图片",
-                // "media_id": "MEDIA_ID1"
                 if (isset($l['key'])) {
                     unset($l['key']);
                 }
                 if (isset($l['url'])) {
                     unset($l['url']);
                 }
-                if (isset($l['appid'])) {
-                    unset($l['appid']);
-                }
-                if (isset($l['pagepath'])) {
-                    unset($l['pagepath']);
-                }
             }
-            if ($type == 'view') {
-                // "type":"view",
-                // "name":"搜索",
-                // "url":"http://www.soso.com/"
-                if (isset($l['key'])) {
-                    unset($l['key']);
-                }
-                if (isset($l['media_id'])) {
-                    unset($l['media_id']);
-                }
-                if (isset($l['appid'])) {
-                    unset($l['appid']);
-                }
-                if (isset($l['pagepath'])) {
-                    unset($l['pagepath']);
-                }
-            }
-            
-            if ($type == 'miniprogram') {
-                // "type":"miniprogram",
-                // "name":"wxa",
-                // "url":"http://mp.weixin.qq.com",
-                // "appid":"wx286b93c14bbf93aa",
-                // "pagepath":"pages/lunar/index"
-                if (isset($l['key'])) {
-                    unset($l['key']);
-                }
-                if (isset($l['media_id'])) {
-                    unset($l['media_id']);
-                }
-            }
-            
+            if ($type == 'view' && isset($l['key']))
+                unset($l['key']);
             if (in_array($type, array(
                 'click',
                 'scancode_push',
@@ -127,23 +88,8 @@ class Menu extends \App\Common\Models\Weixin\Menu
                 'pic_photo_or_album',
                 'pic_weixin',
                 'location_select'
-            ))) {
-                // "type": "pic_weixin",
-                // "name": "微信相册发图",
-                // "key": "rselfmenu_1_2"
-                if (isset($l['url'])) {
-                    unset($l['url']);
-                }
-                if (isset($l['media_id'])) {
-                    unset($l['media_id']);
-                }
-                if (isset($l['appid'])) {
-                    unset($l['appid']);
-                }
-                if (isset($l['pagepath'])) {
-                    unset($l['pagepath']);
-                }
-            }
+            )) && isset($l['url']))
+                unset($l['url']);
             unset($l['parent'], $l['priority'], $l['_id']);
             $tree[] = $l;
         }

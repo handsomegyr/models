@@ -1,12 +1,12 @@
 <?php
 namespace App\Backend\Submodules\Live\Models;
 
-class Room extends \App\Common\Models\Live\Room
+class Auchor extends \App\Common\Models\Live\Auchor
 {
     use \App\Backend\Models\Base;
-
+    
     /**
-     * 获取所有房间列表
+     * 获取所有活动列表
      *
      * @return array
      */
@@ -21,4 +21,5 @@ class Room extends \App\Common\Models\Live\Room
         }
         return $list;
     }
+    
 }

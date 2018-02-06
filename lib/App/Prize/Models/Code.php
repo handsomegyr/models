@@ -15,9 +15,6 @@ class Code extends \App\Common\Models\Prize\Code
     {
         $now = getCurrentTime();
         $query = array(
-            '_id' => array(
-                '$ne' => '0123456789012345678901234'
-            ),
             'prize_id' => $prize_id,
             'is_used' => array(
                 '$ne' => true
@@ -34,36 +31,30 @@ class Code extends \App\Common\Models\Prize\Code
         while (true) {
             $code = $this->findOne($query);
             if (! empty($code)) {
-                $objLock = new \iLock(cacheKey($code['_id']));
-                if ($objLock->lock()) {
-                    $query['_id'] = array(
-                        '$ne' => $code['_id']
-                    );
-                } else {
-                    $options = array();
-                    $options['query'] = array(
-                        '_id' => $code['_id'],
-                        'prize_id' => $prize_id,
-                        'is_used' => array(
-                            '$ne' => true
-                        ),
-                        'start_time' => array(
-                            '$lt' => $now
-                        ),
-                        'end_time' => array(
-                            '$gt' => $now
-                        )
-                    );
-                    $options['update'] = array(
-                        '$set' => array(
-                            'is_used' => true,
-                            'activity_id' => $activity_id
-                        )
-                    );
-                    $rst = $this->findAndModify($options);
-                    if (! empty($rst['value']))
-                        return $rst['value'];
-                }
+                $options = array();
+                $options['query'] = array(
+                    '_id' => $code['_id'],
+                    'prize_id' => $prize_id,
+                    'is_used' => array(
+                        '$ne' => true
+                    ),
+                    'start_time' => array(
+                        '$lt' => $now
+                    ),
+                    'end_time' => array(
+                        '$gt' => $now
+                    )
+                );
+                $options['update'] = array(
+                    '$set' => array(
+                        'is_used' => true,
+                        'activity_id' => $activity_id
+                    )
+                );
+                $rst = $this->findAndModify($options);
+                if (! empty($rst['value']))
+                    return $rst['value'];
+                
                 if ($loop ++ >= 10) {
                     return false;
                 }

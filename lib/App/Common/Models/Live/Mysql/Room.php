@@ -1,8 +1,11 @@
 <?php
 namespace App\Common\Models\Live\Mysql;
+
 use App\Common\Models\Base\Mysql\Base;
+
 class Room extends Base
 {
+
     /**
      * 直播-房间管理
      * This model is mapped to the table ilive_room
@@ -11,9 +14,11 @@ class Room extends Base
     {
         return 'ilive_room';
     }
+
     public function reorganize(array $data)
     {
         $data = parent::reorganize($data);
+        $data['is_opened'] = $this->changeToBoolean($data['is_opened']);
         $data['start_time'] = $this->changeToMongoDate($data['start_time']);
         $data['end_time'] = $this->changeToMongoDate($data['end_time']);
         $data['is_test'] = $this->changeToBoolean($data['is_test']);
