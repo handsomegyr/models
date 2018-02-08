@@ -25,6 +25,9 @@ class Api
     public $_isInstance = false;
     // 是否是简单抽奖,主要用于没有任何奖品数量限制的抽奖場景
     public $_isSimpleLottery = false;
+    
+    // 是否为了验证在并发环境下测试抽奖流程
+    public $_isTest4Concurreny = false;
 
     public function __construct()
     {
@@ -82,8 +85,16 @@ class Api
                 $ret['result'] = $invalidExchange;
                 return $ret;
             }
+            
             try {
                 $this->_exchange->begin();
+                
+                if ($this->_isTest4Concurreny) {
+                    $rand = mt_rand(0, 100);
+                    if ($rand < 10) {
+                        throw new \Exception('随机异常发生2', - 3);
+                    }
+                }
                 // 检查中奖情况和中奖限制条件的关系
                 $this->_limit->setExchangeModel($this->_exchange);
                 $limit = $this->_limit->checkLimit($activity_id, $identity_id, 'all');
@@ -109,6 +120,13 @@ class Api
                     if (! $this->_rule->updateRemain($rule)) {
                         throw new \Exception('竞争争夺奖品失败', - 5);
                     }
+                    
+                    if ($this->_isTest4Concurreny) {
+                        $rand = mt_rand(0, 100);
+                        if ($rand > 80) {
+                            throw new \Exception('随机异常发生3', - 3);
+                        }
+                    }
                 }
                 // throw new \Exception("测试", 999);
                 // 竞争到奖品，根据奖品的属性标记状态
@@ -128,6 +146,12 @@ class Api
                         if ($code == false) {
                             throw new \Exception('虚拟券不足!', - 6);
                         }
+                        if ($this->_isTest4Concurreny) {
+                            $rand = mt_rand(0, 100);
+                            if ($rand > 20 && $rand < 40) {
+                                throw new \Exception('随机异常发生4', - 3);
+                            }
+                        }
                     }
                 }
                 
@@ -140,6 +164,13 @@ class Api
                     $exchangeInfo['exchange_id'] = $exchangeInfo['_id'];
                 } else {
                     throw new \Exception('中奖信息记录失败', - 7);
+                }
+                
+                if ($this->_isTest4Concurreny) {
+                    $rand = mt_rand(0, 100);
+                    if ($rand > 50 && $rand < 70) {
+                        throw new \Exception('随机异常发生5', - 3);
+                    }
                 }
                 $this->_exchange->commit();
                 $this->_record->record($activity_id, $identity_id, $source, 1, "恭喜您中奖了！");

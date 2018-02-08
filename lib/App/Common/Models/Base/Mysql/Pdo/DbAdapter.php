@@ -20,6 +20,8 @@ class DbAdapter
     // @array, The parameters of the SQL query
     private $parameters;
 
+    private $transnum = 0;
+
     /**
      * Constructor for App\Common\Models\Base\Mysql\Pdo\DbAdapter
      *
@@ -72,6 +74,8 @@ class DbAdapter
         
         // Disable emulation of prepared statements, use REAL prepared statements instead.
         $this->pdo->setAttribute(\PDO::ATTR_EMULATE_PREPARES, false);
+        
+        // $this->pdo->setAttribute(\PDO::MYSQL_ATTR_USE_BUFFERED_QUERY, true);
         
         // Connection succeeded, set the boolean to true.
         $this->bConnected = true;
@@ -233,8 +237,14 @@ class DbAdapter
     public function begin($nesting = true)
     {
         if ($this->pdo) {
-            return $this->pdo->beginTransaction();
+            $this->transnum ++;
+            if ($this->transnum == 1) {
+                return $this->pdo->beginTransaction();
+            } else {
+                return true;
+            }
         } else {
+            throw new \Exception("pdo is empty");
             return false;
         }
     }
@@ -248,8 +258,14 @@ class DbAdapter
     public function rollback($nesting = true)
     {
         if ($this->pdo) {
-            return $this->pdo->rollBack();
+            $this->transnum --;
+            if (empty($this->transnum)) {
+                return $this->pdo->rollBack();
+            } else {
+                return false;
+            }
         } else {
+            throw new \Exception("pdo is empty");
             return false;
         }
     }
@@ -263,8 +279,14 @@ class DbAdapter
     public function commit($nesting = true)
     {
         if ($this->pdo) {
-            return $this->pdo->commit();
+            $this->transnum --;
+            if (empty($this->transnum)) {
+                return $this->pdo->commit();
+            } else {
+                return true;
+            }
         } else {
+            throw new \Exception("pdo is empty");
             return false;
         }
     }

@@ -15,6 +15,9 @@ class Code extends \App\Common\Models\Prize\Code
     {
         $now = getCurrentTime();
         $query = array(
+            '_id' => array(
+                '$ne' => '0123456789012345678901234'
+            ),
             'prize_id' => $prize_id,
             'is_used' => array(
                 '$ne' => true
@@ -24,7 +27,8 @@ class Code extends \App\Common\Models\Prize\Code
             ),
             'end_time' => array(
                 '$gt' => $now
-            )
+            ),
+            '__FOR_UPDATE__' => true
         );
         
         $loop = 0;
@@ -54,7 +58,6 @@ class Code extends \App\Common\Models\Prize\Code
                 $rst = $this->findAndModify($options);
                 if (! empty($rst['value']))
                     return $rst['value'];
-                
                 if ($loop ++ >= 10) {
                     return false;
                 }

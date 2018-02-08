@@ -372,6 +372,10 @@ trait BaseTrait
         }
         $className = $this->getSource();
         $phql = "SELECT COUNT(*) as num FROM {$className} WHERE {$conditions['conditions']}";
+        if (! empty($conditions['for_update'])) {
+            $phql = $phql . "  FOR UPDATE ";
+            unset($conditions['for_update']);
+        }
         return array(
             'sql' => $phql,
             'conditions' => $conditions
@@ -388,6 +392,10 @@ trait BaseTrait
         }
         $className = $this->getSource();
         $phql = "SELECT * FROM {$className} WHERE {$conditions['conditions']}";
+        if (! empty($conditions['for_update'])) {
+            $phql = $phql . "  FOR UPDATE ";
+            unset($conditions['for_update']);
+        }
         return array(
             'sql' => $phql,
             'conditions' => $conditions
@@ -423,6 +431,10 @@ trait BaseTrait
             $orderBy = "ORDER BY {$order['order']}";
         }
         $phql = "SELECT * FROM {$className} WHERE {$conditions['conditions']} {$orderBy} LIMIT {$conditions['limit']} OFFSET {$conditions['offset']} ";
+        if (! empty($conditions['for_update'])) {
+            $phql = $phql . "  FOR UPDATE ";
+            unset($conditions['for_update']);
+        }
         return array(
             'sql' => $phql,
             'conditions' => $conditions
@@ -445,6 +457,10 @@ trait BaseTrait
             $orderBy = "ORDER BY {$order['order']}";
         }
         $phql = "SELECT * FROM {$className} WHERE {$conditions['conditions']} {$orderBy} ";
+        if (! empty($conditions['for_update'])) {
+            $phql = $phql . "  FOR UPDATE ";
+            unset($conditions['for_update']);
+        }
         return array(
             'sql' => $phql,
             'conditions' => $conditions
@@ -472,6 +488,10 @@ trait BaseTrait
         }
         
         $phql = "select {$groupFields} SUM({$columns['column']}) AS sumatory FROM {$className} WHERE {$conditions['conditions']} {$groupBy}";
+        if (! empty($conditions['for_update'])) {
+            $phql = $phql . "  FOR UPDATE ";
+            unset($conditions['for_update']);
+        }
         return array(
             'sql' => $phql,
             'conditions' => $conditions
@@ -491,6 +511,10 @@ trait BaseTrait
         }
         $className = $this->getSource();
         $phql = "select DISTINCT {$field} FROM {$className} WHERE {$conditions['conditions']}";
+        if (! empty($conditions['for_update'])) {
+            $phql = $phql . "  FOR UPDATE ";
+            unset($conditions['for_update']);
+        }
         return array(
             'sql' => $phql,
             'conditions' => $conditions
