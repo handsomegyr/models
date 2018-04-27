@@ -391,7 +391,7 @@ trait BaseTrait
             $conditions['bind'] = array();
         }
         $className = $this->getSource();
-        $phql = "SELECT * FROM {$className} WHERE {$conditions['conditions']}";
+        $phql = "SELECT * FROM {$className} WHERE {$conditions['conditions']} limit 1 ";
         if (! empty($conditions['for_update'])) {
             $phql = $phql . "  FOR UPDATE ";
             unset($conditions['for_update']);
