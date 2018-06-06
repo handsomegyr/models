@@ -6,8 +6,9 @@ use App\Common\Models\Base\Base;
 class MsgCount extends Base
 {
 
-    function __construct()
+    function __construct($db = Base::MYSQL)
     {
-        $this->setModel(new \App\Common\Models\Message\Mysql\MsgCount());
+        $className = $this->getClassNameByDb($db, '\App\Common\Models\Message\%s\MsgCount');
+        $this->setModel(new $className());
     }
 }

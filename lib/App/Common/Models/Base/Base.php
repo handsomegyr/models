@@ -4,6 +4,21 @@ namespace App\Common\Models\Base;
 class Base implements IBase
 {
 
+    const MYSQL = 1;
+
+    const MONGODB = 2;
+
+    protected function getClassNameByDb($db, $className)
+    {
+        $str = "Mysql";
+        if ($db == self::MONGODB) {
+            $str = "Mongodb";
+        }
+        $className = sprintf($className, $str);
+        // die($className . $db);
+        return $className;
+    }
+
     protected $isDebug = false;
 
     protected $isPhql = false;

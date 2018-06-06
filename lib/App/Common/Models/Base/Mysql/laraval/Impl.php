@@ -7,7 +7,8 @@ use PDO;
 use DB;
 
 class Impl2 extends Base
-{    
+{
+    
     use BaseTrait;
 
     protected $model = NULL;
