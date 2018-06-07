@@ -57,14 +57,14 @@ class Impl2 extends Base
             $conditions['bind'] = array();
         }
         $className = $this->getSource();
-        $phql = "SELECT COUNT(*) as num FROM {$className} WHERE {$conditions['conditions']}";        
-		$result = $this->executeQuery($phql, $conditions['bind'], 'select');
+        $phql = "SELECT COUNT(*) as num FROM {$className} WHERE {$conditions['conditions']}";
+        $result = $this->executeQuery($phql, $conditions['bind'], 'select');
         if (count($result) > 0) {
             $num = $result[0]['num'];
         } else {
             $num = 0;
         }
-		
+        
         return $num;
     }
 
@@ -78,14 +78,13 @@ class Impl2 extends Base
         }
         $className = $this->getSource();
         $phql = "SELECT * FROM {$className} WHERE {$conditions['conditions']}";
-		$info = $this->executeQuery($phql, $conditions['bind'], 'selectOne');
+        $info = $this->executeQuery($phql, $conditions['bind'], 'selectOne');
         // die('info:' . var_dump($info));
         if (! empty($info)) {
             return $this->reorganize($info);
         } else {
             return array();
         }
-		
     }
 
     /**
@@ -179,11 +178,18 @@ class Impl2 extends Base
             $groupBy = "GROUP BY {$groups['group']}";
             $groupFields = "{$groups['group']},";
         }
-		
-		$phql = "select {$groupFields} SUM({$columns['column']}) AS sumatory FROM {$className} WHERE {$conditions['conditions']} {$groupBy}";
+        
+        $summaryFields = '';
+        if (! empty($fields)) {
+            foreach ($fields as $field) {
+                $summaryFields .= "SUM({$field}) AS {$field},";
+            }
+            $summaryFields = trim($summaryFields, ',');
+        }
+        
+        $phql = "select {$groupFields} {$summaryFields} FROM {$className} WHERE {$conditions['conditions']} {$groupBy}";
         $ret = $this->executeQuery($phql, $conditions['bind'], 'select');
-		return $ret;
-		
+        return $ret;
     }
 
     public function distinct($field, array $query)
@@ -266,8 +272,7 @@ class Impl2 extends Base
             if (empty($info)) {
                 // 如果需要插入的话
                 if ($upsert) {
-                    array_walk_recursive($criteria, function (&$value, $key)
-                    {
+                    array_walk_recursive($criteria, function (&$value, $key) {
                         if (is_array($value)) {
                             unset($criteria[$key]);
                         }
@@ -322,7 +327,7 @@ class Impl2 extends Base
         $updateFieldValues = $this->getUpdateContents($object);
         $phql = "UPDATE {$className} SET {$updateFieldValues['fields']} WHERE {$conditions['conditions']} ";
         $data = array_merge($updateFieldValues['values'], $conditions['bind']);
-		$result = $this->executeQuery($phql, $data, 'update');
+        $result = $this->executeQuery($phql, $data, 'update');
     }
 
     public function remove(array $query)
@@ -334,10 +339,10 @@ class Impl2 extends Base
         $conditions = $this->getConditions($query);
         $className = $this->getSource();
         $phql = "DELETE FROM {$className} WHERE {$conditions['conditions']}";
-		$result = $this->executeQuery($phql, $conditions['bind'], 'delete');
+        $result = $this->executeQuery($phql, $conditions['bind'], 'delete');
     }
 
-	protected function executeQuery($phql, array $data, $method = 'select')
+    protected function executeQuery($phql, array $data, $method = 'select')
     {
         try {
             $phql = preg_replace('/:(.*?):/i', ':$1', $phql);
@@ -349,7 +354,7 @@ class Impl2 extends Base
                 die('OK');
             }
             DB::setFetchMode(PDO::FETCH_ASSOC);
-            $result = DB::$method($phql, $data);            
+            $result = DB::$method($phql, $data);
             return $result;
         } catch (\Exception $e) {
             throw $e;

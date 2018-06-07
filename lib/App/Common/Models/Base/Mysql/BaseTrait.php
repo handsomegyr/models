@@ -487,7 +487,15 @@ trait BaseTrait
             $groupFields = "{$groups['group']},";
         }
         
-        $phql = "select {$groupFields} SUM({$columns['column']}) AS sumatory FROM {$className} WHERE {$conditions['conditions']} {$groupBy}";
+        $summaryFields = '';
+        if (! empty($fields)) {
+            foreach ($fields as $field) {
+                $summaryFields .= "SUM({$field}) AS {$field},";
+            }
+            $summaryFields = trim($summaryFields, ',');
+        }
+        
+        $phql = "select {$groupFields} {$summaryFields} FROM {$className} WHERE {$conditions['conditions']} {$groupBy}";
         if (! empty($conditions['for_update'])) {
             $phql = $phql . "  FOR UPDATE ";
             unset($conditions['for_update']);

@@ -161,7 +161,65 @@ class Impl extends Base
 
     public function sum(array $query, array $fields = array(), array $groups = array())
     {
-        throw new \Exception('sum 函数未实现');
+        if (empty($fields)) {
+            return array();
+        }
+        
+        if (empty($groups)) {
+            return array();
+        }
+        
+        $ops = array();
+        if (! empty($query)) {
+            $ops[] = array(
+                '$match' => $query
+            );
+        }
+        
+        $groupFieldsSum = array();
+        foreach ($fields as $field) {
+            $groupFieldsSum[$field] = array(
+                '$sum' => '$' . $field
+            );
+        }
+        
+        $groupFields = array();
+        foreach ($groups as $group) {
+            $groupFields[$group] = '$' . $group;
+        }
+        
+        $groupOps = array(
+            '_id' => $groupFields
+        );
+        foreach ($groupFieldsSum as $key => $fieldsSum) {
+            $groupOps[$key] = $fieldsSum;
+        }
+        
+        $ops[] = array(
+            '$group' => $groupOps
+        );
+        // echo "<pre>";
+        // print_r($ops);
+        // die('xx');
+        $rst = $this->aggregate($ops, null, null);
+        // Array ( [ok] => 1 [result] => Array ( [0] => Array ( [_id] => Array ( [_id] => MongoId Object ( [objectID:MongoId:private] => MongoDB\BSON\ObjectId Object ( [oid] => 5b17cef969dc0a08131fce43 ) ) ) [sysMsgCount] => 1 ) ) [waitedMS] => 0 )
+        $this->doError($rst);
+        
+        $list = array();
+        if (! empty($rst['result'])) {
+            foreach ($rst['result'] as $item) {
+                $item1 = array();
+                foreach ($groups as $group) {
+                    $item1[$group] = $item['_id'][$group];
+                }
+                foreach (array_keys($groupFieldsSum) as $fieldsSum) {
+                    $item1[$fieldsSum] = $item[$fieldsSum];
+                }
+                $item1 = $this->reorganize($item1);
+                $list[] = $item1;
+            }
+        }
+        return $list;
     }
 
     public function distinct($field, array $query)
@@ -170,15 +228,7 @@ class Impl extends Base
         $query = $this->toArray($query);
         $rst = $this->_model->distinct($key, $query);
         $ret = $this->result($rst);
-        
-        $list = array();
-        if (! empty($ret)) {
-            foreach ($ret as $key => $item) {
-                $data = $this->reorganize($item);
-                $list[] = $data[$field];
-            }
-        }
-        return $list;
+        return $ret;
     }
 
     /**
@@ -199,19 +249,33 @@ class Impl extends Base
     }
 
     /**
+     * 保存数据，$datas中如果包含_id属性，那么将更新_id的数据，否则创建新的数据
+     *
+     * @param string $datas            
+     * @throws \Exception
+     * @return string
+     */
+    public function save(array $datas)
+    {
+        return $this->insert($datas);
+    }
+
+    /**
      * findAndModify
      */
     public function findAndModify(array $options)
     {
         $options = $this->toArray($options);
         $rst = $this->_model->findAndModifyByCommand($options);
-        return $this->result($rst);
+        // ERROR的情况1 Array ( [lastErrorObject] => Array ( [updatedExisting] => [n] => 0 ) [value] => [ok] => 1 ) xxx
+        // OK的情况 Array ( [lastErrorObject] => Array ( [updatedExisting] => 1 [n] => 1 ) [value] => Array ( [_id] => MongoId Object ( [objectID:MongoId:private] => MongoDB\BSON\ObjectId Object ( [oid] => 5b18941869dc0a07c253ccd2 ) ) [user_id] => guoyongrong5b189418943a3 [sysMsgCount] => 2 [privMsgCount] => 5 [friendMsgCount] => 2 [replyMsgCount] => 1 [__CREATE_TIME__] => MongoDate Object ( [sec] => 1528337432 [usec] => 607000 ) [__MODIFY_TIME__] => MongoDate Object ( [sec] => 1528337432 [usec] => 610000 ) [__REMOVED__] => ) [ok] => 1 )
+        $this->doError($rst);
+        $rst = $this->result($rst);
         // 增加reorganize处理
-        if (! empty($info)) {
-            return $this->reorganize($info);
-        } else {
-            return array();
+        if (! empty($rst['value'])) {
+            $rst['value'] = $this->reorganize($rst['value']);
         }
+        return $rst;
     }
 
     public function update(array $criteria, array $object, array $options = array())
@@ -220,6 +284,8 @@ class Impl extends Base
         $object = $this->toArray($object);
         $options = $this->toArray($options);
         $rst = $this->_model->update($criteria, $object, $options);
+        // Array ( [ok] => 1 [nModified] => 1 [n] => 1 [err] => [errmsg] => [updatedExisting] => 1 )
+        $this->doError($rst);
         return $this->result($rst);
     }
 
@@ -227,6 +293,7 @@ class Impl extends Base
     {
         $criteria = $this->toArray($query);
         $rst = $this->_model->physicalRemove($criteria);
+        // Array ( [ok] => 1 [n] => 1 [err] => [errmsg] => )
         return $this->result($rst);
     }
 
@@ -259,6 +326,21 @@ class Impl extends Base
             });
         }
         return $rst;
+    }
+
+    private function doError($rst)
+    {
+        if (empty($rst['ok'])) {
+            // [err] => [errmsg] =>
+            $error_msg = '数据库错误发生';
+            if (! empty($rst['err'])) {
+                $error_msg .= ' err: ' . $rst['err'];
+            }
+            if (! empty($rst['errmsg'])) {
+                $error_msg .= ' errmsg: ' . $rst['errmsg'];
+            }
+            throw new \Exception($error_msg);
+        }
     }
 
     /**
@@ -307,25 +389,6 @@ class Impl extends Base
         $a = $this->toArray($a);
         $rst = $this->_model->batchInsert($a, $option);
         return $this->result($rst);
-    }
-
-    /**
-     * 保存数据，$datas中如果包含_id属性，那么将更新_id的数据，否则创建新的数据
-     *
-     * @param string $datas            
-     * @throws \Exception
-     * @return string
-     */
-    public function save(array $datas)
-    {
-        $datas = $this->toArray($datas);
-        $rst = $this->_model->saveRef($datas);
-        $info = $this->result($rst);
-        if (! empty($info)) {
-            return $this->reorganize($info);
-        } else {
-            return array();
-        }
     }
 
     /**
