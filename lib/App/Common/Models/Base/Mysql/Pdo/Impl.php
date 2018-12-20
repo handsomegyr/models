@@ -22,7 +22,7 @@ class Impl extends Base
         $this->setPhql($this->model->getPhql());
         $this->setDebug($this->model->getDebug());
         $this->setDb($this->model->getDb());
-        $this->setSource($this->model->getSource());
+        $this->setSource($this->getPrefix() . $this->model->getSource());
     }
 
     /**

@@ -53,6 +53,19 @@ class Base implements \App\Common\Models\Base\IBase
     {
         return $this->name;
     }
+    
+    // 数据库表前缀
+    public function getPrefix()
+    {
+        $descriptor = $this->getDI()
+            ->getDB()
+            ->getDescriptor();
+        if (! empty($descriptor['prefix'])) {
+            return $descriptor['prefix'];
+        } else {
+            return "";
+        }
+    }
 
     public function setDb($db)
     {

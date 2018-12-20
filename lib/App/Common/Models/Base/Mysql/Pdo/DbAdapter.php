@@ -325,4 +325,9 @@ class DbAdapter
         }
         return $statement;
     }
+
+    public function getDescriptor()
+    {
+        return $this->descriptor;
+    }
 }

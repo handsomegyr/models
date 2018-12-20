@@ -21,8 +21,8 @@ class Impl2 extends Base
         $this->model = $model;
         $this->setPhql($this->model->getPhql());
         $this->setDebug($this->model->getDebug());
-        $this->setDb($this->model->getDb());       
-        $this->setSource($this->model->getSource());
+        $this->setDb($this->model->getDb());
+        $this->setSource($this->getPrefix() . $this->model->getSource());
     }
 
     /**
@@ -257,8 +257,7 @@ class Impl2 extends Base
             if (empty($info)) {
                 // 如果需要插入的话
                 if ($upsert) {
-                    array_walk_recursive($criteria, function (&$value, $key)
-                    {
+                    array_walk_recursive($criteria, function (&$value, $key) {
                         if (is_array($value)) {
                             unset($criteria[$key]);
                         }
