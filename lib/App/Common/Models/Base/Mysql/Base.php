@@ -58,7 +58,7 @@ class Base implements \App\Common\Models\Base\IBase
     public function getPrefix()
     {
         $descriptor = $this->getDI()
-            ->getDB()
+            ->getDb()
             ->getDescriptor();
         if (! empty($descriptor['prefix'])) {
             return $descriptor['prefix'];
