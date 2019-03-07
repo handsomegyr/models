@@ -1,5 +1,5 @@
 <?php
-namespace App\Common\Models\Base\Mysql\Laravel;
+namespace App\Common\Models\Base\Mysql\Laraval;
 
 use App\Common\Models\Base\Mysql\Base;
 use App\Common\Models\Base\Mysql\BaseTrait;
