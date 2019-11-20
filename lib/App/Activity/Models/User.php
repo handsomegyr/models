@@ -77,7 +77,7 @@ class User extends \App\Common\Models\Activity\User
         $data['thirdparty_user'] = $thirdparty_user; // 第3方账号
         $data['worth'] = intval($worth); // 价值
         $data['worth2'] = intval($worth2); // 价值2
-        $data['happen_time'] = getCurrentTime();
+        $data['log_time'] = getCurrentTime();
         $data['scene'] = $scene; // 场景
         $data['memo'] = $memo; // 备注
         $info = $this->insert($data);
