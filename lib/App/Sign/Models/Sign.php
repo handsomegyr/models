@@ -92,7 +92,7 @@ class Sign extends \App\Common\Models\Sign\Sign
                     ),
                     "update" => array(
                         '$set' => array(
-                            "is_continue_sign" => false,
+                            "is_continue_sign" => true,
                             "lastip" => getIp(),
                             "continue_sign_count" => 1, // 重新计数连续签到
                             "restart_sign_time" => $sign_time, // 重新设置签到日期
