@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Backend\Models;
 
 use App\Common\Models\System\Role;
@@ -55,19 +56,20 @@ class User extends \App\Common\Models\System\User
             )
         );
         $this->update($query, $data);
-        
+
         // 获取角色信息
-        if (! empty($user['role'])) {
+        if (!empty($user['role'])) {
             $modelRole = new Role();
             $roleInfo = $modelRole->getInfoById($user['role']);
             $_SESSION['roleInfo'] = $roleInfo;
         } else {
             $_SESSION['roleInfo'] = array();
         }
-        
+
         $_SESSION['admin_id'] = $user['_id'];
         $_SESSION['admin_name'] = $user['username'];
-        
+        $_SESSION['admin_user_info'] = $user;
+
         return $user;
     }
 
@@ -83,6 +85,7 @@ class User extends \App\Common\Models\System\User
         $userData = array();
         $userData['username'] = $username;
         $userData['password'] = $password;
+        $userData['headimgurl'] = '';
         $userData['lastip'] = getIp();
         $userData['lasttime'] = getCurrentTime();
         $userData['times'] = 1;
