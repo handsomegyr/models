@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Backend\Models;
 
 class Input extends \stdClass
@@ -16,12 +17,12 @@ class Input extends \stdClass
         if (empty($this->filter)) {
             $schemas = $this->getSchemas();
             $this->filter = array();
-            if (! empty($schemas)) {
+            if (!empty($schemas)) {
                 foreach ($schemas as $key => $field) {
                     $this->filter[$key] = urldecode(trim($this->$key));
                 }
             }
-            
+
             $this->filter['sort_by'] = trim($this->sort_by);
             $this->filter['sort_order'] = trim($this->sort_order);
             /* 分页大小 */
@@ -31,10 +32,10 @@ class Input extends \stdClass
             } else {
                 $this->filter['page_size'] = 10;
             }
-            
+
             // 当前页数
             $this->filter['page'] = (empty($this->page) || intval($this->page) <= 0) ? 1 : intval($this->page);
-            
+
             // offset
             $this->filter['start'] = ($this->filter['page'] - 1) * $this->filter['page_size'];
         }
@@ -45,8 +46,8 @@ class Input extends \stdClass
     {
         /* page 总数 */
         $this->filter['record_count'] = $record_count;
-        $this->filter['page_count'] = (! empty($this->filter['record_count'])) ? ceil($this->filter['record_count'] / $this->filter['page_size']) : 1;
-        
+        $this->filter['page_count'] = (!empty($this->filter['record_count'])) ? ceil($this->filter['record_count'] / $this->filter['page_size']) : 1;
+
         /* 边界处理 */
         if ($this->filter['page'] > $this->filter['page_count']) {
             $this->filter['page'] = $this->filter['page_count'];
@@ -69,7 +70,7 @@ class Input extends \stdClass
         if (isset($this->$method) && is_callable($this->$method))
             return call_user_func_array($this->$method, $args);
         else
-            throw new \Exception("{$method} is not set or callable", - 1);
+            throw new \Exception("{$method} is not set or callable", -1);
     }
 
     /**
@@ -81,9 +82,9 @@ class Input extends \stdClass
     {
         $filter = $this->getFilter();
         $schemas = $this->getSchemas();
-        
+
         $where = array();
-        if (! empty($schemas)) {
+        if (!empty($schemas)) {
             foreach ($schemas as $key => $field) {
                 if (isset($filter[$key])) {
                     if (strlen($filter[$key]) > 0) {
@@ -92,23 +93,31 @@ class Input extends \stdClass
                         } elseif ($field['data']['type'] == "datetime") {
                             $datetime = urldecode($filter[$key]);
                             $datatimeArr = explode('|', $datetime);
-                            if (! empty($datatimeArr[0])) {
+                            if (!empty($datatimeArr[0])) {
                                 $where[$key]['$gte'] = getCurrentTime(strtotime($datatimeArr[0]));
                             }
-                            if (! empty($datatimeArr[1])) {
+                            if (!empty($datatimeArr[1])) {
                                 $where[$key]['$lte'] = getCurrentTime(strtotime($datatimeArr[1]));
                             }
                         } elseif ($field['data']['type'] == "integer") {
                             $num = urldecode($filter[$key]);
                             $numArr = explode('|', $num);
-                            if (! empty($numArr[0])) {
+                            if (!empty($numArr[0])) {
                                 $where[$key]['$gte'] = $numArr[0];
                             }
-                            if (! empty($numArr[1])) {
+                            if (!empty($numArr[1])) {
                                 $where[$key]['$lte'] = $numArr[1];
                             }
                         } else {
-                            $where[$key] = urldecode($filter[$key]);
+                            // $where[$key] = urldecode($filter[$key]);
+                            $str1 = urldecode($filter[$key]);
+                            $strArr = explode('|', $str1);
+                            if (!empty($strArr[0])) {
+                                $where[$key]['$gte'] = $strArr[0];
+                            }
+                            if (!empty($strArr[1])) {
+                                $where[$key]['$lte'] = $strArr[1];
+                            }
                         }
                     }
                 }
@@ -122,7 +131,7 @@ class Input extends \stdClass
         $filter = $this->getFilter();
         // 排序方式
         $sort = array();
-        $sort[$filter['sort_by']] = ('desc' == strtolower($filter['sort_order'])) ? - 1 : 1;
+        $sort[$filter['sort_by']] = ('desc' == strtolower($filter['sort_order'])) ? -1 : 1;
         return $sort;
     }
 
@@ -142,10 +151,10 @@ class Input extends \stdClass
     {
         $schemas = $this->getSchemas();
         $data = array();
-        if (! empty($schemas)) {
+        if (!empty($schemas)) {
             foreach ($schemas as $key => $field) {
                 if ($field['data']['type'] == "string") {
-                    
+
                     if (isset($this->$key) && $is_update) {
                         $data[$key] = urldecode(trim($this->$key));
                     } else {
@@ -192,7 +201,7 @@ class Input extends \stdClass
                         if (is_array($this->$key)) {
                             $data[$key] = $this->$key;
                         } else {
-                            throw new \ErrorException("{$key} is not array", - 99);
+                            throw new \ErrorException("{$key} is not array", -99);
                         }
                     } else {
                         $data[$key] = isset($field['data']['defaultValue']) ? $field['data']['defaultValue'] : array();
@@ -213,7 +222,7 @@ class Input extends \stdClass
                 }
             }
         }
-        
+
         if ($is_update) {
             unset($data['_id']);
         } else {
