@@ -152,6 +152,7 @@ class Menu extends \App\Common\Models\System\Menu
             $is_active = (! empty($requestUrl) && ! empty($rows['url']) && (strstr($rows['url'], $requestUrl) != false)) ? true : false;
             $priv_arr[$rows['_id']] = array(
                 'name' => $rows['name'],
+                'icon' => $rows['icon'],
                 'relevance' => $rows['relevance'],
                 'url' => $rows['url'],
                 'is_show' => $rows['is_show'],
@@ -171,6 +172,7 @@ class Menu extends \App\Common\Models\System\Menu
             $is_active = (! empty($requestUrl) && ! empty($priv['url']) && (strstr($priv['url'], $requestUrl) != false)) ? true : false;
             $priv_arr[$priv["pid"]]["priv"][$priv["_id"]] = array(
                 'name' => $priv['name'],
+                'icon' => $priv['icon'],
                 'relevance' => $priv['relevance'],
                 'url' => $priv['url'],
                 'is_show' => $priv['is_show'],
