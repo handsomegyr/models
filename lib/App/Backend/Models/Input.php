@@ -217,6 +217,11 @@ class Input extends \stdClass
                     if (isset($this->$key)) {
                         $data[$key] = trim($this->$key);
                     }
+                } elseif ($field['data']['type'] == "multifile") {
+                    unset($data[$key]);					
+                    if (isset($this->$key)) {
+                        $data[$key] = ($this->$key);
+                    }
                 } else {
                     $data[$key] = "";
                 }
