@@ -522,7 +522,7 @@ class Menu
         // 小程序二维码
         $item = array(
             'menu_name' => '小程序二维码',
-            'menu_model' => 'weixin2-miniprogram-qrcode',
+            'menu_model' => 'weixin2-miniprogramqrcode',
             'level' => '小程序二维码管理',
             'icon' => '',
             'model' => '\App\Backend\Submodules\Weixin2\Models\Miniprogram\Qrcode\Qrcode'
@@ -672,7 +672,7 @@ class Menu
         // 小程序二维码类型
         $item = array(
             'menu_name' => '小程序二维码类型',
-            'menu_model' => 'weixin2-miniprogram-qrcodetype',
+            'menu_model' => 'weixin2-miniprogramqrcodetype',
             'level' => '系统配置管理',
             'icon' => '',
             'model' => '\App\Backend\Submodules\Weixin2\Models\Miniprogram\Qrcode\Type'
@@ -892,7 +892,7 @@ class Menu
         // 用户增减数据
         $item = array(
             'menu_name' => '用户增减数据',
-            'menu_model' => 'weixin2-datacube-usersummary',
+            'menu_model' => 'weixin2-datacubeusersummary',
             'level' => '用户分析数据统计',
             'icon' => '',
             'model' => '\App\Backend\Submodules\Weixin2\Models\DataCube\UserSummary'
@@ -902,7 +902,7 @@ class Menu
         // 累计用户数据
         $item = array(
             'menu_name' => '累计用户数据',
-            'menu_model' => 'weixin2-datacube-usercumulate',
+            'menu_model' => 'weixin2-datacubeusercumulate',
             'level' => '用户分析数据统计',
             'icon' => '',
             'model' => '\App\Backend\Submodules\Weixin2\Models\DataCube\UserCumulate'
@@ -912,7 +912,7 @@ class Menu
         // 图文群发每日数据
         $item = array(
             'menu_name' => '图文群发每日数据',
-            'menu_model' => 'weixin2-datacube-articlesummary',
+            'menu_model' => 'weixin2-datacubearticlesummary',
             'level' => '图文分析数据统计',
             'icon' => '',
             'model' => '\App\Backend\Submodules\Weixin2\Models\DataCube\ArticleSummary'
@@ -922,7 +922,7 @@ class Menu
         // 图文群发总数据
         $item = array(
             'menu_name' => '图文群发总数据',
-            'menu_model' => 'weixin2-datacube-articletotal',
+            'menu_model' => 'weixin2-datacubearticletotal',
             'level' => '图文分析数据统计',
             'icon' => '',
             'model' => '\App\Backend\Submodules\Weixin2\Models\DataCube\ArticleTotal'
@@ -932,7 +932,7 @@ class Menu
         // 图文统计数据
         $item = array(
             'menu_name' => '图文统计数据',
-            'menu_model' => 'weixin2-datacube-userread',
+            'menu_model' => 'weixin2-datacubeuserread',
             'level' => '图文分析数据统计',
             'icon' => '',
             'model' => '\App\Backend\Submodules\Weixin2\Models\DataCube\UserRead'
@@ -942,7 +942,7 @@ class Menu
         // 图文统计分时数据
         $item = array(
             'menu_name' => '图文统计分时数据',
-            'menu_model' => 'weixin2-datacube-userreadhour',
+            'menu_model' => 'weixin2-datacubeuserreadhour',
             'level' => '图文分析数据统计',
             'icon' => '',
             'model' => '\App\Backend\Submodules\Weixin2\Models\DataCube\UserReadHour'
@@ -952,7 +952,7 @@ class Menu
         // 图文分享转发数据
         $item = array(
             'menu_name' => '图文分享转发数据',
-            'menu_model' => 'weixin2-datacube-usershare',
+            'menu_model' => 'weixin2-datacubeusershare',
             'level' => '图文分析数据统计',
             'icon' => '',
             'model' => '\App\Backend\Submodules\Weixin2\Models\DataCube\UserShare'
@@ -962,7 +962,7 @@ class Menu
         // 图文分享转发分时数据
         $item = array(
             'menu_name' => '图文分享转发分时数据',
-            'menu_model' => 'weixin2-datacube-usersharehour',
+            'menu_model' => 'weixin2-datacubeusersharehour',
             'level' => '图文分析数据统计',
             'icon' => '',
             'model' => '\App\Backend\Submodules\Weixin2\Models\DataCube\UserShareHour'
@@ -972,7 +972,7 @@ class Menu
         // 消息发送概况数据
         $item = array(
             'menu_name' => '消息发送概况数据',
-            'menu_model' => 'weixin2-datacube-upstreammsg',
+            'menu_model' => 'weixin2-datacubeupstreammsg',
             'level' => '消息分析数据统计',
             'icon' => '',
             'model' => '\App\Backend\Submodules\Weixin2\Models\DataCube\UpstreamMsg'
@@ -982,7 +982,7 @@ class Menu
         // 消息分送分时数据
         $item = array(
             'menu_name' => '消息分送分时数据',
-            'menu_model' => 'weixin2-datacube-upstreammsghour',
+            'menu_model' => 'weixin2-datacubeupstreammsghour',
             'level' => '消息分析数据统计',
             'icon' => '',
             'model' => '\App\Backend\Submodules\Weixin2\Models\DataCube\UpstreamMsgHour'
@@ -992,7 +992,7 @@ class Menu
         // 消息发送周数据
         $item = array(
             'menu_name' => '消息发送周数据',
-            'menu_model' => 'weixin2-datacube-upstreammsgweek',
+            'menu_model' => 'weixin2-datacubeupstreammsgweek',
             'level' => '消息分析数据统计',
             'icon' => '',
             'model' => '\App\Backend\Submodules\Weixin2\Models\DataCube\UpstreamMsgWeek'
@@ -1002,7 +1002,7 @@ class Menu
         // 消息发送月数据
         $item = array(
             'menu_name' => '消息发送月数据',
-            'menu_model' => 'weixin2-datacube-upstreammsgmonth',
+            'menu_model' => 'weixin2-datacubeupstreammsgmonth',
             'level' => '消息分析数据统计',
             'icon' => '',
             'model' => '\App\Backend\Submodules\Weixin2\Models\DataCube\UpstreamMsgMonth'
@@ -1012,7 +1012,7 @@ class Menu
         // 消息发送分布数据
         $item = array(
             'menu_name' => '消息发送分布数据',
-            'menu_model' => 'weixin2-datacube-upstreammsgdist',
+            'menu_model' => 'weixin2-datacubeupstreammsgdist',
             'level' => '消息分析数据统计',
             'icon' => '',
             'model' => '\App\Backend\Submodules\Weixin2\Models\DataCube\UpstreamMsgDist'
@@ -1022,7 +1022,7 @@ class Menu
         // 消息发送分布分时数据
         $item = array(
             'menu_name' => '消息发送分布分时数据',
-            'menu_model' => 'weixin2-datacube-upstreammsgdisthour',
+            'menu_model' => 'weixin2-datacubeupstreammsgdisthour',
             'level' => '消息分析数据统计',
             'icon' => '',
             'model' => '\App\Backend\Submodules\Weixin2\Models\DataCube\UpstreamMsgDistHour'
@@ -1032,7 +1032,7 @@ class Menu
         // 消息发送分布周数据
         $item = array(
             'menu_name' => '消息发送分布周数据',
-            'menu_model' => 'weixin2-datacube-upstreammsgdistweek',
+            'menu_model' => 'weixin2-datacubeupstreammsgdistweek',
             'level' => '消息分析数据统计',
             'icon' => '',
             'model' => '\App\Backend\Submodules\Weixin2\Models\DataCube\UpstreamMsgDistWeek'
@@ -1042,7 +1042,7 @@ class Menu
         // 消息发送分布月数据
         $item = array(
             'menu_name' => '消息发送分布月数据',
-            'menu_model' => 'weixin2-datacube-upstreammsgdistmonth',
+            'menu_model' => 'weixin2-datacubeupstreammsgdistmonth',
             'level' => '消息分析数据统计',
             'icon' => '',
             'model' => '\App\Backend\Submodules\Weixin2\Models\DataCube\UpstreamMsgDistMonth'
@@ -1052,7 +1052,7 @@ class Menu
         // 接口分析数据
         $item = array(
             'menu_name' => '接口分析数据',
-            'menu_model' => 'weixin2-datacube-interfacesummary',
+            'menu_model' => 'weixin2-datacubeinterfacesummary',
             'level' => '接口分析数据统计',
             'icon' => '',
             'model' => '\App\Backend\Submodules\Weixin2\Models\DataCube\InterfaceSummary'
@@ -1062,7 +1062,7 @@ class Menu
         // 接口分析分时数据
         $item = array(
             'menu_name' => '接口分析分时数据',
-            'menu_model' => 'weixin2-datacube-interfacesummaryhour',
+            'menu_model' => 'weixin2-datacubeinterfacesummaryhour',
             'level' => '接口分析数据统计',
             'icon' => '',
             'model' => '\App\Backend\Submodules\Weixin2\Models\DataCube\InterfaceSummaryHour'
@@ -1082,7 +1082,7 @@ class Menu
         // 推送任务
         $item = array(
             'menu_name' => '推送任务',
-            'menu_model' => 'weixin2-notification-task',
+            'menu_model' => 'weixin2-notificationtask',
             'level' => '消息推送管理',
             'icon' => '',
             'model' => '\App\Backend\Submodules\Weixin2\Models\Notification\Task'
@@ -1092,7 +1092,7 @@ class Menu
         // 推送任务内容
         $item = array(
             'menu_name' => '推送任务内容',
-            'menu_model' => 'weixin2-notification-taskcontent',
+            'menu_model' => 'weixin2-notificationtaskcontent',
             'level' => '消息推送管理',
             'icon' => '',
             'model' => '\App\Backend\Submodules\Weixin2\Models\Notification\TaskContent'
@@ -1102,7 +1102,7 @@ class Menu
         // 推送任务日志
         $item = array(
             'menu_name' => '推送任务日志',
-            'menu_model' => 'weixin2-notification-tasklog',
+            'menu_model' => 'weixin2-notificationtasklog',
             'level' => '消息推送管理',
             'icon' => '',
             'model' => '\App\Backend\Submodules\Weixin2\Models\Notification\TaskLog'
@@ -1112,7 +1112,7 @@ class Menu
         // 推送任务处理
         $item = array(
             'menu_name' => '推送任务处理',
-            'menu_model' => 'weixin2-notification-taskprocess',
+            'menu_model' => 'weixin2-notificationtaskprocess',
             'level' => '消息推送管理',
             'icon' => '',
             'model' => '\App\Backend\Submodules\Weixin2\Models\Notification\TaskProcess'
