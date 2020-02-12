@@ -14,7 +14,7 @@ class Menu
             'menu_name' => '微信平台管理',
             'menu_model' => '',
             'level' => '',
-            'icon' => 'images',
+            'icon' => '',
             'model' => ''
         );
         $tree[] = $item;
