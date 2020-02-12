@@ -159,9 +159,9 @@ class Menu
         );
         $tree[] = $item;
 
-        // 消息管理
+        // 消息相关管理
         $item = array(
-            'menu_name' => '消息管理',
+            'menu_name' => '消息相关管理',
             'menu_model' => '',
             'level' => '微信平台管理',
             'icon' => '',
@@ -173,7 +173,7 @@ class Menu
         $item = array(
             'menu_name' => '消息与事件接收日志',
             'menu_model' => 'weixin2-msglog',
-            'level' => '消息管理',
+            'level' => '消息相关管理',
             'icon' => '',
             'model' => '\App\Backend\Submodules\Weixin2\Models\Msg\Log'
         );
@@ -183,7 +183,7 @@ class Menu
         $item = array(
             'menu_name' => '被动回复用户消息管理',
             'menu_model' => '',
-            'level' => '消息管理',
+            'level' => '消息相关管理',
             'icon' => '',
             'model' => ''
         );
@@ -193,7 +193,7 @@ class Menu
         $item = array(
             'menu_name' => '客服管理',
             'menu_model' => '',
-            'level' => '消息管理',
+            'level' => '消息相关管理',
             'icon' => '',
             'model' => ''
         );
@@ -203,7 +203,7 @@ class Menu
         $item = array(
             'menu_name' => '模板消息管理',
             'menu_model' => '',
-            'level' => '消息管理',
+            'level' => '消息相关管理',
             'icon' => '',
             'model' => ''
         );
@@ -213,7 +213,7 @@ class Menu
         $item = array(
             'menu_name' => '一次性订阅消息管理',
             'menu_model' => '',
-            'level' => '消息管理',
+            'level' => '消息相关管理',
             'icon' => '',
             'model' => ''
         );
@@ -223,7 +223,7 @@ class Menu
         $item = array(
             'menu_name' => '群发管理',
             'menu_model' => '',
-            'level' => '消息管理',
+            'level' => '消息相关管理',
             'icon' => '',
             'model' => ''
         );
@@ -429,9 +429,9 @@ class Menu
         );
         $tree[] = $item;
 
-        // 自定义菜单管理
+        // 自定义菜单相关管理
         $item = array(
-            'menu_name' => '自定义菜单管理',
+            'menu_name' => '自定义菜单相关管理',
             'menu_model' => '',
             'level' => '微信平台管理',
             'icon' => '',
@@ -443,7 +443,7 @@ class Menu
         $item = array(
             'menu_name' => '自定义菜单设置',
             'menu_model' => 'weixin2-menu',
-            'level' => '自定义菜单管理',
+            'level' => '自定义菜单相关管理',
             'icon' => '',
             'model' => '\App\Backend\Submodules\Weixin2\Models\Menu\Menu'
         );
@@ -453,7 +453,7 @@ class Menu
         $item = array(
             'menu_name' => '个性化菜单匹配规则设置',
             'menu_model' => 'weixin2-menuconditionalmatchrule',
-            'level' => '自定义菜单管理',
+            'level' => '自定义菜单相关管理',
             'icon' => '',
             'model' => '\App\Backend\Submodules\Weixin2\Models\Menu\ConditionalMatchrule'
         );
@@ -463,15 +463,15 @@ class Menu
         $item = array(
             'menu_name' => '个性化菜单设置',
             'menu_model' => 'weixin2-menuconditional',
-            'level' => '自定义菜单管理',
+            'level' => '自定义菜单相关管理',
             'icon' => '',
             'model' => '\App\Backend\Submodules\Weixin2\Models\Menu\Conditional'
         );
         $tree[] = $item;
 
-        // 二维码管理
+        // 二维码相关管理
         $item = array(
-            'menu_name' => '二维码管理',
+            'menu_name' => '二维码相关管理',
             'menu_model' => '',
             'level' => '微信平台管理',
             'icon' => '',
@@ -483,7 +483,7 @@ class Menu
         $item = array(
             'menu_name' => '公众号二维码管理',
             'menu_model' => '',
-            'level' => '二维码管理',
+            'level' => '二维码相关管理',
             'icon' => '',
             'model' => ''
         );
@@ -493,7 +493,7 @@ class Menu
         $item = array(
             'menu_name' => '小程序二维码管理',
             'menu_model' => '',
-            'level' => '二维码管理',
+            'level' => '二维码相关管理',
             'icon' => '',
             'model' => ''
         );
