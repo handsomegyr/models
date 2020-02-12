@@ -8,10 +8,10 @@ class Type extends Base
 {
     /**
      * 微信-小程序二维码类型
-     * This model is mapped to the table iweixin2_Miniprogram_qrcode_type
+     * This model is mapped to the table iweixin2_miniprogram_qrcode_type
      */
     public function getSource()
     {
-        return 'iweixin2_Miniprogram_qrcode_type';
+        return 'iweixin2_miniprogram_qrcode_type';
     }
 }

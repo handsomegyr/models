@@ -365,7 +365,7 @@ class Menu
             'menu_model' => 'weixin2-massmsg',
             'level' => '群发管理',
             'icon' => '',
-            'model' => '\App\Backend\Submodules\Weixin2\Models\MassMsg'
+            'model' => '\App\Backend\Submodules\Weixin2\Models\MassMsg\MassMsg'
         );
         $tree[] = $item;
 
