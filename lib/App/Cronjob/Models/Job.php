@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Cronjob\Models;
 
 class Job extends \App\Common\Models\Cronjob\Job
@@ -10,7 +11,7 @@ class Job extends \App\Common\Models\Cronjob\Job
     public function getDefaultSort()
     {
         $sort = array(
-            '_id' => - 1
+            '_id' => -1
         );
         return $sort;
     }
@@ -41,7 +42,7 @@ class Job extends \App\Common\Models\Cronjob\Job
                 '$gte' => $now
             )
         ));
-        
+
         return $cmds;
     }
 
@@ -70,14 +71,14 @@ class Job extends \App\Common\Models\Cronjob\Job
     public function recordResult($_id, $result, $startTime)
     {
         $scriptExecuteTime = sprintf("%08.2f", microtime(true) - $startTime);
-        
+
         $log = new Log();
         $log->insert(array(
             'job_name' => $_id,
             'execute_result' => $result,
             'script_execute_time' => $scriptExecuteTime
         ));
-        
+
         return $this->update(array(
             '_id' => $_id
         ), array(

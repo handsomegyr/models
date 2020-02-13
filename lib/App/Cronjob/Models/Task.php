@@ -2,7 +2,7 @@
 
 namespace App\Cronjob\Models;
 
-class Log extends \App\Common\Models\Cronjob\Log
+class Task extends \App\Common\Models\Cronjob\Task
 {
 
     /**

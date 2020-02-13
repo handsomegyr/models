@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Common\Models\Cronjob;
 
 use App\Common\Models\Base\Base;
