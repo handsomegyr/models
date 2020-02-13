@@ -17,14 +17,16 @@ class Tag extends Base
      *
      * @return array
      */
-    public static function getAllByType($field = "id")
+    public function getAllByType($field = "_id")
     {
-        $list = self::where("tag_id", ">", 0)->orderBy('id', 'asc')
-            ->select('name', 'id', 'tag_id')
-            ->get();
+        $list = $this->findAll(array(,
+            'tag_id' => array(
+                '$gt' => 0
+            ),
+        ), array('_id' => 1));
         $options = array();
         foreach ($list as $item) {
-            $options[$item->$field] = $item->name;
+            $options[$item[$field]] = $item['name'];
         }
         return $options;
     }

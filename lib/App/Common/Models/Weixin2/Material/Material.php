@@ -16,20 +16,17 @@ class Material extends Base
      *
      * @return array
      */
-    public static function getAllByType($type, $field = "id")
+    public function getAllByType($type, $field = "_id")
     {
         if (!empty($type)) {
-            $list = self::where("type", $type)->orderBy('id', 'asc')
-                ->select('name', 'id', 'media_id')
-                ->get();
+            $query = array('type' => $type);
         } else {
-            $list = self::orderBy('id', 'asc')
-                ->select('name', 'id', 'media_id')
-                ->get();
+            $query = array();
         }
+        $list = $this->findAll($query, array('_id' => 1));
         $options = array();
         foreach ($list as $item) {
-            $options[$item->$field] = $item->name;
+            $options[$item[$field]] = $item['name'];
         }
         return $options;
     }

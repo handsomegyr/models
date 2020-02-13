@@ -17,20 +17,17 @@ class ReplyMsg extends Base
      *
      * @return array
      */
-    public static function getAllByType($msg_type, $field = "id")
+    public function getAllByType($msg_type, $field = "id")
     {
         if (!empty($msg_type)) {
-            $list = self::where("msg_type", $msg_type)->orderBy('id', 'asc')
-                ->select('name', 'id', 'media_id')
-                ->get();
+            $query = array('msg_type' => $msg_type);
         } else {
-            $list = self::orderBy('id', 'asc')
-                ->select('name', 'id', 'media_id')
-                ->get();
+            $query = array();
         }
+        $list = $this->findAll($query, array('_id' => 1));
         $options = array();
         foreach ($list as $item) {
-            $options[$item->$field] = $item->name;
+            $options[$item[$field]] = $item['name'];
         }
         return $options;
     }

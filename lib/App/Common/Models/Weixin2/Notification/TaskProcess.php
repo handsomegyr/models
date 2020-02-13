@@ -18,14 +18,12 @@ class TaskProcess extends Base
      *
      * @return array
      */
-    public static function getAll()
+    public function getAll()
     {
-        $list = self::orderBy('id', 'asc')
-            ->select('name', 'id')
-            ->get();
+        $list = $this->findAll(array(), array('_id' => 1));
         $options = array();
         foreach ($list as $item) {
-            $options[$item->id] = $item->name;
+            $options[$item['_id']] = $item['name'];
         }
         return $options;
     }

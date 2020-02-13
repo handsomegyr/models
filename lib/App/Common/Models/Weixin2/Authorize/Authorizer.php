@@ -17,14 +17,12 @@ class Authorizer extends Base
      *
      * @return array
      */
-    public static function getAll()
+    public function getAll()
     {
-        $list = self::orderBy('appid', 'asc')
-            ->select('appid', 'nick_name')
-            ->get();
+        $list = $this->findAll(array(), array('appid' => 1));
         $options = array();
         foreach ($list as $item) {
-            $options[$item->appid] = $item->nick_name;
+            $options[$item['appid']] = $item['nick_name'];
         }
         return $options;
     }

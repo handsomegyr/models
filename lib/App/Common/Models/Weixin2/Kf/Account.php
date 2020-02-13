@@ -16,14 +16,12 @@ class Account extends Base
      *
      * @return array
      */
-    public static function getAll()
+    public function getAll()
     {
-        $list = self::orderBy('kf_account', 'asc')
-            ->select('kf_account')
-            ->get();
+        $list = $this->findAll(array(), array('kf_account' => 1));
         $options = array();
         foreach ($list as $item) {
-            $options[$item->kf_account] = "{$item->kf_account}";
+            $options[$item['kf_account']] = $item['kf_account'];
         }
         return $options;
     }

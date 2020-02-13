@@ -17,7 +17,7 @@ class SnsApplication extends Base
      *
      * @return array
      */
-    public static function getAll()
+    public function getAll()
     {
         $list = self::orderBy('id', 'asc')
             ->select('name', 'id')

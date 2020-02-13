@@ -17,14 +17,12 @@ class Component extends Base
      *
      * @return array
      */
-    public static function getAll()
+    public function getAll()
     {
-        $list = self::orderBy('appid', 'asc')
-            ->select('appid', 'name')
-            ->get();
+        $list = $this->findAll(array(), array('appid' => 1));
         $options = array();
         foreach ($list as $item) {
-            $options[$item->appid] = $item->name;
+            $options[$item['appid']] = $item['name'];
         }
         return $options;
     }

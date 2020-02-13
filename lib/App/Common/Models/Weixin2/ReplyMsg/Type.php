@@ -16,14 +16,12 @@ class Type extends Base
      *
      * @return array
      */
-    public static function getAll()
+    public function getAll()
     {
-        $list = self::orderBy('id', 'asc')
-            ->select('name', 'value')
-            ->get();
+        $list = $this->findAll(array(), array('_id' => 1));
         $options = array();
         foreach ($list as $item) {
-            $options[$item->value] = $item->name;
+            $options[$item['value']] = $item['name'];
         }
         return $options;
     }

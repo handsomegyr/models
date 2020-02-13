@@ -17,14 +17,12 @@ class Keyword extends Base
      *
      * @return array
      */
-    public static function getAll()
+    public function getAll()
     {
-        $list = self::orderBy('id', 'asc')
-            ->select('keyword', 'id')
-            ->get();
+        $list = $this->findAll(array(), array('_id' => 1));
         $options = array();
         foreach ($list as $item) {
-            $options[$item->id] = $item->keyword;
+            $options[$item['_id']] = $item['keyword'];
         }
         return $options;
     }
