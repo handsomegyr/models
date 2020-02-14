@@ -18,7 +18,6 @@ class Tag extends Base
     public function reorganize(array $data)
     {
         $data = parent::reorganize($data);
-
         $data['tag_time'] = $this->changeToMongoDate($data['tag_time']);
         return $data;
     }

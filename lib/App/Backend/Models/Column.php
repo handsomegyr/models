@@ -29,4 +29,17 @@ class Column //extends \stdClass
         $value = call_user_func_array($callback, [$this->rowModel, $this]);
         return $value;
     }
+
+    /**
+     * Set style of this column.
+     *
+     * @param string $style
+     *
+     * @return $this
+     */
+    public function style($style)
+    {
+        return $style;
+    }
+
 }

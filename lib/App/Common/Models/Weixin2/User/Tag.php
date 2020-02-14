@@ -19,7 +19,7 @@ class Tag extends Base
      */
     public function getAllByType($field = "_id")
     {
-        $list = $this->findAll(array(,
+        $list = $this->findAll(array(
             'tag_id' => array(
                 '$gt' => 0
             ),
