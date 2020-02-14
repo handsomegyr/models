@@ -21,7 +21,7 @@ class File extends Base
         $data = parent::reorganize($data);
 
         $data['cron_time'] = $this->changeToMongoDate($data['cron_time']);
-        $data['status'] = $this->changeToBoolean($data['status']);
+        // $data['status'] = $this->changeToBoolean($data['status']);
         $data['log_time'] = $this->changeToMongoDate($data['log_time']);
         return $data;
     }
