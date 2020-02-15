@@ -6,17 +6,23 @@ use Closure;
 
 class Column //extends \stdClass
 {
-    public function __construct(array $row)
+    protected $fieldName = null;
+    protected $schemas = array();
+    protected $rowModel = null;
+    protected $fieldValue = null;
+    protected $baseUrl = null;
+
+    public function __construct($fieldName, $fieldValue, array $schemas, array $row, $baseUrl)
     {
-        // $this->row = $row;
+        $this->fieldName = $fieldName;
+        $this->fieldValue = $fieldValue;
+        $this->schemas = $schemas;
+        $this->baseUrl = $baseUrl;
         $this->rowModel = new \stdClass();
         foreach ($row as $key => $value) {
             $this->rowModel->$key = $value;
-            // $this->$key = $value;
         }
     }
-
-    protected $rowModel = null;
 
     /**
      * Add a display callback.
@@ -42,4 +48,40 @@ class Column //extends \stdClass
         return $style;
     }
 
+    public function downloadable()
+    {
+        if (empty($this->fieldValue)) {
+            return "";
+        }
+        $name = $this->fieldValue;
+        $src = $this->getSrc();
+        return <<<HTML
+<a href='{$src}' download='{$name}' target='_blank' class='text-muted'>
+    <i class="fa fa-download"></i> {$name}
+</a>
+HTML;
+    }
+
+    public function image($src, $width = 50, $height = 50)
+    {
+        if (empty($this->fieldValue)) {
+            return "";
+        }
+        if (empty($src)) {
+            $src = $this->getSrc();
+        }
+        return "<img src='{$src}' style='max-width:{$width}px;max-height:{$height}px' class='img img-thumbnail' />";
+    }
+
+    protected function getSrc()
+    {
+        $id = $this->fieldValue;
+        $field = $this->schemas[$this->fieldName];
+        $path = "";
+        if (!empty($field['data'][$field['data']['type']])) {
+            $fileInfo = $field['data'][$field['data']['type']];
+            $path = empty($fileInfo['path']) ? '' : trim($fileInfo['path'], '/') . '/';
+        }
+        return $this->baseUrl . "service/file/index?upload_path=" . trim($path, '/') . "&id=" . $id;
+    }
 }
