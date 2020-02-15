@@ -153,7 +153,7 @@ class Input extends \stdClass
         $data = array();
         if (!empty($schemas)) {
             foreach ($schemas as $key => $field) {
-                if ($field['data']['type'] == "string" || $field['data']['type'] == "image") {
+                if ($field['data']['type'] == "string") {
 
                     if (isset($this->$key) && $is_update) {
                         $data[$key] = urldecode(trim($this->$key));
