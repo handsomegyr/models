@@ -23,7 +23,7 @@ class News extends Base
 
         $data['show_cover_pic'] = $this->changeToBoolean($data['show_cover_pic']);
         $data['need_open_comment'] = $this->changeToBoolean($data['need_open_comment']);
-        $data['only_fans_can_comment'] = $this->changeToBoolean($data['only_fans_can_comment']);
+        // $data['only_fans_can_comment'] = $this->changeToBoolean($data['only_fans_can_comment']);
         return $data;
     }
 }

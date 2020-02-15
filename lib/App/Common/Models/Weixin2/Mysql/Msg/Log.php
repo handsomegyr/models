@@ -18,6 +18,9 @@ class Log extends Base
     {
         $data = parent::reorganize($data);
 
+        $data['aes_info'] = $this->changeToArray($data['aes_info']);
+        $data['request_params'] = $this->changeToArray($data['request_params']);        
+
         $data['request_time'] = $this->changeToMongoDate($data['request_time']);
         $data['response_time'] = $this->changeToMongoDate($data['response_time']);
 

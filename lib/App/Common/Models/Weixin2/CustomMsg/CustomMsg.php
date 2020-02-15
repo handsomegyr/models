@@ -27,7 +27,7 @@ class CustomMsg extends Base
         $list = $this->findAll($query, array('_id' => 1));
         $options = array();
         foreach ($list as $item) {
-            $options[$item->$field] = $item->name;
+            $options[$item[$field]] = $item['name'];
         }
         return $options;
     }

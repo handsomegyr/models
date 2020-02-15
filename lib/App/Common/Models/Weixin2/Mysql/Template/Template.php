@@ -20,8 +20,8 @@ class Template extends Base
     {
         $data = parent::reorganize($data);
 
+        // $data['content'] = $this->changeToArray($data['content']);
         $data['template_time'] = $this->changeToMongoDate($data['template_time']);
-
         $data['is_created'] = $this->changeToBoolean($data['is_created']);
         return $data;
     }

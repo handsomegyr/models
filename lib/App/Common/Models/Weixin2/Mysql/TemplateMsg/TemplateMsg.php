@@ -14,4 +14,12 @@ class TemplateMsg extends Base
     {
         return 'iweixin2_template_msg';
     }
+
+    public function reorganize(array $data)
+    {
+        $data = parent::reorganize($data);
+
+        $data['data'] = $this->changeToArray($data['data']);
+        return $data;
+    }
 }
