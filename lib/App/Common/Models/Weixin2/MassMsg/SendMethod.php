@@ -18,12 +18,11 @@ class SendMethod extends Base
      */
     public function getAll()
     {
-        $list = self::orderBy('id', 'asc')
-            ->select('name', 'id')
-            ->get();
+        $query = array();
+        $list = $this->findAll($query, array('_id' => 1));
         $options = array();
         foreach ($list as $item) {
-            $options[$item->id] = $item->name;
+            $options[$item['_id']] = $item['name'];
         }
         return $options;
     }

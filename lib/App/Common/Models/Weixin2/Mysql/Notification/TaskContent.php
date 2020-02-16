@@ -14,4 +14,13 @@ class TaskContent extends Base
     {
         return 'iweixin2_notification_task_content';
     }
+
+    public function reorganize(array $data)
+    {
+        $data = parent::reorganize($data);
+
+        $data['openids'] = $this->changeToArray($data['openids']);
+        $data['push_time'] = $this->changeToMongoDate($data['push_time']);
+        return $data;
+    }
 }
