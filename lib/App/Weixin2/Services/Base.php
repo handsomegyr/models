@@ -1,5 +1,5 @@
 <?php
-namespace App\Weixin\Services;
+namespace App\Weixin2\Services;
 
 class Base
 {
