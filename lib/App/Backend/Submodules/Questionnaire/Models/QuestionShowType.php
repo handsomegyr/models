@@ -2,7 +2,7 @@
 
 namespace App\Backend\Submodules\Questionnaire\Models;
 
-class Question extends \App\Common\Models\Questionnaire\Question
+class QuestionShowType extends \App\Common\Models\Questionnaire\QuestionShowType
 {
 
     use \App\Backend\Models\Base;
@@ -19,7 +19,7 @@ class Question extends \App\Common\Models\Questionnaire\Question
         $ret = $this->findAll($query, $sort);
         $list = array();
         foreach ($ret as $item) {
-            $list[$item['_id']] = $item['name'];
+            $list[$item['code']] = $item['name'];
         }
         return $list;
     }

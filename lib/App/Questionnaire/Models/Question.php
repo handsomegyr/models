@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Questionnaire\Models;
 
 class Question extends \App\Common\Models\Questionnaire\Question
@@ -9,7 +10,9 @@ class Question extends \App\Common\Models\Questionnaire\Question
      */
     public function getQuery()
     {
-        $query = array();
+        $query = array(
+            'is_show' => 1
+        );
         return $query;
     }
 
@@ -22,7 +25,7 @@ class Question extends \App\Common\Models\Questionnaire\Question
     public function getDefaultSort($sort = -1)
     {
         $sort = array(
-            'show_order' => - 1,
+            'show_order' => -1,
             '_id' => $sort
         );
         return $sort;
@@ -53,11 +56,11 @@ class Question extends \App\Common\Models\Questionnaire\Question
     {
         // 获取所有的题目列表
         $list = $this->getListByQuestionnaireId($questionnaireId);
-        
+
         $ret = array();
-        if (! empty($list)) {
+        if (!empty($list)) {
             $rand_keys = array_rand($list, $randomNum);
-            if (! is_array($rand_keys)) {
+            if (!is_array($rand_keys)) {
                 $rand_keys = array(
                     $rand_keys
                 );
@@ -78,17 +81,17 @@ class Question extends \App\Common\Models\Questionnaire\Question
         $answerList = array();
         $question_num = 0;
         foreach ($questionList as $questionInfo) {
-            $question_num ++;
+            $question_num++;
             if (isset($userAnswers[$questionInfo['_id']])) {
                 // 检查答案
                 $ret = $this->checkAnswer($questionInfo, $userAnswers[$questionInfo['_id']]);
                 $answerList[] = $ret;
-                
+
                 $score += $ret['score'];
                 $correct_num += $ret['correct_num'];
                 $wrong_num += $ret['wrong_num'];
             } else {
-                $noanswer_num ++;
+                $noanswer_num++;
             }
         }
         // $correct = round($correct_num * 100 / $question_num);
@@ -115,16 +118,16 @@ class Question extends \App\Common\Models\Questionnaire\Question
         $wrong_num = 0;
         $score = 0;
         $result = false;
-        
+
         // 有正确答案，进行判断
-        if (! empty($questionInfo['correct_answer'])) {
+        if (!empty($questionInfo['correct_answer'])) {
             $arrAnswerKey = array();
             foreach ($userAnswer as $answerInfo) {
                 $arrAnswerKey[] = trim(strtoupper($answerInfo['key']));
             }
             asort($arrAnswerKey); // 排序
             $strAnswerKey = implode('', $arrAnswerKey);
-            
+
             // 逗号分隔
             $arrCorrectkey = explode(',', trim($questionInfo['correct_answer']));
             foreach ($arrCorrectkey as &$key) {
@@ -132,19 +135,19 @@ class Question extends \App\Common\Models\Questionnaire\Question
             }
             asort($arrCorrectkey); // 排序
             $strCorrectKey = implode('', $arrCorrectkey);
-            
+
             if (trim($strCorrectKey) == trim($strAnswerKey)) {
-                $correct_num ++;
+                $correct_num++;
                 $result = true;
                 $score = $questionInfo['score'];
             } else {
-                $wrong_num ++;
+                $wrong_num++;
             }
         } else {
             // 无正确答案，默认都正确
             $result = true;
             $score = $questionInfo['score'];
-            $correct_num ++;
+            $correct_num++;
         }
         $ret = array(
             'question_id' => $questionInfo['_id'],

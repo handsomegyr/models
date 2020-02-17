@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Questionnaire\Models;
 
 class QuestionItem extends \App\Common\Models\Questionnaire\QuestionItem
@@ -13,7 +14,7 @@ class QuestionItem extends \App\Common\Models\Questionnaire\QuestionItem
     public function getDefaultSort($sort = -1)
     {
         $sort = array(
-            'show_order' => - 1,
+            'show_order' => -1,
             '_id' => $sort
         );
         return $sort;

@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Common\Models\Questionnaire\Mysql;
 
 use App\Common\Models\Base\Mysql\Base;
@@ -22,4 +23,3 @@ class QuestionItem extends Base
         return $data;
     }
 }
-

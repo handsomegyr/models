@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Common\Models\Questionnaire\Mysql;
 
 use App\Common\Models\Base\Mysql\Base;
@@ -19,6 +20,7 @@ class Question extends Base
     {
         $data = parent::reorganize($data);
         $data['is_required'] = $this->changeToBoolean($data['is_required']);
+        $data['is_show'] = $this->changeToBoolean($data['is_show']);
         return $data;
     }
 }

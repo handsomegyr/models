@@ -1,9 +1,10 @@
 <?php
+
 namespace App\Backend\Submodules\Questionnaire\Models;
 
 class Questionnaire extends \App\Common\Models\Questionnaire\Questionnaire
 {
-    
+
     use \App\Backend\Models\Base;
 
     /**

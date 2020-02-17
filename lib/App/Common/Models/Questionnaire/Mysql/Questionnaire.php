@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Common\Models\Questionnaire\Mysql;
 
 use App\Common\Models\Base\Mysql\Base;
@@ -21,8 +22,7 @@ class Questionnaire extends Base
         $data['is_rand'] = $this->changeToBoolean($data['is_rand']);
         $data['start_time'] = $this->changeToMongoDate($data['start_time']);
         $data['end_time'] = $this->changeToMongoDate($data['end_time']);
-        
+
         return $data;
     }
 }
-

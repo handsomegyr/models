@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Common\Models\Questionnaire\Mysql;
 
 use App\Common\Models\Base\Mysql\Base;
@@ -15,4 +16,3 @@ class QuestionType extends Base
         return 'iquestionnaire_question_type';
     }
 }
-

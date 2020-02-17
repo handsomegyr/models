@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Questionnaire\Models;
 
 class Random extends \App\Common\Models\Questionnaire\Random
@@ -39,7 +40,7 @@ class Random extends \App\Common\Models\Questionnaire\Random
         return $this->insert($data);
     }
 
-    public function finish($randomId)
+    public function finish($randomId, $finish_time)
     {
         $rst = $this->update(array(
             '_id' => $randomId,
@@ -47,10 +48,10 @@ class Random extends \App\Common\Models\Questionnaire\Random
         ), array(
             '$set' => array(
                 'is_finish' => true,
-                'finish_time' => new \MongoDate()
+                'finish_time' => getCurrentTime($finish_time)
             )
         ));
-        
+
         return $rst;
     }
 }
