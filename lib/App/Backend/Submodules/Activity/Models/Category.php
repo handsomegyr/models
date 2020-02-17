@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Backend\Submodules\Activity\Models;
 
 class Category extends \App\Common\Models\Activity\Category

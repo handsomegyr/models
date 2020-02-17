@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Article\Views\Helpers;
 
 use App\Article\Models\Article;

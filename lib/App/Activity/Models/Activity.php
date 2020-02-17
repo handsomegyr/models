@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Activity\Models;
 
 class Activity extends \App\Common\Models\Activity\Activity
@@ -46,8 +47,8 @@ class Activity extends \App\Common\Models\Activity\Activity
         $ret['is_actvity_paused'] = $is_actvity_paused;
         // 活动是否结束了
         $ret['is_activity_over'] = $is_activity_over;
-        
-        if (! empty($is_return_info)) {
+
+        if (!empty($is_return_info)) {
             // 活动信息
             $ret['activityInfo'] = $activityInfo;
         }
@@ -115,9 +116,9 @@ class Activity extends \App\Common\Models\Activity\Activity
     public function checkActivityActive($activity_id)
     {
         $activityInfo = $this->getActivityInfo($activity_id);
-        if (! empty($activityInfo['is_actived'])) {
+        if (!empty($activityInfo['is_actived'])) {
             $now = time();
-            if (! empty($activityInfo['start_time']) && ! empty($activityInfo['end_time'])) {
+            if (!empty($activityInfo['start_time']) && !empty($activityInfo['end_time'])) {
                 if ($activityInfo['start_time']->sec <= $now && $now <= $activityInfo['end_time']->sec) {
                     return true;
                 } else {

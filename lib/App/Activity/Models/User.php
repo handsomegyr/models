@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Activity\Models;
 
 class User extends \App\Common\Models\Activity\User
@@ -18,7 +19,7 @@ class User extends \App\Common\Models\Activity\User
             'user_id' => $user_id,
             'activity_id' => strval($activity_id)
         );
-        if (! empty($otherCondition)) {
+        if (!empty($otherCondition)) {
             $query = array_merge($query, $otherCondition);
         }
         $info = $this->findOne($query);
@@ -31,7 +32,7 @@ class User extends \App\Common\Models\Activity\User
             'thirdparty_user' => $thirdparty_user,
             'activity_id' => strval($activity_id)
         );
-        if (! empty($otherCondition)) {
+        if (!empty($otherCondition)) {
             $query = array_merge($query, $otherCondition);
         }
         $info = $this->findOne($query);
@@ -44,7 +45,7 @@ class User extends \App\Common\Models\Activity\User
             'redpack_user' => $redpack_user,
             'activity_id' => strval($activity_id)
         );
-        if (! empty($otherCondition)) {
+        if (!empty($otherCondition)) {
             $query = array_merge($query, $otherCondition);
         }
         $info = $this->findOne($query);
@@ -54,7 +55,9 @@ class User extends \App\Common\Models\Activity\User
     /**
      * 生成记录
      *
-     * @param string $user_id            
+     * @param string $activity_id
+     * @param string $user_id
+     * @param number $log_time            
      * @param string $nickname            
      * @param string $headimgurl            
      * @param string $redpack_user            
@@ -66,7 +69,7 @@ class User extends \App\Common\Models\Activity\User
      * @param array $memo            
      * @return array
      */
-    public function create($user_id, $nickname, $headimgurl, $redpack_user, $thirdparty_user, $worth = 0, $worth2 = 0, $activity_id, $scene="", array $memo = array('memo'=>''))
+    public function create($activity_id, $user_id, $log_time, $nickname, $headimgurl, $redpack_user, $thirdparty_user, $worth = 0, $worth2 = 0, $scene = "", array $memo = array('memo' => ''))
     {
         $data = array();
         $data['activity_id'] = strval($activity_id); // 邀请活动
@@ -77,7 +80,7 @@ class User extends \App\Common\Models\Activity\User
         $data['thirdparty_user'] = $thirdparty_user; // 第3方账号
         $data['worth'] = intval($worth); // 价值
         $data['worth2'] = intval($worth2); // 价值2
-        $data['log_time'] = getCurrentTime();
+        $data['log_time'] = getCurrentTime($log_time);
         $data['scene'] = $scene; // 场景
         $data['memo'] = $memo; // 备注
         $info = $this->insert($data);
@@ -99,11 +102,11 @@ class User extends \App\Common\Models\Activity\User
      * @param array $memo            
      * @return array
      */
-    public function getOrCreateByUserId($user_id, $nickname, $headimgurl, $redpack_user, $thirdparty_user, $worth = 0, $worth2 = 0, $activity_id, $scene="", array $memo = array())
+    public function getOrCreateByUserId($activity_id, $user_id, $log_time, $nickname, $headimgurl, $redpack_user, $thirdparty_user, $worth = 0, $worth2 = 0, $scene = "", array $memo = array())
     {
         $info = $this->getInfoByUserid($user_id, $activity_id);
         if (empty($info)) {
-            $info = $this->create($user_id, $nickname, $headimgurl, $redpack_user, $thirdparty_user, $worth, $worth2, $activity_id, $scene, $memo);
+            $info = $this->create($activity_id, $user_id, $log_time, $nickname, $headimgurl, $redpack_user, $thirdparty_user, $worth, $worth2, $activity_id, $scene, $memo);
         }
         return $info;
     }
@@ -132,32 +135,32 @@ class User extends \App\Common\Models\Activity\User
         $query = array(
             '_id' => $info['_id']
         );
-        
+
         $options = array();
         $options['query'] = $query;
-        
+
         $update = array(
             '$inc' => array(
                 'worth' => $worth
             )
         );
-        if (! empty($otherIncData)) {
+        if (!empty($otherIncData)) {
             $update['$inc'] = array_merge($update['$inc'], $otherIncData);
         }
-        
-        if (! empty($otherUpdateData)) {
+
+        if (!empty($otherUpdateData)) {
             $update['$set'] = $otherUpdateData;
         }
-        
+
         $options['update'] = $update;
         $options['new'] = true; // 返回更新之后的值
-        
+
         $rst = $this->findAndModify($options);
         if (empty($rst['ok'])) {
             throw new Exception("findandmodify失败");
         }
-        
-        if (! empty($rst['value'])) {
+
+        if (!empty($rst['value'])) {
             return $rst['value'];
         } else {
             throw new Exception("价值增加失败");

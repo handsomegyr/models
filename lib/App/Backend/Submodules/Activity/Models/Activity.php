@@ -1,9 +1,10 @@
 <?php
+
 namespace App\Backend\Submodules\Activity\Models;
 
 class Activity extends \App\Common\Models\Activity\Activity
 {
-    use\App\Backend\Models\Base;
+    use \App\Backend\Models\Base;
 
     /**
      * 获取所有活动列表

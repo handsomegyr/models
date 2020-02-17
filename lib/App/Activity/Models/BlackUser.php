@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Activity\Models;
 
 class BlackUser extends \App\Common\Models\Activity\BlackUser
@@ -15,7 +16,7 @@ class BlackUser extends \App\Common\Models\Activity\BlackUser
                 'activity_id' => $activity_id
             );
             $info = $this->findOne($query);
-            if (! empty($info)) {
+            if (!empty($info)) {
                 $cache->save($cacheKey, $info, 5 * 60);
             }
         }

@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Backend\Submodules\Activity\Models;
 
 class BlackUser extends \App\Common\Models\Activity\BlackUser
