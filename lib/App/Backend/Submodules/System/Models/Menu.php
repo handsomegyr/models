@@ -142,7 +142,7 @@ class Menu extends \App\Common\Models\System\Menu
     public function getPrivilege($menu_list, $requestUrl = "")
     {
         return $this->buildPrivilegeTree($menu_list, $requestUrl);
-        
+
         $menu_list = empty($menu_list) ? array() : $menu_list;
         $priv_arr = array();
         $sort = $this->getDefaultSort();
@@ -219,7 +219,9 @@ class Menu extends \App\Common\Models\System\Menu
         $new = array();
         foreach ($menus as $a) {
             unset($a['__CREATE_TIME__'], $a['__MODIFY_TIME__'], $a['__REMOVED__']);
-            $is_active = (!empty($requestUrl) && !empty($a['url']) && (strstr($a['url'], $requestUrl) != false)) ? true : false;
+            //$is_active = (!empty($requestUrl) && !empty($a['url']) && (strstr($a['url'], $requestUrl) != false)) ? true : false;
+            $is_active = (!empty($requestUrl) && !empty($a['url']) && ($a['url'] == $requestUrl . '/list')) ? true : false;
+
             $cando = in_array($a['_id'], $menu_list) ? 1 : 0;
             $a['relevance'] = '';
             $privMenu = array(
@@ -258,11 +260,15 @@ class Menu extends \App\Common\Models\System\Menu
             if (isset($menus[$l['_id']])) {
                 $sub_menus = $this->buildTree($menus, $menus[$l['_id']]);
                 $cando = 0;
+                $is_active = 0;
                 $priv_list = '';
                 if (!empty($sub_menus)) {
                     foreach ($sub_menus as $sm) {
                         if ($sm['cando']) {
                             $cando = 1;
+                        }
+                        if ($sm['is_active']) {
+                            $is_active = 1;
                         }
                     }
                     $priv_list .= join(',', @array_keys($sub_menus));
@@ -272,6 +278,7 @@ class Menu extends \App\Common\Models\System\Menu
                     $l['priv_list'] = trim(',' . $priv_list, ',');
                 }
                 $l['cando'] = $cando;
+                $l['is_active'] = $is_active;
             }
             $tree[$l['_id']] = $l;
         }
