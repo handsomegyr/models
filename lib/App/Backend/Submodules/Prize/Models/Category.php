@@ -1,9 +1,10 @@
 <?php
+
 namespace App\Backend\Submodules\Prize\Models;
 
 class Category extends \App\Common\Models\Prize\Category
 {
-    use\App\Backend\Models\Base;
+    use \App\Backend\Models\Base;
 
     /**
      * 获取所有列表

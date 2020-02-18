@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Prize\Models;
 
 class Code extends \App\Common\Models\Prize\Code
@@ -30,11 +31,11 @@ class Code extends \App\Common\Models\Prize\Code
             ),
             '__FOR_UPDATE__' => true
         );
-        
+
         $loop = 0;
         while (true) {
             $code = $this->findOne($query);
-            if (! empty($code)) {
+            if (!empty($code)) {
                 $options = array();
                 $options['query'] = array(
                     '_id' => $code['_id'],
@@ -56,9 +57,9 @@ class Code extends \App\Common\Models\Prize\Code
                     )
                 );
                 $rst = $this->findAndModify($options);
-                if (! empty($rst['value']))
+                if (!empty($rst['value']))
                     return $rst['value'];
-                if ($loop ++ >= 10) {
+                if ($loop++ >= 10) {
                     return false;
                 }
             } else {

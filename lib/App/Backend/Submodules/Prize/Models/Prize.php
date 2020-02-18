@@ -1,10 +1,11 @@
 <?php
+
 namespace App\Backend\Submodules\Prize\Models;
 
 class Prize extends \App\Common\Models\Prize\Prize
 {
-    use\App\Backend\Models\Base;
-    
+    use \App\Backend\Models\Base;
+
     /**
      * 获取所有列表
      *

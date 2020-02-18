@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Prize\Models;
 
 class Prize extends \App\Common\Models\Prize\Prize
@@ -28,7 +29,7 @@ class Prize extends \App\Common\Models\Prize\Prize
             '_id' => $prize_id
         ));
     }
-    
+
     /**
      * 创建一个奖品
      *
