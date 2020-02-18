@@ -73,7 +73,8 @@ class Invitation extends \App\Common\Models\Invitation\Invitation
      * @param string $user_name            
      * @param string $user_headimgurl            
      * @param string $url            
-     * @param string $desc            
+     * @param string $desc             
+     * @param number $send_time             
      * @param number $worth            
      * @param number $worth2            
      * @param number $invited_total            
@@ -84,7 +85,7 @@ class Invitation extends \App\Common\Models\Invitation\Invitation
      * @param array $memo            
      * @return array
      */
-    public function create($user_id, $user_name, $user_headimgurl, $url, $desc, $worth = 0, $worth2 = 0, $invited_total = 0, $personal_receive_num = 0, $is_need_subscribed = false, $subscibe_hint_url = "", $activity_id = '', array $memo = array('memo' => ''))
+    public function create($user_id, $user_name, $user_headimgurl, $url, $desc, $send_time, $worth = 0, $worth2 = 0, $invited_total = 0, $personal_receive_num = 0, $is_need_subscribed = false, $subscibe_hint_url = "", $activity_id = '', array $memo = array('memo' => ''))
     {
         $data = array();
         $data['activity_id'] = $activity_id; // 邀请活动
@@ -97,7 +98,7 @@ class Invitation extends \App\Common\Models\Invitation\Invitation
         $data['worth2'] = $worth2; // 价值2
         $data['invited_num'] = 0; // 接受邀请次数
         $data['invited_total'] = $invited_total; // 接受邀请总次数，如果为0，不限制
-        $data['send_time'] = getCurrentTime(); // 发送时间
+        $data['send_time'] = getCurrentTime($send_time); // 发送时间
         $data['is_need_subscribed'] = $is_need_subscribed; // 是否需要微信关注
         $data['subscibe_hint_url'] = $subscibe_hint_url; // 微信关注提示页面链接
         $data['personal_receive_num'] = $personal_receive_num; // 个人领取次数，如果为0，不限制
@@ -116,7 +117,8 @@ class Invitation extends \App\Common\Models\Invitation\Invitation
      * @param string $user_name            
      * @param string $user_headimgurl            
      * @param string $url            
-     * @param string $desc            
+     * @param string $desc              
+     * @param number $send_time            
      * @param number $worth            
      * @param number $worth2            
      * @param number $invited_total            
@@ -127,11 +129,11 @@ class Invitation extends \App\Common\Models\Invitation\Invitation
      * @param array $memo            
      * @return array
      */
-    public function getOrCreateByUserId($user_id, $user_name, $user_headimgurl, $url, $desc, $worth = 0, $worth2 = 0, $invited_total = 0, $personal_receive_num = 0, $is_need_subscribed = false, $subscibe_hint_url = "", $activity_id = '', array $memo = array())
+    public function getOrCreateByUserId($user_id, $user_name, $user_headimgurl, $url, $desc, $send_time, $worth = 0, $worth2 = 0, $invited_total = 0, $personal_receive_num = 0, $is_need_subscribed = false, $subscibe_hint_url = "", $activity_id = '', array $memo = array())
     {
         $info = $this->getInfoByUserId($user_id, $activity_id);
         if (empty($info)) {
-            $info = $this->create($user_id, $user_name, $user_headimgurl, $url, $desc, $worth, $worth2, $invited_total, $personal_receive_num, $is_need_subscribed, $subscibe_hint_url, $activity_id, $memo);
+            $info = $this->create($user_id, $user_name, $user_headimgurl, $url, $desc, $send_time, $worth, $worth2, $invited_total, $personal_receive_num, $is_need_subscribed, $subscibe_hint_url, $activity_id, $memo);
         }
         return $info;
     }
@@ -388,6 +390,9 @@ class Invitation extends \App\Common\Models\Invitation\Invitation
                     '_id' => '$user_id',
                     'totalWorth' => array(
                         '$sum' => '$worth'
+                    ),
+                    'totalWorth2' => array(
+                        '$sum' => '$worth2'
                     ),
                     'totalInvitedNum' => array(
                         '$sum' => '$invited_num'
