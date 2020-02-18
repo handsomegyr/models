@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Invitation\Models;
 
 class User extends \App\Common\Models\Invitation\User
@@ -30,7 +31,7 @@ class User extends \App\Common\Models\Invitation\User
             'user_id' => $user_id,
             'activity_id' => $activity_id
         );
-        if (! empty($otherCondition)) {
+        if (!empty($otherCondition)) {
             $query = array_merge($query, $otherCondition);
         }
         $info = $this->findOne($query);
@@ -49,7 +50,7 @@ class User extends \App\Common\Models\Invitation\User
      * @param array $memo            
      * @return array
      */
-    public function create($user_id, $user_name, $user_headimgurl, $worth = 0, $worth2 = 0, $activity_id = 0, array $memo = array('memo'=>''))
+    public function create($user_id, $user_name, $user_headimgurl, $worth = 0, $worth2 = 0, $activity_id = 0, array $memo = array('memo' => ''))
     {
         $data = array();
         $data['activity_id'] = $activity_id; // 邀请活动
@@ -97,12 +98,12 @@ class User extends \App\Common\Models\Invitation\User
      */
     public function lock($id)
     {
-        if (! $this->isExclusive) { // 非排他
+        if (!$this->isExclusive) { // 非排他
             return false;
         }
         // 锁定之前，先清除过期锁
         $this->expire($id);
-        
+
         // 查找当前用户的锁
         $lock = $this->findOne(array(
             '_id' => ($id)
@@ -115,7 +116,7 @@ class User extends \App\Common\Models\Invitation\User
                 'lock' => false
             );
         }
-        
+
         $options = array();
         $options['query'] = $query;
         $options['update'] = array(
@@ -125,12 +126,12 @@ class User extends \App\Common\Models\Invitation\User
             )
         );
         $options['new'] = false; // 返回更新之前的值
-        
+
         $rst = $this->findAndModify($options);
         if (empty($rst['ok'])) {
             throw new \Exception("findandmodify失败");
         }
-        
+
         if (empty($rst['value'])) {
             // 已经被锁定
             return true;
@@ -147,7 +148,7 @@ class User extends \App\Common\Models\Invitation\User
      */
     public function unlock($id)
     {
-        if (! $this->isExclusive) { // 非排他
+        if (!$this->isExclusive) { // 非排他
             return;
         }
         return $this->update(array(
@@ -202,37 +203,37 @@ class User extends \App\Common\Models\Invitation\User
         $query = array(
             '_id' => $info['_id']
         );
-        
+
         if ($this->isExclusive) { // 排他
             $query['lock'] = true;
         }
-        
+
         $options = array();
         $options['query'] = $query;
-        
+
         $update = array(
             '$inc' => array(
                 'worth' => $worth,
                 'worth2' => $worth2
             )
         );
-        if (! empty($otherIncData)) {
+        if (!empty($otherIncData)) {
             $update['$inc'] = array_merge($update['$inc'], $otherIncData);
         }
-        
-        if (! empty($otherUpdateData)) {
+
+        if (!empty($otherUpdateData)) {
             $update['$set'] = $otherUpdateData;
         }
-        
+
         $options['update'] = $update;
         $options['new'] = true; // 返回更新之后的值
-        
+
         $rst = $this->findAndModify($options);
         if (empty($rst['ok'])) {
             throw new \Exception("findandmodify失败");
         }
-        
-        if (! empty($rst['value'])) {
+
+        if (!empty($rst['value'])) {
             return $rst['value'];
         } else {
             throw new \Exception("价值增加失败");

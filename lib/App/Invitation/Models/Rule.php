@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Invitation\Models;
 
 class Rule extends \App\Common\Models\Invitation\Rule
@@ -39,14 +40,13 @@ class Rule extends \App\Common\Models\Invitation\Rule
     {
         $groupList = array();
         // 按照probability分组
-        array_map(function ($row) use(&$groupList)
-        {
+        array_map(function ($row) use (&$groupList) {
             $groupList[$row['probability']][] = $row;
         }, $list);
-        
+
         // 按照概率从高到底的次序排序
         ksort($groupList, SORT_NUMERIC);
-        
+
         // 按分组随机排序
         $resultList = array();
         foreach ($groupList as $key => $rows) {
@@ -63,7 +63,7 @@ class Rule extends \App\Common\Models\Invitation\Rule
     {
         $worth = 0;
         $rules = $this->getRules($activity_id);
-        if (! empty($rules)) {
+        if (!empty($rules)) {
             foreach ($rules as $rule) {
                 if (rand(0, 9999) < $rule['probability']) {
                     $worth = $rule['worth'];

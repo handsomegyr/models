@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Invitation\Models;
 
 class InvitationGotDetail extends \App\Common\Models\Invitation\InvitationGotDetail
@@ -37,7 +38,7 @@ class InvitationGotDetail extends \App\Common\Models\Invitation\InvitationGotDet
      * @param array $memo            
      * @return array
      */
-    public function create($invitation_id, $owner_user_id, $owner_user_name, $owner_user_headimgurl, $got_user_id, $got_user_name, $got_user_headimgurl, $got_worth = 0,$got_worth2 = 0, $activity_id = '', array $memo = array())
+    public function create($invitation_id, $owner_user_id, $owner_user_name, $owner_user_headimgurl, $got_user_id, $got_user_name, $got_user_headimgurl, $got_worth = 0, $got_worth2 = 0, $activity_id = '', array $memo = array())
     {
         $data = array();
         $data['activity_id'] = $activity_id; // 邀请活动
@@ -68,7 +69,7 @@ class InvitationGotDetail extends \App\Common\Models\Invitation\InvitationGotDet
         if (empty($receive_limit)) {
             return false;
         }
-        
+
         $query = array();
         $query['invitation_id'] = $invitation_id; // 邀请函ID
         $query['got_user_id'] = $got_user_id; // 领邀请函的user_id
@@ -87,7 +88,7 @@ class InvitationGotDetail extends \App\Common\Models\Invitation\InvitationGotDet
     public function getListByPage($invitationId, $page = 1, $limit = 10)
     {
         $sort = array(
-            'got_time' => - 1
+            'got_time' => -1
         );
         $query = array();
         $query['invitation_id'] = $invitationId;
@@ -109,7 +110,7 @@ class InvitationGotDetail extends \App\Common\Models\Invitation\InvitationGotDet
     {
         if (empty($sort)) {
             $sort = array(
-                'got_time' => - 1
+                'got_time' => -1
             );
         }
         $query = array();
@@ -133,7 +134,7 @@ class InvitationGotDetail extends \App\Common\Models\Invitation\InvitationGotDet
     {
         if (empty($sort)) {
             $sort = array(
-                'got_time' => - 1
+                'got_time' => -1
             );
         }
         $query = array();
@@ -175,8 +176,8 @@ class InvitationGotDetail extends \App\Common\Models\Invitation\InvitationGotDet
                 )
             )
         ));
-        
-        if (! empty($rst['result'])) {
+
+        if (!empty($rst['result'])) {
             return $rst['result'][0]['total'];
         } else {
             return 0;
@@ -215,8 +216,8 @@ class InvitationGotDetail extends \App\Common\Models\Invitation\InvitationGotDet
                 )
             )
         ));
-        
-        if (! empty($rst['result'])) {
+
+        if (!empty($rst['result'])) {
             return $rst['result'][0]['total'];
         } else {
             return 0;

@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Invitation\Models;
 
 class Invitation extends \App\Common\Models\Invitation\Invitation
@@ -30,7 +31,7 @@ class Invitation extends \App\Common\Models\Invitation\Invitation
             'user_id' => $user_id,
             'activity_id' => $activity_id
         );
-        if (! empty($otherCondition)) {
+        if (!empty($otherCondition)) {
             $query = array_merge($query, $otherCondition);
         }
         $info = $this->findOne($query);
@@ -51,14 +52,14 @@ class Invitation extends \App\Common\Models\Invitation\Invitation
             'user_id' => $user_id,
             'activity_id' => $activity_id
         );
-        if (! empty($otherCondition)) {
+        if (!empty($otherCondition)) {
             $query = array_merge($query, $otherCondition);
         }
         $sort = array(
-            'send_time' => - 1
+            'send_time' => -1
         );
         $list = $this->find($query, $sort, 0, 1);
-        if (! empty($list['datas'])) {
+        if (!empty($list['datas'])) {
             return $list['datas'][0];
         } else {
             return null;
@@ -83,7 +84,7 @@ class Invitation extends \App\Common\Models\Invitation\Invitation
      * @param array $memo            
      * @return array
      */
-    public function create($user_id, $user_name, $user_headimgurl, $url, $desc, $worth = 0, $worth2 = 0, $invited_total = 0, $personal_receive_num = 0, $is_need_subscribed = false, $subscibe_hint_url = "", $activity_id = '', array $memo = array('memo'=>''))
+    public function create($user_id, $user_name, $user_headimgurl, $url, $desc, $worth = 0, $worth2 = 0, $invited_total = 0, $personal_receive_num = 0, $is_need_subscribed = false, $subscibe_hint_url = "", $activity_id = '', array $memo = array('memo' => ''))
     {
         $data = array();
         $data['activity_id'] = $activity_id; // 邀请活动
@@ -103,7 +104,7 @@ class Invitation extends \App\Common\Models\Invitation\Invitation
         $data['lock'] = false; // 未锁定
         $data['expire'] = getCurrentTime(); // 过期时间
         $data['memo'] = $memo; // 备注
-        
+
         $info = $this->insert($data);
         return $info;
     }
@@ -161,12 +162,12 @@ class Invitation extends \App\Common\Models\Invitation\Invitation
      */
     public function lock($invitationId)
     {
-        if (! $this->isExclusive) { // 非排他
+        if (!$this->isExclusive) { // 非排他
             return false;
         }
         // 锁定之前，先清除过期锁
         $this->expire($invitationId);
-        
+
         // 查找当前用户的锁
         $lock = $this->findOne(array(
             '_id' => ($invitationId)
@@ -179,7 +180,7 @@ class Invitation extends \App\Common\Models\Invitation\Invitation
                 'lock' => false
             );
         }
-        
+
         $options = array();
         $options['query'] = $query;
         $options['update'] = array(
@@ -189,12 +190,12 @@ class Invitation extends \App\Common\Models\Invitation\Invitation
             )
         );
         $options['new'] = false; // 返回更新之前的值
-        
+
         $rst = $this->findAndModify($options);
         if (empty($rst['ok'])) {
             throw new \Exception("findandmodify失败");
         }
-        
+
         if (empty($rst['value'])) {
             // 已经被锁定
             return true;
@@ -211,7 +212,7 @@ class Invitation extends \App\Common\Models\Invitation\Invitation
      */
     public function unlock($invitationId)
     {
-        if (! $this->isExclusive) { // 非排他
+        if (!$this->isExclusive) { // 非排他
             return;
         }
         return $this->update(array(
@@ -268,20 +269,20 @@ class Invitation extends \App\Common\Models\Invitation\Invitation
         $query = array(
             '_id' => $info['_id']
         );
-        
+
         if ($this->isExclusive) { // 排他
             $query['lock'] = true;
         }
-        
-        if (! empty($info['invited_total'])) {
+
+        if (!empty($info['invited_total'])) {
             $query['invited_num'] = array(
                 '$lt' => $info['invited_total']
             );
         }
-        
+
         $options = array();
         $options['query'] = $query;
-        
+
         $update = array(
             '$inc' => array(
                 'invited_num' => 1,
@@ -289,23 +290,23 @@ class Invitation extends \App\Common\Models\Invitation\Invitation
                 'worth2' => $worth2
             )
         );
-        if (! empty($otherIncData)) {
+        if (!empty($otherIncData)) {
             $update['$inc'] = array_merge($update['$inc'], $otherIncData);
         }
-        
-        if (! empty($otherUpdateData)) {
+
+        if (!empty($otherUpdateData)) {
             $update['$set'] = $otherUpdateData;
         }
-        
+
         $options['update'] = $update;
         $options['new'] = true; // 返回更新之后的值
-        
+
         $rst = $this->findAndModify($options);
         if (empty($rst['ok'])) {
             throw new \Exception("findandmodify失败");
         }
-        
-        if (! empty($rst['value'])) {
+
+        if (!empty($rst['value'])) {
             return $rst['value'];
         } else {
             throw new \Exception("接受邀请次数增加失败");
@@ -324,7 +325,7 @@ class Invitation extends \App\Common\Models\Invitation\Invitation
     public function getListByPage($user_id, $activity_id = '', $page = 1, $limit = 10)
     {
         $sort = array(
-            'send_time' => - 1
+            'send_time' => -1
         );
         $query = array();
         $query['user_id'] = $user_id;
@@ -355,7 +356,7 @@ class Invitation extends \App\Common\Models\Invitation\Invitation
      */
     public function isOver($info)
     {
-        $isOver = (! empty($info['invited_total']) && $info['invited_num'] >= $info['invited_total']) ? true : false;
+        $isOver = (!empty($info['invited_total']) && $info['invited_num'] >= $info['invited_total']) ? true : false;
         return $isOver;
     }
 
@@ -394,8 +395,8 @@ class Invitation extends \App\Common\Models\Invitation\Invitation
                 )
             )
         ));
-        
-        if (! empty($rst['result'])) {
+
+        if (!empty($rst['result'])) {
             return $rst['result'][0];
         } else {
             return 0;

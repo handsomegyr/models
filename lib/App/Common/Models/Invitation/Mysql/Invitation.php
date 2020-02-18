@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Common\Models\Invitation\Mysql;
 
 use App\Common\Models\Base\Mysql\Base;
@@ -21,7 +22,7 @@ class Invitation extends Base
         $data['send_time'] = $this->changeToMongoDate($data['send_time']);
         $data['expire'] = $this->changeToMongoDate($data['expire']);
         $data['lock'] = $this->changeToBoolean($data['lock']);
-        $data['is_need_subscribed'] = $this->changeToBoolean($data['is_need_subscribed']);        
+        $data['is_need_subscribed'] = $this->changeToBoolean($data['is_need_subscribed']);
         return $data;
     }
 }

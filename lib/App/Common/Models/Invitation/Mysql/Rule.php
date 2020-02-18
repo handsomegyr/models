@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Common\Models\Invitation\Mysql;
 
 use App\Common\Models\Base\Mysql\Base;
@@ -17,9 +18,9 @@ class Rule extends Base
 
     public function reorganize(array $data)
     {
-        $data = parent::reorganize($data);        
+        $data = parent::reorganize($data);
         $data['start_time'] = $this->changeToMongoDate($data['start_time']);
-        $data['end_time'] = $this->changeToMongoDate($data['end_time']);        
+        $data['end_time'] = $this->changeToMongoDate($data['end_time']);
         return $data;
     }
 }
