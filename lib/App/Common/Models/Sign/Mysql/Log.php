@@ -1,6 +1,9 @@
 <?php
+
 namespace App\Common\Models\Sign\Mysql;
+
 use App\Common\Models\Base\Mysql\Base;
+
 class Log extends Base
 {
     /**

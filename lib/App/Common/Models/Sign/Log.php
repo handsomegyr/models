@@ -1,6 +1,9 @@
 <?php
+
 namespace App\Common\Models\Sign;
-use App\Common\Models\Base\Base; 
+
+use App\Common\Models\Base\Base;
+
 class Log extends Base
 {
     function __construct()
