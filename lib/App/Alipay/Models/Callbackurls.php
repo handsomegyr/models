@@ -1,26 +1,59 @@
 <?php
+
 namespace App\Alipay\Models;
 
 class Callbackurls extends \App\Common\Models\Alipay\Callbackurls
 {
 
-    /**
-     * 默认排序
-     */
-    public function getDefaultSort()
+    public function getValidCallbackUrlList($appid)
     {
-        $sort = array(
-            '_id' => - 1
-        );
-        return $sort;
+        $cache = $this->getDI()->get('cache');
+        $cacheKey = cacheKey(__FILE__, __CLASS__, __METHOD__, __LINE__);
+        $list = $cache->get($cacheKey);
+        // $list = array();
+        if (empty($list)) {
+            $ret = $this->findAll(array(
+                'app_id' => $appid,
+                'is_valid' => true
+            ));
+            $list = array();
+            if (!empty($ret)) {
+                foreach ($ret as $item) {
+                    $list[] = $item['url'];
+                }
+            }
+            if (!empty($list)) {
+                $cache->save($cacheKey, $list);
+            }
+        }
+        return $list;
     }
 
-    /**
-     * 默认查询条件
-     */
-    public function getQuery()
+    public function isValid($appid, $url)
     {
-        $query = array();
-        return $query;
+        $callbackUrls = $this->getValidCallbackUrlList($appid);
+        if (empty($callbackUrls)) {
+            return false;
+        }
+        $hostname = $this->getHost($url);
+        if (in_array($hostname, $callbackUrls)) {
+            return true;
+        }
+        $pos = strpos($hostname, '.');
+        if ($pos === false) {
+        } else {
+            $hostname = substr($hostname, $pos + 1);
+            if (in_array($hostname, $callbackUrls)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private function getHost($Address)
+    {
+        $parseUrl = parse_url(trim($Address));
+        return trim(isset($parseUrl['host']) ? $parseUrl['host'] : array_shift(explode('/', $parseUrl['path'], 2)));
     }
 }

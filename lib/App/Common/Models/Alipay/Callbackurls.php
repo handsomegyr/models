@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Common\Models\Alipay;
 
 use App\Common\Models\Base\Base;

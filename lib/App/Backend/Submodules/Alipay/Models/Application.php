@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Backend\Submodules\Alipay\Models;
 
 class Application extends \App\Common\Models\Alipay\Application
