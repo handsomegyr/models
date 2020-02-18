@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Common\Models\Base\Mysql\Laraval;
 
 use App\Common\Models\Base\Mysql\Base;
@@ -8,7 +9,7 @@ use DB;
 
 class Impl2 extends Base
 {
-    
+
     use BaseTrait;
 
     protected $model = NULL;
@@ -64,7 +65,7 @@ class Impl2 extends Base
         } else {
             $num = 0;
         }
-        
+
         return $num;
     }
 
@@ -80,7 +81,7 @@ class Impl2 extends Base
         $phql = "SELECT * FROM {$className} WHERE {$conditions['conditions']}";
         $info = $this->executeQuery($phql, $conditions['bind'], 'selectOne');
         // die('info:' . var_dump($info));
-        if (! empty($info)) {
+        if (!empty($info)) {
             return $this->reorganize($info);
         } else {
             return array();
@@ -99,7 +100,7 @@ class Impl2 extends Base
     public function find(array $query, array $sort = null, $skip = 0, $limit = 10, array $fields = array())
     {
         $total = $this->count($query);
-        
+
         $conditions = $this->getConditions($query);
         if (empty($conditions)) {
             $conditions = array();
@@ -114,18 +115,18 @@ class Impl2 extends Base
             'offset' => $skip
         ));
         $orderBy = "";
-        if (! empty($order['order'])) {
+        if (!empty($order['order'])) {
             $orderBy = "ORDER BY {$order['order']}";
         }
         $phql = "SELECT * FROM {$className} WHERE {$conditions['conditions']} {$orderBy} LIMIT {$conditions['limit']} OFFSET {$conditions['offset']} ";
         $ret = $this->executeQuery($phql, $conditions['bind'], 'select');
         $list = array();
-        if (! empty($ret)) {
+        if (!empty($ret)) {
             foreach ($ret as $key => $item) {
                 $list[$key] = $this->reorganize($item);
             }
         }
-        
+
         return array(
             'total' => $total,
             'datas' => $list
@@ -144,14 +145,14 @@ class Impl2 extends Base
         $order = $this->getSort($sort);
         $conditions = array_merge($conditions, $order);
         $orderBy = "";
-        if (! empty($order['order'])) {
+        if (!empty($order['order'])) {
             $orderBy = "ORDER BY {$order['order']}";
         }
         $phql = "SELECT * FROM {$className} WHERE {$conditions['conditions']} {$orderBy} ";
         $ret = $this->executeQuery($phql, $conditions['bind'], 'select');
-        
+
         $list = array();
-        if (! empty($ret)) {
+        if (!empty($ret)) {
             foreach ($ret as $key => $item) {
                 $list[$key] = $this->reorganize($item);
             }
@@ -171,22 +172,22 @@ class Impl2 extends Base
         $columns = $this->getColumns($fields);
         $groups = $this->getGroups($groups);
         $params = array_merge($columns, $conditions, $groups);
-        
+
         $groupBy = "";
         $groupFields = "";
-        if (! empty($groups) && ! empty($groups['group'])) {
+        if (!empty($groups) && !empty($groups['group'])) {
             $groupBy = "GROUP BY {$groups['group']}";
             $groupFields = "{$groups['group']},";
         }
-        
+
         $summaryFields = '';
-        if (! empty($fields)) {
+        if (!empty($fields)) {
             foreach ($fields as $field) {
                 $summaryFields .= "SUM({$field}) AS {$field},";
             }
             $summaryFields = trim($summaryFields, ',');
         }
-        
+
         $phql = "select {$groupFields} {$summaryFields} FROM {$className} WHERE {$conditions['conditions']} {$groupBy}";
         $ret = $this->executeQuery($phql, $conditions['bind'], 'select');
         return $ret;
@@ -195,7 +196,7 @@ class Impl2 extends Base
     public function distinct($field, array $query)
     {
         if (empty($field)) {
-            throw new \Exception('请指定字段$field', - 999);
+            throw new \Exception('请指定字段$field', -999);
         }
         $conditions = $this->getConditions($query);
         if (empty($conditions)) {
@@ -207,7 +208,7 @@ class Impl2 extends Base
         $phql = "select DISTINCT {$field} FROM {$className} WHERE {$conditions['conditions']}";
         $ret = $this->executeQuery($phql, $conditions['bind'], 'select');
         $list = array();
-        if (! empty($ret)) {
+        if (!empty($ret)) {
             foreach ($ret as $key => $item) {
                 $data = $this->reorganize($item);
                 $list[] = $data[$field];
@@ -244,16 +245,16 @@ class Impl2 extends Base
             $criteria = $options['query'];
         }
         if (empty($criteria)) {
-            throw new \Exception("query condition is empty in findAndModify", - 999);
+            throw new \Exception("query condition is empty in findAndModify", -999);
         }
         $object = array();
         if (isset($options['update'])) {
             $object = $options['update'];
         }
         if (empty($object)) {
-            throw new \Exception("update content is empty in findAndModify", - 999);
+            throw new \Exception("update content is empty in findAndModify", -999);
         }
-        
+
         $new = false;
         if (isset($options['new'])) {
             $new = $options['new'];
@@ -262,12 +263,12 @@ class Impl2 extends Base
         if (isset($options['upsert'])) {
             $upsert = $options['upsert'];
         }
-        
+
         try {
             $this->begin();
             // 获取单条记录
             $info = $this->findOne($criteria);
-            
+
             // 如果没有找到的话
             if (empty($info)) {
                 // 如果需要插入的话
@@ -281,7 +282,7 @@ class Impl2 extends Base
                     $datas = array_merge($criteria, $object['$set']);
                     $newInfo = $this->insert($datas);
                 } else {
-                    throw new \Exception("no record match query condition", - 999);
+                    throw new \Exception("no record match query condition", -999);
                 }
             } else {
                 // 进行更新操作
@@ -296,7 +297,7 @@ class Impl2 extends Base
             }
             $this->commit();
             // 这里要确认一些mongodb的findAndModify操作的返回值
-            
+
             $rst = array();
             $rst['ok'] = 1;
             if (empty($new)) {
@@ -319,27 +320,29 @@ class Impl2 extends Base
     public function update(array $criteria, array $object, array $options = array())
     {
         if (empty($criteria)) {
-            throw new \Exception("更新数据的时候请指定条件", - 999);
+            throw new \Exception("更新数据的时候请指定条件", -999);
         }
-        
+
         $className = $this->getSource();
         $conditions = $this->getConditions($criteria);
         $updateFieldValues = $this->getUpdateContents($object);
         $phql = "UPDATE {$className} SET {$updateFieldValues['fields']} WHERE {$conditions['conditions']} ";
         $data = array_merge($updateFieldValues['values'], $conditions['bind']);
         $result = $this->executeQuery($phql, $data, 'update');
+        return $result;
     }
 
     public function remove(array $query)
     {
         if (empty($query)) {
-            throw new \Exception("删除数据的时候请指定条件", - 999);
+            throw new \Exception("删除数据的时候请指定条件", -999);
         }
-        
+
         $conditions = $this->getConditions($query);
         $className = $this->getSource();
         $phql = "DELETE FROM {$className} WHERE {$conditions['conditions']}";
         $result = $this->executeQuery($phql, $conditions['bind'], 'delete');
+        return $result;
     }
 
     protected function executeQuery($phql, array $data, $method = 'select')

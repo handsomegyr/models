@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Common\Models\Base\Mysql;
 
 class Base implements \App\Common\Models\Base\IBase
@@ -13,15 +14,15 @@ class Base implements \App\Common\Models\Base\IBase
     protected $dbName = 'db';
 
     protected $secondary = false;
-    
+
     use BaseTrait;
 
     private $impl = NULL;
 
     public function __construct()
     {
-        // $this->impl = new \App\Common\Models\Base\Mysql\Phalcon\Impl2($this);
-        $this->impl = new \App\Common\Models\Base\Mysql\Pdo\Impl($this);
+        $this->impl = new \App\Common\Models\Base\Mysql\Phalcon\Impl2($this);
+        // $this->impl = new \App\Common\Models\Base\Mysql\Pdo\Impl($this);
     }
 
     public function setPhql($isPhql)
@@ -53,14 +54,14 @@ class Base implements \App\Common\Models\Base\IBase
     {
         return $this->name;
     }
-    
+
     // 数据库表前缀
     public function getPrefix()
     {
         $descriptor = $this->getDI()
             ->getDb()
             ->getDescriptor();
-        if (! empty($descriptor['prefix'])) {
+        if (!empty($descriptor['prefix'])) {
             return $descriptor['prefix'];
         } else {
             return "";

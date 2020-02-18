@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Common\Models\Base\Mongodb\Default1;
 
 use App\Common\Models\Base\Mongodb\Base;
@@ -187,26 +188,26 @@ class MongoCollectionAdapter
      */
     public function __construct($collection, $collectionOptions = null)
     {
-        if (! class_exists("MongoClient")) {
+        if (!class_exists("MongoClient")) {
             throw new \Exception('请安装MongoClient');
         }
-        
-        if (! class_exists("MongoCollection")) {
+
+        if (!class_exists("MongoCollection")) {
             throw new \Exception('请安装MongoCollection');
         }
-        
+
         $config = \Phalcon\DI::getDefault()->getConfig();
         $database = $config->mongodb->dbname;
-        
+
         if ($collection === null) {
             throw new \Exception('$collection集合为空');
         }
-        
+
         $this->_collection = $collection;
         $this->_database = $database;
         $this->_cluster = $cluster;
         $this->_collectionOptions = $collectionOptions;
-        
+
         $options = array();
         if (PHP_SAPI !== 'cli') {
             $timeout = 1000 * intval(ini_get('max_execution_time'));
@@ -216,34 +217,34 @@ class MongoCollectionAdapter
         }
         $this->_mongoConnect = new \MongoClient($config->mongodb->uri, $options);
         $this->_mongoConnect->setReadPreference(\MongoClient::RP_PRIMARY_PREFERRED);
-        
+
         if ($this->_mongoConnect == null) {
             throw new \Exception("请设定mongodb连接信息");
         }
-        
+
         $this->_db = $this->_mongoConnect->selectDB($database);
         $this->_admin = $this->_mongoConnect->selectDB(Base::DB_ADMIN);
         $this->_backup = $this->_mongoConnect->selectDB(Base::DB_BACKUP);
         $this->_mapreduce = $this->_mongoConnect->selectDB(Base::DB_MAPREDUCE);
         $this->_fs = new \MongoGridFS($this->_db, Base::GRIDFS_PREFIX);
-        
+
         // 默认执行几个操作
         // 第一个操作，判断集合是否创建，如果没有创建，则进行分片处理（目前采用_ID作为片键）
         // if (APPLICATION_ENV === 'production') {
         // $this->shardingCollection();
         // }
-        
+
         $this->_instance = new \MongoCollection($this->_db, $this->_collection);
-        
+
         // die($database);
-    
-    /**
-     * 设定读取优先级
-     * MongoClient::RP_PRIMARY 只读取主db
-     * MongoClient::RP_PRIMARY_PREFERRED 读取主db优先
-     * MongoClient::RP_SECONDARY 只读从db优先
-     * MongoClient::RP_SECONDARY_PREFERRED 读取从db优先
-     */
+
+        /**
+         * 设定读取优先级
+         * MongoClient::RP_PRIMARY 只读取主db
+         * MongoClient::RP_PRIMARY_PREFERRED 读取主db优先
+         * MongoClient::RP_SECONDARY 只读从db优先
+         * MongoClient::RP_SECONDARY_PREFERRED 读取从db优先
+         */
         // $this->db->setReadPreference(\MongoClient::RP_SECONDARY_PREFERRED);
     }
 
@@ -265,16 +266,16 @@ class MongoCollectionAdapter
      */
     private function appendQuery(array $query = null)
     {
-        if (! is_array($query)) {
+        if (!is_array($query)) {
             $query = array();
         }
         if ($this->_noAppendQuery) {
             return $query;
         }
-        
+
         $keys = array_keys($query);
         $intersect = array_intersect($keys, $this->_queryHaystack);
-        if (! empty($intersect)) {
+        if (!empty($intersect)) {
             $query = array(
                 '$and' => array(
                     // 不用伦理删除
@@ -300,13 +301,13 @@ class MongoCollectionAdapter
      */
     private function checkKeyExistInArray($array, $keys)
     {
-        if (! is_array($keys)) {
+        if (!is_array($keys)) {
             $keys = array(
                 $keys
             );
         }
         $result = false;
-        array_walk_recursive($array, function ($items, $key) use($keys, &$result) {
+        array_walk_recursive($array, function ($items, $key) use ($keys, &$result) {
             if (in_array($key, $keys, true))
                 $result = true;
         });
@@ -321,17 +322,17 @@ class MongoCollectionAdapter
      */
     private function addSharedKeyToQuery(array $query = null)
     {
-        if (! is_array($query)) {
+        if (!is_array($query)) {
             throw new \Exception('$query必须为数组');
         }
-        
+
         if ($this->checkKeyExistInArray($query, '_id')) {
             return $query;
         }
-        
+
         $keys = array_keys($query);
         $intersect = array_intersect($keys, $this->_queryHaystack);
-        if (! empty($intersect)) {
+        if (!empty($intersect)) {
             $query = array(
                 '$and' => array(
                     array(
@@ -353,18 +354,18 @@ class MongoCollectionAdapter
      */
     private function getSharedKeyToQuery(array $query = null)
     {
-        if (! is_array($query)) {
+        if (!is_array($query)) {
             throw new \Exception('$query必须为数组');
         }
-        
+
         if ($this->checkKeyExistInArray($query, '_id')) {
             return $query;
         }
-        
+
         $_ids = $this->distinct('_id', $query);
         $keys = array_keys($query);
         $intersect = array_intersect($keys, $this->_queryHaystack);
-        if (! empty($intersect)) {
+        if (!empty($intersect)) {
             $query = array(
                 '$and' => array(
                     array(
@@ -399,11 +400,11 @@ class MongoCollectionAdapter
             'max' => pow(10, 8), // 如果简单开启capped=>true,单个集合的最大条数为1亿条数据
             'autoIndexId' => true
         );
-        
+
         if ($this->_collectionOptions !== NULL) {
             $this->_collectionOptions = array_merge($defaultCollectionOptions, $this->_collectionOptions);
         }
-        
+
         if (rand(0, 100) === 1) {
             $this->_db->createCollection($this->_collection, $this->_collectionOptions);
             $rst = $this->_admin->command(array(
@@ -436,7 +437,7 @@ class MongoCollectionAdapter
      */
     public function aggregate($pipeline, $op = NULL, $op1 = NULL)
     {
-        if (! $this->_noAppendQuery) {
+        if (!$this->_noAppendQuery) {
             if (isset($pipeline[0]['$geoNear'])) {
                 $first = array_shift($pipeline);
                 // 不用伦理删除
@@ -458,7 +459,7 @@ class MongoCollectionAdapter
                 // ));
             }
         }
-        
+
         return $this->_instance->aggregate($pipeline);
     }
 
@@ -467,7 +468,7 @@ class MongoCollectionAdapter
      *
      * @see MongoCollection::batchInsert()
      */
-    public function batchInsert(array $documents, array $options = array('continueOnError'=>true))
+    public function batchInsert(array $documents, array $options = array('continueOnError' => true))
     {
         array_walk($documents, function (&$row, $key) {
             $row['__CREATE_TIME__'] = $row['__MODIFY_TIME__'] = new \MongoDate();
@@ -540,7 +541,7 @@ class MongoCollectionAdapter
         if ($this->checkIndexExist($keys)) {
             return true;
         }
-        
+
         $default = array();
         $default['background'] = true;
         $default['w'] = 0;
@@ -560,7 +561,7 @@ class MongoCollectionAdapter
     public function checkIndexExist($keys)
     {
         $indexs = $this->_instance->getIndexInfo();
-        if (! empty($indexs) && is_array($indexs)) {
+        if (!empty($indexs) && is_array($indexs)) {
             foreach ($indexs as $index) {
                 if ($index['key'] == $keys) {
                     return true;
@@ -602,25 +603,25 @@ class MongoCollectionAdapter
      * @param array $fields            
      * @return array
      */
-    public function findAll($query, $sort = array('_id'=>1), $skip = 0, $limit = 0, $fields = array())
+    public function findAll($query, $sort = array('_id' => 1), $skip = 0, $limit = 0, $fields = array())
     {
         $fields = empty($fields) ? array() : $fields;
         $cursor = $this->find($query, $fields);
-        if (! $cursor instanceof \MongoCursor)
+        if (!$cursor instanceof \MongoCursor)
             throw new \Exception('$query error:' . json_encode($query));
-        
-        if (! empty($sort))
+
+        if (!empty($sort))
             $cursor->sort($sort);
-        if (! empty($skip))
+        if (!empty($skip))
             $cursor->skip($skip);
-        
+
         if ($limit > 0) {
             $cursor->limit($limit);
         }
-        
+
         if ($cursor instanceof \Traversable)
             return iterator_to_array($cursor, false);
-        
+
         return array();
     }
 
@@ -637,7 +638,7 @@ class MongoCollectionAdapter
     public function findAndModify(array $query, array $update = NULL, array $fields = NULL, array $options = NULL)
     {
         $query = $this->appendQuery($query);
-        if ($this->_instance->count($query) == 0 && ! empty($options['upsert'])) {
+        if ($this->_instance->count($query) == 0 && !empty($options['upsert'])) {
             $query = $this->addSharedKeyToQuery($query);
         } else {
             unset($options['upsert']);
@@ -672,8 +673,8 @@ class MongoCollectionAdapter
             $cmd['fields'] = $option['fields'];
         if (isset($option['upsert']))
             $cmd['upsert'] = is_bool($option['upsert']) ? $option['upsert'] : false;
-        
-        if ($this->_instance->count($cmd['query']) == 0 && ! empty($option['upsert'])) {
+
+        if ($this->_instance->count($cmd['query']) == 0 && !empty($option['upsert'])) {
             $cmd['query'] = $this->addSharedKeyToQuery($cmd['query']);
         } else {
             unset($cmd['upsert']);
@@ -691,30 +692,30 @@ class MongoCollectionAdapter
     {
         if (empty($a))
             throw new \Exception('$object is NULL');
-        
+
         $default = array(
             'fsync' => self::fsync
         );
         $options = ($options === NULL) ? $default : array_merge($default, $options);
-        
+
         array_unset_recursive($a, array(
             '__CREATE_TIME__',
             '__MODIFY_TIME__',
             '__REMOVED__'
         ));
-        
-        if (! isset($a['__CREATE_TIME__'])) {
+
+        if (!isset($a['__CREATE_TIME__'])) {
             $a['__CREATE_TIME__'] = new \MongoDate();
         }
-        
-        if (! isset($a['__MODIFY_TIME__'])) {
+
+        if (!isset($a['__MODIFY_TIME__'])) {
             $a['__MODIFY_TIME__'] = new \MongoDate();
         }
-        
-        if (! isset($a['__REMOVED__'])) {
+
+        if (!isset($a['__REMOVED__'])) {
             $a['__REMOVED__'] = false;
         }
-        
+
         $b = $a;
         $res = $this->_instance->insert($b, $options);
         $a = $b;
@@ -734,30 +735,30 @@ class MongoCollectionAdapter
     {
         if (empty($a))
             throw new \Exception('$object is NULL');
-        
+
         $default = array(
             'fsync' => self::fsync
         );
         $options = ($options === NULL) ? $default : array_merge($default, $options);
-        
+
         array_unset_recursive($a, array(
             '__CREATE_TIME__',
             '__MODIFY_TIME__',
             '__REMOVED__'
         ));
-        
-        if (! isset($a['__CREATE_TIME__'])) {
+
+        if (!isset($a['__CREATE_TIME__'])) {
             $a['__CREATE_TIME__'] = new \MongoDate();
         }
-        
-        if (! isset($a['__MODIFY_TIME__'])) {
+
+        if (!isset($a['__MODIFY_TIME__'])) {
             $a['__MODIFY_TIME__'] = new \MongoDate();
         }
-        
-        if (! isset($a['__REMOVED__'])) {
+
+        if (!isset($a['__REMOVED__'])) {
             $a['__REMOVED__'] = false;
         }
-        
+
         return $this->_instance->insert($a, $options);
     }
 
@@ -773,25 +774,25 @@ class MongoCollectionAdapter
     {
         if (empty($a))
             throw new \Exception('$a is NULL');
-        
+
         array_unset_recursive($a, array(
             '__CREATE_TIME__',
             '__MODIFY_TIME__',
             '__REMOVED__'
         ));
-        
-        if (! isset($a['__CREATE_TIME__'])) {
+
+        if (!isset($a['__CREATE_TIME__'])) {
             $a['__CREATE_TIME__'] = new \MongoDate();
         }
-        
-        if (! isset($a['__MODIFY_TIME__'])) {
+
+        if (!isset($a['__MODIFY_TIME__'])) {
             $a['__MODIFY_TIME__'] = new \MongoDate();
         }
-        
-        if (! isset($a['__REMOVED__'])) {
+
+        if (!isset($a['__REMOVED__'])) {
             $a['__REMOVED__'] = false;
         }
-        
+
         // if (! isset($a['_id'])) {
         // $a['_id'] = new \MongoId();
         // }
@@ -806,7 +807,7 @@ class MongoCollectionAdapter
             'new' => true,
             'upsert' => true
         );
-        
+
         return $this->_instance->findAndModify($query, $a, $fields, $options);
     }
 
@@ -820,22 +821,22 @@ class MongoCollectionAdapter
     {
         if ($criteria === NULL)
             throw new \Exception('$criteria is NULL');
-        
+
         $default = array(
             'justOne' => self::justOne,
             'fsync' => self::fsync
         );
-        
+
         $options = ($options === NULL) ? $default : array_merge($default, $options);
-        
+
         // 方案一 真实删除
         // return $this->_instance->remove($criteria, $options);
         // 方案二 伪删除
-        
-        if (! $options['justOne']) {
+
+        if (!$options['justOne']) {
             $options['multiple'] = true;
         }
-        
+
         $criteria = $this->appendQuery($criteria);
         return $this->_instance->update($criteria, array(
             '$set' => array(
@@ -854,12 +855,12 @@ class MongoCollectionAdapter
     {
         if ($criteria === NULL)
             throw new \Exception('$criteria is NULL');
-        
+
         $default = array(
             'justOne' => self::justOne,
             'fsync' => self::fsync
         );
-        
+
         $options = ($options === NULL) ? $default : array_merge($default, $options);
         return $this->_instance->remove($criteria, $options);
     }
@@ -873,15 +874,15 @@ class MongoCollectionAdapter
      */
     public function update($criteria, $object, array $options = NULL)
     {
-        if (! is_array($criteria))
+        if (!is_array($criteria))
             throw new \Exception('$criteria is array');
-        
+
         if (empty($object))
             throw new \Exception('$object is empty');
-        
+
         $keys = array_keys($object);
         foreach ($keys as $key) {
-            if (! in_array($key, $this->_updateHaystack, true)) {
+            if (!in_array($key, $this->_updateHaystack, true)) {
                 throw new \Exception('$key must contain ' . join(',', $this->_updateHaystack));
             }
         }
@@ -889,9 +890,9 @@ class MongoCollectionAdapter
             'upsert' => self::upsert,
             'multiple' => self::multiple
         );
-        
+
         $options = ($options === NULL) ? $default : array_merge($default, $options);
-        
+
         $criteria = $this->appendQuery($criteria);
         array_unset_recursive($object, array(
             // '_id', //允许更新内嵌文档中的_id
@@ -899,11 +900,11 @@ class MongoCollectionAdapter
             '__MODIFY_TIME__',
             '__REMOVED__'
         ));
-        
-        if (! empty($object['$set']['_id'])) {
+
+        if (!empty($object['$set']['_id'])) {
             throw new \Exception('$object can\'t $set=>_id');
         }
-        
+
         if ($this->_instance->count($criteria) == 0) {
             if (isset($options['upsert']) && $options['upsert']) {
                 $criteria = $this->addSharedKeyToQuery($criteria);
@@ -934,7 +935,7 @@ class MongoCollectionAdapter
                 )
             ), $options);
         }
-        
+
         return $this->_instance->update($criteria, $object, $options);
     }
 
@@ -947,7 +948,7 @@ class MongoCollectionAdapter
      */
     public function save($a, array $options = NULL)
     {
-        if (! isset($a['__CREATE_TIME__'])) {
+        if (!isset($a['__CREATE_TIME__'])) {
             $a['__CREATE_TIME__'] = new \MongoDate();
         }
         $a['__REMOVED__'] = false;
@@ -969,7 +970,7 @@ class MongoCollectionAdapter
      */
     public function saveRef(&$a, array $options = NULL)
     {
-        if (! isset($a['__CREATE_TIME__'])) {
+        if (!isset($a['__CREATE_TIME__'])) {
             $a['__CREATE_TIME__'] = new \MongoDate();
         }
         $a['__REMOVED__'] = false;
@@ -979,7 +980,7 @@ class MongoCollectionAdapter
                 'w' => 1
             );
         }
-        
+
         $b = $a;
         $res = $this->_instance->save($b, $options);
         $a = $b;
@@ -1003,7 +1004,7 @@ class MongoCollectionAdapter
      *
      * @param array $command            
      */
-    public function mapReduce($out = null, $map, $reduce, $query = array(), $finalize = null, $method = 'replace', $scope = null, $sort = array('$natural'=>1), $limit = null)
+    public function mapReduce($out = null, $map, $reduce, $query = array(), $finalize = null, $method = 'replace', $scope = null, $sort = array('$natural' => 1), $limit = null)
     {
         if ($out == null) {
             $out = md5(serialize(func_get_args()));
@@ -1012,8 +1013,8 @@ class MongoCollectionAdapter
             // map reduce执行锁管理开始
             $locks = new self('locks', Base::DB_MAPREDUCE, $this->_cluster);
             $locks->setReadPreference(\MongoClient::RP_PRIMARY_PREFERRED);
-            
-            $checkLock = function ($out) use($locks) {
+
+            $checkLock = function ($out) use ($locks) {
                 $check = $locks->findOne(array(
                     'out' => $out
                 ));
@@ -1047,8 +1048,8 @@ class MongoCollectionAdapter
                     return false;
                 }
             };
-            
-            $releaseLock = function ($out, $rst = null) use($locks) {
+
+            $releaseLock = function ($out, $rst = null) use ($locks) {
                 return $locks->update(array(
                     'out' => $out
                 ), array(
@@ -1058,7 +1059,7 @@ class MongoCollectionAdapter
                     )
                 ));
             };
-            
+
             $failure = function ($code, $msg) {
                 if (is_array($msg)) {
                     $msg = json_encode($msg);
@@ -1070,32 +1071,32 @@ class MongoCollectionAdapter
                 );
             };
             // map reduce执行锁管理结束
-            
-            if (! $checkLock($out)) {
+
+            if (!$checkLock($out)) {
                 $command = array();
                 $command['mapreduce'] = $this->_collection;
                 $command['map'] = ($map instanceof \MongoCode) ? $map : new \MongoCode($map);
                 $command['reduce'] = ($reduce instanceof \MongoCode) ? $reduce : new \MongoCode($reduce);
                 $command['query'] = $this->appendQuery($query);
-                
-                if (! empty($finalize))
+
+                if (!empty($finalize))
                     $command['finalize'] = ($finalize instanceof \MongoCode) ? $finalize : new \MongoCode($finalize);
-                if (! empty($sort))
+                if (!empty($sort))
                     $command['sort'] = $sort;
-                if (! empty($limit))
+                if (!empty($limit))
                     $command['limit'] = $limit;
-                if (! empty($scope))
+                if (!empty($scope))
                     $command['scope'] = $scope;
                 $command['verbose'] = true;
-                
-                if (! in_array($method, array(
+
+                if (!in_array($method, array(
                     'replace',
                     'merge',
                     'reduce'
                 ), true)) {
                     $method = 'replace';
                 }
-                
+
                 $command['out'] = array(
                     $method => $out,
                     'db' => DB_MAPREDUCE,
@@ -1107,7 +1108,7 @@ class MongoCollectionAdapter
                 );
                 $rst = $this->command($command);
                 $releaseLock($out, $rst);
-                
+
                 if ($rst['ok'] == 1) {
                     if ($rst['counts']['emit'] > 0 && $rst['counts']['output'] > 0) {
                         $outMongoCollection = new self($out, DB_MAPREDUCE, $this->_cluster);
@@ -1136,21 +1137,21 @@ class MongoCollectionAdapter
      */
     public function storeToGridFS($fieldName, $metadata = array())
     {
-        if (! is_array($metadata))
+        if (!is_array($metadata))
             $metadata = array();
-        
-        if (! isset($_FILES[$fieldName]))
+
+        if (!isset($_FILES[$fieldName]))
             throw new \Exception('$_FILES[$fieldName]无效');
-        
+
         $metadata = array_merge($metadata, $_FILES[$fieldName]);
         $finfo = new \finfo(FILEINFO_MIME);
         $mime = $finfo->file($_FILES[$fieldName]['tmp_name']);
         if ($mime !== false)
             $metadata['mime'] = $mime;
-        
+
         $id = $this->_fs->storeUpload($fieldName, $metadata);
         $gridfsFile = $this->_fs->get($id);
-        if (! ($gridfsFile instanceof \MongoGridFSFile)) {
+        if (!($gridfsFile instanceof \MongoGridFSFile)) {
             throw new \Exception('$gridfsFile is not instanceof MongoGridFSFile');
         }
         return $gridfsFile->file;
@@ -1165,17 +1166,17 @@ class MongoCollectionAdapter
      */
     public function storeBytesToGridFS($bytes, $filename = '', $metadata = array())
     {
-        if (! is_array($metadata))
+        if (!is_array($metadata))
             $metadata = array();
-        
-        if (! empty($filename))
+
+        if (!empty($filename))
             $metadata['filename'] = $filename;
-        
+
         $finfo = new \finfo(FILEINFO_MIME);
         $mime = $finfo->buffer($bytes);
         if ($mime !== false)
             $metadata['mime'] = $mime;
-        
+
         $id = $this->_fs->storeBytes($bytes, $metadata);
         $gridfsFile = $this->_fs->get($id);
         return $gridfsFile->file;
@@ -1189,7 +1190,7 @@ class MongoCollectionAdapter
      */
     public function getGridFsFileById($id)
     {
-        if (! $id instanceof \MongoId) {
+        if (!$id instanceof \MongoId) {
             $id = new \MongoId($id);
         }
         return $this->_fs->get($id);
@@ -1203,7 +1204,7 @@ class MongoCollectionAdapter
      */
     public function getInfoFromGridFS($id)
     {
-        if (! $id instanceof \MongoId) {
+        if (!$id instanceof \MongoId) {
             $id = new \MongoId($id);
         }
         $gridfsFile = $this->_fs->get($id);
@@ -1218,7 +1219,7 @@ class MongoCollectionAdapter
      */
     public function getFileFromGridFS($id)
     {
-        if (! $id instanceof \MongoId) {
+        if (!$id instanceof \MongoId) {
             $id = new \MongoId($id);
         }
         $gridfsFile = $this->_fs->get($id);
@@ -1234,7 +1235,7 @@ class MongoCollectionAdapter
      */
     public function removeFileFromGridFS($id)
     {
-        if (! $id instanceof \MongoId) {
+        if (!$id instanceof \MongoId) {
             $id = new \MongoId($id);
         }
         return $this->_fs->remove($id);
@@ -1261,11 +1262,11 @@ class MongoCollectionAdapter
 /**
  * 对于fastcgi模式加快返回速度
  */
-if (! function_exists("array_unset_recursive")) {
+if (!function_exists("array_unset_recursive")) {
 
     function array_unset_recursive(&$array, $remove)
     {
-        if (! is_array($remove)) {
+        if (!is_array($remove)) {
             $remove = array(
                 $remove
             );

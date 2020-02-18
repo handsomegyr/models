@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Common\Models\Base\Mongodb\Default1;
 
 use App\Common\Models\Base\Mongodb\Base;
@@ -11,12 +12,12 @@ class Impl extends Base
     public function __construct($model)
     {
         $this->model = $model;
-        
+
         $this->setPhql($this->model->getPhql());
         $this->setDebug($this->model->getDebug());
         $this->setDb($this->model->getDb());
         $this->setSource($this->model->getSource());
-        
+
         $this->_model = new MongoCollectionAdapter($this->model->getSource());
     }
 
@@ -71,14 +72,14 @@ class Impl extends Base
     public function findOne(array $query)
     {
         $query = $this->toArray($query);
-        if (! empty($fields)) {
+        if (!empty($fields)) {
             $fields = $this->toArray($fields);
         } else {
             $fields = array();
         }
         $rst = $this->_model->findOne($query, $fields);
         $info = $this->result($rst);
-        if (! empty($info)) {
+        if (!empty($info)) {
             return $this->reorganize($info);
         } else {
             return array();
@@ -103,33 +104,33 @@ class Impl extends Base
         $limit = intval($limit);
         $limit = $limit < 0 ? 10 : $limit;
         $limit = $limit > 1000 ? 1000 : $limit;
-        if (! empty($fields)) {
+        if (!empty($fields)) {
             $fields = $this->toArray($fields);
         } else {
             $fields = array();
         }
-        
+
         $cursor = $this->_model->find($query, $fields);
         $total = $cursor->count();
-        if (! empty($sort))
+        if (!empty($sort))
             $cursor->sort($sort);
         if ($skip > 0)
             $cursor->skip($skip);
         $cursor->limit($limit);
-        
+
         $rst = array(
             'datas' => iterator_to_array($cursor, false),
             'total' => $total
         );
         $ret = $this->result($rst);
-        
+
         $list = array();
-        if (! empty($ret['datas'])) {
+        if (!empty($ret['datas'])) {
             foreach ($ret['datas'] as $key => $item) {
                 $list[$key] = $this->reorganize($item);
             }
         }
-        
+
         return array(
             'total' => $total,
             'datas' => $list
@@ -142,16 +143,16 @@ class Impl extends Base
         $sort = $this->toArray($sort);
         if (empty($sort)) {
             $sort = array(
-                '_id' => - 1
+                '_id' => -1
             );
         }
         $fields = $this->toArray($fields);
         $rst = $this->_model->findAll($query, $sort, 0, 0, $fields);
-        
+
         $ret = $this->result($rst);
-        
+
         $list = array();
-        if (! empty($ret)) {
+        if (!empty($ret)) {
             foreach ($ret as $key => $item) {
                 $list[$key] = $this->reorganize($item);
             }
@@ -164,37 +165,37 @@ class Impl extends Base
         if (empty($fields)) {
             return array();
         }
-        
+
         if (empty($groups)) {
             return array();
         }
-        
+
         $ops = array();
-        if (! empty($query)) {
+        if (!empty($query)) {
             $ops[] = array(
                 '$match' => $query
             );
         }
-        
+
         $groupFieldsSum = array();
         foreach ($fields as $field) {
             $groupFieldsSum[$field] = array(
                 '$sum' => '$' . $field
             );
         }
-        
+
         $groupFields = array();
         foreach ($groups as $group) {
             $groupFields[$group] = '$' . $group;
         }
-        
+
         $groupOps = array(
             '_id' => $groupFields
         );
         foreach ($groupFieldsSum as $key => $fieldsSum) {
             $groupOps[$key] = $fieldsSum;
         }
-        
+
         $ops[] = array(
             '$group' => $groupOps
         );
@@ -204,9 +205,9 @@ class Impl extends Base
         $rst = $this->aggregate($ops, null, null);
         // Array ( [ok] => 1 [result] => Array ( [0] => Array ( [_id] => Array ( [_id] => MongoId Object ( [objectID:MongoId:private] => MongoDB\BSON\ObjectId Object ( [oid] => 5b17cef969dc0a08131fce43 ) ) ) [sysMsgCount] => 1 ) ) [waitedMS] => 0 )
         $this->doError($rst);
-        
+
         $list = array();
-        if (! empty($rst['result'])) {
+        if (!empty($rst['result'])) {
             foreach ($rst['result'] as $item) {
                 $item1 = array();
                 foreach ($groups as $group) {
@@ -241,7 +242,7 @@ class Impl extends Base
         $datas = $this->toArray($datas);
         $rst = $this->_model->insertByFindAndModify($datas);
         $info = $this->result($rst);
-        if (! empty($info)) {
+        if (!empty($info)) {
             return $this->reorganize($info);
         } else {
             return array();
@@ -272,7 +273,7 @@ class Impl extends Base
         $this->doError($rst);
         $rst = $this->result($rst);
         // 增加reorganize处理
-        if (! empty($rst['value'])) {
+        if (!empty($rst['value'])) {
             $rst['value'] = $this->reorganize($rst['value']);
         }
         return $rst;
@@ -320,7 +321,7 @@ class Impl extends Base
         if (is_array($rst)) {
             array_walk_recursive($rst, function (&$value, $key) {
                 if ($key === '_id' && strlen($value) === 24) {
-                    if (! ($value instanceof \MongoId))
+                    if (!($value instanceof \MongoId))
                         $value = new \MongoId($value);
                 }
             });
@@ -333,10 +334,10 @@ class Impl extends Base
         if (empty($rst['ok'])) {
             // [err] => [errmsg] =>
             $error_msg = '数据库错误发生';
-            if (! empty($rst['err'])) {
+            if (!empty($rst['err'])) {
                 $error_msg .= ' err: ' . $rst['err'];
             }
-            if (! empty($rst['errmsg'])) {
+            if (!empty($rst['errmsg'])) {
                 $error_msg .= ' errmsg: ' . $rst['errmsg'];
             }
             throw new \Exception($error_msg);
@@ -352,7 +353,7 @@ class Impl extends Base
      */
     public function __call($funcname, $arguments)
     {
-        if (! is_array($arguments)) {
+        if (!is_array($arguments)) {
             $arguments = $newArgument = array();
         } else {
             $newArgument = array();
@@ -384,7 +385,7 @@ class Impl extends Base
      * @throws \Exception
      * @return string
      */
-    public function batchInsert($a, $option = array('continueOnError'=>true))
+    public function batchInsert($a, $option = array('continueOnError' => true))
     {
         $a = $this->toArray($a);
         $rst = $this->_model->batchInsert($a, $option);
@@ -411,13 +412,13 @@ class Impl extends Base
      */
     public function ensureIndex($keys, $options)
     {
-        if (! empty($keys)) {
+        if (!empty($keys)) {
             $keys = $this->toArray($keys);
         } else {
             $keys = trim($keys);
         }
-        
-        if (! empty($options)) {
+
+        if (!empty($options)) {
             $options = $this->toArray($options);
         } else {
             $options = array(
@@ -466,15 +467,15 @@ class Impl extends Base
         $ops1 = $this->toArray($ops1);
         $ops2 = $this->toArray($ops2);
         $ops3 = $this->toArray($ops3);
-        
+
         $param_arr[] = $ops1;
-        if (! empty($ops2)) {
+        if (!empty($ops2)) {
             $param_arr[] = $ops2;
         }
-        if (! empty($ops3)) {
+        if (!empty($ops3)) {
             $param_arr[] = $ops3;
         }
-        
+
         $rst = call_user_func_array(array(
             $this->_model,
             'aggregate'
@@ -494,7 +495,7 @@ class Impl extends Base
         if (base64_encode(base64_decode($fileBytes, true)) === $fileBytes) {
             $fileBytes = base64_decode($fileBytes);
         }
-        
+
         $rst = $this->_model->storeBytesToGridFS($fileBytes, $fileName, array(
             'collection_id' => $this->_collection_id,
             'project_id' => $this->_project_id
@@ -522,7 +523,7 @@ class Impl extends Base
                 $this->_model,
                 $cmd
             ), $param_arr);
-            
+
             if ($last)
                 $rst = $execute;
             else

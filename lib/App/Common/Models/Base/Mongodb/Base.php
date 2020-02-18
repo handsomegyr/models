@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Common\Models\Base\Mongodb;
 
 class Base implements \App\Common\Models\Base\IBase
@@ -27,7 +28,7 @@ class Base implements \App\Common\Models\Base\IBase
     protected $dbName = 'db';
 
     protected $secondary = false;
-    
+
     use BaseTrait;
 
     private $impl = NULL;

@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Common\Models\Base;
 
 interface IBase

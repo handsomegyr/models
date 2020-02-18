@@ -74,5 +74,3 @@ trait BaseTrait
         return $ret;
     }
 }
-
-?>

@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Lottery\Models;
 
 class Rule extends \App\Common\Models\Lottery\Rule
@@ -6,46 +7,18 @@ class Rule extends \App\Common\Models\Lottery\Rule
 
     private $_rules = null;
 
-    private $_limit = null;
-
-    private $_exchange = null;
-
-    public function setExchangeModel(Exchange $exchange)
-    {
-        $this->_exchange = $exchange;
-    }
-
-    public function getExchangeModel()
-    {
-        if ($this->exchange == null) {
-            $this->exchange = new Exchange();
-        }
-        return $this->exchange;
-    }
-
-    public function setLimitModel(Limit $limit)
-    {
-        $this->_limit = $limit;
-    }
-
-    public function getLimitModel()
-    {
-        if ($this->_limit == null) {
-            $this->_limit = new Limit();
-        }
-        return $this->_limit;
-    }
-
     /**
      * 获取指定活动的全部抽奖规则
      *
-     * @param string $activity_id            
-     * @param array $prize_ids            
+     * @param string $activity_id             
+     * @param number $now            
+     * @param array $prize_ids           
+     * @param array $exclude_prize_ids          
      */
-    public function getRules($activity_id, array $prize_ids = array())
+    public function getRules($activity_id, $now, array $prize_ids = array(), array $exclude_prize_ids = array())
     {
         if ($this->_rules == null) {
-            $now = getCurrentTime();
+            $now = getCurrentTime($now);
             $query = array(
                 'activity_id' => $activity_id,
                 'allow_start_time' => array(
@@ -55,11 +28,19 @@ class Rule extends \App\Common\Models\Lottery\Rule
                     '$gte' => $now
                 )
             );
-            if (! empty($prize_ids)) {
+
+            if (!empty($prize_ids)) {
                 $query['prize_id'] = array(
                     '$in' => $prize_ids
                 );
             }
+
+            if (!empty($exclude_prize_ids)) {
+                $query['prize_id'] = array(
+                    '$nin' => $exclude_prize_ids
+                );
+            }
+
             $this->_rules = $this->findAll($query);
         }
         return $this->doShuffle($this->_rules);
@@ -75,14 +56,13 @@ class Rule extends \App\Common\Models\Lottery\Rule
     {
         $groupList = array();
         // 按照allow_probability分组
-        array_map(function ($row) use(&$groupList)
-        {
+        array_map(function ($row) use (&$groupList) {
             $groupList[$row['allow_probability']][] = $row;
         }, $list);
-        
+
         // 按照概率从高到底的次序排序
         ksort($groupList, SORT_NUMERIC);
-        
+
         // 按分组随机排序
         $resultList = array();
         foreach ($groupList as $key => $rows) {
@@ -93,21 +73,17 @@ class Rule extends \App\Common\Models\Lottery\Rule
     }
 
     /**
-     * 计算抽奖概率判断用户是否中奖
+     * 锁住记录
+     *
+     * @param int $id            
      */
-    public function lottery($activity_id, $identity_id, array $prize_ids = array())
+    public function lockRule($id)
     {
-        $rules = $this->getRules($activity_id, $prize_ids);
-        if (! empty($rules)) {
-            foreach ($rules as $rule) {
-                if (rand(0, 9999) < $rule['allow_probability'] && $rule['allow_number'] > 0) {
-                    $allow = $this->getLimitModel()->checkLimit($activity_id, $identity_id, $rule['prize_id']);
-                    if ($allow)
-                        return $rule;
-                }
-            }
-        }
-        return false;
+        $rule = $this->findOne(array(
+            '_id' => $id,
+            '__FOR_UPDATE__' => true
+        ));
+        return $rule;
     }
 
     /**
@@ -118,27 +94,25 @@ class Rule extends \App\Common\Models\Lottery\Rule
      */
     public function updateRemain($rule)
     {
-        $options = array();
-        $options['query'] = array(
+        $query = array(
             '_id' => $rule['_id'],
             'prize_id' => $rule['prize_id'],
             'allow_number' => array(
                 '$gt' => 0
             )
         );
-        $options['update'] = array(
+        $updateData = array(
             '$inc' => array(
-                'allow_number' => - 1
+                'allow_number' => -1,
+                'win_number' => 1
             )
         );
-        $rst = $this->findAndModify($options);
-        if ($rst['ok'] == 0) {
-            throw new \Exception("findAndModify执行错误，返回结果为:" . json_encode($rst));
+        $affectRows = $this->update($query, $updateData);
+        if ($affectRows < 1) {
+            throw new \Exception('竞争争夺奖品失败');
+        } else {
+            return true;
         }
-        if ($rst['value'] == null) {
-            return false;
-        }
-        return true;
     }
 
     /**
@@ -148,10 +122,10 @@ class Rule extends \App\Common\Models\Lottery\Rule
      * @param string $prize_id            
      * @param number $allow_number            
      * @param number $allow_probability            
-     * @param \Mongodate $allow_start_time            
-     * @param \Mongodate $allow_end_time            
+     * @param number $allow_start_time            
+     * @param number $allow_end_time            
      */
-    public function create($activity_id, $prize_id, $allow_number = 0, $allow_probability = 0, $allow_start_time = null, $allow_end_time = null)
+    public function create($activity_id, $prize_id, $allow_number = 0, $allow_probability = 0, $allow_start_time = 0, $allow_end_time = 0)
     {
         if (empty($allow_start_time)) {
             $allow_start_time = getCurrentTime(strtotime('2016-01-01 00:00:00'));
@@ -162,10 +136,11 @@ class Rule extends \App\Common\Models\Lottery\Rule
         $data = array();
         $data['activity_id'] = $activity_id;
         $data['prize_id'] = $prize_id;
-        $data['allow_start_time'] = $allow_start_time;
-        $data['allow_end_time'] = $allow_end_time;
+        $data['allow_start_time'] = getCurrentTime($allow_start_time);
+        $data['allow_end_time'] = getCurrentTime($allow_end_time);
         $data['allow_number'] = $allow_number;
         $data['allow_probability'] = $allow_probability;
+        $data['win_number'] = 0;
         return $this->insert($data);
     }
 }

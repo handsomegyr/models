@@ -583,5 +583,3 @@ trait BaseTrait
         );
     }
 }
-
-?>

@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Common\Models\Base\Mysql\Phalcon;
 
 use App\Common\Models\Base\Mysql\Base;
@@ -77,7 +78,7 @@ class Impl2 extends Base
         $conditions = $sqlAndConditions['conditions'];
         $result = $this->executeQuery($phql, $conditions['bind']);
         $result = $result->fetch();
-        if (! empty($result)) {
+        if (!empty($result)) {
             $num = $result['num'];
         } else {
             $num = 0;
@@ -92,7 +93,7 @@ class Impl2 extends Base
         $conditions = $sqlAndConditions['conditions'];
         $result = $this->executeQuery($phql, $conditions['bind']);
         $info = $result->fetch();
-        if (! empty($info)) {
+        if (!empty($info)) {
             return $this->reorganize($info);
         } else {
             return array();
@@ -111,19 +112,19 @@ class Impl2 extends Base
     public function find(array $query, array $sort = null, $skip = 0, $limit = 10, array $fields = array())
     {
         $total = $this->count($query);
-        
+
         $sqlAndConditions = $this->getSqlAndConditions4Find($query, $sort, $skip, $limit, $fields);
         $phql = $sqlAndConditions['sql'];
         $conditions = $sqlAndConditions['conditions'];
         $result = $this->executeQuery($phql, $conditions['bind']);
         $ret = $result->fetchAll();
         $list = array();
-        if (! empty($ret)) {
+        if (!empty($ret)) {
             foreach ($ret as $key => $item) {
                 $list[$key] = $this->reorganize($item);
             }
         }
-        
+
         return array(
             'total' => $total,
             'datas' => $list
@@ -138,7 +139,7 @@ class Impl2 extends Base
         $result = $this->executeQuery($phql, $conditions['bind']);
         $ret = $result->fetchAll();
         $list = array();
-        if (! empty($ret)) {
+        if (!empty($ret)) {
             foreach ($ret as $key => $item) {
                 $list[$key] = $this->reorganize($item);
             }
@@ -164,7 +165,7 @@ class Impl2 extends Base
         $result = $this->executeQuery($phql, $conditions['bind']);
         $ret = $result->fetchAll();
         $list = array();
-        if (! empty($ret)) {
+        if (!empty($ret)) {
             foreach ($ret as $key => $item) {
                 $data = $this->reorganize($item);
                 $list[] = $data[$field];
@@ -199,6 +200,7 @@ class Impl2 extends Base
         $updateFieldValues = $sqlAndConditions['updateFieldValues'];
         $data = array_merge($updateFieldValues['values'], $conditions['bind']);
         $result = $this->executeQuery($phql, $data, 'execute');
+        return $result;
     }
 
     public function remove(array $query)
@@ -207,6 +209,7 @@ class Impl2 extends Base
         $phql = $sqlAndConditions['sql'];
         $conditions = $sqlAndConditions['conditions'];
         $result = $this->executeQuery($phql, $conditions['bind'], 'execute');
+        return $result;
     }
 
     /**
@@ -229,16 +232,16 @@ class Impl2 extends Base
             $criteria = $options['query'];
         }
         if (empty($criteria)) {
-            throw new \Exception("query condition is empty in findAndModify", - 999);
+            throw new \Exception("query condition is empty in findAndModify", -999);
         }
         $object = array();
         if (isset($options['update'])) {
             $object = $options['update'];
         }
         if (empty($object)) {
-            throw new \Exception("update content is empty in findAndModify", - 999);
+            throw new \Exception("update content is empty in findAndModify", -999);
         }
-        
+
         $new = false;
         if (isset($options['new'])) {
             $new = $options['new'];
@@ -247,12 +250,12 @@ class Impl2 extends Base
         if (isset($options['upsert'])) {
             $upsert = $options['upsert'];
         }
-        
+
         try {
             $this->begin();
             // 获取单条记录
             $info = $this->findOne($criteria);
-            
+
             // 如果没有找到的话
             if (empty($info)) {
                 // 如果需要插入的话
@@ -266,7 +269,7 @@ class Impl2 extends Base
                     $datas = array_merge($criteria, $object['$set']);
                     $newInfo = $this->insert($datas);
                 } else {
-                    throw new \Exception("no record match query condition", - 999);
+                    throw new \Exception("no record match query condition", -999);
                 }
             } else {
                 // 进行更新操作
@@ -281,7 +284,7 @@ class Impl2 extends Base
             }
             $this->commit();
             // 这里要确认一些mongodb的findAndModify操作的返回值
-            
+
             $rst = array();
             $rst['ok'] = 1;
             if (empty($new)) {

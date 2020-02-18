@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Lottery\Models;
 
 class Exchange extends \App\Common\Models\Lottery\Exchange
@@ -39,35 +40,34 @@ class Exchange extends \App\Common\Models\Lottery\Exchange
      *
      * @param string $user_id            
      * @param string $activity_id            
-     * @param \MongoDate $startTime            
-     * @param \MongoDate $endTime            
+     * @param number $startTime            
+     * @param number $endTime            
      * @return NULL
      */
-    public function getExchangeBy($user_id = '', $activity_id = '', \MongoDate $startTime = null, \MongoDate $endTime = null)
+    public function getExchangeBy($user_id = '', $activity_id = '', $startTime = 0, $endTime = 0)
     {
-        $query = array(
-            'is_valid' => true
-        );
-        if (! empty($user_id)) {
+        $query = array();
+        if (!empty($user_id)) {
             $query['user_id'] = $user_id;
         }
-        if (! empty($activity_id)) {
+        if (!empty($activity_id)) {
             $query['activity_id'] = $activity_id;
         }
-        
-        if (! empty($startTime)) {
-            $query['got_time']['$gte'] = $startTime;
+
+        if (!empty($startTime)) {
+            $query['got_time']['$gte'] = getCurrentTime($startTime);
         } else {
             // 防止中奖数据过多，增加条件只获取过去一年的数据
             $query['got_time']['$gte'] = getCurrentTime(strtotime(date("Y-m-d")) - 365 * 86400);
         }
-        
-        if (! empty($endTime)) {
-            $query['got_time']['$lt'] = $endTime;
+
+        if (!empty($endTime)) {
+            $query['got_time']['$lt'] = getCurrentTime($endTime);
         }
-        
+        $query['is_valid'] = true;
+
         $this->_exchanges = $this->findAll($query, array(
-            '_id' => - 1
+            '_id' => -1
         ));
         return $this->_exchanges;
     }
@@ -84,11 +84,9 @@ class Exchange extends \App\Common\Models\Lottery\Exchange
         $query = array(
             'user_id' => $user_id,
             'activity_id' => $activity_id,
-            'is_valid' => array(
-                '$ne' => true
-            )
+            'is_valid' => 0
         );
-        if (! empty($prize_ids)) {
+        if (!empty($prize_ids)) {
             $query['prize_id'] = array(
                 '$in' => $prize_ids
             );
@@ -101,28 +99,28 @@ class Exchange extends \App\Common\Models\Lottery\Exchange
      *
      * @param string $activity_id            
      * @param string $user_id            
-     * @param \MongoDate $startTime            
-     * @param \MongoDate $endTime            
+     * @param number $startTime            
+     * @param number $endTime            
      * @return multitype:number
      */
-    public function filterExchangeByGroup($activity_id, $user_id, \MongoDate $startTime = null, \MongoDate $endTime = null)
+    public function filterExchangeByGroup($activity_id, $user_id, $startTime = 0, $endTime = 0)
     {
         $rst = array();
         $exchanges = $this->getExchangeBy($user_id, $activity_id, $startTime, $endTime);
-        if (! empty($exchanges)) {
+        if (!empty($exchanges)) {
             foreach ($exchanges as $key => $exchange) {
-                if (! empty($exchange['prize_id'])) {
+                if (!empty($exchange['prize_id'])) {
                     if (empty($rst[$exchange['prize_id']]))
                         $rst[$exchange['prize_id']] = 1;
                     else
                         $rst[$exchange['prize_id']] += 1;
                 }
             }
-            
+
             $rst['all'] = count($exchanges);
             return $rst;
         }
-        
+
         return $rst;
     }
 
@@ -137,10 +135,12 @@ class Exchange extends \App\Common\Models\Lottery\Exchange
      * @param array $user_info            
      * @param array $user_contact            
      * @param string $isValid            
-     * @param string $source            
+     * @param string $source             
+     * @param string $got_time            
+     * @param number $rule_id           
      * @param array $memo            
      */
-    public function record($activity_id, $prize_id, $prize_info, $prize_code, $user_id, $user_info, $user_contact, $isValid, $source, array $memo = array())
+    public function record($activity_id, $prize_id, $prize_info, $prize_code, $user_id, $user_info, $user_contact, $isValid, $source, $got_time, $rule_id, array $memo = array())
     {
         $data = array(
             'activity_id' => $activity_id,
@@ -148,29 +148,50 @@ class Exchange extends \App\Common\Models\Lottery\Exchange
             'prize_id' => $prize_id,
             'is_valid' => $isValid,
             'source' => $source,
-            'got_time' => getCurrentTime()
+            'got_time' => getCurrentTime($got_time)
         );
-        
+
         $data['prize_code'] = $prize_info['prize_code'];
         $data['prize_name'] = $prize_info['prize_name'];
         $data['prize_category'] = $prize_info['category'];
         $data['prize_virtual_currency'] = $prize_info['virtual_currency'];
         $data['prize_is_virtual'] = $prize_info['is_virtual'];
-        
-        if (! empty($prize_code)) {
+
+        if (!empty($prize_code)) {
             $data['prize_virtual_code'] = $prize_code['code'];
             $data['prize_virtual_pwd'] = $prize_code['pwd'];
+        } else {
+            $data['prize_virtual_code'] = "";
+            $data['prize_virtual_pwd'] = "";
         }
-        if (! empty($user_info)) {
+
+        if (!empty($user_info)) {
             $data['user_name'] = $user_info['user_name'];
             $data['user_headimgurl'] = $user_info['user_headimgurl'];
+        } else {
+            $data['user_name'] = "";
+            $data['user_headimgurl'] = "";
         }
-        if (! empty($user_contact)) {
-            $data['contact_name'] = $user_contact['name'];
-            $data['contact_mobile'] = $user_contact['mobile'];
-            $data['contact_address'] = $user_contact['address'];
+
+        if (!empty($user_contact)) {
+            $data['contact_name'] = empty($user_contact['name']) ? "" : $user_contact['name'];
+            $data['contact_mobile'] = empty($user_contact['mobile']) ? "" : $user_contact['mobile'];
+            $data['contact_address'] = empty($user_contact['address']) ? "" : $user_contact['address'];
+            $data['contact_province'] = empty($user_contact['province']) ? "" : $user_contact['province'];
+            $data['contact_city'] = empty($user_contact['city']) ? "" : $user_contact['city'];
+            $data['contact_district'] = empty($user_contact['district']) ? "" : $user_contact['district'];
+            $data['contact_zipcode'] = empty($user_contact['zipcode']) ? "" : $user_contact['zipcode'];
+        } else {
+            $data['contact_name'] = "";
+            $data['contact_mobile'] = "";
+            $data['contact_address'] = "";
+            $data['contact_province'] = "";
+            $data['contact_city'] = "";
+            $data['contact_district'] = "";
+            $data['contact_zipcode'] = "";
         }
         $data['win_code'] = $this->createWinCode();
+        $data['rule_id'] = $rule_id;
         $data['memo'] = $memo;
         return $this->insert($data);
     }
@@ -220,7 +241,7 @@ class Exchange extends \App\Common\Models\Lottery\Exchange
                 '$in' => $activity_ids
             );
         }
-        
+
         if ($user_ids) {
             $query['user_id'] = array(
                 '$in' => $user_ids
@@ -231,7 +252,7 @@ class Exchange extends \App\Common\Models\Lottery\Exchange
                 '$in' => $prizeIds
             );
         }
-        
+
         if ($is_today) {
             // 当天
             $today = date('Y-m-d');
@@ -267,7 +288,7 @@ class Exchange extends \App\Common\Models\Lottery\Exchange
                 '$in' => $activity_ids
             );
         }
-        
+
         if ($user_ids) {
             $query['user_id'] = array(
                 '$in' => $user_ids
@@ -278,7 +299,7 @@ class Exchange extends \App\Common\Models\Lottery\Exchange
                 '$in' => $prizeIds
             );
         }
-        
+
         if ($is_today) { // 当天
             $today = date('Y-m-d');
             $start = getCurrentTime(strtotime($today . ' 00:00:00'));
@@ -291,14 +312,14 @@ class Exchange extends \App\Common\Models\Lottery\Exchange
         if ($conditions) {
             $query = array_merge($query, $conditions);
         }
-        
+
         $list = $this->findAll($query);
         return $list;
     }
 
     private function createWinCode()
     {
-        $orderId = date('ymdHis') . (substr(microtime(true) * 10000, - 3, 3)) . rand(1000, 9999);
+        $orderId = date('ymdHis') . (substr(microtime(true) * 10000, -3, 3)) . rand(1000, 9999);
         return $orderId;
     }
 

@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Common\Models\Base;
 
 class Base implements IBase
@@ -28,7 +29,7 @@ class Base implements IBase
     protected $dbName = 'db';
 
     protected $secondary = false;
-    
+
     use BaseTrait;
 
     /**

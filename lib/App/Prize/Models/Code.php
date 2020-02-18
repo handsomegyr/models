@@ -12,9 +12,9 @@ class Code extends \App\Common\Models\Prize\Code
      * @param string $activity_id            
      * @return array boolean
      */
-    public function getCode($prize_id, $activity_id = '')
+    public function getCode($prize_id, $now, $activity_id = '')
     {
-        $now = getCurrentTime();
+        $now = getCurrentTime($now);
         $query = array(
             '_id' => array(
                 '$ne' => '0123456789012345678901234'
