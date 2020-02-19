@@ -23,31 +23,34 @@ class Rule extends \App\Common\Models\Exchange\Rule
      */
     public function getRules($activity_id, $now, $score = 0, $score_category = 0, array $prize_ids = array())
     {
-        $q = $this->getModel()
-            ->where("activity_id", $activity_id)
-            ->where("allow_start_time", "<=", date("Y-m-d H:i:s", $now))
-            ->where("allow_end_time", ">=", date("Y-m-d H:i:s", $now));
+        $query = array();
+        $query['activity_id'] = $activity_id;
+        $query['allow_start_time'] = array(
+            '$lte' => getCurrentTime($now)
+        );
+        $query['allow_end_time'] = array(
+            '$gte' => getCurrentTime($now)
+        );
+
         if (!empty($prize_ids)) {
-            $q->whereIn("prize_id", $prize_ids);
+            $query['prize_id'] = array(
+                '$in' => $prize_ids
+            );
         }
 
         if ($score) {
-            $q->where("score", ">=", $score);
+            $query['score'] = array(
+                '$gte' => $score
+            );
         }
-        if ($score_category) {
-            $q->where("score_category", $score_category);
-        }
-        $q->orderby("sort", "asc");
 
-        $list = $q->get();
-        $ret = array();
-        if (!empty($list)) {
-            foreach ($list as $item) {
-                $item = $this->getReturnData($item);
-                $ret[] = $item;
-            }
+        if ($score_category) {
+            $query['score_category'] = $score_category;
         }
-        return $ret;
+
+        $sort = $this->getDefaultSort();
+        $list = $this->findAll($query, $sort);
+        return $list;
     }
 
     /**
@@ -78,77 +81,24 @@ class Rule extends \App\Common\Models\Exchange\Rule
         }
         $quantity = abs($quantity);
 
-        $affectRows = $this->getModel()
-            ->where("id", $rule_id)
-            ->where("allow_number", ">=", 0)
-            ->update(array(
-                'allow_number' => DB::raw("allow_number-{$quantity}"),
-                'exchange_quantity' => DB::raw("exchange_quantity+{$quantity}")
-            ));
+        $query = array(
+            '_id' => $rule_id,
+            'allow_number' => array(
+                '$gte' => $quantity
+            )
+        );
+        $updateData = array(
+            '$inc' => array(
+                'allow_number' => -$quantity,
+                'exchange_quantity' => $quantity
+            )
+        );
+        $affectRows =  $this->update($query, $updateData);
         if ($affectRows < 1) {
             return false;
             // throw new \Exception("奖品的剩余数量已经为零");
         } else {
             return true;
         }
-    }
-
-
-    // 减少规则数量
-    public function exchange($rule_id, $quantity)
-    {
-        $option = array();
-        $option['query'] = array(
-            '_id' => $rule_id,
-            'quantity' => array(
-                '$gte' => $quantity
-            )
-        );
-        $option['update'] = array(
-            '$inc' => array(
-                'quantity' => -$quantity,
-                'exchange_quantity' => $quantity
-            )
-        );
-        $rst = $this->findAndModify($option);
-        if (empty($rst['ok'])) {
-            throw new \Exception("减少规则数量的findAndModify执行错误，返回结果为:" . json_encode($rst));
-        }
-        if (empty($rst['value'])) {
-            throw new \Exception("减少规则数量的findAndModify执行错误，返回结果为:" . json_encode($rst));
-        }
-        return $rst['value'];
-    }
-
-    /**
-     * 获得可兑换奖品
-     *
-     * @param number $date            
-     * @param number $score            
-     * @param number $score_category            
-     * @return array
-     */
-    public function getList($date = 0, $score = 0, $score_category = 0)
-    {
-        if (!$date) {
-            $date = time();
-        }
-        $query = array();
-        $query['start_time'] = array(
-            '$lte' => getCurrentTime($date)
-        );
-        $query['end_time'] = array(
-            '$gt' => getCurrentTime($date)
-        );
-        if ($score)
-            $query['score'] = array(
-                '$gte' => $score
-            );
-        if ($score_category)
-            $query['score_category'] = $score_category;
-
-        $sort = $this->getDefaultSort();
-        $list = $this->findAll($query, $sort);
-        return $list;
     }
 }
