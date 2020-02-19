@@ -1,6 +1,10 @@
 <?php
+
 namespace App\Exchange\Models;
 
+/**
+ * 废弃
+ */
 class Log extends \App\Common\Models\Exchange\Log
 {
 

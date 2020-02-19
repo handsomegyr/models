@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Lottery\Models;
+namespace App\Exchange\Models;
 
-class Exchange extends \App\Common\Models\Lottery\Exchange
+class Exchange extends \App\Common\Models\Exchange\Exchange
 {
 
     private $_exchanges = null;
@@ -140,7 +140,7 @@ class Exchange extends \App\Common\Models\Lottery\Exchange
      * @param number $rule_id           
      * @param array $memo            
      */
-    public function record($activity_id, $prize_id, $prize_info, $prize_code, $user_id, $user_info, $user_contact, $isValid, $source, $got_time, $rule_id, array $memo = array())
+    public function record($activity_id, $prize_id, $prize_info, $prize_code, $user_id, $user_info, $user_contact, $isValid, $source, $got_time, $quantity, $score_category, $score, $rule_id, array $memo = array())
     {
         $data = array(
             'activity_id' => $activity_id,
@@ -191,7 +191,12 @@ class Exchange extends \App\Common\Models\Lottery\Exchange
             $data['contact_zipcode'] = "";
         }
         $data['win_code'] = $this->createWinCode();
+
+        $data['quantity'] = $quantity;
+        $data['score_category'] = $score_category;
+        $data['score'] = $score;
         $data['rule_id'] = $rule_id;
+
         $data['memo'] = $memo;
         return $this->insert($data);
     }
@@ -221,6 +226,40 @@ class Exchange extends \App\Common\Models\Lottery\Exchange
         return $this->findOne(array(
             '_id' => $exchange_id
         ));
+    }
+
+    /**
+     * 获取某用户某奖品的兑换次数
+     *
+     * @param string $activity_id 
+     * @param string $user_id            
+     * @param string $prize_id            
+     * @param number $start_time            
+     * @param number $end_time            
+     * @return number
+     */
+    public function getExchangeNum($activity_id, $user_id, $prize_id, $start_time, $end_time)
+    {
+        $query = array(
+            'user_id' => $user_id,
+            'activity_id' => $activity_id,,
+            'got_time' => array(
+                '$gte' => getCurrentTime($start_time),
+                '$lt' => getCurrentTime($end_time)
+            ),
+            'prize_id' => $prize_id,
+            'is_valid' => true
+        );
+        $fields = array(
+            'quantity'
+        );
+        $groups = array();
+        $summary = 0;
+        $ret = $this->sum($query, $fields, $groups);
+        foreach ($ret as $row) {
+            $summary += $row['quantity'];
+        }
+        return $summary;
     }
 
     /**

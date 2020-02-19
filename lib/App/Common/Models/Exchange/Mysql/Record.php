@@ -4,15 +4,15 @@ namespace App\Common\Models\Exchange\Mysql;
 
 use App\Common\Models\Base\Mysql\Base;
 
-class Log extends Base
+class Record extends Base
 {
 
     /**
-     * 兑换-日志
-     * This model is mapped to the table iexchange_log
+     * 兑换日志记录
+     * This model is mapped to the table iexchange_record
      */
     public function getSource()
     {
-        return 'iexchange_log';
+        return 'iexchange_record';
     }
 }

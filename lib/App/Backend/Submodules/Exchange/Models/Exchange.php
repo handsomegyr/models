@@ -2,7 +2,8 @@
 
 namespace App\Backend\Submodules\Exchange\Models;
 
-class Log extends \App\Common\Models\Exchange\Log
+class Exchange extends \App\Common\Models\Exchange\Exchange
 {
+
     use \App\Backend\Models\Base;
 }

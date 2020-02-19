@@ -1,6 +1,10 @@
 <?php
+
 namespace App\Exchange\Models;
 
+/**
+ * 废弃
+ */
 class Success extends \App\Common\Models\Exchange\Success
 {
 
@@ -19,7 +23,7 @@ class Success extends \App\Common\Models\Exchange\Success
      * @param array $memo            
      * @return array
      */
-    public function addSuccess($user_id, $prize_id, $quantity, $score, array $rule_info, array $prize_code_info = array(), array $prize_info = array(), array $user_info = array(), array $user_contact = array(), array $memo = array('memo'=>''))
+    public function addSuccess($user_id, $prize_id, $quantity, $score, array $rule_info, array $prize_code_info = array(), array $prize_info = array(), array $user_info = array(), array $user_contact = array(), array $memo = array('memo' => ''))
     {
         $data = array();
         $data['user_id'] = $user_id;
@@ -28,29 +32,29 @@ class Success extends \App\Common\Models\Exchange\Success
         $data['score'] = $score;
         $data['is_valid'] = true;
         $data['exchange_time'] = getCurrentTime();
-        
+
         $data['rule_id'] = $rule_info['_id'];
-        
+
         $data['prize_code'] = $prize_info['prize_code'];
         $data['prize_name'] = $prize_info['prize_name'];
         $data['prize_category'] = $prize_info['category'];
         $data['prize_is_virtual'] = $prize_info['is_virtual'];
         $data['prize_virtual_currency'] = $prize_info['virtual_currency'];
-        
-        if (! empty($prize_code_info)) {
+
+        if (!empty($prize_code_info)) {
             $data['prize_virtual_code'] = $prize_code_info['code'];
             $data['prize_virtual_pwd'] = $prize_code_info['pwd'];
         }
-        if (! empty($user_info)) {
+        if (!empty($user_info)) {
             $data['user_name'] = $user_info['user_name'];
             $data['user_headimgurl'] = $user_info['user_headimgurl'];
         }
-        if (! empty($user_contact)) {
+        if (!empty($user_contact)) {
             $data['contact_name'] = $user_contact['name'];
             $data['contact_mobile'] = $user_contact['mobile'];
             $data['contact_address'] = $user_contact['address'];
         }
-        
+
         $data['memo'] = $memo;
         $data = $this->insert($data);
         return $data;
@@ -65,7 +69,7 @@ class Success extends \App\Common\Models\Exchange\Success
      * @param \MongoDate $end_time            
      * @return number
      */
-    public function getExchangeNum($user_id, $prize_id,\MongoDate $start_time,\MongoDate $end_time)
+    public function getExchangeNum($user_id, $prize_id, \MongoDate $start_time, \MongoDate $end_time)
     {
         $count = 0;
         $query = array(
@@ -78,7 +82,7 @@ class Success extends \App\Common\Models\Exchange\Success
             )
         );
         $list = $this->findAll($query);
-        if (! empty($list)) {
+        if (!empty($list)) {
             foreach ($list as $key => $val) {
                 $count += $val['quantity'];
             }
@@ -114,21 +118,21 @@ class Success extends \App\Common\Models\Exchange\Success
      * @param array $prize_ids            
      * @return array
      */
-    public function getExchangeList($user_id,\MongoDate $start_time = null,\MongoDate $end_time = null, array $prize_ids = array())
+    public function getExchangeList($user_id, \MongoDate $start_time = null, \MongoDate $end_time = null, array $prize_ids = array())
     {
         $query = array(
             'user_id' => $user_id
         );
-        if (! empty($prize_ids)) {
+        if (!empty($prize_ids)) {
             $query['prize_id'] = array(
                 '$in' => $prize_ids
             );
         }
         $query['is_valid'] = true;
-        if (! empty($start_time)) {
+        if (!empty($start_time)) {
             $query['exchange_time']['$gte'] = $start_time;
         }
-        if (! empty($end_time)) {
+        if (!empty($end_time)) {
             $query['exchange_time']['$lt'] = $end_time;
         }
         $list = $this->findAll($query);

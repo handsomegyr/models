@@ -4,11 +4,11 @@ namespace App\Common\Models\Exchange;
 
 use App\Common\Models\Base\Base;
 
-class Rule extends Base
+class Exchange extends Base
 {
 
     function __construct()
     {
-        $this->setModel(new \App\Common\Models\Exchange\Mysql\Rule());
+        $this->setModel(new \App\Common\Models\Exchange\Mysql\Exchange());
     }
 }

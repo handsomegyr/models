@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Common\Models\Exchange\Mysql;
 
 use App\Common\Models\Base\Mysql\Base;
@@ -20,7 +21,7 @@ class Limit extends Base
         $data = parent::reorganize($data);
         $data['start_time'] = $this->changeToMongoDate($data['start_time']);
         $data['end_time'] = $this->changeToMongoDate($data['end_time']);
-        
+
         return $data;
     }
 }
