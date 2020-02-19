@@ -1,10 +1,11 @@
 <?php
+
 namespace App\Backend\Submodules\Vote\Models;
 
 class LimitCategory extends \App\Common\Models\Vote\LimitCategory
 {
-    
-    use\App\Backend\Models\Base;
+
+    use \App\Backend\Models\Base;
 
     /**
      * 获取所有列表

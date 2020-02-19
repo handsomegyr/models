@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Vote\Models;
 
 class Item extends \App\Common\Models\Vote\Item
@@ -13,7 +14,7 @@ class Item extends \App\Common\Models\Vote\Item
     public function getDefaultSort($sort = -1)
     {
         $sort = array(
-            'show_order' => - 1,
+            'show_order' => -1,
             '_id' => $sort
         );
         return $sort;
@@ -74,7 +75,7 @@ class Item extends \App\Common\Models\Vote\Item
         );
         $ret = $this->findAll($query);
         $list = array();
-        if (! empty($ret)) {
+        if (!empty($ret)) {
             foreach ($ret as $item) {
                 $list[$item['name']] = $item;
             }
@@ -131,7 +132,7 @@ class Item extends \App\Common\Models\Vote\Item
         $query['vote_count'] = array(
             '$gt' => $myInfo['vote_count']
         ); // 按投票次数
-        if (! empty($otherConditions)) {
+        if (!empty($otherConditions)) {
             foreach ($otherConditions as $key => $value) {
                 $query[$key] = $value;
             }
@@ -163,7 +164,7 @@ class Item extends \App\Common\Models\Vote\Item
         $data['show_order'] = intval($show_order);
         $data['rank_period'] = 0;
         $data['memo'] = $memo;
-        
+
         $info = $this->insert($data);
         return $info;
     }
@@ -232,25 +233,25 @@ class Item extends \App\Common\Models\Vote\Item
      * @throws Exception
      * @return array
      */
-    public function getRankList($page = 1, $limit = 10, array $otherConditon = array(), array $sort = null, array $cacheInfo = array('isCache'=>false,'cacheKey'=>null,'expire_time'=>null))
+    public function getRankList($page = 1, $limit = 10, array $otherConditon = array(), array $sort = null, array $cacheInfo = array('isCache' => false, 'cacheKey' => null, 'expire_time' => null))
     {
         if (empty($sort)) {
             $sort = array(
-                'vote_count' => - 1
+                'vote_count' => -1
             );
         }
         $condition = $this->getQuery();
-        if (! empty($otherConditon)) {
+        if (!empty($otherConditon)) {
             $condition = array_merge($condition, $otherConditon);
         }
         $list = array();
-        
-        if (! empty($cacheInfo) && ! empty($cacheInfo['isCache']) && ! empty($cacheInfo['cacheKey'])) {
+
+        if (!empty($cacheInfo) && !empty($cacheInfo['isCache']) && !empty($cacheInfo['cacheKey'])) {
             $cache = Zend_Registry::get('cache');
             $cacheKey = md5($cacheInfo['cacheKey'] . 'page' . $page . 'limit' . $limit . "_condition_" . md5(serialize($condition)) . "_sort_" . md5(serialize($sort)));
             $list = $cache->load($cacheKey);
         }
-        
+
         if (empty($list)) {
             $rst = $this->aggregate(array(
                 array(
@@ -280,7 +281,7 @@ class Item extends \App\Common\Models\Vote\Item
                 ),
                 array(
                     '$sort' => array(
-                        'value.vote_count' => - 1,
+                        'value.vote_count' => -1,
                         'value.__CREATE_TIME__' => 1
                     )
                 ),
@@ -291,21 +292,21 @@ class Item extends \App\Common\Models\Vote\Item
                     '$limit' => $limit
                 )
             ));
-            
+
             if (empty($rst['ok'])) {
                 throw new \Exception("获取排名失败");
             }
-            
+
             if (empty($rst['result'])) {
                 throw new \Exception("获取排名失败");
             }
-            
+
             $list = $rst['result'];
         }
-        if (! empty($cacheInfo) && ! empty($cacheInfo['isCache']) && ! empty($cacheInfo['cacheKey'])) {
+        if (!empty($cacheInfo) && !empty($cacheInfo['isCache']) && !empty($cacheInfo['cacheKey'])) {
             $cache->save($list, $cacheKey, array(), empty($cacheInfo['expire_time']) ? null : $cacheInfo['expire_time']);
         }
-        
+
         return array(
             'condition' => $condition,
             'list' => $list

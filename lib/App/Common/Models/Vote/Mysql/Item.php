@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Common\Models\Vote\Mysql;
 
 use App\Common\Models\Base\Mysql\Base;
@@ -18,8 +19,9 @@ class Item extends Base
     public function reorganize(array $data)
     {
         $data = parent::reorganize($data);
+        
+        $data['publish_time'] = $this->changeToMongoDate($data['publish_time']);
         $data['is_closed'] = $this->changeToBoolean($data['is_closed']);
         return $data;
     }
 }
-

@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Vote\Models;
 
 class Period extends \App\Common\Models\Vote\Period

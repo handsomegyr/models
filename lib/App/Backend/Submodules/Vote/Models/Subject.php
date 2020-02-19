@@ -1,9 +1,10 @@
 <?php
+
 namespace App\Backend\Submodules\Vote\Models;
 
 class Subject extends \App\Common\Models\Vote\Subject
 {
-    
+
     use \App\Backend\Models\Base;
 
     /**

@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Common\Models\Vote\Mysql;
 
 use App\Common\Models\Base\Mysql\Base;
@@ -14,7 +15,7 @@ class Subject extends Base
     {
         return 'ivote_subject';
     }
-    
+
     public function reorganize(array $data)
     {
         $data = parent::reorganize($data);

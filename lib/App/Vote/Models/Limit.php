@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Vote\Models;
 
 class Limit extends \App\Common\Models\Vote\Limit
@@ -55,24 +56,24 @@ class Limit extends \App\Common\Models\Vote\Limit
     public function getLimitList($activitys = array(), $subjects = array(), $items = array())
     {
         $query = $this->getQuery();
-        if (! empty($activitys)) {
+        if (!empty($activitys)) {
             $query['activity'] = array(
                 '$in' => $activitys
             );
         }
-        if (! empty($subjects)) {
+        if (!empty($subjects)) {
             $query['subject'] = array(
                 '$in' => $subjects
             );
         }
-        if (! empty($items)) {
+        if (!empty($items)) {
             $query['items'] = array(
                 '$in' => $items
             );
         }
-        
+
         $sort = array(
-            'category' => - 1
+            'category' => -1
         );
         $list = $this->findAll($query, $sort);
         return $list;
@@ -91,32 +92,32 @@ class Limit extends \App\Common\Models\Vote\Limit
      * @param array $cacheInfo            
      * @return boolean
      */
-    public function checkLimit($activityId, $subjectId, $itemId, $identity, $num = 1, array $activitys = array(), array $subjects = array(), array $items = array(), array $cacheInfo = array('isCache'=>false,'cacheKey'=>null,'expire_time'=>null))
+    public function checkLimit($activityId, $subjectId, $itemId, $identity, $num = 1, array $activitys = array(), array $subjects = array(), array $items = array(), array $cacheInfo = array('isCache' => false, 'cacheKey' => null, 'expire_time' => null))
     {
         if (empty($this->limits)) {
             // 获取限制列表
             $this->limits = $this->getLimitList($activitys, $subjects, $items);
         }
         // 检查
-        if (! empty($this->limits)) {
+        if (!empty($this->limits)) {
             $modelLog = $this->getLogModel();
             foreach ($this->limits as $limit) {
                 $activity = empty($limit['activity']) ? NULL : $limit['activity'];
                 $subject = empty($limit['subject']) ? NULL : $limit['subject'];
                 $item = empty($limit['item']) ? NULL : $limit['item'];
-                
-                if (! empty($item) && $item != $itemId) { // 如果设置到选项这一层次,并且用户所投的选项和限制选项不同的话,跳过检查
+
+                if (!empty($item) && $item != $itemId) { // 如果设置到选项这一层次,并且用户所投的选项和限制选项不同的话,跳过检查
                     continue;
                 }
-                
-                if (! empty($subject) && $subject != $subjectId) { // 如果设置到主题这一层次,并且用户所投的主题和限制主题不同的话,跳过检查
+
+                if (!empty($subject) && $subject != $subjectId) { // 如果设置到主题这一层次,并且用户所投的主题和限制主题不同的话,跳过检查
                     continue;
                 }
-                
-                if (! empty($activity) && $activity != $activityId) { // 如果设置到活动这一层次,并且用户所投的活动和限制活动不同的话,跳过检查
+
+                if (!empty($activity) && $activity != $activityId) { // 如果设置到活动这一层次,并且用户所投的活动和限制活动不同的话,跳过检查
                     continue;
                 }
-                
+
                 $activity = empty($activity) ? NULL : array(
                     $activity
                 );
@@ -126,7 +127,7 @@ class Limit extends \App\Common\Models\Vote\Limit
                 $item = empty($item) ? NULL : array(
                     $item
                 );
-                
+
                 switch (intval($limit['category'])) {
                     case 3:
                         $isVoted = $modelLog->isVoted(array(
@@ -143,8 +144,7 @@ class Limit extends \App\Common\Models\Vote\Limit
                             'session_id' => session_id()
                         ), $num, $activity, $subject, $item, null, null, $cacheInfo); // 根据会话ID
                         break;
-                    default:
-                        ;
+                    default:;
                         break;
                 }
                 if ($isVoted) {
@@ -152,7 +152,7 @@ class Limit extends \App\Common\Models\Vote\Limit
                 }
             }
         }
-        
+
         return true;
     }
 }

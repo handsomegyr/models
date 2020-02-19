@@ -1,9 +1,10 @@
 <?php
+
 namespace App\Backend\Submodules\Vote\Models;
 
 class Category extends \App\Common\Models\Vote\Category
 {
-    
+
     use \App\Backend\Models\Base;
 
     /**

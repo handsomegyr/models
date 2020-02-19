@@ -15,7 +15,7 @@ class Log extends Base
     {
         return 'ivote_log';
     }
-    
+
     public function reorganize(array $data)
     {
         $data = parent::reorganize($data);

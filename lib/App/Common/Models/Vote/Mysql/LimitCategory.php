@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Common\Models\Vote\Mysql;
 
 use App\Common\Models\Base\Mysql\Base;
@@ -15,4 +16,3 @@ class LimitCategory extends Base
         return 'ivote_limit_category';
     }
 }
-

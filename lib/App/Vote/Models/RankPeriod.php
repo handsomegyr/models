@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Vote\Models;
 
 class RankPeriod extends \App\Common\Models\Vote\RankPeriod
@@ -17,9 +18,9 @@ class RankPeriod extends \App\Common\Models\Vote\RankPeriod
     public function getDefaultSort($sort = -1)
     {
         $sort = array(
-            'period' => - 1,
-            'vote_count' => - 1,
-            'show_order' => - 1,
+            'period' => -1,
+            'vote_count' => -1,
+            'show_order' => -1,
             '_id' => $sort
         );
         return $sort;
@@ -48,9 +49,8 @@ class RankPeriod extends \App\Common\Models\Vote\RankPeriod
         $data['vote_count'] = intval($vote_count);
         $data['show_order'] = intval($show_order);
         $data['memo'] = $memo;
-        
+
         $info = $this->insert($data);
         return $info;
     }
-
 }

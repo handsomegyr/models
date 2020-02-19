@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Vote\Models;
 
 class Subject extends \App\Common\Models\Vote\Subject
@@ -13,7 +14,7 @@ class Subject extends \App\Common\Models\Vote\Subject
     public function getDefaultSort($sort = -1)
     {
         $sort = array(
-            'show_order' => - 1,
+            'show_order' => -1,
             '_id' => $sort
         );
         return $sort;
@@ -100,7 +101,7 @@ class Subject extends \App\Common\Models\Vote\Subject
         $query['vote_count'] = array(
             '$gt' => $myInfo['vote_count']
         ); // 按投票次数
-        if (! empty($otherConditions)) {
+        if (!empty($otherConditions)) {
             foreach ($otherConditions as $key => $value) {
                 $query[$key] = $value;
             }
