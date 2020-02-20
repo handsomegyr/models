@@ -28,11 +28,18 @@ class Limit extends \App\Common\Models\Vote\Limit
     private $limits = array();
 
     /**
-     * 默认查询条件
+     * 获取限制列表
+     *
+     * @param number $now 
+     * @param array $activitys            
+     * @param array $subjects            
+     * @param array $items            
+     *
+     * @return array
      */
-    public function getQuery()
+    public function getLimitList($now, $activitys = array(), $subjects = array(), $items = array())
     {
-        $now = getCurrentTime();
+        $now = getCurrentTime($now);
         $query = array(
             'start_time' => array(
                 '$lte' => $now
@@ -41,21 +48,6 @@ class Limit extends \App\Common\Models\Vote\Limit
                 '$gte' => $now
             )
         ); // 显示
-        return $query;
-    }
-
-    /**
-     * 获取限制列表
-     *
-     * @param array $activitys            
-     * @param array $subjects            
-     * @param array $items            
-     *
-     * @return array
-     */
-    public function getLimitList($activitys = array(), $subjects = array(), $items = array())
-    {
-        $query = $this->getQuery();
         if (!empty($activitys)) {
             $query['activity'] = array(
                 '$in' => $activitys
@@ -82,21 +74,25 @@ class Limit extends \App\Common\Models\Vote\Limit
     /**
      * 限制检查
      *
+     * @param number $now  
      * @param string $activityId            
      * @param string $subjectId            
      * @param string $itemId            
-     * @param string $identity            
+     * @param string $identity              
+     * @param string $ip            
+     * @param string $session_id             
+     * @param number $num         
      * @param array $activitys            
      * @param array $subjects            
      * @param array $items            
      * @param array $cacheInfo            
      * @return boolean
      */
-    public function checkLimit($activityId, $subjectId, $itemId, $identity, $num = 1, array $activitys = array(), array $subjects = array(), array $items = array(), array $cacheInfo = array('isCache' => false, 'cacheKey' => null, 'expire_time' => null))
+    public function checkLimit($now, $activityId, $subjectId, $itemId, $identity, $ip, $session_id, $num = 1, array $activitys = array(), array $subjects = array(), array $items = array(), array $cacheInfo = array('isCache' => false, 'cacheKey' => null, 'expire_time' => null))
     {
         if (empty($this->limits)) {
             // 获取限制列表
-            $this->limits = $this->getLimitList($activitys, $subjects, $items);
+            $this->limits = $this->getLimitList($now, $activitys, $subjects, $items);
         }
         // 检查
         if (!empty($this->limits)) {
@@ -132,17 +128,17 @@ class Limit extends \App\Common\Models\Vote\Limit
                     case 3:
                         $isVoted = $modelLog->isVoted(array(
                             'identity' => $identity
-                        ), $num, $activity, $subject, $item, null, null, $cacheInfo); // 根据身份
+                        ), $num, $activity, $subject, $item, 0, 0, $cacheInfo); // 根据身份
                         break;
                     case 2:
                         $isVoted = $modelLog->isVoted(array(
-                            'ip' => getIp()
-                        ), $num, $activity, $subject, $item, null, null, $cacheInfo); // 根据IP
+                            'ip' => $ip
+                        ), $num, $activity, $subject, $item, 0, 0, $cacheInfo); // 根据IP
                         break;
                     case 1:
                         $isVoted = $modelLog->isVoted(array(
-                            'session_id' => session_id()
-                        ), $num, $activity, $subject, $item, null, null, $cacheInfo); // 根据会话ID
+                            'session_id' => $session_id
+                        ), $num, $activity, $subject, $item, 0, 0, $cacheInfo); // 根据会话ID
                         break;
                     default:;
                         break;

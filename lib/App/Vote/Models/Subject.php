@@ -34,12 +34,17 @@ class Subject extends \App\Common\Models\Vote\Subject
         return $sort;
     }
 
+
     /**
-     * 默认查询条件
+     * 根据活动ID获取场主题列表
+     *
+     * @param string $activityId 
+     * @param number $now           
+     * @return array
      */
-    public function getQuery()
+    public function getListByActivityId($activityId, $now)
     {
-        $now = getCurrentTime();
+        $now = getCurrentTime($now);
         $query = array(
             "is_closed" => false,
             'start_time' => array(
@@ -49,18 +54,6 @@ class Subject extends \App\Common\Models\Vote\Subject
                 '$gte' => $now
             )
         ); // 显示
-        return $query;
-    }
-
-    /**
-     * 根据活动ID获取场主题列表
-     *
-     * @param string $activityId            
-     * @return array
-     */
-    public function getListByActivityId($activityId)
-    {
-        $query = $this->getQuery();
         $query['activity_id'] = $activityId;
         $sort = $this->getDefaultSort();
         $ret = $this->findAll($query, $sort);
@@ -73,14 +66,16 @@ class Subject extends \App\Common\Models\Vote\Subject
      * @param string $id            
      * @param number $vote_count            
      */
-    public function incVoteCount($id, $vote_count = 1)
+    public function incVoteCount($id, $vote_count = 1, $view_count = 0, $share_count = 0)
     {
         $query = array(
             '_id' => ($id)
         );
         $this->update($query, array(
             '$inc' => array(
-                'vote_count' => $vote_count
+                'vote_count' => $vote_count,
+                'view_count' => $view_count,
+                'share_count' => $share_count
             )
         ));
     }
@@ -88,13 +83,23 @@ class Subject extends \App\Common\Models\Vote\Subject
     /**
      * 我的排名
      *
-     * @param array $myInfo            
+     * @param array $myInfo    
+     * @param number $now          
      * @param array $otherConditions            
      * @return number
      */
-    public function getRank($myInfo, array $otherConditions = array())
+    public function getRank($myInfo, $now, array $otherConditions = array())
     {
-        $query = $this->getQuery();
+        $now = getCurrentTime($now);
+        $query = array(
+            "is_closed" => false,
+            'start_time' => array(
+                '$lte' => $now
+            ),
+            'end_time' => array(
+                '$gte' => $now
+            )
+        ); // 显示
         $query['_id'] = array(
             '$ne' => $myInfo['_id']
         );

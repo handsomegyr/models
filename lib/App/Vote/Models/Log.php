@@ -26,21 +26,27 @@ class Log extends \App\Common\Models\Vote\Log
      * @param string $subject            
      * @param string $item            
      * @param string $identity            
+     * @param string $ip            
+     * @param string $session_id            
      * @param number $vote_num            
+     * @param number $view_num            
+     * @param number $share_num            
      * @param array $memo            
      * @return array
      */
-    public function log($activity, $subject, $item, $identity, $vote_num = 1, array $memo = array())
+    public function log($activity, $subject, $item, $identity, $ip, $session_id, $vote_time, $vote_num, $view_num, $share_num, array $memo = array())
     {
         $data = array();
         $data['activity'] = $activity;
         $data['subject'] = $subject;
         $data['item'] = $item;
-        $data['vote_time'] = getCurrentTime();
+        $data['vote_time'] = getCurrentTime($vote_time);
         $data['identity'] = $identity;
-        $data['ip'] = getIp();
-        $data['session_id'] = session_id();
+        $data['ip'] = $ip;
+        $data['session_id'] = $session_id;
         $data['vote_num'] = intval($vote_num);
+        $data['view_num'] = intval($view_num);
+        $data['share_num'] = intval($share_num);
         $data['memo'] = $memo;
 
         $info = $this->insert($data);
@@ -55,13 +61,13 @@ class Log extends \App\Common\Models\Vote\Log
      * @param array $activitys            
      * @param array $subjects            
      * @param array $items            
-     * @param MongoDate $startTime            
-     * @param MongoDate $endTime            
+     * @param number $startTime            
+     * @param number $endTime            
      * @param array $cacheInfo            
      * @throws Exception
      * @return boolean
      */
-    public function isVoted(array $judgeBy = array('identity' => NULL, 'ip' => NULL, 'session_id' => NULL), $num = 1, array $activitys = NULL, array $subjects = NULL, array $items = NULL, $startTime = NULL, $endTime = NULL, array $cacheInfo = array('isCache' => false, 'cacheKey' => null, 'expire_time' => null))
+    public function isVoted(array $judgeBy = array('identity' => NULL, 'ip' => NULL, 'session_id' => NULL), $num = 1, array $activitys = NULL, array $subjects = NULL, array $items = NULL, $startTime = 0, $endTime = 0, array $cacheInfo = array('isCache' => false, 'cacheKey' => null, 'expire_time' => null))
     {
         $query = array();
 
@@ -109,10 +115,10 @@ class Log extends \App\Common\Models\Vote\Log
         }
 
         if (!empty($startTime)) {
-            $query['vote_time']['$gte'] = $startTime;
+            $query['vote_time']['$gte'] = getCurrentTime($startTime);
         }
         if (!empty($endTime)) {
-            $query['vote_time']['$lte'] = $endTime;
+            $query['vote_time']['$lte'] = getCurrentTime($endTime);
         }
 
         if (intval($num) < 1) {
