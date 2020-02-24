@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Backend\Submodules\System\Models;
 
 use App\Backend\Models\Input;
@@ -14,7 +15,7 @@ class Enum extends \App\Common\Models\System\Enum
     {
         $sort = array(
             'show_order' => 1,
-            '_id' => - 1
+            '_id' => -1
         );
         return $sort;
     }
@@ -40,16 +41,16 @@ class Enum extends \App\Common\Models\System\Enum
     {
         // 分页查询
         $list = $this->findAll($input->getQuery(), $input->getSort());
-        
+
         $enumList = array();
-        if (! empty($list)) {
+        if (!empty($list)) {
             foreach ($list as $item) {
                 $pkey = "p:" . (empty($item['pid']) ? "0" : $item['pid']);
                 $key = ($item['_id']);
                 $enumList[$pkey][$key] = $item;
             }
         }
-        if (! empty($enumList["p:0"])) {
+        if (!empty($enumList["p:0"])) {
             $input->setRecordCount(count($enumList["p:0"]));
             $filter = $input->getFilter();
             $enumList["p:0"] = array_slice($enumList["p:0"], $filter['start'], min($filter['record_count'], $filter['page_size']));
@@ -59,7 +60,7 @@ class Enum extends \App\Common\Models\System\Enum
             $filter = $input->getFilter();
             $datas = array();
         }
-        
+
         return array(
             'data' => $datas,
             'filter' => $filter,
@@ -80,15 +81,15 @@ class Enum extends \App\Common\Models\System\Enum
     {
         $list = array();
         $pkey = "p:" . $pkey;
-        if (! empty($enumList[$pkey])) {
+        if (!empty($enumList[$pkey])) {
             foreach ($enumList[$pkey] as $key => $item) {
                 $item['level'] = $level;
                 $item['enum_id'] = $item['_id'];
                 $item['has_children'] = empty($enumList["p:" . $item['enum_id']]);
-                
+
                 $list[] = $item;
                 $list2 = $this->recursiveGet($enumList, $key, $level + 1);
-                if (! empty($list2)) {
+                if (!empty($list2)) {
                     $list = array_merge($list, $list2);
                 }
             }
@@ -99,16 +100,16 @@ class Enum extends \App\Common\Models\System\Enum
     public function getList4Tree($enum_id = "")
     {
         $input = new Input();
-        if (! empty($enum_id)) {
+        if (!empty($enum_id)) {
             $input->id = $enum_id;
         }
         $input->sort_by = "show_order";
         $input->sort_order = "DESC";
         $input->page_size = 3000;
-        
+
         $ret = $this->getList($input);
         $datas = array();
-        
+
         foreach ($ret["data"] as $var) {
             $text = "";
             if ($var['level'] > 0) {

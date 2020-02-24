@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Backend\Submodules\System\Models;
 
 use App\Backend\Models\Input;
@@ -48,7 +49,7 @@ class Resource extends \App\Common\Models\System\Resource
             $data['key'] = "{$item['module']}_{$item['controller']}::{$data['method']}";
             $resources[$key][] = $data;
         }
-        
+
         /* 获取权限的分组数据 */
         $priv_arr = array();
         foreach (array_keys($resources) as $rows) {
@@ -60,7 +61,7 @@ class Resource extends \App\Common\Models\System\Resource
                 'key' => $infoArr[0]
             );
         }
-        
+
         /* 按权限组查询底级的权限名称 */
         foreach ($resources as $key => $item) {
             foreach ($item as $priv) {
@@ -73,7 +74,7 @@ class Resource extends \App\Common\Models\System\Resource
                 );
             }
         }
-        
+
         // 将同一组的权限使用 "," 连接起来，供JS全选
         foreach ($priv_arr as $action_id => $action_group) {
             $priv_arr[$action_id]['priv_list'] = join(',', @array_keys($action_group['priv']));

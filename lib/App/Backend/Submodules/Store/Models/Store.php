@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Backend\Submodules\Store\Models;
 
 class Store extends \App\Common\Models\Store\Store

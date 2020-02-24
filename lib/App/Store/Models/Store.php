@@ -1,9 +1,10 @@
 <?php
+
 namespace App\Store\Models;
 
 class Store extends \App\Common\Models\Store\Store
 {
-    
+
     // 店铺状态，0关闭，1开启，2审核中
     const STATE0 = 0; // 关闭
     const STATE1 = 1; // 开启
@@ -12,7 +13,7 @@ class Store extends \App\Common\Models\Store\Store
     {
         return array(
             'state' => self::STATE1 // 开启
-                );
+        );
     }
 
     /**
@@ -24,7 +25,7 @@ class Store extends \App\Common\Models\Store\Store
     public function getActiveListByIds(array $ids)
     {
         $ret = array();
-        if (! empty($ids)) {
+        if (!empty($ids)) {
             $query = array(
                 '_id' => array(
                     '$in' => array_values($ids)
@@ -33,7 +34,7 @@ class Store extends \App\Common\Models\Store\Store
             $defaultQuery = $this->getDefaultQuery();
             $query = array_merge($query, $defaultQuery);
             $list = $this->findAll($query);
-            if (! empty($list)) {
+            if (!empty($list)) {
                 foreach ($list as $item) {
                     $ret[$item['_id']] = $item;
                 }

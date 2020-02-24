@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Backend\Submodules\System\Models;
 
 class Role extends \App\Common\Models\System\Role
@@ -10,7 +11,7 @@ class Role extends \App\Common\Models\System\Role
         /* 判断是否已经存在 */
         $query = array();
         $query['name'] = urldecode($name);
-        if (! empty($id)) {
+        if (!empty($id)) {
             $query['_id'] = array(
                 '$ne' => $id
             );
@@ -26,7 +27,7 @@ class Role extends \App\Common\Models\System\Role
         /* 判断是否已经存在 */
         $query = array();
         $query['alias'] = $alias;
-        if (! empty($id)) {
+        if (!empty($id)) {
             $query['_id'] = array(
                 '$ne' => $id
             );

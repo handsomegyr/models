@@ -257,33 +257,39 @@ class Menu extends \App\Common\Models\System\Menu
     {
         $tree = array();
         foreach ($parent as $l) {
+            $cando = empty($l['cando']) ? 0 : $l['cando'];
+            $priv_list = empty($l['priv_list']) ? '' : $l['priv_list'];
+            $sub_menus = array();
+            $sub_priv_list = array();
             if (isset($menus[$l['_id']])) {
                 $sub_menus = $this->buildTree($menus, $menus[$l['_id']]);
-                $cando = 0;
-                $is_active = 0;
-                $priv_list = '';
                 if (!empty($sub_menus)) {
                     foreach ($sub_menus as $sm) {
                         if ($sm['cando']) {
                             $cando = 1;
                         }
-                        if ($sm['is_active']) {
-                            $is_active = 1;
+                        if (!empty($sm['priv_list'])) {
+                            $sub_priv_list[] = $sm['priv_list'];
                         }
                     }
-                    $priv_list .= join(',', @array_keys($sub_menus));
+                    $sub_priv_list = array_merge($sub_priv_list, @array_keys($sub_menus));
+                    $sub_priv_list = array_unique($sub_priv_list);
                 }
-                $l['priv'] = $sub_menus;
-                if (!empty($priv_list)) {
-                    $l['priv_list'] = trim(',' . $priv_list, ',');
-                }
-                $l['cando'] = $cando;
-                $l['is_active'] = $is_active;
             }
+            $l['priv'] = $sub_menus;
+
+            if (!empty($sub_priv_list)) {
+                $priv_list .= join(',', $sub_priv_list);
+            }
+            if (!empty($priv_list)) {
+                $l['priv_list'] = trim(',' . $priv_list, ',');
+            }
+            $l['cando'] = $cando;
             $tree[$l['_id']] = $l;
         }
         return $tree;
     }
+
 
     public function getList4Tree($menu_id = "")
     {

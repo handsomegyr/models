@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Backend\Submodules\System\Models;
 
 use App\Backend\Models\Input;
@@ -41,15 +42,15 @@ class Area extends \App\Common\Models\System\Area
         // 分页查询
         $list = $this->findAll($input->getQuery(), $input->getSort());
         $areaList = array();
-        if (! empty($list)) {
+        if (!empty($list)) {
             foreach ($list as $item) {
                 $pkey = "p:" . (empty($item['parent_code']) ? "0" : $item['parent_code']);
                 $key = "cur:" . ($item['code']);
                 $areaList[$pkey][$key] = $item;
             }
         }
-        
-        if (! empty($areaList["p:0"])) {
+
+        if (!empty($areaList["p:0"])) {
             $input->setRecordCount(count($areaList["p:0"]));
             $filter = $input->getFilter();
             $areaList["p:0"] = array_slice($areaList["p:0"], $filter['start'], min($filter['record_count'], $filter['page_size']));
@@ -79,15 +80,15 @@ class Area extends \App\Common\Models\System\Area
     {
         $list = array();
         $pkey = "p:" . $pkey;
-        if (! empty($areaList[$pkey])) {
+        if (!empty($areaList[$pkey])) {
             foreach ($areaList[$pkey] as $key => $item) {
                 // $item['level'] = $level;
                 $item['area_code'] = $item['code'];
                 $item['has_children'] = empty($areaList["p:" . $item['area_code']]);
-                
+
                 $list[] = $item;
                 $list2 = $this->recursiveGet($areaList, ltrim($key, 'cur:'), $level + 1);
-                if (! empty($list2)) {
+                if (!empty($list2)) {
                     $list = array_merge($list, $list2);
                 }
             }
@@ -98,16 +99,16 @@ class Area extends \App\Common\Models\System\Area
     public function getList4Tree($area_code = 0)
     {
         $input = new Input();
-        if (! empty($area_code)) {
+        if (!empty($area_code)) {
             $input->code = $area_code;
         }
         $input->sort_by = "parent_code";
         $input->sort_order = "DESC";
         $input->page_size = 3000;
-        
+
         $ret = $this->getList($input);
         $datas = array();
-        
+
         foreach ($ret["data"] as $var) {
             $text = "";
             if ($var['level'] > 0) {
