@@ -1,9 +1,10 @@
 <?php
+
 namespace App\Backend\Submodules\Weixincard\Models;
 
 class DateInfoType extends \App\Common\Models\Weixincard\DateInfoType
 {
-    
+
     use \App\Backend\Models\Base;
 
     /**

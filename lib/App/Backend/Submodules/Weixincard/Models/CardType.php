@@ -1,9 +1,10 @@
 <?php
+
 namespace App\Backend\Submodules\Weixincard\Models;
 
 class CardType extends \App\Common\Models\Weixincard\CardType
 {
-    
+
     use \App\Backend\Models\Base;
 
     /**

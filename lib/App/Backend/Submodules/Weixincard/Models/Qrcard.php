@@ -1,9 +1,10 @@
 <?php
+
 namespace App\Backend\Submodules\Weixincard\Models;
 
 class Qrcard extends \App\Common\Models\Weixincard\Qrcard
 {
-    
+
     use \App\Backend\Models\Base;
 
     private $_weixin;
@@ -22,7 +23,7 @@ class Qrcard extends \App\Common\Models\Weixincard\Qrcard
     public function getDefaultSort()
     {
         $sort = array(
-            '_id' => - 1
+            '_id' => -1
         );
         return $sort;
     }
@@ -34,21 +35,6 @@ class Qrcard extends \App\Common\Models\Weixincard\Qrcard
     {
         $query = array();
         return $query;
-    }
-
-    /**
-     * 根据ID获取信息
-     *
-     * @param string $id            
-     * @return array
-     */
-    public function getInfoById($id)
-    {
-        $query = array(
-            '_id' => myMongoId($id)
-        );
-        $info = $this->findOne($query);
-        return $info;
     }
 
     /**
@@ -77,7 +63,7 @@ class Qrcard extends \App\Common\Models\Weixincard\Qrcard
         $query = array(
             'card_id' => $card_id
         );
-        if (! empty($code)) {
+        if (!empty($code)) {
             $query['code'] = $code;
         }
         $info = $this->findOne($query);
@@ -123,17 +109,17 @@ class Qrcard extends \App\Common\Models\Weixincard\Qrcard
      * @param string $show_qrcode_url            
      * @param array $memo            
      */
-    public function recordTicket(array $card, $ticket, $url, $qrcodeUrl, $show_qrcode_url, array $memo = array('memo'=>''))
+    public function recordTicket(array $card, $ticket, $url, $qrcodeUrl, $show_qrcode_url, array $memo = array('memo' => ''))
     {
         $query = array();
         $query['_id'] = $card['_id'];
-        
+
         $data = array();
         $data['ticket'] = $ticket;
         $data['url'] = $url;
         $data['qrcodeUrl'] = $qrcodeUrl;
         $data['show_qrcode_url'] = $show_qrcode_url;
-        
+
         $data['ticket_time'] = new \MongoDate();
         $data['is_created'] = true;
         $data['memo'] = $memo;
@@ -151,9 +137,9 @@ class Qrcard extends \App\Common\Models\Weixincard\Qrcard
         $is_unique_code = empty($card['is_unique_code']) ? false : true;
         $balance = empty($card['balance']) ? 0 : $card['balance'];
         $outer_id = empty($card['outer_id']) ? 0 : intval($card['outer_id']);
-        
+
         $ticketInfo = $this->_weixin->getCardManager()->qrcodeCreate($card_id, $code, $openid, $expire_seconds, $is_unique_code, $balance, $outer_id);
-        if (! empty($ticketInfo['errcode'])) {
+        if (!empty($ticketInfo['errcode'])) {
             throw new \Exception($ticketInfo['errmsg'], $ticketInfo['errcode']);
         }
         // Array ( [errcode] => 0 [errmsg] => ok [ticket] => gQEj8DoAAAAAAAAAASxodHRwOi8vd2VpeGluLnFxLmNvbS9xL3drd1VOUVBtcUt6UkxGajlVR2RGAAIEHWuBVAMEAAAAAA== [url] => http://weixin.qq.com/q/wkwUNQPmqKzRLFj9UGdF [show_qrcode_url] => http://weixin.qq.com/q/wkwUNQPmqKzRLFj9UGdF )
@@ -161,7 +147,7 @@ class Qrcard extends \App\Common\Models\Weixincard\Qrcard
         $url = ($ticketInfo['url']);
         // $qrcodeUrl = $this->_weixin->getQrcodeManager()->getQrcodeUrl(urlencode($ticket));
         $qrcodeUrl = $show_qrcode_url = ($ticketInfo['show_qrcode_url']);
-        
+
         // 记录
         $memo = array(
             'weixinQrcodeCreate' => $ticketInfo

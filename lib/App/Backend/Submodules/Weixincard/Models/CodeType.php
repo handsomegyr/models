@@ -1,9 +1,10 @@
 <?php
+
 namespace App\Backend\Submodules\Weixincard\Models;
 
 class CodeType extends \App\Common\Models\Weixincard\CodeType
 {
-    
+
     use \App\Backend\Models\Base;
 
     /**

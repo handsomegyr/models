@@ -1,9 +1,10 @@
 <?php
+
 namespace App\Backend\Submodules\Weixincard\Models;
 
 class Logo extends \App\Common\Models\Weixincard\Logo
 {
-    
+
     use \App\Backend\Models\Base;
 
     /**
@@ -48,7 +49,7 @@ class Logo extends \App\Common\Models\Weixincard\Logo
         $query['is_uploaded'] = true;
         $sort = $this->getDefaultSort();
         $list = $this->find($query, $sort, 0, 1);
-        if (! empty($list['datas'])) {
+        if (!empty($list['datas'])) {
             return $list['datas'][0];
         }
         return array();

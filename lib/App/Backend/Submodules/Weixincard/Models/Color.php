@@ -1,9 +1,10 @@
 <?php
+
 namespace App\Backend\Submodules\Weixincard\Models;
 
 class Color extends \App\Common\Models\Weixincard\Color
 {
-    
+
     use \App\Backend\Models\Base;
 
     /**

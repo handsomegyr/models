@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Common\Models\Weixincard;
 
 use App\Common\Models\Base\Base;
@@ -16,10 +17,10 @@ class Logo extends Base
         $uploadPath = $this->getUploadPath();
         // return "{$baseUrl}upload/{$uploadPath}/{$image}";
         $xyStr = "";
-        if (! empty($x)) {
+        if (!empty($x)) {
             $xyStr .= "&w={$x}";
         }
-        if (! empty($y)) {
+        if (!empty($y)) {
             $xyStr .= "&h={$y}";
         }
         return "{$baseUrl}service/file/index?id={$image}&upload_path={$uploadPath}{$xyStr}";

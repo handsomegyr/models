@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Weixincard\Models;
 
 class Event extends \App\Common\Models\Weixincard\Event

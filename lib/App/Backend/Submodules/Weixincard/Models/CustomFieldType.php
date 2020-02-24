@@ -1,9 +1,10 @@
 <?php
+
 namespace App\Backend\Submodules\Weixincard\Models;
 
 class CustomFieldType extends \App\Common\Models\Weixincard\CustomFieldType
 {
-    
+
     use \App\Backend\Models\Base;
 
     /**

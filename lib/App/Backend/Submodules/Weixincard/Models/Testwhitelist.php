@@ -1,9 +1,10 @@
 <?php
+
 namespace App\Backend\Submodules\Weixincard\Models;
 
 class Testwhitelist extends \App\Common\Models\Weixincard\Testwhitelist
 {
-    
+
     use \App\Backend\Models\Base;
 
     /**
