@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Common\Models\Bargain\Mysql;
 
 use App\Common\Models\Base\Mysql\Base;
@@ -25,7 +26,9 @@ class Bargain extends Base
         $data['is_both_bargain'] = $this->changeToBoolean($data['is_both_bargain']);
         $data['is_bargain_to_minworth'] = $this->changeToBoolean($data['is_bargain_to_minworth']);
         $data['bargain_to_minworth_time'] = $this->changeToMongoDate($data['bargain_to_minworth_time']);
-        
+        $data['bargain_time'] = $this->changeToMongoDate($data['bargain_time']);
+        $data['close_time'] = $this->changeToMongoDate($data['close_time']);
+
         return $data;
     }
 }

@@ -256,7 +256,8 @@ class Menu extends \App\Common\Models\System\Menu
     private function buildTree(&$menus, $parent)
     {
         $tree = array();
-        foreach ($parent as $l) {
+        foreach ($parent as $l) {            
+            $is_active = empty($l['is_active']) ? 0 : $l['is_active'];
             $cando = empty($l['cando']) ? 0 : $l['cando'];
             $priv_list = empty($l['priv_list']) ? '' : $l['priv_list'];
             $sub_menus = array();
@@ -267,6 +268,9 @@ class Menu extends \App\Common\Models\System\Menu
                     foreach ($sub_menus as $sm) {
                         if ($sm['cando']) {
                             $cando = 1;
+                        }
+                        if ($sm['is_active']) {
+                            $is_active = 1;
                         }
                         if (!empty($sm['priv_list'])) {
                             $sub_priv_list[] = $sm['priv_list'];
@@ -285,6 +289,7 @@ class Menu extends \App\Common\Models\System\Menu
                 $l['priv_list'] = trim(',' . $priv_list, ',');
             }
             $l['cando'] = $cando;
+            $l['is_active'] = $is_active;
             $tree[$l['_id']] = $l;
         }
         return $tree;

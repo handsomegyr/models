@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Bargain\Models;
 
 class Log extends \App\Common\Models\Bargain\Log
@@ -10,7 +11,7 @@ class Log extends \App\Common\Models\Bargain\Log
     public function getDefaultSort()
     {
         $sort = array(
-            '_id' => - 1
+            '_id' => -1
         );
         return $sort;
     }
@@ -50,11 +51,13 @@ class Log extends \App\Common\Models\Bargain\Log
      * @param string $client_ip            
      * @param string $bargain_id            
      * @param number $bargain_num            
-     * @param number $bargain_amount            
-     * @param boolean $is_system_bargain            
+     * @param number $bargain_amount         
+     * @param boolean $is_system_bargain             
+     * @param string $activity_id              
+     * @param number $bargain_time            
      * @param string $memo            
      */
-    public function record($user_id, $user_name, $user_headimgurl, $client_ip, $bargain_id, $bargain_num, $bargain_amount, $is_system_bargain, array $memo = array())
+    public function record($user_id, $user_name, $user_headimgurl, $client_ip, $bargain_id, $bargain_num, $bargain_amount, $is_system_bargain, $activity_id, $bargain_time, array $memo = array())
     {
         if (empty($memo)) {
             $memo = array(
@@ -69,8 +72,9 @@ class Log extends \App\Common\Models\Bargain\Log
             'bargain_id' => $bargain_id,
             'bargain_num' => intval($bargain_num),
             'bargain_amount' => intval($bargain_amount),
-            'bargain_time' => new \MongoDate(),
             'is_system_bargain' => $is_system_bargain,
+            'bargain_time' => getCurrentTime($bargain_time),
+            'activity_id' => $activity_id,
             'memo' => $memo
         ));
     }
@@ -88,7 +92,7 @@ class Log extends \App\Common\Models\Bargain\Log
     public function getList($page = 1, $limit = 10, array $otherConditon = array(), array $sort = array())
     {
         $list = $this->getPageList($page, $limit, $otherConditon, $sort, array());
-        
+
         return array(
             'condition' => $condition,
             'list' => $list
@@ -110,11 +114,11 @@ class Log extends \App\Common\Models\Bargain\Log
         }
         $defaultQuery = $this->getDefaultQuery();
         $query = array_merge($query, $defaultQuery);
-        
+
         $key = cacheKey(__FILE__, __CLASS__, __METHOD__, $query, $sort, $fields, $page, $limit);
-        
+
         $cache = $this->getDI()->get("cache");
-        
+
         $list = $cache->get($key);
         if (empty($list)) {
             $list = $this->find($query, $sort, ($page - 1) * $limit, $limit, $fields);

@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Bargain\Models;
 
 class Bargain extends \App\Common\Models\Bargain\Bargain
@@ -10,20 +11,32 @@ class Bargain extends \App\Common\Models\Bargain\Bargain
     public function getDefaultSort()
     {
         $sort = array(
-            'total_bargain_num' => - 1,
-            'worth' => - 1,
-            '_id' => - 1
+            'total_bargain_num' => -1,
+            'worth' => -1,
+            '_id' => -1
         );
         return $sort;
     }
 
     /**
-     * 默认查询条件
+     * 根据发起用户ID和砍价物编号和活动ID获取信息
+     *
+     * @param string $user_id            
+     * @param string $bargain_code            
+     * @param string $activity_id            
+     * @param string $now            
+     * @return array
      */
-    public function getQuery()
+    public function getLatestInfoByUserIdAndBargainCode($user_id, $bargain_code, $activity_id, $now)
     {
-        $now = new \MongoDate();
         $query = array(
+            'user_id' => $user_id,
+            'code' => $bargain_code,
+            'activity_id' => $activity_id
+        );
+
+        $now = getCurrentTime($now);
+        $queryDefault = array(
             'is_closed' => false,
             'quantity' => array(
                 '$gt' => 0
@@ -35,28 +48,11 @@ class Bargain extends \App\Common\Models\Bargain\Bargain
                 '$gt' => $now
             )
         );
-        return $query;
-    }
 
-    /**
-     * 根据发起用户ID和砍价物编号和活动ID获取信息
-     *
-     * @param string $user_id            
-     * @param string $bargain_code            
-     * @param string $activity_id            
-     * @return array
-     */
-    public function getLatestInfoByUserIdAndBargainCode($user_id, $bargain_code, $activity_id)
-    {
-        $query = array(
-            'user_id' => $user_id,
-            'code' => $bargain_code,
-            'activity_id' => $activity_id
-        );
-        $query = array_merge($query, $this->getQuery());
-        
+        $query = array_merge($query, $queryDefault);
+
         $sort = array(
-            'launch_time' => - 1
+            'launch_time' => -1
         );
         $list = $this->find($query, $sort, 0, 1);
         if (empty($list['datas'])) {
@@ -85,16 +81,18 @@ class Bargain extends \App\Common\Models\Bargain\Bargain
      * @param number $bargain_num_limit            
      * @param boolean $is_both_bargain            
      * @param number $bargain_period            
+     * @param number $launch_time            
+     * @param number $bargain_to_minworth_time            
      * @param string $memo            
      */
-    public function create($activity_id, $user_id, $user_name, $user_headimgurl, $code, $name, $worth, $quantity, $bargain_from, $bargain_to, $worth_min, $bargain_max, $is_closed, $bargain_num_limit, $is_both_bargain, \MongoDate $start_time, \MongoDate $end_time, $bargain_period, array $memo = array('memo'=>''))
+    public function create($activity_id, $user_id, $user_name, $user_headimgurl, $code, $name, $worth, $quantity, $bargain_from, $bargain_to, $worth_min, $bargain_max, $is_closed, $bargain_num_limit, $is_both_bargain, $start_time, $end_time, $bargain_period, $launch_time, $bargain_to_minworth_time, array $memo = array('memo' => ''))
     {
         return $this->insert(array(
             'activity_id' => $activity_id,
             'user_id' => $user_id,
             'user_name' => $user_name,
             'user_headimgurl' => $user_headimgurl,
-            'launch_time' => new \MongoDate(),
+            'launch_time' => getCurrentTime($launch_time),
             'code' => $code,
             'name' => $name,
             'worth' => intval($worth),
@@ -107,13 +105,15 @@ class Bargain extends \App\Common\Models\Bargain\Bargain
             'is_closed' => $is_closed,
             'bargain_num_limit' => intval($bargain_num_limit),
             'is_both_bargain' => $is_both_bargain,
-            'start_time' => $start_time,
-            'end_time' => $end_time,
+            'start_time' => getCurrentTime($start_time),
+            'end_time' => getCurrentTime($end_time),
             'bargain_period' => $bargain_period,
             'total_bargain_num' => 0,
             'total_bargain_amount' => 0,
             'is_bargain_to_minworth' => false,
-            'bargain_to_minworth_time' => new \MongoDate(),
+            'bargain_to_minworth_time' => getCurrentTime($bargain_to_minworth_time),
+            'bargain_time' => getCurrentTime($launch_time),
+            'close_time' => getCurrentTime(strtotime('0001-01-01 00:00:00')),
             'memo' => $memo
         ));
     }
@@ -124,11 +124,12 @@ class Bargain extends \App\Common\Models\Bargain\Bargain
      * @param array $bargainInfo            
      * @param string $identity_id            
      * @param number $amount            
-     * @param number $num            
+     * @param number $num               
+     * @param number $now          
      * @throws Exception
      * @return array
      */
-    public function incBargain($bargainInfo, $amount, $num)
+    public function incBargain($bargainInfo, $amount, $num, $now)
     {
         $bargain_id = ($bargainInfo['_id']);
         $options = array();
@@ -142,7 +143,10 @@ class Bargain extends \App\Common\Models\Bargain\Bargain
             '$inc' => array(
                 'total_bargain_num' => $num,
                 'total_bargain_amount' => $amount,
-                'current_worth' => - $amount
+                'current_worth' => -$amount
+            ),
+            'set' => array(
+                'bargain_time' => getCurrentTime($now)
             )
         );
         $options['new'] = true; // 返回更新之后的值
@@ -156,7 +160,7 @@ class Bargain extends \App\Common\Models\Bargain\Bargain
         return $rst['value'];
     }
 
-    public function setBargainToMinworth($bargainInfo)
+    public function setBargainToMinworth($bargainInfo, $now)
     {
         // 如果砍到了最低价值的时候，设置一个标志位
         $this->update(array(
@@ -164,7 +168,8 @@ class Bargain extends \App\Common\Models\Bargain\Bargain
         ), array(
             '$set' => array(
                 'is_bargain_to_minworth' => true,
-                'bargain_to_minworth_time' => time()
+                'bargain_time' => getCurrentTime($now),
+                'bargain_to_minworth_time' => getCurrentTime($now)
             )
         ));
     }
@@ -174,7 +179,7 @@ class Bargain extends \App\Common\Models\Bargain\Bargain
      *
      * @param string $id            
      */
-    public function doClosed($id)
+    public function doClosed($id, $now)
     {
         $options = array();
         $options['query'] = array(
@@ -183,7 +188,8 @@ class Bargain extends \App\Common\Models\Bargain\Bargain
         );
         $options['update'] = array(
             '$set' => array(
-                'is_closed' => true
+                'is_closed' => true,
+                'close_time' => getCurrentTime($now),
             )
         );
         $options['new'] = true; // 返回更新之后的值

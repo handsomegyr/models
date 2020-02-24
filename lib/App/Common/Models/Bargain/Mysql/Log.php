@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Common\Models\Bargain\Mysql;
 
 use App\Common\Models\Base\Mysql\Base;
