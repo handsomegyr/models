@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Payment\Models;
 
 class Notify extends \App\Common\Models\Payment\Notify
@@ -13,7 +14,7 @@ class Notify extends \App\Common\Models\Payment\Notify
     public function getDefaultSort()
     {
         $sort = array();
-        $sort['notify_time'] = - 1;
+        $sort['notify_time'] = -1;
         return $sort;
     }
 
@@ -28,12 +29,12 @@ class Notify extends \App\Common\Models\Payment\Notify
         return $query;
     }
 
-    public function recordLog($out_trade_no, $content)
+    public function recordLog($out_trade_no, $content, $notify_time)
     {
         $data = array();
         $data['out_trade_no'] = $out_trade_no;
         $data['content'] = $content;
-        $data['notify_time'] = getCurrentTime();
+        $data['notify_time'] = getCurrentTime($notify_time);
         return $this->insert($data);
     }
 }

@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Common\Models\Payment\Mysql;
 
 use App\Common\Models\Base\Mysql\Base;
@@ -14,7 +15,7 @@ class Payment extends Base
     {
         return 'ipayment_payment';
     }
-    
+
     public function reorganize(array $data)
     {
         $data = parent::reorganize($data);

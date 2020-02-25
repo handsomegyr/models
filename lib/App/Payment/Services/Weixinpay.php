@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Payment\Services;
 
 use App\Payment\Models\Payment;
@@ -27,7 +28,7 @@ class Weixinpay
     public function nativePay($out_trade_no, $body, $attach, $total_fee, $time_start, $time_expire, $goods_tag, $notify_url, $openid, $product_id)
     {
         // 调用微信统一下单接口，生成预支付交易链接
-        
+
         // PC网页或公众号内支付请传"WEB"
         $device_info = "WEB";
         $nonce_str = \Weixin\Helpers::createNonceStr(32);
@@ -44,30 +45,30 @@ class Weixinpay
     public function doNotify($callback)
     {
         $msg = "OK";
-        
+
         // 如果返回成功则验证签名
         try {
             // 获取通知的数据
-//             $xml = <<<EOD
-// <xml><appid><![CDATA[wxbf9165206b992f39]]></appid>
-//             <bank_type><![CDATA[CFT]]></bank_type>
-//             <cash_fee><![CDATA[100]]></cash_fee>
-//             <device_info><![CDATA[WEB]]></device_info>
-//             <fee_type><![CDATA[CNY]]></fee_type>
-//             <is_subscribe><![CDATA[N]]></is_subscribe>
-//             <mch_id><![CDATA[1332019901]]></mch_id>
-//             <nonce_str><![CDATA[hvIl5f75qlasHsHoKaJrq1Gmw8J5bsgt]]></nonce_str>
-//             <openid><![CDATA[o4ELSvz-B4_DThF0Vpfrverk3IpY]]></openid>
-//             <out_trade_no><![CDATA[571b0012887c2210688b4674]]></out_trade_no>
-//             <result_code><![CDATA[SUCCESS]]></result_code>
-//             <return_code><![CDATA[SUCCESS]]></return_code>
-//             <sign><![CDATA[A34729D2FD91578516B437E9E7850750]]></sign>
-//             <time_end><![CDATA[20160423125512]]></time_end>
-//             <total_fee>100</total_fee>
-//             <trade_type><![CDATA[NATIVE]]></trade_type>
-//             <transaction_id><![CDATA[4009222001201604235127207202]]></transaction_id>
-//             </xml>
-// EOD;
+            //             $xml = <<<EOD
+            // <xml><appid><![CDATA[wxbf9165206b992f39]]></appid>
+            //             <bank_type><![CDATA[CFT]]></bank_type>
+            //             <cash_fee><![CDATA[100]]></cash_fee>
+            //             <device_info><![CDATA[WEB]]></device_info>
+            //             <fee_type><![CDATA[CNY]]></fee_type>
+            //             <is_subscribe><![CDATA[N]]></is_subscribe>
+            //             <mch_id><![CDATA[1332019901]]></mch_id>
+            //             <nonce_str><![CDATA[hvIl5f75qlasHsHoKaJrq1Gmw8J5bsgt]]></nonce_str>
+            //             <openid><![CDATA[o4ELSvz-B4_DThF0Vpfrverk3IpY]]></openid>
+            //             <out_trade_no><![CDATA[571b0012887c2210688b4674]]></out_trade_no>
+            //             <result_code><![CDATA[SUCCESS]]></result_code>
+            //             <return_code><![CDATA[SUCCESS]]></return_code>
+            //             <sign><![CDATA[A34729D2FD91578516B437E9E7850750]]></sign>
+            //             <time_end><![CDATA[20160423125512]]></time_end>
+            //             <total_fee>100</total_fee>
+            //             <trade_type><![CDATA[NATIVE]]></trade_type>
+            //             <transaction_id><![CDATA[4009222001201604235127207202]]></transaction_id>
+            //             </xml>
+            // EOD;
             $xml = $GLOBALS['HTTP_RAW_POST_DATA'];
             $notifyData = \Weixin\Helpers::xmlToArray($xml);
             $this->checkSign($notifyData);
@@ -76,7 +77,7 @@ class Weixinpay
             $msg = $e->getMessage();
             $result = false;
         }
-        
+
         if ($result == false) {
             $ret = array();
             $ret['return_code'] = "FAIL";
@@ -89,7 +90,7 @@ class Weixinpay
         }
         $xml = \Weixin\Helpers::arrayToXml($ret);
         echo $xml;
-        
+
         return;
     }
 
@@ -107,14 +108,14 @@ class Weixinpay
     final private function notifyProcess($callback, array $notifyData)
     {
         // 用户基础该类之后需要重写该方法，成功的时候返回true，失败返回false
-        if (! array_key_exists("transaction_id", $notifyData)) {
+        if (!array_key_exists("transaction_id", $notifyData)) {
             throw new \Exception("输入参数不正确");
         }
         // 查询订单，判断订单真实性
-        if (! $this->orderquery($notifyData["transaction_id"], $notifyData["out_trade_no"])) {
+        if (!$this->orderquery($notifyData["transaction_id"], $notifyData["out_trade_no"])) {
             throw new \Exception("订单查询失败");
         }
-        
+
         return call_user_func($callback, $notifyData);
     }
 
@@ -136,7 +137,7 @@ class Weixinpay
         $weixinApi->setCertKey($this->_config['certKey']);
         return $weixinApi;
     }
-    
+
     // 查询订单
     private function orderquery($transaction_id, $out_trade_no)
     {
@@ -162,12 +163,12 @@ class Weixinpay
                 throw new \Exception($notifyData['err_code'] . "." . $notifyData['err_code_des']);
             }
         }
-        
+
         // fix异常
-        if (! array_key_exists('sign', $notifyData)) {
+        if (!array_key_exists('sign', $notifyData)) {
             throw new \Exception("签名错误！");
         }
-        
+
         $weixinApi = $this->getWeixinPayApi();
         $sign = $weixinApi->getSign($notifyData);
         if ($notifyData['sign'] != $sign) {

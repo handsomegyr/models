@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Points\Models;
 
 class Log extends \App\Common\Models\Points\Log
@@ -13,7 +14,7 @@ class Log extends \App\Common\Models\Points\Log
     public function getDefaultSort($dir = -1)
     {
         $sort = array();
-        $sort['add_time'] = $dir;
+        $sort['log_time'] = $dir;
         return $sort;
     }
 
@@ -33,10 +34,11 @@ class Log extends \App\Common\Models\Points\Log
      *
      * @param string $uniqueId            
      */
-    public function getInfoByUniqueId($uniqueId, $category = 0)
+    public function getInfoByUniqueId($uniqueId, $point_rule_id, $category = 0)
     {
         $query = array(
             'unique_id' => strval($uniqueId),
+            'point_rule_id' => strval($point_rule_id),
             'category' => intval($category)
         );
         return $this->findOne($query);
@@ -57,12 +59,12 @@ class Log extends \App\Common\Models\Points\Log
         $list = $cache->get($key);
         if (empty($list)) {
             if (empty($sort)) {
-                $sort = $this->getDefaultSort(- 1);
+                $sort = $this->getDefaultSort(-1);
             }
             $defaultQuery = $this->getDefaultQuery();
             $query = array_merge($query, $defaultQuery);
             $list = $this->find($query, $sort, ($page - 1) * $limit, $limit, $fields);
-            if (! empty($list['datas'])) {
+            if (!empty($list['datas'])) {
                 $cache->save($key, $list, 60 * 60); // 一个小时
             }
         }
@@ -87,13 +89,13 @@ class Log extends \App\Common\Models\Points\Log
             'user_id' => $user_id,
             'category' => $category
         );
-        if (! empty($beginTime)) {
-            $query['add_time']['$gte'] = getCurrentTime($beginTime);
+        if (!empty($beginTime)) {
+            $query['log_time']['$gte'] = getCurrentTime($beginTime);
         }
-        if (! empty($endTime)) {
-            $query['add_time']['$lte'] = getCurrentTime($endTime);
+        if (!empty($endTime)) {
+            $query['log_time']['$lte'] = getCurrentTime($endTime);
         }
-        if (! empty($otherConditions)) {
+        if (!empty($otherConditions)) {
             $query = array_merge($query, $otherConditions);
         }
         $list = $this->getPageList($page, $limit, $query, array(), array());
@@ -106,27 +108,40 @@ class Log extends \App\Common\Models\Points\Log
      * @param number $category            
      * @param string $user_id            
      * @param string $user_name            
-     * @param string $user_headimgurl            
-     * @param string $unique_id            
-     * @param boolean $is_consumed            
-     * @param \MongoDate $add_time            
+     * @param string $user_headimgurl             
      * @param number $points            
+     * @param number $log_time          
+     * @param string $unique_id            
+     * @param string $point_rule_id               
+     * @param string $point_rule_code         
+     * @param string $activity_id            
+     * @param string $channel             
      * @param string $stage            
-     * @param string $desc            
+     * @param string $desc              
+     * @param array $memo          
      */
-    public function log($category, $user_id, $user_name, $user_headimgurl, $unique_id, $is_consumed, \MongoDate $add_time, $points, $stage, $desc)
+    public function log($category, $user_id, $user_name, $user_headimgurl, $points, $log_time, $unique_id, $point_rule_id, $point_rule_code, $activity_id = "", $channel = "", $stage = "", $desc = "", array $memo = array('memo' => ''))
     {
         $data = array();
         $data['category'] = $category;
         $data['user_id'] = $user_id;
         $data['user_name'] = $user_name;
         $data['user_headimgurl'] = $user_headimgurl;
-        $data['unique_id'] = $unique_id;
-        $data['is_consumed'] = $is_consumed;
         $data['points'] = $points;
-        $data['stage'] = $stage;
-        $data['desc'] = urldecode($desc);
-        $data['add_time'] = $add_time;
+        $data['log_time'] = getCurrentTime($log_time);
+        $data['unique_id'] = $unique_id;
+        $data['point_rule_id'] = $point_rule_id;
+        $data['point_rule_code'] = $point_rule_code;
+        $data['activity_id'] = $activity_id;
+        $data['channel'] = $channel;
+        $data['memo'] = $memo;
+
+        // 是否同步
+        $data['is_sync'] = false;
+        $data['sync_time'] = '0001-01-01 00:00:00';
+
+        $data['is_consumed'] = false;
+        $data['consume_time'] = '0001-01-01 00:00:00';
         return $this->insert($data);
     }
 }

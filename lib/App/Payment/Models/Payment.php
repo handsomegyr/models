@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Payment\Models;
 
 class Payment extends \App\Common\Models\Payment\Payment
@@ -55,12 +56,12 @@ class Payment extends \App\Common\Models\Payment\Payment
             $query = array();
             $ret = $this->findAll($query);
             $list = array();
-            if (! empty($ret)) {
+            if (!empty($ret)) {
                 foreach ($ret as $item) {
                     $list[$item['code']] = $item;
                 }
             }
-            if (! empty($list)) {
+            if (!empty($list)) {
                 $cache->save($cacheKey, $list, 60 * 60); // 一个小时
             }
         }

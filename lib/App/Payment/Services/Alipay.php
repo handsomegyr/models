@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Payment\Services;
 
 use App\Payment\Models\Payment;
@@ -36,7 +37,7 @@ class Alipay
     public function directPay($out_trade_no, $subject, $total_fee, $body, $show_url, $notify_url, $return_url)
     {
         $total_fee = showPrice($total_fee, 2);
-        
+
         $this->params = array(
             'service' => 'create_direct_pay_by_user',
             'paymethod' => 'directPay',
@@ -56,7 +57,7 @@ class Alipay
             'extra_common_param' => '',
             '_input_charset' => $this->_alipayConfig['input_charset']
         );
-        
+
         $alipaySubmit = new AlipaySubmit($this->_alipayConfig);
         $payUrl = $alipaySubmit->alipay_gateway_new . $alipaySubmit->buildRequestParaToString($this->params);
         return $payUrl;
@@ -69,18 +70,19 @@ class Alipay
     {
         $alipayNotify = new AlipayNotify($this->_alipayConfig);
         $verify_result = $alipayNotify->verifyNotify();
-        
+
         if ($verify_result) {
             $out_trade_no = isset($_POST['out_trade_no']) ? $_POST['out_trade_no'] : '';
             $trade_no = isset($_POST['trade_no']) ? $_POST['trade_no'] : ''; // 支付宝交易号
             $trade_status = isset($_POST['trade_status']) ? $_POST['trade_status'] : ''; // 交易状态
             $buyer_email = isset($_POST['buyer_email']) ? $_POST['buyer_email'] : '';
-            
-            if ($trade_status == 'TRADE_FINISHED') {} else 
+
+            if ($trade_status == 'TRADE_FINISHED') {
+            } else 
                 if ($trade_status == 'TRADE_SUCCESS') {
-                    $this->notifyCallback($out_trade_no, $trade_status);
-                }
-            
+                $this->notifyCallback($out_trade_no, $trade_status);
+            }
+
             echo 'success';
         } else {
             echo 'fail';
@@ -94,13 +96,13 @@ class Alipay
     {
         $alipayNotify = new AlipayNotify($this->_alipayConfig);
         $verify_result = $alipayNotify->verifyReturn();
-        
+
         if ($verify_result) {
             $out_trade_no = isset($_GET['out_trade_no']) ? $_GET['out_trade_no'] : '';
             $trade_no = isset($_GET['trade_no']) ? $_GET['trade_no'] : '';
             $trade_status = isset($_GET['trade_status']) ? $_GET['trade_status'] : '';
             $buyer_email = isset($_GET['buyer_email']) ? $_GET['buyer_email'] : '';
-            
+
             if ($trade_status == 'TRADE_FINISHED' || $trade_status == 'TRADE_SUCCESS') {
                 $this->returnCallback($out_trade_no, $trade_status);
             } else {
@@ -121,13 +123,13 @@ class Alipay
         $url = $this->_projectInfo['callback'];
         if (strpos($url, '?') === false)
             $url .= '?';
-        
+
         $params = array(
             'out_trade_no' => $out_trade_no,
             'trade_status' => $trade_status,
             'sign' => $this->sign($out_trade_no)
         );
-        
+
         $url .= '&' . http_build_query($params);
         header('location:' . $url);
         exit();
@@ -147,7 +149,7 @@ class Alipay
                 'trade_status' => $trade_status,
                 'sign' => $this->sign($out_trade_no)
             );
-            
+
             doGet($this->_callbackUrl, $params);
             return true;
         } catch (\Exception $e) {

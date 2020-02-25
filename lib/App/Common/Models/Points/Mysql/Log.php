@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Common\Models\Points\Mysql;
 
 use App\Common\Models\Base\Mysql\Base;
@@ -18,8 +19,11 @@ class Log extends Base
     public function reorganize(array $data)
     {
         $data = parent::reorganize($data);
+        $data['log_time'] = $this->changeToMongoDate($data['log_time']);
         $data['is_consumed'] = $this->changeToBoolean($data['is_consumed']);
-        $data['add_time'] = $this->changeToMongoDate($data['add_time']);
+        $data['consume_time'] = $this->changeToMongoDate($data['consume_time']);
+        $data['is_sync'] = $this->changeToBoolean($data['is_sync']);
+        $data['sync_time'] = $this->changeToMongoDate($data['sync_time']);
         return $data;
     }
 }

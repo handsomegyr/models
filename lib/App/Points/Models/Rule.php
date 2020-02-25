@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Points\Models;
 
 class Rule extends \App\Common\Models\Points\Rule
@@ -12,7 +13,7 @@ class Rule extends \App\Common\Models\Points\Rule
         $sort = array(
             'item_category' => 1,
             'code' => 1,
-            'points' => - 1
+            'points' => -1
         );
         return $sort;
     }
@@ -41,12 +42,12 @@ class Rule extends \App\Common\Models\Points\Rule
             $sort = $this->getDefaultSort();
             $list = $this->findAll($query, $sort);
             $ruleList = array();
-            if (! empty($list)) {
+            if (!empty($list)) {
                 foreach ($list as $item) {
                     $ruleList[$item['code']][$item['category']] = $item;
                 }
             }
-            if (! empty($ruleList)) {
+            if (!empty($ruleList)) {
                 $cache->save($key, $ruleList, 60 * 60 * 24); // 24小时
             }
         }
@@ -66,10 +67,10 @@ class Rule extends \App\Common\Models\Points\Rule
         $info = $cache->get($key);
         if (empty($info)) {
             $query = array();
-            $query['category'] = $category;
             $query['code'] = $code;
+            $query['category'] = $category;
             $info = $this->findOne($query);
-            if (! empty($info)) {
+            if (!empty($info)) {
                 $cache->save($key, $info, 60 * 60 * 24); // 24小时
             }
         }

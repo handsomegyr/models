@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Points\Models;
 
 class User extends \App\Common\Models\Points\User
@@ -41,6 +42,20 @@ class User extends \App\Common\Models\Points\User
     }
 
     /**
+     * 锁住记录
+     *
+     * @param int $id            
+     */
+    public function lockUser($id)
+    {
+        $user = $this->findOne(array(
+            '_id' => $id,
+            '__FOR_UPDATE__' => true
+        ));
+        return $user;
+    }
+
+    /**
      * 根据用户IDs获取用户列表信息
      *
      * @param string $user_id            
@@ -56,11 +71,11 @@ class User extends \App\Common\Models\Points\User
             'category' => intval($category)
         );
         $sort = array(
-            '_id' => - 1
+            '_id' => -1
         );
         $ret = $this->findAll($query, $sort);
         $list = array();
-        if (! empty($ret)) {
+        if (!empty($ret)) {
             foreach ($ret as $item) {
                 $list[$item['user_id']] = $item;
             }
@@ -71,115 +86,51 @@ class User extends \App\Common\Models\Points\User
     /**
      * 添加或消耗积分
      *
-     * @param string $category            
-     * @param string $user_id            
-     * @param string $user_name            
-     * @param string $uniqueId            
-     * @param \MongoDate $add_time            
-     * @param number $points            
-     * @param string $stage            
-     * @param string $desc            
+     * @param number $id             
+     * @param number $points        
+     * @param number $now          
      */
-    public function addOrReduce($category, $user_id, $user_name, $user_headimgurl, $uniqueId, $add_time, $points, $stage, $desc)
+    public function addOrReduce($id, $points, $now)
     {
-        if (empty($add_time)) {
-            $add_time = getCurrentTime();
-        }
-        $lockKey = cacheKey(__FILE__, __CLASS__, __METHOD__, $uniqueId, $category);
-        $objLock = new \iLock($lockKey);
-        // 检查是否已经加锁了
-        if ($objLock->lock()) {
-            return;
-        }
-        $modelLog = new Log();
-        $logInfo = $modelLog->getInfoByUniqueId($uniqueId, $category);
-        if (! empty($logInfo)) {
-            return;
-        }
-        
+        $query = array();
+        $query['_id'] = $id;
+
+        $updateData = array();
+        $updateData['point_time'] = getCurrentTime($now);
+
         $points = intval($points);
-        if ($points >= 0) {
+        if ($points != 0) {
             // 增加积分处理
-            $is_consumed = false;
-            $data = array();
-            $data['point_time'] = $add_time;
-            $options = array();
-            $options['query'] = array(
-                'user_id' => $user_id,
-                'category' => $category
-            );
-            $options['update'] = array(
-                '$set' => $data,
-                '$inc' => array(
+            if ($points > 0) {
+                $points = abs($points);
+                $incData = array(
                     'current' => $points,
                     'total' => $points
-                )
-            );
-            $options['new'] = true; // 返回更新之后的值
-            $rst = $this->findAndModify($options);
-            if (empty($rst['ok'])) {
-                throw new \Exception("添加积分的findAndModify执行错误，返回结果为:" . json_encode($rst), 804);
-            }
-            if (empty($rst['value'])) {
-                throw new \Exception("添加积分的findAndModify执行错误，返回结果为:" . json_encode($rst), 804);
-            }
-        } else {
-            // 消费积分处理
-            $points = abs($points);
-            $is_consumed = true;
-            $data = array();
-            $data['point_time'] = $add_time;
-            $options = array();
-            $options['query'] = array(
-                'user_id' => $user_id,
-                'category' => $category,
-                'current' => array(
-                    '$gte' => $points
-                )
-            );
-            $options['update'] = array(
-                '$set' => $data,
-                '$inc' => array(
-                    'current' => - $points,
+                );
+            } else {
+                $points = abs($points);
+                $query['current'] = array('$gte' => $points);
+                $incData = array(
+                    'current' => -$points,
                     'consume' => $points
-                )
-            );
-            $options['new'] = true; // 返回更新之后的值
-            $rst = $this->findAndModify($options);
-            if (empty($rst['ok'])) {
-                throw new \Exception("消费积分的findAndModify执行错误，返回结果为:" . json_encode($rst), 804);
-            }
-            if (empty($rst['value'])) {
-                throw new \Exception("消费积分的findAndModify执行错误，返回结果为:" . json_encode($rst), 804);
+                );
             }
         }
-        // 记录积分日志
-        $modelLog->log($category, $user_id, $user_name, $user_headimgurl, $uniqueId, $is_consumed, $add_time, $points, $stage, $desc);
-        return $rst['value'];
+
+        $affectRows = $this->update($query, array(
+            '$set' => $updateData,
+            '$inc' => $incData,
+        ));
+
+        if ($affectRows < 1) {
+            throw new \Exception("积分更新失败");
+        } else {
+            // 重新获取
+            $newInfo = $this->getInfoById($id);
+            return $newInfo;
+        }
     }
 
-    /**
-     * 根据user_id生成或获取记录
-     *
-     * @param number $category            
-     * @param string $user_id            
-     * @param string $user_name            
-     * @param string $user_headimgurl            
-     * @param number $current            
-     * @param number $freeze            
-     * @param number $consume            
-     * @param number $expire            
-     * @param array $memo            
-     * @return array
-     */
-    public function getOrCreateByUserId($category, $user_id, $user_name, $user_headimgurl, $current = 0, $freeze = 0, $consume = 0, $expire = 0, array $memo = array('memo'=>''))
-    {
-        $info = $this->getInfoByUserId($user_id, $category);
-        if (empty($info)) {
-            $info = $this->create($category, $user_id, $user_name, $user_headimgurl, $current, $freeze, $consume, $expire, $memo);
-        }
-        return $info;
-    }
 
     /**
      * 生成记录
@@ -187,7 +138,8 @@ class User extends \App\Common\Models\Points\User
      * @param number $category            
      * @param string $user_id            
      * @param string $user_name            
-     * @param string $user_headimgurl            
+     * @param string $user_headimgurl              
+     * @param number $now           
      * @param number $current            
      * @param number $freeze            
      * @param number $consume            
@@ -195,7 +147,7 @@ class User extends \App\Common\Models\Points\User
      * @param array $memo            
      * @return array
      */
-    public function create($category, $user_id, $user_name, $user_headimgurl, $current = 0, $freeze = 0, $consume = 0, $expire = 0, array $memo = array('memo'=>''))
+    public function create($category, $user_id, $user_name, $user_headimgurl, $now, $current = 0, $freeze = 0, $consume = 0, $expire = 0, array $memo = array('memo' => ''))
     {
         $data = array();
         $data['category'] = $category; // 积分分类
@@ -207,9 +159,25 @@ class User extends \App\Common\Models\Points\User
         $data['freeze'] = $freeze; // 冻结积分
         $data['consume'] = $consume; // 消费积分
         $data['expire'] = $expire; // 过期积分
-        $data['point_time'] = getCurrentTime(); // 积分时间
+        $data['point_time'] = getCurrentTime($now); // 积分时间
         $data['memo'] = $memo; // 备注
         $info = $this->insert($data);
+        return $info;
+    }
+
+    public function updateUserInfo($info, $nickname, $headimgurl)
+    {
+        $updateData = array();
+        if (!empty($nickname) && $info['user_name'] != $nickname) {
+            $updateData['user_name'] = $nickname;
+        }
+        if (!empty($headimgurl) && $info['user_headimgurl'] != $headimgurl) {
+            $updateData['user_headimgurl'] = $headimgurl;
+        }
+        if (!empty($updateData)) {
+            $this->update(array('_id' => $info['_id']), array('$set' => $updateData));
+            $info = array_merge($info, $updateData);
+        }
         return $info;
     }
 }

@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Payment\Models;
 
 class Log extends \App\Common\Models\Payment\Log
@@ -13,7 +14,7 @@ class Log extends \App\Common\Models\Payment\Log
     public function getDefaultSort()
     {
         $sort = array();
-        $sort['log_time'] = - 1;
+        $sort['log_time'] = -1;
         return $sort;
     }
 
@@ -51,27 +52,27 @@ class Log extends \App\Common\Models\Payment\Log
     {
         $otherConditions = array();
         $otherConditions['user_id'] = $_SESSION['member_id'];
-        if (! empty($type)) {
+        if (!empty($type)) {
             $otherConditions['type'] = $type;
         }
-        if (! empty($beginTime)) {
+        if (!empty($beginTime)) {
             $otherConditions['log_time']['$gte'] = getCurrentTime($beginTime);
         }
-        if (! empty($endTime)) {
+        if (!empty($endTime)) {
             $otherConditions['log_time']['$lte'] = getCurrentTime($endTime);
         }
         $list = $this->getPageList($page, $limit, $otherConditions);
         return $list;
     }
 
-    public function recordLog($user_id, $type, $money, $desc, $memo)
+    public function recordLog($user_id, $type, $money, $desc, $log_time, $memo)
     {
         $data = array();
         $data['user_id'] = $user_id;
         $data['type'] = $type;
         $data['money'] = $money;
         $data['desc'] = $desc;
-        $data['log_time'] = getCurrentTime();
+        $data['log_time'] = getCurrentTime($log_time);
         $data['memo'] = $memo;
         return $this->insert($data);
     }

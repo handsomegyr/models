@@ -1,9 +1,21 @@
 <?php
+
 namespace App\Backend\Submodules\Points\Models;
 
 class Category extends \App\Common\Models\Points\Category
 {
     use \App\Backend\Models\Base;
+
+    /**
+     * 默认排序
+     */
+    public function getDefaultSort()
+    {
+        $sort = array(
+            'sort' => 1
+        );
+        return $sort;
+    }
 
     /**
      * 获取所有列表

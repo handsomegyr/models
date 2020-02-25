@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Points\Models;
 
 class Category extends \App\Common\Models\Points\Category
@@ -10,7 +11,7 @@ class Category extends \App\Common\Models\Points\Category
     public function getDefaultSort()
     {
         $sort = array(
-            'code' => 1
+            'sort' => 1
         );
         return $sort;
     }
@@ -39,12 +40,12 @@ class Category extends \App\Common\Models\Points\Category
             $sort = $this->getDefaultSort();
             $list = $this->findAll($query, $sort);
             $categoryList = array();
-            if (! empty($list)) {
+            if (!empty($list)) {
                 foreach ($list as $item) {
                     $categoryList[$item['code']] = $item['name'];
                 }
             }
-            if (! empty($categoryList)) {
+            if (!empty($categoryList)) {
                 $cache->save($key, $categoryList, 60 * 60 * 24); // 24小时
             }
         }

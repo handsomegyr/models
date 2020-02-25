@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Points\Views\Helpers;
 
 use App\Points\Models\Category;
