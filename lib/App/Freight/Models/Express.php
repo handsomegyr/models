@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Freight\Models;
 
 class Express extends \App\Common\Models\Freight\Express
@@ -43,7 +44,7 @@ class Express extends \App\Common\Models\Freight\Express
             $sort = $this->getDefaultSort();
         }
         $defaultQuery = $this->getDefaultQuery();
-        $query = array_merge($query, $defaultQuery);        
+        $query = array_merge($query, $defaultQuery);
         $list = $this->findAll($query, $sort, $fields);
         return $list;
     }
@@ -60,7 +61,7 @@ class Express extends \App\Common\Models\Freight\Express
         $list = $cache->get($key);
         if (empty($list)) {
             $list = $this->getList();
-            if (! empty($list)) {
+            if (!empty($list)) {
                 $cache->save($key, $list, 60 * 60); // 一个小时
             }
         }
