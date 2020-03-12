@@ -14,13 +14,11 @@ class BlackUser extends \App\Common\Models\Weixin2\User\BlackUser
      */
     public function getInfoByOpenid($openid, $authorizer_appid, $component_appid)
     {
-        $info = $this->getModel()
-            ->where('openid', $openid)
-            ->where('authorizer_appid', $authorizer_appid)
-            ->where('component_appid', $component_appid)
-            ->first();
-        $info = $this->getReturnData($info);
-
+        $info = $this->findOne(array(
+            'openid' => $openid,
+            'authorizer_appid' => $authorizer_appid,
+            'component_appid' => $component_appid
+        ));
         return $info;
     }
 
@@ -28,16 +26,16 @@ class BlackUser extends \App\Common\Models\Weixin2\User\BlackUser
     {
         $updateData = array();
         $updateData['is_black'] = 1;
-        $updateData['black_time'] = date("Y-m-d H:i:s", $now);
-        return $this->updateById($id, $updateData);
+        $updateData['black_time'] = getCurrentTime($now);
+        return $this->update(array('_id' => $id), array('$set' => $updateData));
     }
 
     public function unblack($id, $now)
     {
         $updateData = array();
         $updateData['is_black'] = 0;
-        $updateData['unblack_time'] = date("Y-m-d H:i:s", $now);
-        return $this->updateById($id, $updateData);
+        $updateData['unblack_time'] = getCurrentTime($now);
+        return $this->update(array('_id' => $id), array('$set' => $updateData));
     }
 
     public function syncBlackList($authorizer_appid, $component_appid, $res, $now)
@@ -47,9 +45,9 @@ class BlackUser extends \App\Common\Models\Weixin2\User\BlackUser
                 $info = $this->getInfoByOpenid($openid, $authorizer_appid, $component_appid);
                 $data = array();
                 $data['is_black'] = 1;
-                $data['black_time'] = date("Y-m-d H:i:s", $now);
+                $data['black_time'] = getCurrentTime($now);
                 if (!empty($info)) {
-                    $this->updateById($info['id'], $data);
+                    $this->update(array('_id' => $info['_id']), array('$set' => $data));
                 } else {
                     $data['authorizer_appid'] = $authorizer_appid;
                     $data['component_appid'] = $component_appid;

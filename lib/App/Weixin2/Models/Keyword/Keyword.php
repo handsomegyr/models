@@ -2,9 +2,6 @@
 
 namespace App\Weixin2\Models\Keyword;
 
-use DB;
-use Cache;
-
 class Keyword extends \App\Common\Models\Weixin2\Keyword\Keyword
 {
     /**
@@ -17,7 +14,10 @@ class Keyword extends \App\Common\Models\Weixin2\Keyword\Keyword
     {
         $keywordList = array();
         $cacheKey = "keyword:authorizer_appid:{$authorizer_appid}:component_appid:{$component_appid}:fuzzy:{$fuzzy}";
-        if (!Cache::tags($this->cache_tag)->has($cacheKey)) {
+        $cacheKey = cacheKey(__FILE__, __CLASS__, $cacheKey);
+        $cache = $this->getDI()->get('cache');
+        $keywordList = $cache->get($cacheKey);
+        if (empty($keywordList)) {
             $rst = $this->getListByFuzzy($authorizer_appid, $component_appid, $fuzzy);
             $keywordList = array();
             if (!empty($rst)) {
@@ -28,10 +28,8 @@ class Keyword extends \App\Common\Models\Weixin2\Keyword\Keyword
             if (!empty($keywordList)) {
                 // 加缓存处理
                 $expire_time = 1 * 60; // 1分钟
-                Cache::tags($this->cache_tag)->put($cacheKey, $keywordList, $expire_time);
+                $cache->save($cacheKey, $keywordList, $expire_time);
             }
-        } else {
-            $keywordList = Cache::tags($this->cache_tag)->get($cacheKey);
         }
         return $keywordList;
     }
@@ -43,7 +41,7 @@ class Keyword extends \App\Common\Models\Weixin2\Keyword\Keyword
         if (!$fuzzy) {
             $msg = strtolower($msg);
             if (isset($keywordList[$msg])) {
-                $this->incHitNumber($keywordList[$msg]['id']);
+                $this->incHitNumber($keywordList[$msg]['_id']);
                 return $keywordList[$msg];
             } else {
                 return $this->matchKeyWord($msg, $authorizer_appid, $component_appid, true);
@@ -66,7 +64,7 @@ class Keyword extends \App\Common\Models\Weixin2\Keyword\Keyword
             $queue->top();
 
             $result = $queue->current();
-            $this->incHitNumber($result['id']);
+            $this->incHitNumber($result['_id']);
             return $result;
         }
     }
@@ -128,8 +126,8 @@ class Keyword extends \App\Common\Models\Weixin2\Keyword\Keyword
     public function incHitNumber($id)
     {
         $updateData = array();
-        $updateData['times'] = DB::raw("times+1");
-        return $this->updateById($id, $updateData);
+        $updateData['times'] = 1;
+        return $this->update(array('_id' => $id), array('$inc' => $updateData));
     }
 
     /**
@@ -148,19 +146,11 @@ class Keyword extends \App\Common\Models\Weixin2\Keyword\Keyword
     public function getListByFuzzy($authorizer_appid, $component_appid, $fuzzy)
     {
         $is_fuzzy = intval($fuzzy);
-        $q = $this->getModel()->query();
-        $q->where('authorizer_appid', $authorizer_appid);
-        $q->where('component_appid', $component_appid);
-        $q->where('is_fuzzy', $is_fuzzy);
-        $q->orderby("priority", "desc")->orderby("id", "desc");
-        $list = $q->get();
-        $ret = array();
-        if (!empty($list)) {
-            foreach ($list as $item) {
-                $item = $this->getReturnData($item);
-                $ret[] = $item;
-            }
-        }
+        $ret = $this->findAll(array(
+            'authorizer_appid' => $authorizer_appid,
+            'component_appid' => $component_appid,
+            'is_fuzzy' => (empty($is_fuzzy) ? false : true)
+        ), array('priority' => -1, '_id' => -1));
         return $ret;
     }
 }

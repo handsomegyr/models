@@ -377,7 +377,7 @@ class ComponentApplication extends \App\Common\Models\Weixin\ComponentApplicatio
                         $cmd['update'] = array(
                             '$set' => array(
                                 'component_access_token' => $arrToken['component_access_token'],
-                                'component_access_token_expire' => new \MongoDate(time() + intval($arrToken['expires_in']))
+                                'component_access_token_expire' => getCurrentTime(time() + intval($arrToken['expires_in']))
                             )
                         );
                         $cmd['new'] = true;

@@ -10,8 +10,8 @@ class Shorturl extends \App\Common\Models\Weixin2\Shorturl
         $updateData = array();
         $updateData['is_created'] = 1;
         $updateData['short_url'] = $res['short_url'];
-        $updateData['short_url_time'] = date("Y-m-d H:i:s", $now);
-        return $this->updateById($id, $updateData);
+        $updateData['short_url_time'] = getCurrentTime($now);
+        return $this->update(array('_id' => $id), array('$set' => $updateData));
     }
 
     public function removeCreatedStatus($id, $now)
@@ -19,6 +19,6 @@ class Shorturl extends \App\Common\Models\Weixin2\Shorturl
         $updateData = array();
         $updateData['is_created'] = 0;
         $updateData['short_url'] = "";
-        return $this->updateById($id, $updateData);
+        return $this->update(array('_id' => $id), array('$set' => $updateData));
     }
 }

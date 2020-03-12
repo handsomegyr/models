@@ -25,7 +25,7 @@ class Event extends \App\Common\Models\Weixincard\Event
         $data = array();
         $data['ToUserName'] = $ToUserName;
         $data['FromUserName'] = $FromUserName;
-        $data['CreateTime'] = new \MongoDate(intval($CreateTime));
+        $data['CreateTime'] = getCurrentTime(intval($CreateTime));
         $data['MsgType'] = $MsgType;
         $data['Event'] = $Event;
         $data['CardId'] = (string) $CardId;

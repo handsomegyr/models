@@ -2,8 +2,6 @@
 
 namespace App\Weixin2\Models\Qrcode;
 
-use DB;
-
 class Qrcode extends \App\Common\Models\Weixin2\Qrcode\Qrcode
 {
 
@@ -12,56 +10,41 @@ class Qrcode extends \App\Common\Models\Weixin2\Qrcode\Qrcode
         $updateData = array();
         $updateData['ticket'] = $ticket;
         $updateData['url'] = $res['url'];
-        $updateData['ticket_time'] = date("Y-m-d H:i:s", $now);
+        $updateData['ticket_time'] = getCurrentTime($now);
         $updateData['is_created'] = 1;
-        return $this->updateById($id, $updateData);
+        return $this->update(array('_id' => $id), array('$set' => $updateData));
     }
 
     public function incSubscribeEventNum($authorizer_appid, $component_appid, $scene, $num = 1)
     {
-        $updateData = array();
-
-        if ($num != 0) {
-            if ($num > 0) {
-                $num = abs($num);
-                $updateData['subscribe_event_num'] = DB::raw("subscribe_event_num+{$num}");
-            } else {
-                $num = abs($num);
-                $updateData['subscribe_event_num'] = DB::raw("subscribe_event_num-{$num}");
-            }
+        if (empty($num)) {
+            return 0;
         }
-        $affectRows = 0;
-        if (!empty($updateData)) {
-            $updateModel = $this->getModel()
-                ->where("scene", $scene)
-                ->where("authorizer_appid", $authorizer_appid)
-                ->where("component_appid", $component_appid);
-            $affectRows = $this->update($updateModel, $updateData);
-        }
+        $incData = array();
+        $incData['subscribe_event_num'] = $num;
+        $query = array(
+            'scene' => $scene,
+            'authorizer_appid' => $authorizer_appid,
+            'component_appid' => $component_appid
+        );
+        $affectRows = $this->update($query, array('$inc' => $incData));
         return $affectRows;
     }
 
     public function incScanEventNum($authorizer_appid, $component_appid, $scene, $num = 1)
     {
-        $updateData = array();
+        if (empty($num)) {
+            return 0;
+        }
+        $incData = array();
+        $incData['scan_event_num'] = $num;
 
-        if ($num != 0) {
-            if ($num > 0) {
-                $num = abs($num);
-                $updateData['scan_event_num'] = DB::raw("scan_event_num+{$num}");
-            } else {
-                $num = abs($num);
-                $updateData['scan_event_num'] = DB::raw("scan_event_num-{$num}");
-            }
-        }
-        $affectRows = 0;
-        if (!empty($updateData)) {
-            $updateModel = $this->getModel()
-                ->where("scene", $scene)
-                ->where("authorizer_appid", $authorizer_appid)
-                ->where("component_appid", $component_appid);
-            $affectRows = $this->update($updateModel, $updateData);
-        }
+        $query = array(
+            'scene' => $scene,
+            'authorizer_appid' => $authorizer_appid,
+            'component_appid' => $component_appid
+        );
+        $affectRows = $this->update($query, array('$inc' => $incData));
         return $affectRows;
     }
 }

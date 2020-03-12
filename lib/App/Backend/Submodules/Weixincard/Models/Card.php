@@ -1180,8 +1180,8 @@ class Card extends \App\Common\Models\Weixincard\Card
         $base_info['can_give_friend'] = intval($can_give_friend);
         $base_info['location_id_list'] = implode(',', $location_id_list);
         $base_info['date_info_type'] = trim($date_info_type);
-        $base_info['date_info_begin_timestamp'] = new \MongoDate(intval($date_info_begin_timestamp));
-        $base_info['date_info_end_timestamp'] = new \MongoDate(intval($date_info_end_timestamp));
+        $base_info['date_info_begin_timestamp'] = getCurrentTime(intval($date_info_begin_timestamp));
+        $base_info['date_info_end_timestamp'] = getCurrentTime(intval($date_info_end_timestamp));
         $base_info['date_info_fixed_term'] = intval($date_info_fixed_term);
         $base_info['date_info_fixed_begin_term'] = intval($date_info_fixed_begin_term);
         $base_info['sku_quantity'] = intval($sku_quantity);

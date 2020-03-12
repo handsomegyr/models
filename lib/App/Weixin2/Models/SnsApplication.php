@@ -2,7 +2,7 @@
 
 namespace App\Weixin2\Models;
 
-use Cache;
+
 
 class SnsApplication extends \App\Common\Models\Weixin2\SnsApplication
 {
@@ -15,18 +15,18 @@ class SnsApplication extends \App\Common\Models\Weixin2\SnsApplication
     public function getInfoByAppid($appid, $is_get_latest = false)
     {
         $cacheKey = $this->getCacheKey4Appid($appid);
-        if ($is_get_latest || !Cache::tags($this->cache_tag)->has($cacheKey)) {
-            $application = $this->getModel()
-                ->where('appid', $appid)
-                ->first();
-            $application = $this->getReturnData($application);
+        $cache = $this->getDI()->get('cache');
+        $application = $cache->get($cacheKey);
+        if ($is_get_latest || empty($application)) {
+            $application = $this->findOne(array(
+                'appid' => $appid
+            ));
+
             if (!empty($application)) {
                 // 加缓存处理
                 $expire_time = 13 * 60;
-                Cache::tags($this->cache_tag)->put($cacheKey, $application, $expire_time);
+                $cache->save($cacheKey, $application, $expire_time);
             }
-        } else {
-            $application = Cache::tags($this->cache_tag)->get($cacheKey);
         }
         return $application;
     }
@@ -56,6 +56,7 @@ class SnsApplication extends \App\Common\Models\Weixin2\SnsApplication
     private function getCacheKey4Appid($appid)
     {
         $cacheKey = "sns_application:appid:{$appid}";
+        $cacheKey = cacheKey(__FILE__, __CLASS__, $cacheKey);
         return $cacheKey;
     }
 }

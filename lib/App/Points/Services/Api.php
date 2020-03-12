@@ -76,7 +76,7 @@ class Api
         }
 
         //添加或消耗积分
-        $pointUserInfo = $this->modelPointUser->addOrReduce($pointUserInfo['id'], $points, $now);
+        $pointUserInfo = $this->modelPointUser->addOrReduce($pointUserInfo['_id'], $points, $now);
 
         // 记录积分日志
         $this->modelPointLog->log($point_category, $user_id, $user_name, $user_headimgurl, $points, $now, $uniqueId, $point_rule_id, $point_rule_code, $activity_id, $channel, $stage, $desc, $memo);

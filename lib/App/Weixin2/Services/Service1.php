@@ -25,8 +25,8 @@ class Service1
     {
         $this->authorizer_appid = $authorizer_appid;
         $this->component_appid = $component_appid;
-        $this->modelWeixinopenComponent = new \App\Components\Weixinopen\Services\Models\Component\ComponentModel();
-        $this->modelWeixinopenAuthorizer = new \App\Components\Weixinopen\Services\Models\Authorize\AuthorizerModel();
+        $this->modelWeixinopenComponent = new \App\Weixin2\Models\Component\Component();
+        $this->modelWeixinopenAuthorizer = new \App\Weixin2\Models\Authorize\Authorizer();
     }
 
     public function getAppConfig4Component()
@@ -85,19 +85,19 @@ class Service1
 
     public function getAuthorizerInfo()
     {
-        $modelAuthorizer = new \App\Components\Weixinopen\Services\Models\Authorize\AuthorizerModel();
+        $modelAuthorizer = new \App\Weixin2\Models\Authorize\Authorizer();
         $authorizerInfo = $modelAuthorizer->getInfoByAppid($this->component_appid, $this->authorizer_appid, true);
         if (empty($authorizerInfo)) {
             throw new \Exception("对应的授权方不存在");
         }
         $res = $this->getWeixinComponent()->apiGetAuthorizerInfo($this->authorizer_appid);
-        $modelAuthorizer->updateAuthorizerInfo($authorizerInfo['id'], $res, $authorizerInfo['memo']);
+        $modelAuthorizer->updateAuthorizerInfo($authorizerInfo['_id'], $res, $authorizerInfo['memo']);
         return $res;
     }
 
     public function addMaterial($material_id)
     {
-        $modelMaterial = new \App\Components\Weixinopen\Services\Models\Material\MaterialModel();
+        $modelMaterial = new \App\Weixin2\Models\Material\Material();
         $materialInfo = $modelMaterial->getInfoById($material_id);
         if (empty($materialInfo)) {
             throw new \Exception("永久素材记录ID:{$material_id}所对应的永久素材不存在");
@@ -121,7 +121,7 @@ class Service1
 
     public function deleteMaterial($material_id)
     {
-        $modelMaterial = new \App\Components\Weixinopen\Services\Models\Material\MaterialModel();
+        $modelMaterial = new \App\Weixin2\Models\Material\Material();
         $materialInfo = $modelMaterial->getInfoById($material_id);
         if (empty($materialInfo)) {
             throw new \Exception("永久素材记录ID:{$material_id}所对应的永久素材不存在");
@@ -142,14 +142,14 @@ class Service1
 
     public function addNews($material_id)
     {
-        $modelMaterial = new \App\Components\Weixinopen\Services\Models\Material\MaterialModel();
+        $modelMaterial = new \App\Weixin2\Models\Material\Material();
         $materialInfo = $modelMaterial->getInfoById($material_id);
         if (empty($materialInfo)) {
             throw new \Exception("永久素材记录ID:{$material_id}所对应的永久素材不存在");
         }
 
         // 查找对应的永久图文素材
-        $modelMaterialNews = new \App\Components\Weixinopen\Services\Models\Material\NewsModel();
+        $modelMaterialNews = new \App\Weixin2\Models\Material\News();
         $articles = $modelMaterialNews->getArticlesByMaterialId($material_id, $this->authorizer_appid, $this->component_appid);
 
         if (empty($articles)) {
@@ -169,14 +169,14 @@ class Service1
 
     public function updateNews($material_id)
     {
-        $modelMaterial = new \App\Components\Weixinopen\Services\Models\Material\MaterialModel();
+        $modelMaterial = new \App\Weixin2\Models\Material\Material();
         $materialInfo = $modelMaterial->getInfoById($material_id);
         if (empty($materialInfo)) {
             throw new \Exception("永久素材记录ID:{$material_id}所对应的永久素材不存在");
         }
 
         // 查找对应的永久图文素材
-        $modelMaterialNews = new \App\Components\Weixinopen\Services\Models\Material\NewsModel();
+        $modelMaterialNews = new \App\Weixin2\Models\Material\News();
         $articles = $modelMaterialNews->getArticlesByMaterialId($material_id, $this->authorizer_appid, $this->component_appid);
 
         if (empty($articles)) {
@@ -201,7 +201,7 @@ class Service1
 
     public function uploadMedia($media_id)
     {
-        $modelMedia = new \App\Components\Weixinopen\Services\Models\Media\MediaModel();
+        $modelMedia = new \App\Weixin2\Models\Media\Media();
         $mediaInfo = $modelMedia->getInfoById($media_id);
         if (empty($mediaInfo)) {
             throw new \Exception("临时素材记录ID:{$media_id}所对应的临时素材不存在");
@@ -234,7 +234,7 @@ class Service1
 
     public function createMenu()
     {
-        $modelMenu = new \App\Components\Weixinopen\Services\Models\Menu\MenuModel();
+        $modelMenu = new \App\Weixin2\Models\Menu\Menu();
         $menus = $modelMenu->buildMenu($this->authorizer_appid, $this->component_appid);
         // return $menus;
         $res = $this->getWeixinObject()
@@ -246,7 +246,7 @@ class Service1
 
     public function createConditionalMenu($matchrule_id)
     {
-        $modelMenuConditionalMatchrule = new \App\Components\Weixinopen\Services\Models\Menu\ConditionalMatchruleModel();
+        $modelMenuConditionalMatchrule = new \App\Weixin2\Models\Menu\ConditionalMatchrule();
         $matchRule = $modelMenuConditionalMatchrule->getInfoById($matchrule_id);
         if (empty($matchRule)) {
             throw new \Exception("匹配规则记录ID:{$matchrule_id}所对应的匹配规则不存在");
@@ -258,7 +258,7 @@ class Service1
         }
 
         // 增加菜单
-        $modelMenuConditional = new \App\Components\Weixinopen\Services\Models\Menu\ConditionalModel();
+        $modelMenuConditional = new \App\Weixin2\Models\Menu\Conditional();
         $menusWithMatchrule = $modelMenuConditional->buildMenusWithMatchrule($ruleInfo, $this->authorizer_appid, $this->component_appid);
         // return $menusWithMatchrule;
         $res = $this->getWeixinObject()
@@ -279,7 +279,7 @@ class Service1
         if (!empty($res['errcode'])) {
             throw new \Exception($res['errmsg'], $res['errcode']);
         }
-        $modelMenuConditional = new \App\Components\Weixinopen\Services\Models\Menu\ConditionalModel();
+        $modelMenuConditional = new \App\Weixin2\Models\Menu\Conditional();
         $modelMenuConditional->removeMenuId($matchrule_id, $menuid);
         return $res;
     }
@@ -289,7 +289,7 @@ class Service1
      */
     public function createQrcode($qrcode_id)
     {
-        $modelQrcode = new \App\Components\Weixinopen\Services\Models\Qrcode\QrcodeModel();
+        $modelQrcode = new \App\Weixin2\Models\Qrcode\Qrcode();
         $qrcodeInfo = $modelQrcode->getInfoById($qrcode_id);
         if (empty($qrcodeInfo)) {
             throw new \Exception("二维码记录ID:{$qrcode_id}所对应的二维码不存在");
@@ -327,7 +327,7 @@ class Service1
 
     public function getUserInfo($user_id)
     {
-        $modelUser = new \App\Components\Weixinopen\Services\Models\User\UserModel();
+        $modelUser = new \App\Weixin2\Models\User\User();
         $userInfo = $modelUser->getInfoById($user_id);
         if (empty($userInfo)) {
             throw new \Exception("用户记录ID:{$user_id}所对应的用户不存在");
@@ -365,7 +365,7 @@ class Service1
 
     public function getUserTagIdList($user_id)
     {
-        $modelUser = new \App\Components\Weixinopen\Services\Models\User\UserModel();
+        $modelUser = new \App\Weixin2\Models\User\User();
         $userInfo = $modelUser->getInfoById($user_id);
         if (empty($userInfo)) {
             throw new \Exception("用户记录ID:{$user_id}所对应的用户不存在");
@@ -387,7 +387,7 @@ class Service1
 
     public function addUserTag($user_tag_id)
     {
-        $modelUserTag = new \App\Components\Weixinopen\Services\Models\User\TagModel();
+        $modelUserTag = new \App\Weixin2\Models\User\Tag();
         $userTagInfo = $modelUserTag->getInfoById($user_tag_id);
         if (empty($userTagInfo)) {
             throw new \Exception("用户标签记录ID:{$user_tag_id}所对应的用户标签不存在");
@@ -407,7 +407,7 @@ class Service1
 
     public function deleteUserTag($user_tag_id)
     {
-        $modelUserTag = new \App\Components\Weixinopen\Services\Models\User\TagModel();
+        $modelUserTag = new \App\Weixin2\Models\User\Tag();
         $userTagInfo = $modelUserTag->getInfoById($user_tag_id);
         if (empty($userTagInfo)) {
             throw new \Exception("用户标签记录ID:{$user_tag_id}所对应的用户标签不存在");
@@ -426,7 +426,7 @@ class Service1
 
     public function syncTagList()
     {
-        $modelUserTag = new \App\Components\Weixinopen\Services\Models\User\TagModel();
+        $modelUserTag = new \App\Weixin2\Models\User\Tag();
         $res = $this->getWeixinObject()
             ->getTagsManager()
             ->get();
@@ -458,7 +458,7 @@ class Service1
 
     public function tagUser($user_to_usertag_id)
     {
-        $modelUserToUserTag = new \App\Components\Weixinopen\Services\Models\User\UserToUserTagModel();
+        $modelUserToUserTag = new \App\Weixin2\Models\User\UserToUserTag();
         $userToTagInfo = $modelUserToUserTag->getInfoById($user_to_usertag_id);
         if (empty($userToTagInfo)) {
             throw new \Exception("用户和用户标签对应记录ID:{$user_to_usertag_id}所对应的记录不存在");
@@ -478,7 +478,7 @@ class Service1
 
     public function untagUser($user_to_usertag_id)
     {
-        $modelUserToUserTag = new \App\Components\Weixinopen\Services\Models\User\UserToUserTagModel();
+        $modelUserToUserTag = new \App\Weixin2\Models\User\UserToUserTag();
         $userToTagInfo = $modelUserToUserTag->getInfoById($user_to_usertag_id);
         if (empty($userToTagInfo)) {
             throw new \Exception("用户和用户标签对应记录ID:{$user_to_usertag_id}所对应的记录不存在");
@@ -499,7 +499,7 @@ class Service1
 
     public function blackUser($black_user_id)
     {
-        $modelBlackUser = new \App\Components\Weixinopen\Services\Models\User\BlackUserModel();
+        $modelBlackUser = new \App\Weixin2\Models\User\BlackUser();
         $blackUserInfo = $modelBlackUser->getInfoById($black_user_id);
         if (empty($blackUserInfo)) {
             throw new \Exception("黑名单用户对应记录ID:{$black_user_id}所对应的记录不存在");
@@ -519,7 +519,7 @@ class Service1
 
     public function unblackUser($black_user_id)
     {
-        $modelBlackUser = new \App\Components\Weixinopen\Services\Models\User\BlackUserModel();
+        $modelBlackUser = new \App\Weixin2\Models\User\BlackUser();
         $blackUserInfo = $modelBlackUser->getInfoById($black_user_id);
         if (empty($blackUserInfo)) {
             throw new \Exception("黑名单用户对应记录ID:{$black_user_id}所对应的记录不存在");
@@ -540,7 +540,7 @@ class Service1
 
     public function syncBlackList()
     {
-        $modelBlackUser = new \App\Components\Weixinopen\Services\Models\User\BlackUserModel();
+        $modelBlackUser = new \App\Weixin2\Models\User\BlackUser();
         $res = $this->getWeixinObject()
             ->getTagsManager()
             ->getblacklist();
@@ -568,7 +568,7 @@ class Service1
 
     public function sendMassMsg($tag_id, array $toUsers, $massMsgInfo, $sendMethodInfo, $match, $is_send = false)
     {
-        $modelMassMsg = new \App\Components\Weixinopen\Services\Models\MassMsgModel();
+        $modelMassMsg = new \App\Weixin2\Models\MassMsg();
 
         $objMassSender = $this->getWeixinObject()
             ->getMsgManager()
@@ -671,7 +671,7 @@ class Service1
                          * "created_at":1398848981
                          * }
                          */
-                        $modelMassMsg->recordUploadResult($massMsgInfo['id'], $res4UploadVideo, time());
+                        $modelMassMsg->recordUploadResult($massMsgInfo['_id'], $res4UploadVideo, time());
 
                         $modelMassMsg['upload_media_id'] = $res4UploadVideo['media_id'];
                         $modelMassMsg['upload_media_created_at'] = $res4UploadVideo['created_at'];
@@ -698,7 +698,7 @@ class Service1
                     // 如果没有上传图文的media_id的话
 
                     // 查找对应的群发图文消息
-                    $modelMassMsgNews = new \App\Components\Weixinopen\Services\Models\MassMsg\NewsModel();
+                    $modelMassMsgNews = new \App\Weixin2\Models\MassMsg\News();
                     $articles = $modelMassMsgNews->getArticlesByMassMsgId($massMsgInfo['mass_msg_id'], $this->authorizer_appid, $this->component_appid);
                     if (empty($articles)) {
                         throw new \Exception("群发消息ID:{$massMsgInfo['mass_msg_id']}所对应的图文不存在");
@@ -722,7 +722,7 @@ class Service1
                      * "created_at":1391857799
                      * }
                      */
-                    $modelMassMsg->recordUploadResult($massMsgInfo['id'], $res4UploadNews, time());
+                    $modelMassMsg->recordUploadResult($massMsgInfo['_id'], $res4UploadNews, time());
 
                     $modelMassMsg['upload_media_id'] = $res4UploadNews['media_id'];
                     $modelMassMsg['upload_media_created_at'] = $res4UploadNews['created_at'];
@@ -775,8 +775,8 @@ class Service1
         }
 
         // 记录日志
-        $modelMassMsgSendLog = new \App\Components\Weixinopen\Services\Models\MassMsg\SendLogModel();
-        $modelMassMsgSendLog->record($massMsgInfo['component_appid'], $massMsgInfo['authorizer_appid'], $massMsgInfo['id'], $massMsgInfo['name'], $massMsgInfo['msg_type'], $massMsgInfo['media'], $massMsgInfo['media_id'], $massMsgInfo['thumb_media'], $massMsgInfo['thumb_media_id'], $massMsgInfo['title'], $massMsgInfo['description'], $massMsgInfo['card_id'], $massMsgInfo['card_ext'], $massMsgInfo['upload_media_id'], $massMsgInfo['upload_media_created_at'], $massMsgInfo['upload_media_type'], $is_to_all, $tag_id, \json_encode($toUsers), $send_ignore_reprint, $clientmsgid, $match['id'], $match['keyword'], $match['mass_msg_type'], "", "", $massmsg, $msg_id, $msg_data_id, time());
+        $modelMassMsgSendLog = new \App\Weixin2\Models\MassMsg\SendLog();
+        $modelMassMsgSendLog->record($massMsgInfo['component_appid'], $massMsgInfo['authorizer_appid'], $massMsgInfo['_id'], $massMsgInfo['name'], $massMsgInfo['msg_type'], $massMsgInfo['media'], $massMsgInfo['media_id'], $massMsgInfo['thumb_media'], $massMsgInfo['thumb_media_id'], $massMsgInfo['title'], $massMsgInfo['description'], $massMsgInfo['card_id'], $massMsgInfo['card_ext'], $massMsgInfo['upload_media_id'], $massMsgInfo['upload_media_created_at'], $massMsgInfo['upload_media_type'], $is_to_all, $tag_id, \json_encode($toUsers), $send_ignore_reprint, $clientmsgid, $match['_id'], $match['keyword'], $match['mass_msg_type'], "", "", $massmsg, $msg_id, $msg_data_id, time());
 
         return array(
             'is_ok' => true,
@@ -786,7 +786,7 @@ class Service1
 
     public function deleteMassMsg($mass_msg_send_log_id)
     {
-        $modelMassMsgSendLog = new \App\Components\Weixinopen\Services\Models\MassMsg\SendLogModel();
+        $modelMassMsgSendLog = new \App\Weixin2\Models\MassMsg\SendLog();
         $massMsgSendLogInfo = $modelMassMsgSendLog->getInfoById($mass_msg_send_log_id);
         if (empty($massMsgSendLogInfo)) {
             throw new \Exception("群发消息发送日志记录ID:{$mass_msg_send_log_id}所对应的记录不存在");
@@ -811,7 +811,7 @@ class Service1
 
     public function getMassMsg($mass_msg_send_log_id)
     {
-        $modelMassMsgSendLog = new \App\Components\Weixinopen\Services\Models\MassMsg\SendLogModel();
+        $modelMassMsgSendLog = new \App\Weixin2\Models\MassMsg\SendLog();
         $massMsgSendLogInfo = $modelMassMsgSendLog->getInfoById($mass_msg_send_log_id);
         if (empty($massMsgSendLogInfo)) {
             throw new \Exception("群发消息发送日志记录ID:{$mass_msg_send_log_id}所对应的记录不存在");
@@ -831,7 +831,7 @@ class Service1
 
     public function answerReplyMsgs($FromUserName, $ToUserName, $match)
     {
-        $modelReplyMsg = new \App\Components\Weixinopen\Services\Models\ReplyMsg\ReplyMsgModel();
+        $modelReplyMsg = new \App\Weixin2\Models\ReplyMsg\ReplyMsg();
         $replyMsgs = $modelReplyMsg->getReplyMsgsByKeyword($match);
         if (empty($replyMsgs)) {
             return "";
@@ -846,8 +846,8 @@ class Service1
                 $articles = array();
                 // 获取图文列表
                 $isFirst = empty($articles) ? true : false;
-                $modelReplyMsgNews = new \App\Components\Weixinopen\Services\Models\ReplyMsg\NewsModel();
-                $articles1 = $modelReplyMsgNews->getArticlesByReplyMsgId($replyMsgs[0]['id'], $replyMsgs[0]['authorizer_appid'], $replyMsgs[0]['component_appid'], $isFirst);
+                $modelReplyMsgNews = new \App\Weixin2\Models\ReplyMsg\News();
+                $articles1 = $modelReplyMsgNews->getArticlesByReplyMsgId($replyMsgs[0]['_id'], $replyMsgs[0]['authorizer_appid'], $replyMsgs[0]['component_appid'], $isFirst);
                 $articles = array_merge($articles, $articles1);
                 $replymsg = $objWeixin->getMsgManager()
                     ->getReplySender()
@@ -892,15 +892,15 @@ class Service1
         }
 
         // 记录日志
-        $modelReplyMsgSendLog = new \App\Components\Weixinopen\Services\Models\ReplyMsg\SendLogModel();
-        $modelReplyMsgSendLog->record($replyMsgs[0]['component_appid'], $replyMsgs[0]['authorizer_appid'], $replyMsgs[0]['id'], $replyMsgs[0]['name'], $replyMsgs[0]['msg_type'], $replyMsgs[0]['media'], $replyMsgs[0]['media_id'], $replyMsgs[0]['thumb_media'], $replyMsgs[0]['thumb_media_id'], $replyMsgs[0]['title'], $replyMsgs[0]['description'], $replyMsgs[0]['music'], $replyMsgs[0]['hqmusic'], $replyMsgs[0]['kf_account'], $match['id'], $match['keyword'], $match['reply_msg_type'], $ToUserName, $FromUserName, $replymsg, time());
+        $modelReplyMsgSendLog = new \App\Weixin2\Models\ReplyMsg\SendLog();
+        $modelReplyMsgSendLog->record($replyMsgs[0]['component_appid'], $replyMsgs[0]['authorizer_appid'], $replyMsgs[0]['_id'], $replyMsgs[0]['name'], $replyMsgs[0]['msg_type'], $replyMsgs[0]['media'], $replyMsgs[0]['media_id'], $replyMsgs[0]['thumb_media'], $replyMsgs[0]['thumb_media_id'], $replyMsgs[0]['title'], $replyMsgs[0]['description'], $replyMsgs[0]['music'], $replyMsgs[0]['hqmusic'], $replyMsgs[0]['kf_account'], $match['_id'], $match['keyword'], $match['reply_msg_type'], $ToUserName, $FromUserName, $replymsg, time());
 
         return $replymsg;
     }
 
     public function answerCustomMsgs($FromUserName, $ToUserName, $match)
     {
-        $modelCustomMsg = new \App\Components\Weixinopen\Services\Models\CustomMsg\CustomMsgModel();
+        $modelCustomMsg = new \App\Weixin2\Models\CustomMsg\CustomMsg();
         $customMsgs = $modelCustomMsg->getCustomMsgsByKeyword($match);
         if (empty($customMsgs)) {
             return false;
@@ -922,8 +922,8 @@ class Service1
                     $articles = array();
                     // 获取图文列表
                     $isFirst = empty($articles) ? true : false;
-                    $modelCustomMsgNews = new \App\Components\Weixinopen\Services\Models\CustomMsg\NewsModel();
-                    $articles1 = $modelCustomMsgNews->getArticlesByCustomMsgId($customMsgInfo['id'], $customMsgInfo['authorizer_appid'], $customMsgInfo['component_appid'], $isFirst);
+                    $modelCustomMsgNews = new \App\Weixin2\Models\CustomMsg\News();
+                    $articles1 = $modelCustomMsgNews->getArticlesByCustomMsgId($customMsgInfo['_id'], $customMsgInfo['authorizer_appid'], $customMsgInfo['component_appid'], $isFirst);
                     $articles = array_merge($articles, $articles1);
                     $custommsg = $objWeixin->getMsgManager()
                         ->getCustomSender()
@@ -1019,8 +1019,8 @@ class Service1
             $custommsg = \json_encode($custommsg);
         }
         // 记录日志
-        $modelCustomMsgSendLog = new \App\Components\Weixinopen\Services\Models\CustomMsg\SendLogModel();
-        $modelCustomMsgSendLog->record($customMsgInfo['component_appid'], $customMsgInfo['authorizer_appid'], $customMsgInfo['id'], $customMsgInfo['name'], $customMsgInfo['msg_type'], $customMsgInfo['media'], $customMsgInfo['media_id'], $customMsgInfo['thumb_media'], $customMsgInfo['thumb_media_id'], $customMsgInfo['title'], $customMsgInfo['description'], $customMsgInfo['music'], $customMsgInfo['hqmusic'], $customMsgInfo['appid'], $customMsgInfo['pagepath'], $customMsgInfo['card_id'], $customMsgInfo['card_ext'], $customMsgInfo['kf_account'], $match['id'], $match['keyword'], $match['custom_msg_type'], $ToUserName, $FromUserName, $custommsg, time());
+        $modelCustomMsgSendLog = new \App\Weixin2\Models\CustomMsg\SendLog();
+        $modelCustomMsgSendLog->record($customMsgInfo['component_appid'], $customMsgInfo['authorizer_appid'], $customMsgInfo['_id'], $customMsgInfo['name'], $customMsgInfo['msg_type'], $customMsgInfo['media'], $customMsgInfo['media_id'], $customMsgInfo['thumb_media'], $customMsgInfo['thumb_media_id'], $customMsgInfo['title'], $customMsgInfo['description'], $customMsgInfo['music'], $customMsgInfo['hqmusic'], $customMsgInfo['appid'], $customMsgInfo['pagepath'], $customMsgInfo['card_id'], $customMsgInfo['card_ext'], $customMsgInfo['kf_account'], $match['_id'], $match['keyword'], $match['custom_msg_type'], $ToUserName, $FromUserName, $custommsg, time());
 
         return array(
             'is_ok' => true,
@@ -1030,7 +1030,7 @@ class Service1
 
     public function addOrUpdateKfAccount($kfaccount_id, $is_add = true)
     {
-        $modelKfAccount = new \App\Components\Weixinopen\Services\Models\Kf\AccountModel();
+        $modelKfAccount = new \App\Weixin2\Models\Kf\Account();
         $kfAccountInfo = $modelKfAccount->getInfoById($kfaccount_id);
         if (empty($kfAccountInfo)) {
             throw new \Exception("客服帐号记录ID:{$kfaccount_id}所对应的记录不存在");
@@ -1054,7 +1054,7 @@ class Service1
 
     public function deleteKfAccount($kfaccount_id)
     {
-        $modelKfAccount = new \App\Components\Weixinopen\Services\Models\Kf\AccountModel();
+        $modelKfAccount = new \App\Weixin2\Models\Kf\Account();
         $kfAccountInfo = $modelKfAccount->getInfoById($kfaccount_id);
         if (empty($kfAccountInfo)) {
             throw new \Exception("客服帐号记录ID:{$kfaccount_id}所对应的记录不存在");
@@ -1073,7 +1073,7 @@ class Service1
 
     public function syncKfAccountList()
     {
-        $modelKfAccount = new \App\Components\Weixinopen\Services\Models\Kf\AccountModel();
+        $modelKfAccount = new \App\Weixin2\Models\Kf\Account();
         $res = $this->getWeixinObject()
             ->getCustomServiceManager()
             ->getkflist();
@@ -1110,7 +1110,7 @@ class Service1
 
     public function syncOnlineKfAccountList()
     {
-        $modelKfAccount = new \App\Components\Weixinopen\Services\Models\Kf\AccountModel();
+        $modelKfAccount = new \App\Weixin2\Models\Kf\Account();
 
         $res = $this->getWeixinObject()
             ->getCustomServiceManager()
@@ -1146,7 +1146,7 @@ class Service1
 
     public function inviteWorker($kfaccount_id)
     {
-        $modelKfAccount = new \App\Components\Weixinopen\Services\Models\Kf\AccountModel();
+        $modelKfAccount = new \App\Weixin2\Models\Kf\Account();
         $kfAccountInfo = $modelKfAccount->getInfoById($kfaccount_id);
         if (empty($kfAccountInfo)) {
             throw new \Exception("客服帐号记录ID:{$kfaccount_id}所对应的记录不存在");
@@ -1163,7 +1163,7 @@ class Service1
 
     public function deleteTemplate($template_rec_id)
     {
-        $modelTemplate = new \App\Components\Weixinopen\Services\Models\Template\TemplateModel();
+        $modelTemplate = new \App\Weixin2\Models\Template\Template();
         $templateInfo = $modelTemplate->getInfoById($template_rec_id);
         if (empty($templateInfo)) {
             throw new \Exception("模板记录ID:{$template_rec_id}所对应的记录不存在");
@@ -1183,7 +1183,7 @@ class Service1
 
     public function syncTemplateList()
     {
-        $modelTemplate = new \App\Components\Weixinopen\Services\Models\Template\TemplateModel();
+        $modelTemplate = new \App\Weixin2\Models\Template\Template();
         $res = $this->getWeixinObject()
             ->getMsgManager()
             ->getTemplateSender()
@@ -1209,7 +1209,7 @@ class Service1
 
     public function answerTemplateMsgs($FromUserName, $ToUserName, $match)
     {
-        $modelTemplateMsg = new \App\Components\Weixinopen\Services\Models\TemplateMsg\TemplateMsgModel();
+        $modelTemplateMsg = new \App\Weixin2\Models\TemplateMsg\TemplateMsg();
         $templates = $modelTemplateMsg->getTemplateMsgsByKeyword($match);
         if (empty($templates)) {
             return false;
@@ -1253,8 +1253,8 @@ class Service1
         }
 
         // 记录日志
-        $modelTemplateMsgSendLog = new \App\Components\Weixinopen\Services\Models\TemplateMsg\SendLogModel();
-        $modelTemplateMsgSendLog->record($templateMsgInfo['component_appid'], $templateMsgInfo['authorizer_appid'], $templateMsgInfo['id'], $templateMsgInfo['name'], $templateMsgInfo['template_id'], $templateMsgInfo['url'], $templateMsgInfo['data'], $templateMsgInfo['color'], $templateMsgInfo['appid'], $templateMsgInfo['pagepath'], $match['id'], $match['keyword'], $ToUserName, $FromUserName, $templatemsg, time());
+        $modelTemplateMsgSendLog = new \App\Weixin2\Models\TemplateMsg\SendLog();
+        $modelTemplateMsgSendLog->record($templateMsgInfo['component_appid'], $templateMsgInfo['authorizer_appid'], $templateMsgInfo['_id'], $templateMsgInfo['name'], $templateMsgInfo['template_id'], $templateMsgInfo['url'], $templateMsgInfo['data'], $templateMsgInfo['color'], $templateMsgInfo['appid'], $templateMsgInfo['pagepath'], $match['_id'], $match['keyword'], $ToUserName, $FromUserName, $templatemsg, time());
 
         return array(
             'is_ok' => true,
@@ -1264,7 +1264,7 @@ class Service1
 
     public function shorturl($shorturl_id)
     {
-        $modelShorturl = new \App\Components\Weixinopen\Services\Models\ShorturlModel();
+        $modelShorturl = new \App\Weixin2\Models\Shorturl();
         $shorturlInfo = $modelShorturl->getInfoById($shorturl_id);
         if (empty($shorturlInfo)) {
             throw new \Exception("短连接记录ID:{$shorturl_id}所对应的记录不存在");
@@ -1283,7 +1283,7 @@ class Service1
 
     public function createKfSession($kfsession_id)
     {
-        $modelKfSession = new \App\Components\Weixinopen\Services\Models\Kf\SessionModel();
+        $modelKfSession = new \App\Weixin2\Models\Kf\Session();
         $kfSessionInfo = $modelKfSession->getInfoById($kfsession_id);
         if (empty($kfSessionInfo)) {
             throw new \Exception("客服会话记录ID:{$kfsession_id}所对应的记录不存在");
@@ -1301,7 +1301,7 @@ class Service1
 
     public function closeKfSession($kfsession_id)
     {
-        $modelKfSession = new \App\Components\Weixinopen\Services\Models\Kf\SessionModel();
+        $modelKfSession = new \App\Weixin2\Models\Kf\Session();
         $kfSessionInfo = $modelKfSession->getInfoById($kfsession_id);
         if (empty($kfSessionInfo)) {
             throw new \Exception("客服会话记录ID:{$kfsession_id}所对应的记录不存在");
@@ -1320,7 +1320,7 @@ class Service1
 
     public function syncMsgRecordList($msgrecord_start_time, $msgrecord_end_time)
     {
-        $modelMsgRecord = new \App\Components\Weixinopen\Services\Models\Kf\MsgRecordModel();
+        $modelMsgRecord = new \App\Weixin2\Models\Kf\MsgRecord();
         $starttime = strtotime(date('Y-m-d', $msgrecord_start_time) . " 00:00:00");
         $endtime = strtotime(date('Y-m-d', $msgrecord_end_time) . " 23:59:59");
 
@@ -1358,7 +1358,7 @@ class Service1
 
     public function syncUserSummary($start_ref_date, $end_ref_date)
     {
-        $modelDataCubeUserSummary = new \App\Components\Weixinopen\Services\Models\DataCube\UserSummaryModel();
+        $modelDataCubeUserSummary = new \App\Weixin2\Models\DataCube\UserSummary();
         $begin_date = date("Y-m-d", $start_ref_date);
         $end_date = date("Y-m-d", $end_ref_date);
 
@@ -1386,7 +1386,7 @@ class Service1
 
     public function syncUserCumulate($start_ref_date, $end_ref_date)
     {
-        $modelDataCubeUserCumulate = new \App\Components\Weixinopen\Services\Models\DataCube\UserCumulateModel();
+        $modelDataCubeUserCumulate = new \App\Weixin2\Models\DataCube\UserCumulate();
         $begin_date = date("Y-m-d", $start_ref_date);
         $end_date = date("Y-m-d", $end_ref_date);
 
@@ -1412,7 +1412,7 @@ class Service1
 
     public function syncInterfaceSummary($start_ref_date, $end_ref_date)
     {
-        $modelDataCubeInterfaceSummary = new \App\Components\Weixinopen\Services\Models\DataCube\InterfaceSummaryModel();
+        $modelDataCubeInterfaceSummary = new \App\Weixin2\Models\DataCube\InterfaceSummary();
 
         $begin_date = date("Y-m-d", $start_ref_date);
         $end_date = date("Y-m-d", $end_ref_date);
@@ -1442,7 +1442,7 @@ class Service1
 
     public function syncInterfaceSummaryHour($start_ref_date, $end_ref_date)
     {
-        $modelDataCubeInterfaceSummaryHour = new \App\Components\Weixinopen\Services\Models\DataCube\InterfaceSummaryHourModel();
+        $modelDataCubeInterfaceSummaryHour = new \App\Weixin2\Models\DataCube\InterfaceSummaryHour();
 
         $begin_date = date("Y-m-d", $start_ref_date);
         $end_date = date("Y-m-d", $end_ref_date);
@@ -1473,7 +1473,7 @@ class Service1
 
     public function syncUpstreamMsg($start_ref_date, $end_ref_date)
     {
-        $modelDataCubeUpstreamMsg = new \App\Components\Weixinopen\Services\Models\DataCube\UpstreamMsgModel();
+        $modelDataCubeUpstreamMsg = new \App\Weixin2\Models\DataCube\UpstreamMsg();
 
         $begin_date = date("Y-m-d", $start_ref_date);
         $end_date = date("Y-m-d", $end_ref_date);
@@ -1502,7 +1502,7 @@ class Service1
 
     public function syncUpstreamMsgHour($start_ref_date, $end_ref_date)
     {
-        $modelDataCubeUpstreamMsgHour = new \App\Components\Weixinopen\Services\Models\DataCube\UpstreamMsgHourModel();
+        $modelDataCubeUpstreamMsgHour = new \App\Weixin2\Models\DataCube\UpstreamMsgHour();
 
         $begin_date = date("Y-m-d", $start_ref_date);
         $end_date = date("Y-m-d", $end_ref_date);
@@ -1532,7 +1532,7 @@ class Service1
 
     public function syncUpstreamMsgWeek($start_ref_date, $end_ref_date)
     {
-        $modelDataCubeUpstreamMsgWeek = new \App\Components\Weixinopen\Services\Models\DataCube\UpstreamMsgWeekModel();
+        $modelDataCubeUpstreamMsgWeek = new \App\Weixin2\Models\DataCube\UpstreamMsgWeek();
 
         $begin_date = date("Y-m-d", $start_ref_date);
         $end_date = date("Y-m-d", $end_ref_date);
@@ -1561,7 +1561,7 @@ class Service1
 
     public function syncUpstreamMsgMonth($start_ref_date, $end_ref_date)
     {
-        $modelDataCubeUpstreamMsgMonth = new \App\Components\Weixinopen\Services\Models\DataCube\UpstreamMsgMonthModel();
+        $modelDataCubeUpstreamMsgMonth = new \App\Weixin2\Models\DataCube\UpstreamMsgMonth();
 
         $begin_date = date("Y-m-d", $start_ref_date);
         $end_date = date("Y-m-d", $end_ref_date);
@@ -1590,7 +1590,7 @@ class Service1
 
     public function syncUpstreamMsgDist($start_ref_date, $end_ref_date)
     {
-        $modelDataCubeUpstreamMsgDist = new \App\Components\Weixinopen\Services\Models\DataCube\UpstreamMsgDistModel();
+        $modelDataCubeUpstreamMsgDist = new \App\Weixin2\Models\DataCube\UpstreamMsgDist();
 
         $begin_date = date("Y-m-d", $start_ref_date);
         $end_date = date("Y-m-d", $end_ref_date);
@@ -1618,7 +1618,7 @@ class Service1
 
     public function syncUpstreamMsgDistHour($start_ref_date, $end_ref_date)
     {
-        $modelDataCubeUpstreamMsgDistHour = new \App\Components\Weixinopen\Services\Models\DataCube\UpstreamMsgDistHourModel();
+        $modelDataCubeUpstreamMsgDistHour = new \App\Weixin2\Models\DataCube\UpstreamMsgDistHour();
 
         $begin_date = date("Y-m-d", $start_ref_date);
         $end_date = date("Y-m-d", $end_ref_date);
@@ -1646,7 +1646,7 @@ class Service1
 
     public function syncUpstreamMsgDistWeek($start_ref_date, $end_ref_date)
     {
-        $modelDataCubeUpstreamMsgDistWeek = new \App\Components\Weixinopen\Services\Models\DataCube\UpstreamMsgDistWeekModel();
+        $modelDataCubeUpstreamMsgDistWeek = new \App\Weixin2\Models\DataCube\UpstreamMsgDistWeek();
         $begin_date = date("Y-m-d", $start_ref_date);
         $end_date = date("Y-m-d", $end_ref_date);
 
@@ -1673,7 +1673,7 @@ class Service1
 
     public function syncUpstreamMsgDistMonth($start_ref_date, $end_ref_date)
     {
-        $modelDataCubeUpstreamMsgDistMonth = new \App\Components\Weixinopen\Services\Models\DataCube\UpstreamMsgDistMonthModel();
+        $modelDataCubeUpstreamMsgDistMonth = new \App\Weixin2\Models\DataCube\UpstreamMsgDistMonth();
         $begin_date = date("Y-m-d", $start_ref_date);
         $end_date = date("Y-m-d", $end_ref_date);
 
@@ -1700,7 +1700,7 @@ class Service1
 
     public function syncArticleSummary($start_ref_date, $end_ref_date)
     {
-        $modelDataCubeArticleSummary = new \App\Components\Weixinopen\Services\Models\DataCube\ArticleSummaryModel();
+        $modelDataCubeArticleSummary = new \App\Weixin2\Models\DataCube\ArticleSummary();
         $begin_date = date("Y-m-d", $start_ref_date);
         $end_date = date("Y-m-d", $end_ref_date);
 
@@ -1736,7 +1736,7 @@ class Service1
 
     public function syncArticleTotal($start_ref_date, $end_ref_date)
     {
-        $modelDataCubeArticleTotal = new \App\Components\Weixinopen\Services\Models\DataCube\ArticleTotalModel();
+        $modelDataCubeArticleTotal = new \App\Weixin2\Models\DataCube\ArticleTotal();
         $begin_date = date("Y-m-d", $start_ref_date);
         $end_date = date("Y-m-d", $end_ref_date);
         $res = $this->getWeixinObject()
@@ -1792,7 +1792,7 @@ class Service1
 
     public function syncUserRead($start_ref_date, $end_ref_date)
     {
-        $modelDataCubeUserRead = new \App\Components\Weixinopen\Services\Models\DataCube\UserReadModel();
+        $modelDataCubeUserRead = new \App\Weixin2\Models\DataCube\UserRead();
         $begin_date = date("Y-m-d", $start_ref_date);
         $end_date = date("Y-m-d", $end_ref_date);
 
@@ -1825,7 +1825,7 @@ class Service1
 
     public function syncUserReadHour($start_ref_date, $end_ref_date)
     {
-        $modelDataCubeUserReadHour = new \App\Components\Weixinopen\Services\Models\DataCube\UserReadHourModel();
+        $modelDataCubeUserReadHour = new \App\Weixin2\Models\DataCube\UserReadHour();
         $begin_date = date("Y-m-d", $start_ref_date);
         $end_date = date("Y-m-d", $end_ref_date);
 
@@ -1901,7 +1901,7 @@ class Service1
 
     public function syncUserShare($start_ref_date, $end_ref_date)
     {
-        $modelDataCubeUserShare = new \App\Components\Weixinopen\Services\Models\DataCube\UserShareModel();
+        $modelDataCubeUserShare = new \App\Weixin2\Models\DataCube\UserShare();
         $begin_date = date("Y-m-d", $start_ref_date);
         $end_date = date("Y-m-d", $end_ref_date);
 
@@ -1935,7 +1935,7 @@ class Service1
 
     public function syncUserShareHour($start_ref_date, $end_ref_date)
     {
-        $modelDataCubeUserShareHour = new \App\Components\Weixinopen\Services\Models\DataCube\UserShareHourModel();
+        $modelDataCubeUserShareHour = new \App\Weixin2\Models\DataCube\UserShareHour();
         $begin_date = date("Y-m-d", $start_ref_date);
         $end_date = date("Y-m-d", $end_ref_date);
 
@@ -1964,7 +1964,7 @@ class Service1
 
     public function openComment($comment_id)
     {
-        $modelComment = new \App\Components\Weixinopen\Services\Models\Comment\CommentModel();
+        $modelComment = new \App\Weixin2\Models\Comment\Comment();
         $commentInfo = $modelComment->getInfoById($comment_id);
         if (empty($commentInfo)) {
             throw new \Exception("已群发文章评论记录ID:{$comment_id}所对应的记录不存在");
@@ -1981,7 +1981,7 @@ class Service1
 
     public function closeComment($comment_id)
     {
-        $modelComment = new \App\Components\Weixinopen\Services\Models\Comment\CommentModel();
+        $modelComment = new \App\Weixin2\Models\Comment\Comment();
         $commentInfo = $modelComment->getInfoById($comment_id);
         if (empty($commentInfo)) {
             throw new \Exception("已群发文章评论记录ID:{$comment_id}所对应的记录不存在");
@@ -1998,7 +1998,7 @@ class Service1
 
     public function syncCommentList($comment_id)
     {
-        $modelComment = new \App\Components\Weixinopen\Services\Models\Comment\CommentModel();
+        $modelComment = new \App\Weixin2\Models\Comment\Comment();
         $commentInfo = $modelComment->getInfoById($comment_id);
         if (empty($commentInfo)) {
             throw new \Exception("已群发文章评论记录ID:{$comment_id}所对应的记录不存在");
@@ -2028,10 +2028,10 @@ class Service1
          * }
          */
         $now = time();
-        $modelCommentLog = new \App\Components\Weixinopen\Services\Models\Comment\LogModel();
+        $modelCommentLog = new \App\Weixin2\Models\Comment\Log();
         $modelCommentLog->syncCommentList($commentInfo['authorizer_appid'], $commentInfo['component_appid'], $commentInfo['msg_data_id'], $commentInfo['index'], $res, $now);
 
-        $modelCommentReplyLog = new \App\Components\Weixinopen\Services\Models\Comment\ReplyLogModel();
+        $modelCommentReplyLog = new \App\Weixin2\Models\Comment\ReplyLog();
         $modelCommentReplyLog->syncReplyList($commentInfo['authorizer_appid'], $commentInfo['component_appid'], $commentInfo['msg_data_id'], $commentInfo['index'], $res, $now);
 
         return $res;
@@ -2039,7 +2039,7 @@ class Service1
 
     public function markelectComment($comment_log_id)
     {
-        $modelCommentLog = new \App\Components\Weixinopen\Services\Models\Comment\LogModel();
+        $modelCommentLog = new \App\Weixin2\Models\Comment\Log();
         $commentLogInfo = $modelCommentLog->getInfoById($comment_log_id);
         if (empty($commentLogInfo)) {
             throw new \Exception("已群发文章评论日志记录ID:{$comment_log_id}所对应的记录不存在");
@@ -2056,7 +2056,7 @@ class Service1
 
     public function unmarkelectComment($comment_log_id)
     {
-        $modelCommentLog = new \App\Components\Weixinopen\Services\Models\Comment\LogModel();
+        $modelCommentLog = new \App\Weixin2\Models\Comment\Log();
         $commentLogInfo = $modelCommentLog->getInfoById($comment_log_id);
         if (empty($commentLogInfo)) {
             throw new \Exception("已群发文章评论日志记录ID:{$comment_log_id}所对应的记录不存在");
@@ -2073,7 +2073,7 @@ class Service1
 
     public function deleteCommentLog($comment_log_id)
     {
-        $modelCommentLog = new \App\Components\Weixinopen\Services\Models\Comment\LogModel();
+        $modelCommentLog = new \App\Weixin2\Models\Comment\Log();
         $commentLogInfo = $modelCommentLog->getInfoById($comment_log_id);
         if (empty($commentLogInfo)) {
             throw new \Exception("已群发文章评论日志记录ID:{$comment_log_id}所对应的记录不存在");
@@ -2093,7 +2093,7 @@ class Service1
 
     public function addCommentReply($comment_reply_log_id)
     {
-        $modelCommentReplyLog = new \App\Components\Weixinopen\Services\Models\Comment\ReplyLogModel();
+        $modelCommentReplyLog = new \App\Weixin2\Models\Comment\ReplyLog();
         $commentReplyLogInfo = $modelCommentReplyLog->getInfoById($comment_reply_log_id);
         if (empty($commentReplyLogInfo)) {
             throw new \Exception("已群发文章评论回复日志记录ID:{$comment_reply_log_id}所对应的记录不存在");
@@ -2110,7 +2110,7 @@ class Service1
 
     public function deleteCommentReply($comment_reply_log_id)
     {
-        $modelCommentReplyLog = new \App\Components\Weixinopen\Services\Models\Comment\ReplyLogModel();
+        $modelCommentReplyLog = new \App\Weixin2\Models\Comment\ReplyLog();
         $commentReplyLogInfo = $modelCommentReplyLog->getInfoById($comment_reply_log_id);
         if (empty($commentReplyLogInfo)) {
             throw new \Exception("已群发文章评论回复日志记录ID:{$comment_reply_log_id}所对应的记录不存在");

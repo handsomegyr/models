@@ -2,26 +2,18 @@
 
 namespace App\Weixin2\Models\CustomMsg;
 
-use Cache;
+
 
 class News extends \App\Common\Models\Weixin2\CustomMsg\News
 {
 
     public function getListByCustomMsgId($custom_msg_id, $authorizer_appid, $component_appid)
     {
-        $q = $this->getModel()->query();
-        $q->where('custom_msg_id', $custom_msg_id);
-        $q->where('authorizer_appid', $authorizer_appid);
-        $q->where('component_appid', $component_appid);
-        $q->orderby("index", "asc")->orderby("id", "desc");
-        $list = $q->get();
-        $ret = array();
-        if (!empty($list)) {
-            foreach ($list as $item) {
-                $item = $this->getReturnData($item);
-                $ret[] = $item;
-            }
-        }
+        $ret = $this->findAll(array(
+            'custom_msg_id' => $custom_msg_id,
+            'authorizer_appid' => $authorizer_appid,
+            'custom_msg_id' => $custom_msg_id
+        ), array('index' => 1, '_id' => -1));
         return $ret;
     }
 
@@ -29,7 +21,10 @@ class News extends \App\Common\Models\Weixin2\CustomMsg\News
     {
         $articles = array();
         $cacheKey = "custommsgnews:custom_msg_id:{$custom_msg_id}:authorizer_appid:{$authorizer_appid}:component_appid:{$component_appid}";
-        if (true || !Cache::tags($this->cache_tag)->has($cacheKey)) {
+        $cacheKey = cacheKey(__FILE__, __CLASS__, $cacheKey);
+        $cache = $this->getDI()->get('cache');
+        $articles = $cache->get($cacheKey);
+        if (true || empty($articles)) {
             $rst = $this->getListByCustomMsgId($custom_msg_id, $authorizer_appid, $component_appid);
             $articles = array();
             if (!empty($rst)) {
@@ -51,10 +46,8 @@ class News extends \App\Common\Models\Weixin2\CustomMsg\News
             if (!empty($articles)) {
                 // 加缓存处理
                 $expire_time = 5 * 60; // 5分钟
-                Cache::tags($this->cache_tag)->put($cacheKey, $articles, $expire_time);
+                $cache->save($cacheKey, $articles, $expire_time);
             }
-        } else {
-            $articles = Cache::tags($this->cache_tag)->get($cacheKey);
         }
         return $articles;
     }

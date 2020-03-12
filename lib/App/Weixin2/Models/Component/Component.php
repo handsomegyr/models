@@ -2,9 +2,6 @@
 
 namespace App\Weixin2\Models\Component;
 
-use Cache;
-use App\Services\Lock\MemcacheLock;
-
 class Component extends \App\Common\Models\Weixin2\Component\Component
 {
 
@@ -16,18 +13,19 @@ class Component extends \App\Common\Models\Weixin2\Component\Component
     public function getInfoByAppId($appid, $is_get_latest = false)
     {
         $cacheKey = $this->getCacheKey4Appid($appid);
-        if ($is_get_latest || !Cache::tags($this->cache_tag)->has($cacheKey)) {
-            $application = $this->getModel()
-                ->where('appid', $appid)
-                ->first();
-            $application = $this->getReturnData($application);
+        $cache = $this->getDI()->get('cache');
+        $application = $cache->get($cacheKey);
+
+        if ($is_get_latest || empty($application)) {
+
+            $application = $this->findOne(array(
+                'appid' => $appid
+            ));
             if (!empty($application)) {
                 // 加缓存处理
                 $expire_time = 5 * 60;
-                Cache::tags($this->cache_tag)->put($cacheKey, $application, $expire_time);
+                $cache->save($cacheKey, $application, $expire_time);
             }
-        } else {
-            $application = Cache::tags($this->cache_tag)->get($cacheKey);
         }
         return $application;
     }
@@ -57,17 +55,18 @@ class Component extends \App\Common\Models\Weixin2\Component\Component
     {
         $updateData = array();
         $updateData['access_token'] = $access_token;
-        $updateData['access_token_expire'] = date("Y-m-d H:i:s", time() + $expires_in);
+        $updateData['access_token_expire'] = getCurrentTime(time() + $expires_in);
         $updateData['verify_ticket'] = $verify_ticket;
         if (!empty($memo)) {
             $updateData["memo"] = $memo;
         }
-        $affectRows = $this->updateById($id, $updateData);
+        $affectRows = $this->update(array('_id' => $id), array('$set' => $updateData));
         // 重新获取数据
         $newInfo = $this->getInfoById($id);
         if (!empty($newInfo)) {
             $expire_time = 5 * 60;
-            Cache::tags($this->cache_tag)->put($this->getCacheKey4Appid($newInfo['appid']), $newInfo, $expire_time);
+            $cache = $this->getDI()->get('cache');
+            $cache->save($this->getCacheKey4Appid($newInfo['appid']), $newInfo, $expire_time);
         }
         return $newInfo;
     }
@@ -76,16 +75,17 @@ class Component extends \App\Common\Models\Weixin2\Component\Component
     {
         $updateData = array();
         $updateData['jsapi_ticket'] = $jsapi_ticket;
-        $updateData['jsapi_ticket_expire'] = date("Y-m-d H:i:s", time() + $expires_in);
+        $updateData['jsapi_ticket_expire'] = getCurrentTime(time() + $expires_in);
         if (!empty($memo)) {
             $updateData["memo"] = $memo;
         }
-        $affectRows = $this->updateById($id, $updateData);
+        $affectRows = $this->update(array('_id' => $id), array('$set' => $updateData));
         // 重新获取数据
         $newInfo = $this->getInfoById($id);
         if (!empty($newInfo)) {
             $expire_time = 5 * 60;
-            Cache::tags($this->cache_tag)->put($this->getCacheKey4Appid($newInfo['appid']), $newInfo, $expire_time);
+            $cache = $this->getDI()->get('cache');
+            $cache->save($this->getCacheKey4Appid($newInfo['appid']), $newInfo, $expire_time);
         }
 
         return $newInfo;
@@ -95,16 +95,17 @@ class Component extends \App\Common\Models\Weixin2\Component\Component
     {
         $updateData = array();
         $updateData['wx_card_api_ticket'] = $wx_card_api_ticket;
-        $updateData['wx_card_api_ticket_expire'] = date("Y-m-d H:i:s", time() + $expires_in);
+        $updateData['wx_card_api_ticket_expire'] = getCurrentTime(time() + $expires_in);
         if (!empty($memo)) {
             $updateData["memo"] = $memo;
         }
-        $affectRows = $this->updateById($id, $updateData);
+        $affectRows = $this->update(array('_id' => $id), array('$set' => $updateData));
         // 重新获取数据
         $newInfo = $this->getInfoById($id);
         if (!empty($newInfo)) {
             $expire_time = 5 * 60;
-            Cache::tags($this->cache_tag)->put($this->getCacheKey4Appid($newInfo['appid']), $newInfo, $expire_time);
+            $cache = $this->getDI()->get('cache');
+            $cache->save($this->getCacheKey4Appid($newInfo['appid']), $newInfo, $expire_time);
         }
 
         return $newInfo;
@@ -118,6 +119,7 @@ class Component extends \App\Common\Models\Weixin2\Component\Component
     private function getCacheKey4Appid($appid)
     {
         $cacheKey = "component:component_appid:{$appid}";
+        $cacheKey = cacheKey(__FILE__, __CLASS__, $cacheKey);
         return $cacheKey;
     }
 
@@ -126,8 +128,8 @@ class Component extends \App\Common\Models\Weixin2\Component\Component
         if (isset($token['access_token_expire'])) {
             if (strtotime($token['access_token_expire']) <= time()) {
                 if (!empty($token['appid']) && !empty($token['appsecret']) && !empty($token['verify_ticket'])) {
-                    $lockKey = $this->cacheKey(__FILE__, __CLASS__, __METHOD__, __LINE__, $token['appid']);
-                    $objLock = new MemcacheLock($lockKey, false);
+                    $lockKey = cacheKey(__FILE__, __CLASS__, __METHOD__, __LINE__, $token['appid']);
+                    $objLock = new \iLock($lockKey);
                     if (!$objLock->lock()) {
                         $objToken = new \Weixin\Component($token['appid'], $token['appsecret']);
                         $arrToken = $objToken->apiComponentToken($token['verify_ticket']);
@@ -150,15 +152,4 @@ class Component extends \App\Common\Models\Weixin2\Component\Component
     }
 
     protected $_expire = 0;
-
-    /**
-     * 范围cache key字符串
-     *
-     * @return string
-     */
-    protected function cacheKey()
-    {
-        $args = func_get_args();
-        return md5(serialize($args));
-    }
 }

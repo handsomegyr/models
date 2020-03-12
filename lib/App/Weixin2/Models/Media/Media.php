@@ -9,7 +9,7 @@ class Media extends \App\Common\Models\Weixin2\Media\Media
     {
         $updateData = array();
         $updateData['media_id'] = $res['media_id'];
-        $updateData['media_time'] = date("Y-m-d H:i:s", $res['created_at']);
-        return $this->updateById($id, $updateData);
+        $updateData['media_time'] = getCurrentTime($res['created_at']);
+        return $this->update(array('_id' => $id), array('$set' => $updateData));
     }
 }

@@ -2,8 +2,6 @@
 
 namespace App\Weixin2\Models\Notification;
 
-use DB;
-
 class Task extends \App\Common\Models\Weixin2\Notification\Task
 {
 
@@ -21,14 +19,21 @@ class Task extends \App\Common\Models\Weixin2\Notification\Task
      */
     public function getAndLockOneTask4ByPushStatus($push_status, $now)
     {
-        $task = $this->getModel()
-            ->where('scheduled_push_time', '<=', date("Y-m-d H:i:s", $now))
-            ->where('push_status', $push_status)
-            ->orderBy('scheduled_push_time', 'asc')
-            ->orderBy('id', 'asc')
-            ->lockForUpdate()
-            ->first();
-        $task = $this->getReturnData($task);
+        $query = array(
+            'scheduled_push_time' => array('$lte' => getCurrentTime($now)),
+            'push_status' => $push_status,
+        );
+        $sort  = array('_id' => 1);
+        $list = $this->find($query, $sort, 0, 1);
+        if (empty($list['datas'])) {
+            return null;
+        } else {
+            $task = $this->findOne(array(
+                '_id' => $list['datas'][0]['_id'],
+                '__FOR_UPDATE__' => true
+            ));
+            return $task;
+        }
         return $task;
     }
 
@@ -36,44 +41,42 @@ class Task extends \App\Common\Models\Weixin2\Notification\Task
     {
         $updateData = array();
         $updateData['push_status'] = $status;
-        $updateData['push_time'] = date("Y-m-d H:i:s", $now);
-        return $this->updateById($id, $updateData);
+        $updateData['push_time'] = getCurrentTime($now);
+        return $this->update(array('_id' => $id), array('$set' => $updateData));
     }
 
     public function updateTaskProcessTotal($id, $task_process_total)
     {
         $updateData = array();
         $updateData['task_process_total'] = $task_process_total;
-        return $this->updateById($id, $updateData);
+        return $this->update(array('_id' => $id), array('$set' => $updateData));
     }
 
     public function incProcessNum($id, $process_num, $is_success = true)
     {
         $updateData = array();
         $updateData['task_process_total'] = $task_process_total;
-        return $this->updateById($id, $updateData);
+        return $this->update(array('_id' => $id), array('$set' => $updateData));
     }
 
     public function incProcessedNum($id, $processed_num, $is_success = false)
     {
         $updateData = array();
         $processed_num = abs($processed_num);
-        $updateData['processed_num'] = DB::raw("processed_num+{$processed_num}");
+        $updateData['processed_num'] = $processed_num;
         // 如果成功的话
         if ($is_success) {
-            $updateData['success_num'] = DB::raw("success_num+{$processed_num}");
+            $updateData['success_num'] = $processed_num;
         }
-
-        $affectRows = $this->updateById($id, $updateData);
+        $affectRows = $this->update(array('_id' => $id), array('$inc' => $updateData));
         return $affectRows;
     }
 
     public function incSuccessNum($id, $success_num)
     {
         $updateData = array();
-        $updateData['success_num'] = DB::raw("success_num+{$success_num}");
-
-        $affectRows = $this->updateById($id, $updateData);
+        $updateData['success_num'] = $success_num;
+        $affectRows = $this->update(array('_id' => $id), array('$inc' => $updateData));
         return $affectRows;
     }
 }

@@ -12,19 +12,11 @@ class Conditional extends \App\Common\Models\Weixin2\Menu\Conditional
      */
     public function getList4MatchRule($matchrule_id, $authorizer_appid, $component_appid)
     {
-        $q = $this->getModel()->query();
-        $q->where('matchrule', $matchrule_id);
-        $q->where('authorizer_appid', $authorizer_appid);
-        $q->where('component_appid', $component_appid);
-        $q->orderby("priority", "asc")->orderby("id", "desc");
-        $list = $q->get();
-        $ret = array();
-        if (!empty($list)) {
-            foreach ($list as $item) {
-                $item = $this->getReturnData($item);
-                $ret[] = $item;
-            }
-        }
+        $ret = $this->findAll(array(
+            'matchrule' => $matchrule_id,
+            'authorizer_appid' => $authorizer_appid,
+            'component_appid' => $component_appid,
+        ), array('priority' => 1, '_id' => -1));
         return $ret;
     }
 
@@ -35,8 +27,8 @@ class Conditional extends \App\Common\Models\Weixin2\Menu\Conditional
      */
     public function buildMenusWithMatchrule($ruleInfo, $authorizer_appid, $component_appid)
     {
-        $matchrule_id = $ruleInfo['id'];
-        unset($ruleInfo['id']);
+        $matchrule_id = $ruleInfo['_id'];
+        unset($ruleInfo['_id']);
         $menus = $this->getList4MatchRule($matchrule_id, $authorizer_appid, $component_appid);
 
         if (!empty($menus)) {
@@ -63,7 +55,7 @@ class Conditional extends \App\Common\Models\Weixin2\Menu\Conditional
     {
         $updateData = array();
         $updateData['menuid'] = $menuid;
-        $updateData['menu_time'] = date("Y-m-d H:i:s", $menu_time);
+        $updateData['menu_time'] = getCurrentTime($menu_time);
 
         $updateModel = $this->getModel()->where("matchrule", $matchrule_id);
         return $this->update($updateModel, $updateData);
@@ -91,9 +83,9 @@ class Conditional extends \App\Common\Models\Weixin2\Menu\Conditional
     // $tree = array();
     // foreach ($parent as $k => $l) {
     // $type = $l['type'];
-    // if (isset($menus[$l['id']])) {
-    // $l['sub_button'] = $this->buildTree($menus, $menus[$l['id']]);
-    // unset($l['type'], $l['key'], $l['url'], $l['media_id'], $l['appid'], $l['pagepath'], $l['id']);
+    // if (isset($menus[$l['_id']])) {
+    // $l['sub_button'] = $this->buildTree($menus, $menus[$l['_id']]);
+    // unset($l['type'], $l['key'], $l['url'], $l['media_id'], $l['appid'], $l['pagepath'], $l['_id']);
     // }
     // if (in_array($type, array(
     // 'media_id',
@@ -172,7 +164,7 @@ class Conditional extends \App\Common\Models\Weixin2\Menu\Conditional
     // unset($l['pagepath']);
     // }
     // }
-    // unset($l['parent'], $l['priority'], $l['id']);
+    // unset($l['parent'], $l['priority'], $l['_id']);
     // $tree[] = $l;
     // }
     // return $tree;
@@ -189,8 +181,8 @@ class Conditional extends \App\Common\Models\Weixin2\Menu\Conditional
     {
         $tree = array();
         foreach ($parent as $k => $l) {
-            if (isset($menus['p_' . $l['id']])) {
-                $l['sub_button'] = $this->buildTree($menus, $menus['p_' . $l['id']]);
+            if (isset($menus['p_' . $l['_id']])) {
+                $l['sub_button'] = $this->buildTree($menus, $menus['p_' . $l['_id']]);
             }
             $type = $l['type'];
             $item = array();

@@ -15,7 +15,7 @@ class Item extends \App\Common\Models\Banner\Item
     public function getFrontData(array $info)
     {
         $data = array();
-        $data['banner_id'] = $info['id'];
+        $data['banner_id'] = $info['_id'];
         $data['name'] = $info['name'];
         $data['desc'] = $info['desc'];
         $data['img_url'] = $info['img_url'];

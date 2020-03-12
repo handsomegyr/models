@@ -14,13 +14,11 @@ class UserShareHour extends \App\Common\Models\Weixin2\DataCube\UserShareHour
      */
     public function getInfoByRefDate($ref_date, $authorizer_appid, $component_appid)
     {
-        $info = $this->getModel()
-            ->where('ref_date', $ref_date)
-            ->where('authorizer_appid', $authorizer_appid)
-            ->where('component_appid', $component_appid)
-            ->first();
-        $info = $this->getReturnData($info);
-
+        $info = $this->findOne(array(
+            'ref_date' => $ref_date,
+            'authorizer_appid' => $authorizer_appid,
+            'component_appid' => $component_appid,
+        ));
         return $info;
     }
 
@@ -42,7 +40,7 @@ class UserShareHour extends \App\Common\Models\Weixin2\DataCube\UserShareHour
                 $data['cumulate_user'] = empty($item['cumulate_user']) ? 0 : $item['cumulate_user'];
 
                 if (!empty($info)) {
-                    $this->updateById($info['id'], $data);
+                    $this->update(array('_id' => $info['_id']), array('$set' => $data));
                 } else {
                     $data['authorizer_appid'] = $authorizer_appid;
                     $data['component_appid'] = $component_appid;

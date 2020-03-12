@@ -2,8 +2,6 @@
 
 namespace App\Weixin2\Models\Notification;
 
-use DB;
-
 class TaskLog extends \App\Common\Models\Weixin2\Notification\TaskLog
 {
 
@@ -49,10 +47,9 @@ class TaskLog extends \App\Common\Models\Weixin2\Notification\TaskLog
 
     public function getInfoByTaskId($notification_task_id)
     {
-        $info = $this->getModel()
-            ->where('notification_task_id', $notification_task_id)
-            ->first();
-        $info = $this->getReturnData($info);
+        $info = $this->findOne(array(
+            'notification_task_id' => $notification_task_id
+        ));
         return $info;
     }
 
@@ -63,11 +60,10 @@ class TaskLog extends \App\Common\Models\Weixin2\Notification\TaskLog
      */
     public function lockLog($id)
     {
-        $rule = $this->getModel()
-            ->where('id', $id)
-            ->lockForUpdate()
-            ->first();
-        $rule = $this->getReturnData($rule);
+        $rule = $this->findOne(array(
+            '_id' => $id,
+            '__FOR_UPDATE__' => true
+        ));
         return $rule;
     }
 
@@ -78,20 +74,11 @@ class TaskLog extends \App\Common\Models\Weixin2\Notification\TaskLog
      */
     public function getAndLockListByTaskId($notification_task_id, $push_status)
     {
-        $list = $this->getModel()
-            ->where('notification_task_id', $notification_task_id)
-            ->where('push_status', $push_status)
-            ->orderBy('id', 'asc')
-            ->lockForUpdate()
-            ->get();
-
-        $ret = array();
-        if (!empty($list)) {
-            foreach ($list as $item) {
-                $item = $this->getReturnData($item);
-                $ret[] = $item;
-            }
-        }
+        $ret = $this->findAll(array(
+            'notification_task_id' => $notification_task_id,
+            'push_status' => $push_status,
+            '__FOR_UPDATE__' => true
+        ), array('_id' => 1));
         return $ret;
     }
 
@@ -100,19 +87,10 @@ class TaskLog extends \App\Common\Models\Weixin2\Notification\TaskLog
      */
     public function getRetryList($retry_num, $push_status)
     {
-        $list = $this->getModel()
-            ->where('process_num', '<=', $retry_num)
-            ->where('push_status', $push_status)
-            ->orderBy('id', 'asc')
-            ->get();
-
-        $ret = array();
-        if (!empty($list)) {
-            foreach ($list as $item) {
-                $item = $this->getReturnData($item);
-                $ret[] = $item;
-            }
-        }
+        $ret = $this->findAll(array(
+            'process_num' => array('$lte' => $retry_num),
+            'push_status' => $push_status
+        ), array('_id' => 1));
         return $ret;
     }
 
@@ -120,7 +98,7 @@ class TaskLog extends \App\Common\Models\Weixin2\Notification\TaskLog
     {
         $updateData = array();
         $updateData['push_status'] = $status;
-        $updateData['push_time'] = date("Y-m-d H:i:s", $now);
+        $updateData['push_time'] = getCurrentTime($now);
         $updateData['is_ok'] = empty($is_ok) ? 0 : 1;
         if (empty($error)) {
             $updateData['error'] = "";
@@ -128,16 +106,8 @@ class TaskLog extends \App\Common\Models\Weixin2\Notification\TaskLog
             $updateData['error'] = \json_encode($error);
         }
 
-        if ($process_num != 0) {
-            if ($process_num > 0) {
-                $process_num = abs($process_num);
-                $updateData['process_num'] = DB::raw("process_num+{$process_num}");
-            } else {
-                $process_num = abs($process_num);
-                $updateData['process_num'] = DB::raw("process_num-{$process_num}");
-            }
-        }
-
-        return $this->updateById($id, $updateData);
+        $incData = array();
+        $incData['process_num'] = $process_num;
+        return $this->update(array('_id' => $id), array('$set' => $updateData, '$inc' => $incData));
     }
 }

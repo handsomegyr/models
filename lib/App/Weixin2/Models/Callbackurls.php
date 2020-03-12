@@ -2,32 +2,32 @@
 
 namespace App\Weixin2\Models;
 
-use Cache;
-
 class Callbackurls extends \App\Common\Models\Weixin2\Callbackurls
 {
     public function getValidCallbackUrlList($authorizer_appid, $component_appid, $is_get_latest = false)
     {
         $cacheKey = "callbackurls:authorizer_appid:{$authorizer_appid}:component_appid:{$component_appid}:callbackurllist";
-        if ($is_get_latest || !Cache::tags($this->cache_tag)->has($cacheKey)) {
-            $ret = $this->getModel()
-                ->where('authorizer_appid', $authorizer_appid)
-                ->where('component_appid', $component_appid)
-                ->where('is_valid', 1)
-                ->get();
+        $cacheKey = cacheKey(__FILE__, __CLASS__, $cacheKey);
+        $cache = $this->getDI()->get('cache');
+        $list = $cache->get($cacheKey);
+
+        if ($is_get_latest || empty($list)) {
+            $ret = $this->findAll(array(
+                'authorizer_appid' => $authorizer_appid,
+                'component_appid' => $component_appid,
+                'is_valid' => true
+            ));
             $list = array();
             if (!empty($ret)) {
                 foreach ($ret as $item) {
-                    $list[] = $item->url;
+                    $list[] = $item['url'];
                 }
             }
             if (!empty($list)) {
                 // 加缓存处理
                 $expire_time = 5 * 60;
-                Cache::tags($this->cache_tag)->put($cacheKey, $list, $expire_time);
+                $cache->save($cacheKey, $list, $expire_time);
             }
-        } else {
-            $list = Cache::tags($this->cache_tag)->get($cacheKey);
         }
         return $list;
     }
@@ -43,7 +43,8 @@ class Callbackurls extends \App\Common\Models\Weixin2\Callbackurls
             return true;
         }
         $pos = strpos($hostname, '.');
-        if ($pos === false) { } else {
+        if ($pos === false) {
+        } else {
             $hostname = substr($hostname, $pos + 1);
             if (in_array($hostname, $callbackUrls)) {
                 return true;

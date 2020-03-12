@@ -46,7 +46,7 @@ class User extends \App\Common\Models\Game\User
     public function updateScore($gameUserInfo, $score, $now)
     {
         $id = $gameUserInfo['_id'];
-        $max_score_time = date("Y-m-d H:i:s", $now);
+        $max_score_time = date('Y-m-d H:i:s', $now);
 
         $incData  = array();
         if (!empty($score)) {

@@ -7,15 +7,13 @@ class SubscribeLog extends \App\Common\Models\Weixin2\SubscribeMsg\SubscribeLog
 
     public function getInfoByOpenidAndTemplateIdAndScene($openid, $template_id, $scene, $authorizer_appid, $component_appid)
     {
-        $info = $this->getModel()
-            ->where('openid', $openid)
-            ->where('scene', $scene)
-            ->where('template_id', $template_id)
-            ->where('authorizer_appid', $authorizer_appid)
-            ->where('component_appid', $component_appid)
-            ->first();
-        $info = $this->getReturnData($info);
-
+        $info = $this->findOne(array(
+            'openid' => $openid,
+            'scene' => $scene,
+            'template_id' => $template_id,
+            'authorizer_appid' => $authorizer_appid,
+            'component_appid' => $component_appid
+        ));
         return $info;
     }
 

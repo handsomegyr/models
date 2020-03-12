@@ -2,25 +2,15 @@
 
 namespace App\Weixin2\Models\MassMsg;
 
-use Cache;
-
 class News extends \App\Common\Models\Weixin2\MassMsg\News
 {
     public function getListByMassMsgId($mass_msg_id, $authorizer_appid, $component_appid)
     {
-        $q = $this->getModel()->query();
-        $q->where('mass_msg_id', $mass_msg_id);
-        $q->where('authorizer_appid', $authorizer_appid);
-        $q->where('component_appid', $component_appid);
-        $q->orderby("index", "asc")->orderby("id", "desc");
-        $list = $q->get();
-        $ret = array();
-        if (!empty($list)) {
-            foreach ($list as $item) {
-                $item = $this->getReturnData($item);
-                $ret[] = $item;
-            }
-        }
+        $ret = $this->findAll(array(
+            'mass_msg_id' => $mass_msg_id,
+            'authorizer_appid' => $authorizer_appid,
+            'component_appid' => $component_appid
+        ), array('index' => 1, '_id' => -1));
         return $ret;
     }
 
@@ -28,7 +18,10 @@ class News extends \App\Common\Models\Weixin2\MassMsg\News
     {
         $articles = array();
         $cacheKey = "materialnews:mass_msg_id:{$mass_msg_id}:authorizer_appid:{$authorizer_appid}:component_appid:{$component_appid}";
-        if (true || !Cache::tags($this->cache_tag)->has($cacheKey)) {
+        $cacheKey = cacheKey(__FILE__, __CLASS__, $cacheKey);
+        $cache = $this->getDI()->get('cache');
+        $articles = $cache->get($cacheKey);
+        if (true || empty($articles)) {
             $rst = $this->getListByMassMsgId($mass_msg_id, $authorizer_appid, $component_appid);
             $articles = array();
             if (!empty($rst)) {
@@ -72,10 +65,8 @@ class News extends \App\Common\Models\Weixin2\MassMsg\News
             if (!empty($articles)) {
                 // 加缓存处理
                 $expire_time = 5 * 60; // 5分钟
-                Cache::tags($this->cache_tag)->put($cacheKey, $articles, $expire_time);
+                $cache->save($cacheKey, $articles, $expire_time);
             }
-        } else {
-            $articles = Cache::tags($this->cache_tag)->get($cacheKey);
         }
         return $articles;
     }
@@ -85,14 +76,14 @@ class News extends \App\Common\Models\Weixin2\MassMsg\News
         $updateData = array();
         $updateData['type'] = $res['type'];
         $updateData['media_id'] = $res['media_id'];
-        $updateData['media_time'] = date("Y-m-d H:i:s", $now);
-        return $this->updateById($id, $updateData);
+        $updateData['media_time'] = getCurrentTime($now);
+        return $this->update(array('_id' => $id), array('$set' => $updateData));
     }
 
     public function removeMediaId($id)
     {
         $updateData = array();
         $updateData['media_id'] = "";
-        return $this->updateById($id, $updateData);
+        return $this->update(array('_id' => $id), array('$set' => $updateData));
     }
 }

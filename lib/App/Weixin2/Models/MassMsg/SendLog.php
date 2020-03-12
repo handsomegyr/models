@@ -40,8 +40,8 @@ class SendLog extends \App\Common\Models\Weixin2\MassMsg\SendLog
             'mass_msg_content' => empty($mass_msg_content) ? "" : $mass_msg_content,
             'msg_id' => empty($msg_id) ? "" : $msg_id,
             'msg_data_id' => empty($msg_data_id) ? "" : $msg_data_id,
-            'msg_time' => date("Y-m-d H:i:s", $log_time),
-            'log_time' => date("Y-m-d H:i:s", $log_time),
+            'msg_time' => getCurrentTime($log_time),
+            'log_time' => getCurrentTime($log_time),
             'msg_status' => ""
         );
 
@@ -54,7 +54,7 @@ class SendLog extends \App\Common\Models\Weixin2\MassMsg\SendLog
         $updateData['upload_media_id'] = $res['media_id'];
         $updateData['upload_media_created_at'] = $res['created_at'];
         $updateData['upload_media_type'] = $res['type'];
-        return $this->updateById($id, $updateData);
+        return $this->update(array('_id' => $id), array('$set' => $updateData));
     }
 
     public function recordMsgId($id, $res, $now)
@@ -64,15 +64,15 @@ class SendLog extends \App\Common\Models\Weixin2\MassMsg\SendLog
         if (!empty($res['msg_data_id'])) {
             $updateData['msg_data_id'] = $res['msg_data_id'];
         }
-        $updateData['msg_time'] = date("Y-m-d H:i:s", $now);
-        return $this->updateById($id, $updateData);
+        $updateData['msg_time'] = getCurrentTime($now);
+        return $this->update(array('_id' => $id), array('$set' => $updateData));
     }
 
     public function recordMsgStatus($id, $res)
     {
         $updateData = array();
         $updateData['msg_status'] = $res['msg_status'];
-        return $this->updateById($id, $updateData);
+        return $this->update(array('_id' => $id), array('$set' => $updateData));
     }
 
     public function removeMsgId($id)
@@ -80,6 +80,6 @@ class SendLog extends \App\Common\Models\Weixin2\MassMsg\SendLog
         $updateData = array();
         $updateData['msg_id'] = "";
         $updateData['msg_data_id'] = "";
-        return $this->updateById($id, $updateData);
+        return $this->update(array('_id' => $id), array('$set' => $updateData));
     }
 }

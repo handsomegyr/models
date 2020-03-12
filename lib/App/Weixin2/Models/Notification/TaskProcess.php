@@ -22,10 +22,9 @@ class TaskProcess extends \App\Common\Models\Weixin2\Notification\TaskProcess
 
     public function getInfoByTaskId($notification_task_id)
     {
-        $info = $this->getModel()
-            ->where('notification_task_id', $notification_task_id)
-            ->first();
-        $info = $this->getReturnData($info);
+        $info = $this->findOne(array(
+            'notification_task_id' => $notification_task_id
+        ));
         return $info;
     }
 
@@ -36,15 +35,21 @@ class TaskProcess extends \App\Common\Models\Weixin2\Notification\TaskProcess
      */
     public function getAndLockOneTask4ByPushStatus($push_status, $now)
     {
-        $task = $this->getModel()
-            ->where('push_time', '<=', date("Y-m-d H:i:s", $now))
-            ->where('push_status', $push_status)
-            ->orderBy('push_time', 'asc')
-            ->orderBy('id', 'asc')
-            ->lockForUpdate()
-            ->first();
-        $task = $this->getReturnData($task);
-        return $task;
+        $query = array(
+            'push_time' => array('$lte' => getCurrentTime($now)),
+            'push_status' => $push_status,
+        );
+        $sort  = array('push_time' => 1, '_id' => 1);
+        $list = $this->find($query, $sort, 0, 1);
+        if (empty($list['datas'])) {
+            return null;
+        } else {
+            $task = $this->findOne(array(
+                '_id' => $list['datas'][0]['_id'],
+                '__FOR_UPDATE__' => true
+            ));
+            return $task;
+        }
     }
 
     /**
@@ -62,7 +67,7 @@ class TaskProcess extends \App\Common\Models\Weixin2\Notification\TaskProcess
         $data['name'] = $name;
         $data['notification_task_id'] = $notification_task_id;
         $data['push_status'] = self::UNPUSH;
-        $data['push_time'] = date("Y-m-d H:i:s", $now);
+        $data['push_time'] = getCurrentTime($now);
         $data['task_process_total'] = $task_process_total;
         $data['processed_num'] = 0;
         $data['success_num'] = 0;
@@ -73,37 +78,35 @@ class TaskProcess extends \App\Common\Models\Weixin2\Notification\TaskProcess
     {
         $updateData = array();
         $updateData['push_status'] = $status;
-        $updateData['push_time'] = date("Y-m-d H:i:s", $now);
-        return $this->updateById($id, $updateData);
+        $updateData['push_time'] = getCurrentTime($now);
+        return $this->update(array('_id' => $id), array('$set' => $updateData));
     }
 
     public function updateTaskProcessTotal($id, $task_process_total)
     {
         $updateData = array();
         $updateData['task_process_total'] = $task_process_total;
-        return $this->updateById($id, $updateData);
+        return $this->update(array('_id' => $id), array('$set' => $updateData));
     }
 
     public function incProcessedNum($id, $processed_num, $is_success = false)
     {
         $updateData = array();
         $processed_num = abs($processed_num);
-        $updateData['processed_num'] = DB::raw("processed_num+{$processed_num}");
+        $updateData['processed_num'] = $processed_num;
         // 如果成功的话
         if ($is_success) {
-            $updateData['success_num'] = DB::raw("success_num+{$processed_num}");
+            $updateData['success_num'] = $processed_num;
         }
-
-        $affectRows = $this->updateById($id, $updateData);
+        $affectRows = $this->update(array('_id' => $id), array('$inc' => $updateData));
         return $affectRows;
     }
 
     public function incSuccessNum($id, $success_num)
     {
         $updateData = array();
-        $updateData['success_num'] = DB::raw("success_num+{$success_num}");
-
-        $affectRows = $this->updateById($id, $updateData);
+        $updateData['success_num'] = $success_num;
+        $affectRows = $this->update(array('_id' => $id), array('$inc' => $updateData));
         return $affectRows;
     }
 }

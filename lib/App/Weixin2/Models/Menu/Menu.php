@@ -7,18 +7,10 @@ class Menu extends \App\Common\Models\Weixin2\Menu\Menu
 
     public function getMenus($authorizer_appid, $component_appid)
     {
-        $q = $this->getModel()->query();
-        $q->where('authorizer_appid', $authorizer_appid);
-        $q->where('component_appid', $component_appid);
-        $q->orderby("priority", "asc")->orderby("id", "asc");
-        $list = $q->get();
-        $ret = array();
-        if (!empty($list)) {
-            foreach ($list as $item) {
-                $item = $this->getReturnData($item);
-                $ret[] = $item;
-            }
-        }
+        $ret = $this->findAll(array(
+            'authorizer_appid' => $authorizer_appid,
+            'component_appid' => $component_appid
+        ), array('priority' => 1, '_id' => 1));
         return $ret;
     }
 
@@ -60,8 +52,8 @@ class Menu extends \App\Common\Models\Weixin2\Menu\Menu
     {
         $tree = array();
         foreach ($parent as $k => $l) {
-            if (isset($menus['p_' . $l['id']])) {
-                $l['sub_button'] = $this->buildTree($menus, $menus['p_' . $l['id']]);
+            if (isset($menus['p_' . $l['_id']])) {
+                $l['sub_button'] = $this->buildTree($menus, $menus['p_' . $l['_id']]);
             }
             $type = $l['type'];
             $item = array();

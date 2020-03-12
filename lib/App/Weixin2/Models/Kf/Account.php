@@ -14,13 +14,11 @@ class Account extends \App\Common\Models\Weixin2\Kf\Account
      */
     public function getInfoByKfAccount($kf_account, $authorizer_appid, $component_appid)
     {
-        $info = $this->getModel()
-            ->where('kf_account', $kf_account)
-            ->where('authorizer_appid', $authorizer_appid)
-            ->where('component_appid', $component_appid)
-            ->first();
-        $info = $this->getReturnData($info);
-
+        $info = $this->findOne(array(
+            'kf_account' => $kf_account,
+            'authorizer_appid' => $authorizer_appid,
+            'component_appid' => $component_appid
+        ));
         return $info;
     }
 
@@ -28,15 +26,15 @@ class Account extends \App\Common\Models\Weixin2\Kf\Account
     {
         $updateData = array();
         $updateData['is_created'] = 1;
-        $updateData['kf_time'] = date("Y-m-d H:i:s", $now);
-        return $this->updateById($id, $updateData);
+        $updateData['kf_time'] = getCurrentTime($now);
+        return $this->update(array('_id' => $id), array('$set' => $updateData));
     }
 
     public function removeCreatedStatus($id, $now)
     {
         $updateData = array();
         $updateData['is_created'] = 0;
-        return $this->updateById($id, $updateData);
+        return $this->update(array('_id' => $id), array('$set' => $updateData));
     }
 
     public function syncKfAccountList($authorizer_appid, $component_appid, $res, $now)
@@ -60,16 +58,16 @@ class Account extends \App\Common\Models\Weixin2\Kf\Account
                     $data['invite_wx'] = $item['invite_wx'];
                 }
                 // if (! empty($item['invite_expire_time'])) {
-                $data['invite_expire_time'] = empty($item['invite_expire_time']) ? null : date("Y-m-d H:i:s", $item['invite_expire_time']);
+                $data['invite_expire_time'] = empty($item['invite_expire_time']) ? null : getCurrentTime($item['invite_expire_time']);
                 // }
                 // if (! empty($item['invite_status'])) {
                 $data['invite_status'] = empty($item['invite_status']) ? "" : $item['invite_status'];
                 // }
 
                 $data['is_created'] = 1;
-                $data['kf_time'] = date("Y-m-d H:i:s", $now);
+                $data['kf_time'] = getCurrentTime($now);
                 if (!empty($info)) {
-                    $this->updateById($info['id'], $data);
+                    $this->update(array('_id' => $info['_id']), array('$set' => $data));
                 } else {
                     $data['authorizer_appid'] = $authorizer_appid;
                     $data['component_appid'] = $component_appid;
@@ -97,9 +95,9 @@ class Account extends \App\Common\Models\Weixin2\Kf\Account
                 $data['accepted_case'] = $item['accepted_case'];
 
                 $data['is_created'] = 1;
-                $data['kf_time'] = date("Y-m-d H:i:s", $now);
+                $data['kf_time'] = getCurrentTime($now);
                 if (!empty($info)) {
-                    $this->updateById($info['id'], $data);
+                    $this->update(array('_id' => $info['_id']), array('$set' => $data));
                 } else {
                     $data['authorizer_appid'] = $authorizer_appid;
                     $data['component_appid'] = $component_appid;

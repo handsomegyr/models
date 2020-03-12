@@ -7,13 +7,12 @@ class KeywordToService extends \App\Common\Models\Weixin2\Keyword\KeywordToServi
 
     public function getServiceIdsByKeywordId($keyword_id)
     {
-        $q = $this->getModel()->query();
-        $q->where('keyword_id', $keyword_id);
-        $list = $q->get();
+        $list = $this->findAll(array(
+            'keyword_id' => $keyword_id
+        ));
         $ret = array();
         if (!empty($list)) {
             foreach ($list as $item) {
-                $item = $this->getReturnData($item);
                 $ret[] = $item['service_id'];
             }
         }
@@ -22,13 +21,13 @@ class KeywordToService extends \App\Common\Models\Weixin2\Keyword\KeywordToServi
 
     public function getKeywordIdsByServiceId($service_id)
     {
-        $q = $this->getModel()->query();
-        $q->where('service_id', $service_id);
-        $list = $q->get();
+        $list = $this->findAll(array(
+            'service_id' => $service_id
+        ));
+
         $ret = array();
         if (!empty($list)) {
             foreach ($list as $item) {
-                $item = $this->getReturnData($item);
                 $ret[] = $item['keyword_id'];
             }
         }

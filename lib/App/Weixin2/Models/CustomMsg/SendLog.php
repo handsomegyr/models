@@ -35,7 +35,7 @@ class SendLog extends \App\Common\Models\Weixin2\CustomMsg\SendLog
             'ToUserName' => empty($ToUserName) ? "" : $ToUserName,
             'FromUserName' => empty($FromUserName) ? "" : $FromUserName,
             'custom_msg_content' => empty($custom_msg_content) ? "" : $custom_msg_content,
-            'log_time' => date("Y-m-d H:i:s", $log_time)
+            'log_time' => getCurrentTime($log_time)
         );
         return $this->insert($datas);
     }

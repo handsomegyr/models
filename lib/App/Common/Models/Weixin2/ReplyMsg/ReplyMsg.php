@@ -17,7 +17,7 @@ class ReplyMsg extends Base
      *
      * @return array
      */
-    public function getAllByType($msg_type, $field = "id")
+    public function getAllByType($msg_type, $field = "_id")
     {
         if (!empty($msg_type)) {
             $query = array('msg_type' => $msg_type);

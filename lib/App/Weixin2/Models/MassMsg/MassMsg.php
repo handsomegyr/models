@@ -11,7 +11,7 @@ class MassMsg extends \App\Common\Models\Weixin2\MassMsg\MassMsg
         $updateData['upload_media_id'] = $res['media_id'];
         $updateData['upload_media_created_at'] = $res['created_at'];
         $updateData['upload_media_type'] = $res['type'];
-        return $this->updateById($id, $updateData);
+        return $this->update(array('_id' => $id), array('$set' => $updateData));
     }
 
     public function recordMsgId($id, $res, $now)
@@ -21,15 +21,15 @@ class MassMsg extends \App\Common\Models\Weixin2\MassMsg\MassMsg
         if (!empty($res['msg_data_id'])) {
             $updateData['msg_data_id'] = $res['msg_data_id'];
         }
-        $updateData['msg_time'] = date("Y-m-d H:i:s", $now);
-        return $this->updateById($id, $updateData);
+        $updateData['msg_time'] = getCurrentTime($now);
+        return $this->update(array('_id' => $id), array('$set' => $updateData));
     }
 
     public function recordMsgStatus($id, $res)
     {
         $updateData = array();
         $updateData['msg_status'] = $res['msg_status'];
-        return $this->updateById($id, $updateData);
+        return $this->update(array('_id' => $id), array('$set' => $updateData));
     }
 
     public function removeMsgId($id)
@@ -37,6 +37,6 @@ class MassMsg extends \App\Common\Models\Weixin2\MassMsg\MassMsg
         $updateData = array();
         $updateData['msg_id'] = "";
         $updateData['msg_data_id'] = "";
-        return $this->updateById($id, $updateData);
+        return $this->update(array('_id' => $id), array('$set' => $updateData));
     }
 }

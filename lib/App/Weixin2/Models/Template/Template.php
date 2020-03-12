@@ -14,13 +14,11 @@ class Template extends \App\Common\Models\Weixin2\Template\Template
      */
     public function getInfoByTemplateId($template_id, $authorizer_appid, $component_appid)
     {
-        $info = $this->getModel()
-            ->where('template_id', $template_id)
-            ->where('authorizer_appid', $authorizer_appid)
-            ->where('component_appid', $component_appid)
-            ->first();
-        $info = $this->getReturnData($info);
-
+        $info = $this->findOne(array(
+            'template_id' => $template_id,
+            'authorizer_appid' => $authorizer_appid,
+            'component_appid' => $component_appid
+        ));
         return $info;
     }
 
@@ -28,15 +26,15 @@ class Template extends \App\Common\Models\Weixin2\Template\Template
     {
         $updateData = array();
         $updateData['is_created'] = 1;
-        $updateData['template_time'] = date("Y-m-d H:i:s", $now);
-        return $this->updateById($id, $updateData);
+        $updateData['template_time'] = getCurrentTime($now);
+        return $this->update(array('_id' => $id), array('$set' => $updateData));
     }
 
     public function removeCreatedStatus($id, $now)
     {
         $updateData = array();
         $updateData['is_created'] = 0;
-        return $this->updateById($id, $updateData);
+        return $this->update(array('_id' => $id), array('$set' => $updateData));
     }
 
     public function syncTemplateList($authorizer_appid, $component_appid, $res, $now)
@@ -57,10 +55,10 @@ class Template extends \App\Common\Models\Weixin2\Template\Template
                 $data['content'] = $item['content'];
                 $data['example'] = $item['example'];
                 $data['is_created'] = 1;
-                $data['template_time'] = date("Y-m-d H:i:s", $now);
+                $data['template_time'] = getCurrentTime($now);
 
                 if (!empty($info)) {
-                    $this->updateById($info['id'], $data);
+                    $this->update(array('_id' => $info['_id']), array('$set' => $data));
                 } else {
                     $data['authorizer_appid'] = $authorizer_appid;
                     $data['component_appid'] = $component_appid;

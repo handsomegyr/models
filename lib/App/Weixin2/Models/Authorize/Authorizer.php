@@ -2,9 +2,6 @@
 
 namespace App\Weixin2\Models\Authorize;
 
-use Cache;
-use App\Services\Lock\MemcacheLock;
-
 class Authorizer extends \App\Common\Models\Weixin2\Authorize\Authorizer
 {
 
@@ -16,19 +13,19 @@ class Authorizer extends \App\Common\Models\Weixin2\Authorize\Authorizer
     public function getInfoByAppid($component_appid, $appid, $is_get_latest = false)
     {
         $cacheKey = $this->getCacheKey4Appid($component_appid, $appid);
-        if ($is_get_latest || !Cache::tags($this->cache_tag)->has($cacheKey)) {
-            $application = $this->getModel()
-                ->where('appid', $appid)
-                ->where('component_appid', $component_appid)
-                ->first();
-            $application = $this->getReturnData($application);
+        $cache = $this->getDI()->get('cache');
+        $application = $cache->get($cacheKey);
+
+        if ($is_get_latest || empty($application)) {
+            $application = $this->findOne(array(
+                'appid' => $appid,
+                'component_appid' => $component_appid
+            ));
             if (!empty($application)) {
                 // 加缓存处理
                 $expire_time = 5 * 60;
-                Cache::tags($this->cache_tag)->put($cacheKey, $application, $expire_time);
+                $cache->save($cacheKey, $application, $expire_time);
             }
-        } else {
-            $application = Cache::tags($this->cache_tag)->get($cacheKey);
         }
         return $application;
     }
@@ -56,7 +53,7 @@ class Authorizer extends \App\Common\Models\Weixin2\Authorize\Authorizer
     public function createAndUpdateAuthorizer($component_appid, $appid, $access_token, $refresh_token, $expires_in, $func_info, $memo = array())
     {
         $lockKey = $this->getCacheKey4Appid($component_appid, $appid);
-        $objLock = new MemcacheLock($lockKey, false);
+        $objLock = new \iLock($lockKey);
         if (!$objLock->lock()) {
             $token = $this->getInfoByAppid($component_appid, $appid);
             if (empty($token)) {
@@ -65,7 +62,7 @@ class Authorizer extends \App\Common\Models\Weixin2\Authorize\Authorizer
                     'component_appid' => $component_appid,
                     'appid' => $appid,
                     'access_token' => $access_token,
-                    'access_token_expire' => date("Y-m-d H:i:s", time() + $expires_in),
+                    'access_token_expire' => getCurrentTime(time() + $expires_in),
                     'refresh_token' => $refresh_token,
                     'func_info' => \json_encode($func_info),
                     'memo' => $memo
@@ -73,7 +70,7 @@ class Authorizer extends \App\Common\Models\Weixin2\Authorize\Authorizer
                 return $this->insert($datas);
             } else {
                 $memo = array_merge($token['memo'], $memo);
-                return $this->updateAccessToken($token['id'], $access_token, $refresh_token, $expires_in, $func_info, $memo);
+                return $this->updateAccessToken($token['_id'], $access_token, $refresh_token, $expires_in, $func_info, $memo);
             }
         }
     }
@@ -83,19 +80,20 @@ class Authorizer extends \App\Common\Models\Weixin2\Authorize\Authorizer
         $updateData = array();
         $updateData['access_token'] = $access_token;
         $updateData['refresh_token'] = $refresh_token;
-        $updateData['access_token_expire'] = date("Y-m-d H:i:s", time() + $expires_in);
+        $updateData['access_token_expire'] = getCurrentTime(time() + $expires_in);
         if (!empty($func_info)) {
             $updateData['func_info'] = \json_encode($func_info);
         }
         if (!empty($memo)) {
             $updateData["memo"] = $memo;
         }
-        $affectRows = $this->updateById($id, $updateData);
+        $affectRows = $this->update(array('_id' => $id), array('$set' => $updateData));
         // 重新获取数据
         $newInfo = $this->getInfoById($id);
         if (!empty($newInfo)) {
             $expire_time = 5 * 60;
-            Cache::tags($this->cache_tag)->put($this->getCacheKey4Appid($newInfo['component_appid'], $newInfo['appid']), $newInfo, $expire_time);
+            $cache = $this->getDI()->get('cache');
+            $cache->save($this->getCacheKey4Appid($newInfo['component_appid'], $newInfo['appid']), $newInfo, $expire_time);
         }
         return $newInfo;
     }
@@ -104,16 +102,17 @@ class Authorizer extends \App\Common\Models\Weixin2\Authorize\Authorizer
     {
         $updateData = array();
         $updateData['jsapi_ticket'] = $jsapi_ticket;
-        $updateData['jsapi_ticket_expire'] = date("Y-m-d H:i:s", time() + $expires_in);
+        $updateData['jsapi_ticket_expire'] =getCurrentTime(time() + $expires_in);
         if (!empty($memo)) {
             $updateData["memo"] = $memo;
         }
-        $affectRows = $this->updateById($id, $updateData);
+        $affectRows = $this->update(array('_id' => $id), array('$set' => $updateData));
         // 重新获取数据
         $newInfo = $this->getInfoById($id);
         if (!empty($newInfo)) {
             $expire_time = 5 * 60;
-            Cache::tags($this->cache_tag)->put($this->getCacheKey4Appid($newInfo['component_appid'], $newInfo['appid']), $newInfo, $expire_time);
+            $cache = $this->getDI()->get('cache');
+            $cache->save($this->getCacheKey4Appid($newInfo['component_appid'], $newInfo['appid']), $newInfo, $expire_time);
         }
 
         return $newInfo;
@@ -123,16 +122,17 @@ class Authorizer extends \App\Common\Models\Weixin2\Authorize\Authorizer
     {
         $updateData = array();
         $updateData['wx_card_api_ticket'] = $wx_card_api_ticket;
-        $updateData['wx_card_api_ticket_expire'] = date("Y-m-d H:i:s", time() + $expires_in);
+        $updateData['wx_card_api_ticket_expire'] = getCurrentTime(time() + $expires_in);
         if (!empty($memo)) {
             $updateData["memo"] = $memo;
         }
-        $affectRows = $this->updateById($id, $updateData);
+        $affectRows = $this->update(array('_id' => $id), array('$set' => $updateData));
         // 重新获取数据
         $newInfo = $this->getInfoById($id);
         if (!empty($newInfo)) {
             $expire_time = 5 * 60;
-            Cache::tags($this->cache_tag)->put($this->getCacheKey4Appid($newInfo['component_appid'], $newInfo['appid']), $newInfo, $expire_time);
+            $cache = $this->getDI()->get('cache');
+            $cache->save($this->getCacheKey4Appid($newInfo['component_appid'], $newInfo['appid']), $newInfo, $expire_time);
         }
 
         return $newInfo;
@@ -151,7 +151,7 @@ class Authorizer extends \App\Common\Models\Weixin2\Authorize\Authorizer
         $updateData['qrcode_url'] = $res['authorizer_info']['qrcode_url'];
         // $updateData['principal_name'] = $res['authorizer_info']['principal_name'];
         // $updateData['signature'] = $res['authorizer_info']['signature'];
-        $affectRows = $this->updateById($id, $updateData);
+        $affectRows = $this->update(array('_id' => $id), array('$set' => $updateData));
         return $affectRows;
     }
 
@@ -163,6 +163,7 @@ class Authorizer extends \App\Common\Models\Weixin2\Authorize\Authorizer
     private function getCacheKey4Appid($component_appid, $appid)
     {
         $cacheKey = "authorizer:component_appid:{$component_appid}:appid:{$appid}";
+        $cacheKey = cacheKey(__FILE__, __CLASS__, $cacheKey);
         return $cacheKey;
     }
 
@@ -170,8 +171,8 @@ class Authorizer extends \App\Common\Models\Weixin2\Authorize\Authorizer
     {
         if (empty($token['access_token_expire']) || strtotime($token['access_token_expire']) <= time()) {
             if (!empty($token['component_appid']) && !empty($token['refresh_token']) && !empty($token['appid'])) {
-                $lockKey = $this->cacheKey(__FILE__, __CLASS__, __METHOD__, __LINE__, $token['component_appid'], $token['appid']);
-                $objLock = new MemcacheLock($lockKey, false);
+                $lockKey = cacheKey(__FILE__, __CLASS__, __METHOD__, __LINE__, $token['component_appid'], $token['appid']);
+                $objLock = new \iLock($lockKey);
                 if (!$objLock->lock()) {
                     $modelComponent = new \App\Components\Weixinopen\Services\Models\Component\ComponentModel();
                     $componentInfo = $modelComponent->getInfoByAppId($token['component_appid'], true);
@@ -179,7 +180,7 @@ class Authorizer extends \App\Common\Models\Weixin2\Authorize\Authorizer
                         $objToken = new \Weixin\Component($componentInfo['appid'], $componentInfo['appsecret']);
                         $objToken->setAccessToken($componentInfo['access_token']);
                         $arrToken = $objToken->apiAuthorizerToken($token['appid'], $token['refresh_token']);
-                        $token = $this->updateAccessToken($token['id'], $arrToken['authorizer_access_token'], $arrToken['authorizer_refresh_token'], $arrToken['expires_in'], null);
+                        $token = $this->updateAccessToken($token['_id'], $arrToken['authorizer_access_token'], $arrToken['authorizer_refresh_token'], $arrToken['expires_in'], null);
                     }
                 }
             }
@@ -194,15 +195,15 @@ class Authorizer extends \App\Common\Models\Weixin2\Authorize\Authorizer
         // 获取jsapi_ticket
         if (empty($token['jsapi_ticket_expire']) || strtotime($token['jsapi_ticket_expire']) <= time()) {
             if (!empty($token['access_token'])) {
-                $lockKey = $this->cacheKey(__FILE__, __CLASS__, __METHOD__, __LINE__, $token['appid']);
-                $objLock = new MemcacheLock($lockKey, false);
+                $lockKey = cacheKey(__FILE__, __CLASS__, __METHOD__, __LINE__, $token['appid']);
+                $objLock = new \iLock($lockKey);
                 if (!$objLock->lock()) {
                     // 获取jsapi_ticket
                     $objJssdk = new \Weixin\Jssdk();
                     $objJssdk->setAppId($token['appid']);
                     $objJssdk->setAccessToken($token['access_token']);
                     $arrJsApiTicket = $objJssdk->getJsApiTicket();
-                    $token = $this->updateJsapiTicket($token['id'], $arrJsApiTicket['ticket'], $arrJsApiTicket['expires_in']);
+                    $token = $this->updateJsapiTicket($token['_id'], $arrJsApiTicket['ticket'], $arrJsApiTicket['expires_in']);
                 }
             }
         }
@@ -212,14 +213,14 @@ class Authorizer extends \App\Common\Models\Weixin2\Authorize\Authorizer
         if (!empty($token['is_weixin_card'])) {
             if (empty($token['wx_card_api_ticket_expire']) || strtotime($token['wx_card_api_ticket_expire']) <= time()) {
                 if (!empty($token['access_token'])) {
-                    $lockKey = $this->cacheKey(__FILE__, __CLASS__, __METHOD__, __LINE__, $token['appid']);
-                    $objLock = new MemcacheLock($lockKey, false);
+                    $lockKey = cacheKey(__FILE__, __CLASS__, __METHOD__, __LINE__, $token['appid']);
+                    $objLock = new \iLock($lockKey);
                     if (!$objLock->lock()) {
                         // 获取微信卡券的api_ticket
                         $weixin = new \Weixin\Client();
                         $weixin->setAccessToken($token['access_token']);
                         $ret = $weixin->getCardManager()->getApiTicket();
-                        $token = $this->updateWxcardApiTicket($token['id'], $ret['ticket'], $ret['expires_in']);
+                        $token = $this->updateWxcardApiTicket($token['_id'], $ret['ticket'], $ret['expires_in']);
                     }
                 }
             }
@@ -228,15 +229,4 @@ class Authorizer extends \App\Common\Models\Weixin2\Authorize\Authorizer
     }
 
     protected $_expire = 0;
-
-    /**
-     * 范围cache key字符串
-     *
-     * @return string
-     */
-    protected function cacheKey()
-    {
-        $args = func_get_args();
-        return md5(serialize($args));
-    }
 }

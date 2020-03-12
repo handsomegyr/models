@@ -21,13 +21,11 @@ class User extends \App\Common\Models\Weixin2\User\User
      */
     public function getInfoByOpenId($openid, $authorizer_appid, $component_appid)
     {
-        $info = $this->getModel()
-            ->where('openid', $openid)
-            ->where('authorizer_appid', $authorizer_appid)
-            ->where('component_appid', $component_appid)
-            ->first();
-        $info = $this->getReturnData($info);
-
+        $info = $this->findOne(array(
+            'openid' => $openid,
+            'authorizer_appid' => $authorizer_appid,
+            'component_appid' => $component_appid
+        ));
         return $info;
     }
 
@@ -44,7 +42,7 @@ class User extends \App\Common\Models\Weixin2\User\User
         $checkInfo = $this->getInfoByOpenId($openid, $authorizer_appid, $component_appid);
         $data = $this->getPrepareData($userInfo, $authorizer_appid, $component_appid, $checkInfo);
         if (!empty($checkInfo)) {
-            $affectRows = $this->updatebyId($checkInfo['id'], $data);
+            $affectRows = $this->update(array('_id' => $checkInfo['_id']), array('$set' => $data));
             return $affectRows;
         } else {
             return $this->insert($data);
@@ -60,14 +58,12 @@ class User extends \App\Common\Models\Weixin2\User\User
      */
     public function getUserInfoByIdLastWeek($openid, $authorizer_appid, $component_appid, $now)
     {
-        $info = $this->getModel()
-            ->where('openid', $openid)
-            ->where('authorizer_appid', $authorizer_appid)
-            ->where('component_appid', $component_appid)
-            ->where('updated_at', ">", date("Y-m-d H:i:s", $now - 7 * 86400))
-            ->first();
-        $info = $this->getReturnData($info);
-
+        $info = $this->findOne(array(
+            'openid' => $openid,
+            'authorizer_appid' => $authorizer_appid,
+            'component_appid' =>  $component_appid,
+            'updated_at' => array('$gt' => getCurrentTime($now - 7 * 86400))
+        ));
         return $info;
     }
 
@@ -91,7 +87,7 @@ class User extends \App\Common\Models\Weixin2\User\User
             $data = $this->getPrepareData($userInfo, $authorizer_appid, $component_appid, $checkInfo);
 
             if (!empty($checkInfo)) {
-                $this->updateById($checkInfo['id'], $data);
+                $affectRows = $this->update(array('_id' => $checkInfo['_id']), array('$set' => $data));
                 return $userInfo;
             } else {
                 $checkInfo = $this->insert($data);
@@ -105,7 +101,7 @@ class User extends \App\Common\Models\Weixin2\User\User
         $authorizer_appid = $checkInfo['authorizer_appid'];
         $component_appid = $checkInfo['component_appid'];
         $data = $this->getPrepareData($userInfo, $authorizer_appid, $component_appid, $checkInfo);
-        return $this->updateById($checkInfo['id'], $data);
+        return $this->update(array('_id' => $checkInfo['_id']), array('$set' => $data));
     }
 
     private function getPrepareData($userInfo, $authorizer_appid, $component_appid, $checkInfo)
@@ -126,7 +122,7 @@ class User extends \App\Common\Models\Weixin2\User\User
             $data['groupid'] = isset($userInfo['groupid']) ? $userInfo['groupid'] : '';
             $data['tagid_list'] = isset($userInfo['tagid_list']) ? \json_encode($userInfo['tagid_list']) : '';
             $data['subscribe'] = isset($userInfo['subscribe']) ? intval($userInfo['subscribe']) : 0;
-            $data['subscribe_time'] = isset($userInfo['subscribe_time']) ? date("Y-m-d H:i:s", $userInfo['subscribe_time']) : '';
+            $data['subscribe_time'] = isset($userInfo['subscribe_time']) ? getCurrentTime($userInfo['subscribe_time']) : '';
             $data['unionid'] = isset($userInfo['unionid']) ? $userInfo['unionid'] : '';
             $data['privilege'] = isset($userInfo['privilege']) ? \json_encode($userInfo['privilege']) : '';
             $data['access_token'] = isset($userInfo['access_token']) ? \json_encode($userInfo['access_token']) : '';
@@ -175,7 +171,7 @@ class User extends \App\Common\Models\Weixin2\User\User
                 $data['subscribe'] = intval($userInfo['subscribe']);
             }
             if (isset($userInfo['subscribe_time'])) {
-                $data['subscribe_time'] = date("Y-m-d H:i:s", $userInfo['subscribe_time']);
+                $data['subscribe_time'] = getCurrentTime($userInfo['subscribe_time']);
             }
             if (isset($userInfo['unionid'])) {
                 $data['unionid'] = $userInfo['unionid'];

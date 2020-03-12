@@ -23,7 +23,7 @@ class ConditionalMatchrule extends \App\Common\Models\Weixin2\Menu\ConditionalMa
         if (empty($plainText)) {
             return false;
         }
-        $ruleInfo['id'] = $matchRule['id'];
+        $ruleInfo['_id'] = $matchRule['_id'];
         return $ruleInfo;
     }
 }

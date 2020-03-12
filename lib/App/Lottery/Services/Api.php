@@ -105,7 +105,7 @@ class Api
                     $rule_id = empty($invalidExchange['rule_id']) ? '' : $invalidExchange['rule_id'];
                     $invalidExchange['exchange_id'] = $invalidExchange['_id'];
                     $ret['result'] = $invalidExchange;
-                    $this->modelRecord->record($activity_id, $identity_id, $source, 1, "未领取或者未激活的奖品再次中奖！", $rule_id, $invalidExchange['id']);
+                    $this->modelRecord->record($activity_id, $identity_id, $source, 1, "未领取或者未激活的奖品再次中奖！", $rule_id, $invalidExchange['_id']);
                     return $ret;
                 }
             }
@@ -198,7 +198,7 @@ class Api
                     }
                 }
                 $this->modelExchange->commit();
-                $this->modelRecord->record($activity_id, $identity_id, $source, 1, "恭喜您中奖了！", $rule_id, $exchangeInfo['id']);
+                $this->modelRecord->record($activity_id, $identity_id, $source, 1, "恭喜您中奖了！", $rule_id, $exchangeInfo['_id']);
                 $ret['result'] = $exchangeInfo;
             } catch (\Exception $e) {
                 $this->modelExchange->rollback();

@@ -12,8 +12,8 @@ class Material extends \App\Common\Models\Weixin2\Material\Material
         if (!empty($res['url'])) {
             $updateData['url'] = $res['url'];
         }
-        $updateData['media_time'] = date("Y-m-d H:i:s", $now);
-        return $this->updateById($id, $updateData);
+        $updateData['media_time'] = getCurrentTime($now);
+        return $this->update(array('_id' => $id), array('$set' => $updateData));
     }
 
     public function removeMediaId($id, $res, $now)
@@ -21,7 +21,7 @@ class Material extends \App\Common\Models\Weixin2\Material\Material
         $updateData = array();
         $updateData['media_id'] = "";
         $updateData['url'] = "";
-        $updateData['delete_media_time'] = date("Y-m-d H:i:s", $now);
-        return $this->updateById($id, $updateData);
+        $updateData['delete_media_time'] = getCurrentTime($now);
+        return $this->update(array('_id' => $id), array('$set' => $updateData));
     }
 }

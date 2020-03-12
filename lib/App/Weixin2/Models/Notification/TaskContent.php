@@ -12,19 +12,10 @@ class TaskContent extends \App\Common\Models\Weixin2\Notification\TaskContent
      */
     public function getAndLockListByTaskId($notification_task_id)
     {
-        $list = $this->getModel()
-            ->where('notification_task_id', $notification_task_id)
-            ->orderBy('id', 'asc')
-            ->lockForUpdate()
-            ->get();
-
-        $ret = array();
-        if (!empty($list)) {
-            foreach ($list as $item) {
-                $item = $this->getReturnData($item);
-                $ret[] = $item;
-            }
-        }
+        $ret = $this->findAll(array(
+            'notification_task_id' => $notification_task_id,
+            '__FOR_UPDATE__' => true
+        ), array('_id' => 1));
         return $ret;
     }
 
@@ -32,37 +23,35 @@ class TaskContent extends \App\Common\Models\Weixin2\Notification\TaskContent
     {
         $updateData = array();
         $updateData['push_status'] = $status;
-        $updateData['push_time'] = date("Y-m-d H:i:s", $now);
-        return $this->updateById($id, $updateData);
+        $updateData['push_time'] = getCurrentTime($now);
+        return $this->update(array('_id' => $id), array('$set' => $updateData));
     }
 
     public function updateTaskProcessTotal($id, $task_process_total)
     {
         $updateData = array();
         $updateData['task_process_total'] = $task_process_total;
-        return $this->updateById($id, $updateData);
+        return $this->update(array('_id' => $id), array('$set' => $updateData));
     }
 
     public function incProcessedNum($id, $processed_num, $is_success = false)
     {
         $updateData = array();
         $processed_num = abs($processed_num);
-        $updateData['processed_num'] = DB::raw("processed_num+{$processed_num}");
+        $updateData['processed_num'] = $processed_num;
         // 如果成功的话
         if ($is_success) {
-            $updateData['success_num'] = DB::raw("success_num+{$processed_num}");
+            $updateData['success_num'] = $processed_num;
         }
-
-        $affectRows = $this->updateById($id, $updateData);
+        $affectRows = $this->update(array('_id' => $id), array('$inc' => $updateData));
         return $affectRows;
     }
 
     public function incSuccessNum($id, $success_num)
     {
         $updateData = array();
-        $updateData['success_num'] = DB::raw("success_num+{$success_num}");
-
-        $affectRows = $this->updateById($id, $updateData);
+        $updateData['success_num'] = $success_num;
+        $affectRows = $this->update(array('_id' => $id), array('$inc' => $updateData));
         return $affectRows;
     }
 }

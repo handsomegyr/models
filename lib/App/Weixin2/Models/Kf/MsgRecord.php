@@ -17,16 +17,14 @@ class MsgRecord extends \App\Common\Models\Weixin2\Kf\MsgRecord
      */
     public function getInfoByRecord($worker, $openid, $opercode, $msgrecord_time, $authorizer_appid, $component_appid)
     {
-        $info = $this->getModel()
-            ->where('worker', $worker)
-            ->where('openid', $openid)
-            ->where('msgrecord_time', $msgrecord_time)
-            ->where('opercode', $opercode)
-            ->where('authorizer_appid', $authorizer_appid)
-            ->where('component_appid', $component_appid)
-            ->first();
-        $info = $this->getReturnData($info);
-
+        $info = $this->findOne(array(
+            'worker' => $worker,
+            'openid' => $openid,
+            'msgrecord_time' => $msgrecord_time,
+            'opercode' => $opercode,
+            'authorizer_appid' => $authorizer_appid,
+            'component_appid' => $component_appid
+        ));
         return $info;
     }
 
@@ -46,12 +44,12 @@ class MsgRecord extends \App\Common\Models\Weixin2\Kf\MsgRecord
                 $data['openid'] = $item['openid'];
                 $data['opercode'] = $item['opercode'];
                 $data['text'] = $item['text'];
-                $data['msgrecord_time'] = date("Y-m-d H:i:s", $item['time']);
+                $data['msgrecord_time'] = getCurrentTime($item['time']);
 
                 $info = $this->getInfoByRecord($item['worker'], $item['openid'], $item['opercode'], $item['msgrecord_time'], $authorizer_appid, $component_appid);
 
                 if (!empty($info)) {
-                    $this->updateById($info['id'], $data);
+                    $this->update(array('_id' => $info['_id']), array('$set' => $data));
                 } else {
                     $data['authorizer_appid'] = $authorizer_appid;
                     $data['component_appid'] = $component_appid;

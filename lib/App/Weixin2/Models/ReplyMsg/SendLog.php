@@ -31,7 +31,7 @@ class SendLog extends \App\Common\Models\Weixin2\ReplyMsg\SendLog
             'ToUserName' => empty($ToUserName) ? "" : $ToUserName,
             'FromUserName' => empty($FromUserName) ? "" : $FromUserName,
             'reply_msg_content' => empty($reply_msg_content) ? "" : $reply_msg_content,
-            'log_time' => date("Y-m-d H:i:s", $log_time)
+            'log_time' => getCurrentTime($log_time)
         );
         return $this->insert($datas);
     }

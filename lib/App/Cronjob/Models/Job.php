@@ -27,8 +27,6 @@ class Job extends \App\Common\Models\Cronjob\Job
 
     /**
      * 获取全部符合要求的计划任务
-     *
-     * @return \MongoDate
      */
     public function getAll()
     {

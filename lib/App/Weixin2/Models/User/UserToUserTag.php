@@ -7,18 +7,18 @@ class UserToUserTag extends \App\Common\Models\Weixin2\User\UserToUserTag
 
     public function getOpenidListByTagId($tag_id, $authorizer_appid, $component_appid)
     {
-        $q = $this->getModel()->query();
-        $q->where('tag_id', $tag_id)
-            ->where('authorizer_appid', $authorizer_appid)
-            ->where('component_appid', $component_appid);
-        $list = $q->get();
+        $list = $this->findAll(array(
+            'tag_id' => $tag_id,
+            'authorizer_appid' => $authorizer_appid,
+            'component_appid' => $component_appid
+        ));
         $ret = array();
         if (!empty($list)) {
             foreach ($list as $item) {
-                $item = $this->getReturnData($item);
                 $ret[] = $item['openid'];
             }
         }
+
         return $ret;
     }
 
@@ -26,15 +26,15 @@ class UserToUserTag extends \App\Common\Models\Weixin2\User\UserToUserTag
     {
         $updateData = array();
         $updateData['is_tag'] = 1;
-        $updateData['tag_time'] = date("Y-m-d H:i:s", $now);
-        return $this->updateById($id, $updateData);
+        $updateData['tag_time'] = getCurrentTime($now);
+        return $this->update(array('_id' => $id), array('$set' => $updateData));
     }
 
     public function untag($id, $now)
     {
         $updateData = array();
         $updateData['is_tag'] = 0;
-        $updateData['untag_time'] = date("Y-m-d H:i:s", $now);
-        return $this->updateById($id, $updateData);
+        $updateData['untag_time'] = getCurrentTime($now);
+        return $this->update(array('_id' => $id), array('$set' => $updateData));
     }
 }
