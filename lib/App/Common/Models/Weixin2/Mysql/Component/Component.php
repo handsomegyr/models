@@ -19,6 +19,7 @@ class Component extends Base
     {
         $data = parent::reorganize($data);
 
+        $data['is_weixin_open_platform'] = $this->changeToBoolean($data['is_weixin_open_platform']);
         $data['access_token_expire'] = $this->changeToMongoDate($data['access_token_expire']);
         return $data;
     }

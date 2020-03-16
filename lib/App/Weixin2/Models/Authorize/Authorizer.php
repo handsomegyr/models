@@ -102,7 +102,7 @@ class Authorizer extends \App\Common\Models\Weixin2\Authorize\Authorizer
     {
         $updateData = array();
         $updateData['jsapi_ticket'] = $jsapi_ticket;
-        $updateData['jsapi_ticket_expire'] =getCurrentTime(time() + $expires_in);
+        $updateData['jsapi_ticket_expire'] = getCurrentTime(time() + $expires_in);
         if (!empty($memo)) {
             $updateData["memo"] = $memo;
         }
@@ -176,11 +176,20 @@ class Authorizer extends \App\Common\Models\Weixin2\Authorize\Authorizer
                 if (!$objLock->lock()) {
                     $modelComponent = new \App\Components\Weixinopen\Services\Models\Component\ComponentModel();
                     $componentInfo = $modelComponent->getInfoByAppId($token['component_appid'], true);
-                    if (!empty($componentInfo)) {
+                    // 如果是微信开放平台的话
+                    if (!empty($componentInfo['is_weixin_open_platform'])) {
                         $objToken = new \Weixin\Component($componentInfo['appid'], $componentInfo['appsecret']);
                         $objToken->setAccessToken($componentInfo['access_token']);
                         $arrToken = $objToken->apiAuthorizerToken($token['appid'], $token['refresh_token']);
                         $token = $this->updateAccessToken($token['_id'], $arrToken['authorizer_access_token'], $arrToken['authorizer_refresh_token'], $arrToken['expires_in'], null);
+                    } else {
+                        // 如果不是微信开放平台的话
+                        $objToken = new \Weixin\Token\Server($token['appid'], $token['appsecret']);
+                        $arrToken = $objToken->getAccessToken();
+                        if (!isset($arrToken['access_token'])) {
+                            throw new \Exception(json_encode($arrToken));
+                        }
+                        $token = $this->updateAccessToken($token['_id'], $arrToken['access_token'], $arrToken['refresh_token'], $arrToken['expires_in'], null);
                     }
                 }
             }
