@@ -30,4 +30,9 @@ class Material extends Base
         }
         return $options;
     }
+
+    public function getUploadPath()
+    {
+        return trim("weixin/material", '/');
+    }
 }

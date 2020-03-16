@@ -109,9 +109,10 @@ class Service1
         if (!empty($materialInfo['introduction'])) {
             $description['introduction'] = $materialInfo['introduction'];
         }
+        $filePath = $modelMaterial->getPhysicalFilePath($materialInfo['media']);
         $res = $this->getWeixinObject()
             ->getMaterialManager()
-            ->addMaterial($materialInfo['type'], config('oss.url') . "/" . $materialInfo['media'], $description);
+            ->addMaterial($materialInfo['type'], $filePath, $description);
         if (!empty($res['errcode'])) {
             throw new \Exception($res['errmsg'], $res['errcode']);
         }
@@ -215,10 +216,11 @@ class Service1
             $res['media_id'] = $mediaInfo['media_id'];
             return $res;
         }
+        $filePath = $modelMedia->getPhysicalFilePath($mediaInfo['media']);
 
         $res = $this->getWeixinObject()
             ->getMediaManager()
-            ->upload($mediaInfo['type'], config('oss.url') . "/" . $mediaInfo['media']);
+            ->upload($mediaInfo['type'], $filePath);
         if (!empty($res['errcode'])) {
             throw new \Exception($res['errmsg'], $res['errcode']);
         }
@@ -855,10 +857,10 @@ class Service1
                 break;
             case 'music':
                 $thumb_media_id = $this->getMediaId4ReplyMsg('thumb', $replyMsgs[0]);
-                $hqmusic = empty($replyMsgs[0]['hqmusic']) ? "" : config('oss.url') . "/" . $replyMsgs[0]['hqmusic'];
+                $hqmusic = empty($replyMsgs[0]['hqmusic']) ? "" : $modelReplyMsg->getPhysicalFilePath($replyMsgs[0]['hqmusic']);
                 $replymsg = $objWeixin->getMsgManager()
                     ->getReplySender()
-                    ->replyMusic($replyMsgs[0]['title'], $replyMsgs[0]['description'], config('oss.url') . "/" . $replyMsgs[0]['music'], $hqmusic, $thumb_media_id);
+                    ->replyMusic($replyMsgs[0]['title'], $replyMsgs[0]['description'], $modelReplyMsg->getPhysicalFilePath($replyMsgs[0]['music']), $hqmusic, $thumb_media_id);
                 break;
             case 'text':
                 $replymsg = $objWeixin->getMsgManager()
@@ -931,13 +933,14 @@ class Service1
                         ->sendGraphText($FromUserName, $articles);
                     break;
                 case 'music':
+                    $modelCustomMsg = new \App\Weixin2\Models\CustomMsg\CustomMsg();
                     $kf_account = empty($customMsgInfo['kf_account']) ? "" : $customMsgInfo['kf_account'];
                     $thumb_media_id = $this->getMediaId4CustomMsg('thumb', $customMsgInfo);
-                    $hqmusic = empty($customMsgInfo['hqmusic']) ? "" : config('oss.url') . "/" . $customMsgInfo['hqmusic'];
+                    $hqmusic = empty($customMsgInfo['hqmusic']) ? "" : $modelCustomMsg->getPhysicalFilePath($customMsgInfo['hqmusic']);
                     $custommsg = $objWeixin->getMsgManager()
                         ->getCustomSender()
                         ->setKfAccount($kf_account)
-                        ->sendMusic($FromUserName, $customMsgInfo['title'], $customMsgInfo['description'], config('oss.url') . "/" . $customMsgInfo['music'], $hqmusic, $thumb_media_id);
+                        ->sendMusic($FromUserName, $customMsgInfo['title'], $customMsgInfo['description'], $modelCustomMsg->getPhysicalFilePath($customMsgInfo['music']), $hqmusic, $thumb_media_id);
                     break;
                 case 'text':
                     $kf_account = empty($customMsgInfo['kf_account']) ? "" : $customMsgInfo['kf_account'];

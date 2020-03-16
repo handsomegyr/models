@@ -31,4 +31,9 @@ class Media extends Base
         }
         return $options;
     }
+
+    public function getUploadPath()
+    {
+        return trim("weixin/media", '/');
+    }
 }

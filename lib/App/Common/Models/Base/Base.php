@@ -238,4 +238,20 @@ class Base implements IBase
     {
         return $this->getModel()->remove($query);
     }
+
+    public function getUploadPath()
+    {
+        return '';
+    }
+
+    public function getPhysicalFilePath($fileName)
+    {
+        $uploadPath = $this->getUploadPath();
+        if (empty($uploadPath)) {
+            $filePath = APP_PATH . "/public/upload/{$fileName}";
+        } else {
+            $filePath = APP_PATH . "/public/upload/{$uploadPath}/{$fileName}";
+        }
+        return $filePath;
+    }
 }

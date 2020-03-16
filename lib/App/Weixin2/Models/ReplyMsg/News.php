@@ -36,7 +36,7 @@ class News extends \App\Common\Models\Weixin2\ReplyMsg\News
                     array_push($articles, array(
                         'title' => $row['title'],
                         'description' => $row['description'],
-                        'picurl' => $isFirst ? (empty($row['index']) ? config('oss.url') . "/" . $row['big_pic_url'] : config('oss.url') . "/" . $row['small_pic_url']) : config('oss.url') . "/" . $row['small_pic_url'],
+                        'picurl' => $isFirst ? (empty($row['index']) ? $this->getPhysicalFilePath($row['big_pic_url'])  : $this->getPhysicalFilePath($row['small_pic_url'])) : $this->getPhysicalFilePath($row['small_pic_url']),
                         'url' => !empty($row['url']) ? $row['url'] : ''
                     ));
                 }

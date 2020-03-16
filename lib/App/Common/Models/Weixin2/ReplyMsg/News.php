@@ -11,4 +11,9 @@ class News extends Base
     {
         $this->setModel(new \App\Common\Models\Weixin2\Mysql\ReplyMsg\News());
     }
+
+    public function getUploadPath()
+    {
+        return trim("weixin/replymsg/news", '/');
+    }
 }
