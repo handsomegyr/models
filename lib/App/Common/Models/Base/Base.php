@@ -248,9 +248,9 @@ class Base implements IBase
     {
         $uploadPath = $this->getUploadPath();
         if (empty($uploadPath)) {
-            $filePath = APP_PATH . "/public/upload/{$fileName}";
+            $filePath = APP_PATH . "public/upload/{$fileName}";
         } else {
-            $filePath = APP_PATH . "/public/upload/{$uploadPath}/{$fileName}";
+            $filePath = APP_PATH . "public/upload/{$uploadPath}/{$fileName}";
         }
         return $filePath;
     }
