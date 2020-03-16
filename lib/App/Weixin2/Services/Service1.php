@@ -570,7 +570,7 @@ class Service1
 
     public function sendMassMsg($tag_id, array $toUsers, $massMsgInfo, $sendMethodInfo, $match, $is_send = false)
     {
-        $modelMassMsg = new \App\Weixin2\Models\MassMsg();
+        $modelMassMsg = new \App\Weixin2\Models\MassMsg\MassMsg();
 
         $objMassSender = $this->getWeixinObject()
             ->getMsgManager()
