@@ -14,6 +14,6 @@ class User extends Base
 
     public function getUploadPath()
     {
-        return trim("systemuser", '/');
+        return trim("system/user", '/');
     }
 }

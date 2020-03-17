@@ -11,4 +11,9 @@ class Subject extends Base
     {
         $this->setModel(new \App\Common\Models\Vote\Mysql\Subject());
     }
+
+    public function getUploadPath()
+    {
+        return trim("vote/subject", '/');
+    }
 }

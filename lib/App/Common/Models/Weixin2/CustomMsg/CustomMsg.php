@@ -34,6 +34,6 @@ class CustomMsg extends Base
 
     public function getUploadPath()
     {
-        return trim("weixin/custommsg", '/');
+        return trim("Weixin2/custommsg", '/');
     }
 }

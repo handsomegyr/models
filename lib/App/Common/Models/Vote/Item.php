@@ -11,4 +11,9 @@ class Item extends Base
     {
         $this->setModel(new \App\Common\Models\Vote\Mysql\Item());
     }
+
+    public function getUploadPath()
+    {
+        return trim("vote/item", '/');
+    }
 }

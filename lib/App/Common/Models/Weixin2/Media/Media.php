@@ -34,6 +34,6 @@ class Media extends Base
 
     public function getUploadPath()
     {
-        return trim("weixin/media", '/');
+        return trim("weixin2/media", '/');
     }
 }

@@ -34,6 +34,6 @@ class ReplyMsg extends Base
 
     public function getUploadPath()
     {
-        return trim("weixin/replymsg", '/');
+        return trim("weixin2/replymsg", '/');
     }
 }

@@ -33,6 +33,6 @@ class Material extends Base
 
     public function getUploadPath()
     {
-        return trim("weixin/material", '/');
+        return trim("weixin2/material", '/');
     }
 }

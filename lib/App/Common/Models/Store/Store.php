@@ -12,21 +12,8 @@ class Store extends Base
         $this->setModel(new \App\Common\Models\Store\Mysql\Store());
     }
 
-    public function getImagePath($baseUrl, $image, $x = 0, $y = 0)
-    {
-        $uploadPath = $this->getUploadPath();
-        $xyStr = "";
-        if (!empty($x)) {
-            $xyStr .= "&w={$x}";
-        }
-        if (!empty($y)) {
-            $xyStr .= "&h={$y}";
-        }
-        return "{$baseUrl}service/file/index?id={$image}&upload_path={$uploadPath}{$xyStr}";
-    }
-
     public function getUploadPath()
     {
-        return trim("store", '/');
+        return trim("store/store", '/');
     }
 }

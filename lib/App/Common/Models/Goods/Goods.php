@@ -1,11 +1,12 @@
 <?php
+
 namespace App\Common\Models\Goods;
 
 use App\Common\Models\Base\Base;
 
 class Goods extends Base
 {
-    
+
     // 商品状态 0下架，1正常，10违规（禁售）
     const STATEDATAS = array(
         '10' => array(
@@ -21,7 +22,7 @@ class Goods extends Base
             'value' => '0'
         )
     );
-    
+
     // 商品审核 1通过，0未通过，10审核中
     const VERIFYDATAS = array(
         '10' => array(
@@ -37,7 +38,7 @@ class Goods extends Base
             'value' => '0'
         )
     );
-    
+
     // 销售状态 1 进行中 2 揭晓中 3 已揭晓
     const SALESTATEDATAS = array(
         '1' => array(
@@ -68,22 +69,8 @@ class Goods extends Base
         $this->setModel(new \App\Common\Models\Goods\Mysql\Goods());
     }
 
-    public function getImagePath($baseUrl, $image, $x = 0, $y = 0)
-    {
-        $uploadPath = $this->getUploadPath();
-        // return "{$baseUrl}upload/{$uploadPath}/{$image}";
-        $xyStr = "";
-        if (! empty($x)) {
-            $xyStr .= "&w={$x}";
-        }
-        if (! empty($y)) {
-            $xyStr .= "&h={$y}";
-        }
-        return "{$baseUrl}service/file/index?id={$image}&upload_path={$uploadPath}{$xyStr}";
-    }
-
     public function getUploadPath()
     {
-        return trim("goods/1", '/');
+        return trim("goods/goods", '/');
     }
 }

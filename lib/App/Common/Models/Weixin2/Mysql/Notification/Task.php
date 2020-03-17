@@ -26,6 +26,6 @@ class Task extends Base
 
     public function getUploadPath()
     {
-        return trim("weixin/notification/task", '/');
+        return trim("weixin2/notification/task", '/');
     }
 }

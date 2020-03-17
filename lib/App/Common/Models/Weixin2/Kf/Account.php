@@ -25,4 +25,9 @@ class Account extends Base
         }
         return $options;
     }
+
+    public function getUploadPath()
+    {
+        return trim("weixin2/kf/account", '/');
+    }
 }

@@ -11,4 +11,9 @@ class Item extends Base
     {
         $this->setModel(new \App\Common\Models\Banner\Mysql\Item());
     }
+
+    public function getUploadPath()
+    {
+        return trim("banner/item", '/');
+    }
 }

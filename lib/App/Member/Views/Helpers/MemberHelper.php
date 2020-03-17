@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Member\Views\Helpers;
 
 use App\Member\Models\Member;
@@ -39,6 +40,9 @@ class MemberHelper extends \Phalcon\Tag
     static public function getImagePath($baseUrl, $avatar, $x = 0, $y = 0)
     {
         $modelMember = new Member();
+        if (empty($avatar)) {
+            $avatar = "UserFace-160-0000.jpg";
+        }
         return $modelMember->getImagePath($baseUrl, $avatar, $x, $y);
     }
 

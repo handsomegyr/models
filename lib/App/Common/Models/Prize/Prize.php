@@ -11,4 +11,9 @@ class Prize extends Base
     {
         $this->setModel(new \App\Common\Models\Prize\Mysql\Prize());
     }
+
+    public function getUploadPath()
+    {
+        return trim("prize/prize", '/');
+    }
 }

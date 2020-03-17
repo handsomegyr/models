@@ -11,4 +11,9 @@ class Banner extends Base
     {
         $this->setModel(new \App\Common\Models\Banner\Mysql\Banner());
     }
+
+    public function getUploadPath()
+    {
+        return trim("banner/banner", '/');
+    }
 }

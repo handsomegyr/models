@@ -14,6 +14,6 @@ class News extends Base
 
     public function getUploadPath()
     {
-        return trim("weixin/custommsg/news", '/');
+        return trim("weixin2/custommsg/news", '/');
     }
 }

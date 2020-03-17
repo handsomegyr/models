@@ -11,4 +11,9 @@ class QuestionItem extends Base
     {
         $this->setModel(new \App\Common\Models\Questionnaire\Mysql\QuestionItem());
     }
+
+    public function getUploadPath()
+    {
+        return trim("question/item", '/');
+    }
 }
