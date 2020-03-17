@@ -103,6 +103,13 @@ interface IBase
      */
     public function save(array $datas);
 
+    /**
+     * 执行update操作
+     *
+     * @param array $criteria     
+     * @param array $object       
+     * @param array $options       
+     */
     public function update(array $criteria, array $object, array $options = array());
 
     /**
@@ -110,5 +117,17 @@ interface IBase
      */
     public function findAndModify(array $options);
 
+    /**
+     * 执行删除操作
+     *
+     * @param array $query            
+     */
     public function remove(array $query);
+
+    /**
+     * 执行物理删除操作
+     *
+     * @param array $query            
+     */
+    public function physicalRemove(array $query);
 }

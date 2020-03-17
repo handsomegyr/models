@@ -2131,6 +2131,63 @@ class Service1
         return $res;
     }
 
+    public function syncSubscribeUserList($authorizer_appid, $component_appid, $now, $openid4Test)
+    {
+        $modelSubscribeUser = new \App\Weixin2\Models\User\SubscribeUser();
+        $userManager = $this->getWeixinObject()->getUserManager();
+
+        // 先确认accesstoken没有问题
+        $FromUserName = $openid4Test;
+        $userInfo = $userManager->getUserInfo($FromUserName);
+        if (!empty($userInfo['errcode'])) {
+            throw new \Exception($userInfo['errmsg'], $userInfo['errcode']);
+        }
+
+        // 清空数据
+        $query = array(
+            'authorizer_appid' => $authorizer_appid,
+            'component_appid' => $component_appid
+        );
+        $this->modelSubscribeUser->physicalRemove($query);
+
+        // 参数 说明
+        $total = 0; // 关注该公众账号的总用户数
+        $count = 0; // 拉取的OPENID个数，最大值为10000
+        $data = array(); // 列表数据，OPENID的列表
+        $next_openid = ""; // 拉取列表的最后一个用户的OPENID
+        for ($i = 1; $i > 0;) {
+
+            $ret = $userManager->getUser($next_openid);
+            if (!empty($ret['errcode'])) {
+                throw new \Exception($ret['errmsg'], $ret['errcode']);
+            }
+
+            $total = $ret['total']; // 关注该公众账号的总用户数
+            $count = $count + $ret['count']; // 拉取的OPENID个数，最大值为10000
+            $data = empty($ret['data']) ? array() : $ret['data']['openid']; // 列表数据，OPENID的列表
+            $next_openid = $ret['next_openid']; // 拉取列表的最后一个用户的OPENID
+
+            if (!empty($data)) {
+                foreach ($data as  $openid) {
+                    $modelSubscribeUser->log($authorizer_appid, $component_appid, $openid, $now);
+                }
+            }
+
+            // 按以下的检查判断是否要退出循环
+            if (empty($data)) {
+                break;
+            }
+
+            if (empty($next_openid)) {
+                break;
+            }
+
+            if ($count >= $total) {
+                break;
+            }
+        }
+    }
+
     private function getMediaId4ReplyMsg($type, $reply)
     {
         if ($type == 'thumb') {

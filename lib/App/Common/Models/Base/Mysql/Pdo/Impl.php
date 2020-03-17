@@ -212,6 +212,15 @@ class Impl extends Base
         return $result;
     }
 
+    public function physicalRemove(array $query)
+    {
+        $sqlAndConditions = $this->getSqlAndConditions4Remove($query);
+        $phql = $sqlAndConditions['sql'];
+        $conditions = $sqlAndConditions['conditions'];
+        $result = $this->executeQuery($phql, $conditions['bind'], 'execute');
+        return $result;
+    }
+
     /**
      * 执行save操作
      *

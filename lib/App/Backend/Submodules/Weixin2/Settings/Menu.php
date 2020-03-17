@@ -159,6 +159,16 @@ class Menu
         );
         $tree[] = $item;
 
+        // 关注用户
+        $item = array(
+            'menu_name' => '关注用户',
+            'menu_model' => 'weixin2-subscribeuser',
+            'level' => '平台用户管理',
+            'icon' => '',
+            'model' => '\App\Backend\Submodules\Weixin2\Models\User\SubscribeUser'
+        );
+        $tree[] = $item;
+
         // 消息相关管理
         $item = array(
             'menu_name' => '消息相关管理',

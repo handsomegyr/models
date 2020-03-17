@@ -204,4 +204,9 @@ class Base implements \App\Common\Models\Base\IBase
     {
         return $this->impl->remove($query);
     }
+
+    public function physicalRemove(array $query)
+    {
+        return $this->impl->physicalRemove($query);
+    }
 }

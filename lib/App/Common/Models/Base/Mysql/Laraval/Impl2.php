@@ -345,6 +345,19 @@ class Impl2 extends Base
         return $result;
     }
 
+    public function physicalRemove(array $query)
+    {
+        if (empty($query)) {
+            throw new \Exception("删除数据的时候请指定条件", -999);
+        }
+
+        $conditions = $this->getConditions($query);
+        $className = $this->getSource();
+        $phql = "DELETE FROM {$className} WHERE {$conditions['conditions']}";
+        $result = $this->executeQuery($phql, $conditions['bind'], 'delete');
+        return $result;
+    }
+
     protected function executeQuery($phql, array $data, $method = 'select')
     {
         try {
