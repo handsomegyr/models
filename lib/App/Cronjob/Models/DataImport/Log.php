@@ -24,7 +24,7 @@ class Log extends \App\Common\Models\Cronjob\DataImport\Log
         $data['stage'] = $stage;
         $data['running_id'] = $running_id;
         $data['desc'] = $desc;
-        $data['log_time'] = getCurrentTime($now);
+        $data['log_time'] = \App\Common\Utils\Helper::getCurrentTime($now);
 
         $result = $this->insert($data);
 

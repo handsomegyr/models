@@ -15,7 +15,7 @@ class Rule extends \App\Common\Models\Invitation\Rule
     public function getRules($activity_id)
     {
         if ($this->_rules == null) {
-            $now = getCurrentTime();
+            $now = \App\Common\Utils\Helper::getCurrentTime();
             $query = array(
                 'activity_id' => $activity_id,
                 'start_time' => array(

@@ -26,7 +26,7 @@ class Tag extends \App\Common\Models\Weixin2\User\Tag
     {
         $updateData = array();
         $updateData['tag_id'] = $res['tag']['id'];
-        $updateData['tag_time'] = getCurrentTime($now);
+        $updateData['tag_time'] = \App\Common\Utils\Helper::getCurrentTime($now);
         $updateData['tag_count'] = empty($res['tag']['count']) ? 0 : $res['tag']['count'];
         return $this->update(array('_id' => $id), array('$set' => $updateData));
     }
@@ -45,7 +45,7 @@ class Tag extends \App\Common\Models\Weixin2\User\Tag
                 $info = $this->getInfoByName($tag['name'], $authorizer_appid, $component_appid);
                 $data = array();
                 $data['tag_id'] = $tag['id'];
-                $data['tag_time'] = getCurrentTime($now);
+                $data['tag_time'] = \App\Common\Utils\Helper::getCurrentTime($now);
                 $data['tag_count'] = empty($tag['count']) ? 0 : $tag['count'];
                 if (!empty($info)) {
                     $this->update(array('_id' => $info['_id']), array('$set' => $data));

@@ -16,7 +16,7 @@ class Limit extends \App\Common\Models\Exchange\Limit
     public function getLimits($activity_id, $now, $prize_id)
     {
         if ($this->_limits == null) {
-            $now = getCurrentTime($now);
+            $now = \App\Common\Utils\Helper::getCurrentTime($now);
             $query = array(
                 'activity_id' => $activity_id,
                 'start_time' => array(

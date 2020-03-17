@@ -69,10 +69,10 @@ class CardBag extends \App\Common\Models\Weixincard\CardBag
         $info['new_code'] = (string) $new_code;
 
         $info['is_got'] = intval($is_got);
-        $info['got_time'] = getCurrentTime(intval($got_time));
+        $info['got_time'] = \App\Common\Utils\Helper::getCurrentTime(intval($got_time));
 
         $info['is_consumed'] = intval($is_consumed);
-        $info['consume_time'] = getCurrentTime(intval($consume_time));
+        $info['consume_time'] = \App\Common\Utils\Helper::getCurrentTime(intval($consume_time));
 
         $info['StaffOpenId'] = $StaffOpenId;
         $info['ConsumeSource'] = $ConsumeSource;
@@ -80,13 +80,13 @@ class CardBag extends \App\Common\Models\Weixincard\CardBag
         $info['LocationName'] = $LocationName;
 
         $info['is_deleted'] = intval($is_deleted);
-        $info['delete_time'] = getCurrentTime(intval($delete_time));
+        $info['delete_time'] = \App\Common\Utils\Helper::getCurrentTime(intval($delete_time));
 
         $info['is_unavailable'] = intval($is_unavailable);
-        $info['unavailable_time'] = getCurrentTime(intval($unavailable_time));
+        $info['unavailable_time'] = \App\Common\Utils\Helper::getCurrentTime(intval($unavailable_time));
 
         $info['is_give_to_friend'] = $is_give_to_friend;
-        $info['give_to_friend_time'] = getCurrentTime(intval($give_to_friend_time));
+        $info['give_to_friend_time'] = \App\Common\Utils\Helper::getCurrentTime(intval($give_to_friend_time));
         $info['friend_card_bag_id'] = $friend_card_bag_id;
 
         $info['memo'] = array(
@@ -134,7 +134,7 @@ class CardBag extends \App\Common\Models\Weixincard\CardBag
             $info['SourceScene'] = (string) $SourceScene;
 
             $info['is_got'] = $is_got;
-            $info['got_time'] = getCurrentTime($got_time);
+            $info['got_time'] = \App\Common\Utils\Helper::getCurrentTime($got_time);
 
             $info['memo'] = array_merge($cardbagInfo['memo'], array(
                 'get' => $memo
@@ -200,7 +200,7 @@ class CardBag extends \App\Common\Models\Weixincard\CardBag
         if (!empty($cardbagInfo)) {
             $info = array();
             $info['is_give_to_friend'] = 1;
-            $info['give_to_friend_time'] = getCurrentTime(intval($CreateTime));
+            $info['give_to_friend_time'] = \App\Common\Utils\Helper::getCurrentTime(intval($CreateTime));
             $info['friend_card_bag_id'] = $friend_card_bag_id;
 
             $info['memo'] = array_merge($cardbagInfo['memo'], array(
@@ -254,7 +254,7 @@ class CardBag extends \App\Common\Models\Weixincard\CardBag
 
             $info = array();
             $info['is_consumed'] = 1;
-            $info['consume_time'] = getCurrentTime(intval($CreateTime));
+            $info['consume_time'] = \App\Common\Utils\Helper::getCurrentTime(intval($CreateTime));
 
             $info['StaffOpenId'] = $StaffOpenId;
             $info['ConsumeSource'] = $ConsumeSource;
@@ -307,7 +307,7 @@ class CardBag extends \App\Common\Models\Weixincard\CardBag
         if (!empty($cardbagInfo)) {
             $info = array();
             $info['is_deleted'] = 1;
-            $info['delete_time'] = getCurrentTime(intval($CreateTime));
+            $info['delete_time'] = \App\Common\Utils\Helper::getCurrentTime(intval($CreateTime));
             $info['memo'] = array_merge($cardbagInfo['memo'], array(
                 'delete' => $memo
             ));
@@ -354,7 +354,7 @@ class CardBag extends \App\Common\Models\Weixincard\CardBag
 
             $info = array();
             $info['is_unavailable'] = 1;
-            $info['unavailable_time'] = getCurrentTime(intval($CreateTime));
+            $info['unavailable_time'] = \App\Common\Utils\Helper::getCurrentTime(intval($CreateTime));
             $info['memo'] = array_merge($cardbagInfo['memo'], array(
                 'unavailable' => $memo
             ));

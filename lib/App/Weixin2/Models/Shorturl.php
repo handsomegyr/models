@@ -10,7 +10,7 @@ class Shorturl extends \App\Common\Models\Weixin2\Shorturl
         $updateData = array();
         $updateData['is_created'] = 1;
         $updateData['short_url'] = $res['short_url'];
-        $updateData['short_url_time'] = getCurrentTime($now);
+        $updateData['short_url_time'] = \App\Common\Utils\Helper::getCurrentTime($now);
         return $this->update(array('_id' => $id), array('$set' => $updateData));
     }
 

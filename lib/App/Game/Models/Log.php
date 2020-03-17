@@ -34,7 +34,7 @@ class Log extends \App\Common\Models\Game\Log
             'game_score2' => $game_score2,
             'game_file' => $game_file,
             'game_img' => $game_img,
-            'play_time' => getCurrentTime($play_time),
+            'play_time' => \App\Common\Utils\Helper::getCurrentTime($play_time),
             'ip' => $ip,
             'memo' => $memo
         );

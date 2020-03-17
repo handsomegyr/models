@@ -23,7 +23,7 @@ class Log extends \App\Common\Models\Weixin2\Comment\Log
     {
         $updateData = array();
         $updateData['is_created'] = 1;
-        $updateData['comment_time'] = getCurrentTime($now);
+        $updateData['comment_time'] = \App\Common\Utils\Helper::getCurrentTime($now);
         return $this->update(array('_id' => $id), array('$set' => $updateData));
     }
 
@@ -31,7 +31,7 @@ class Log extends \App\Common\Models\Weixin2\Comment\Log
     {
         $updateData = array();
         $updateData['is_created'] = 0;
-        $updateData['delete_comment_time'] = getCurrentTime($now);
+        $updateData['delete_comment_time'] = \App\Common\Utils\Helper::getCurrentTime($now);
         return $this->update(array('_id' => $id), array('$set' => $updateData));
     }
 
@@ -77,7 +77,7 @@ class Log extends \App\Common\Models\Weixin2\Comment\Log
                  */
                 $data['comment_type'] = $item['comment_type'];
                 $data['content'] = $item['content'];
-                $data['comment_time'] = getCurrentTime($item['create_time']);
+                $data['comment_time'] = \App\Common\Utils\Helper::getCurrentTime($item['create_time']);
                 $data['is_created'] = 1;
                 if (!empty($info)) {
                     $this->update(array('_id' => $info['_id']), array('$set' => $data));

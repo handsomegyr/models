@@ -25,7 +25,7 @@ class Event extends \App\Common\Models\Weixincard\Event
         $data = array();
         $data['ToUserName'] = $ToUserName;
         $data['FromUserName'] = $FromUserName;
-        $data['CreateTime'] = getCurrentTime(intval($CreateTime));
+        $data['CreateTime'] = \App\Common\Utils\Helper::getCurrentTime(intval($CreateTime));
         $data['MsgType'] = $MsgType;
         $data['Event'] = $Event;
         $data['CardId'] = (string) $CardId;

@@ -9,7 +9,7 @@ class Comment extends \App\Common\Models\Weixin2\Comment\Comment
     {
         $updateData = array();
         $updateData['is_open'] = 1;
-        $updateData['open_time'] = getCurrentTime($now);
+        $updateData['open_time'] = \App\Common\Utils\Helper::getCurrentTime($now);
         return $this->update(array('_id' => $id), array('$set' => $updateData));
     }
 
@@ -17,7 +17,7 @@ class Comment extends \App\Common\Models\Weixin2\Comment\Comment
     {
         $updateData = array();
         $updateData['is_open'] = 0;
-        $updateData['close_time'] = getCurrentTime($now);
+        $updateData['close_time'] = \App\Common\Utils\Helper::getCurrentTime($now);
         return $this->update(array('_id' => $id), array('$set' => $updateData));
     }
 }

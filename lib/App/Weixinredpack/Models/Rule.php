@@ -61,7 +61,7 @@ class Rule extends \App\Common\Models\Weixinredpack\Rule
     public function getRules($activity_id, $customer_id, $redpack_id)
     {
         if ($this->_rules == null) {
-            $now = getCurrentTime();
+            $now = \App\Common\Utils\Helper::getCurrentTime();
             $this->_rules = $this->findAll(array(
                 'activity' => $activity_id,
                 'customer' => $customer_id,

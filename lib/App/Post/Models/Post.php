@@ -116,7 +116,7 @@ class Post extends \App\Common\Models\Post\Post
         $data['title'] = $title;
         $data['content'] = $content;
         $data['pic'] = $pic;
-        $data['post_time'] = getCurrentTime();
+        $data['post_time'] = \App\Common\Utils\Helper::getCurrentTime();
         $data['state'] = self::STATE0;
         $data['fail_reason'] = "";
         $data['point'] = 0;
@@ -185,7 +185,7 @@ class Post extends \App\Common\Models\Post\Post
         $data['state'] = self::STATE2;
         $data['point'] = $point;
         $data['is_recommend'] = empty($is_recommend) ? false : true;
-        $data['verify_time'] = getCurrentTime();
+        $data['verify_time'] = \App\Common\Utils\Helper::getCurrentTime();
         $data['verify_user_id'] = $user_id;
         $data['verify_user_name'] = $user_name;
         
@@ -202,7 +202,7 @@ class Post extends \App\Common\Models\Post\Post
         $data = array();
         $data['state'] = self::STATE1;
         $data['fail_reason'] = $fail_reason;
-        $data['verify_time'] = getCurrentTime();
+        $data['verify_time'] = \App\Common\Utils\Helper::getCurrentTime();
         $data['verify_user_id'] = $user_id;
         $data['verify_user_name'] = $user_name;
         return $this->update($query, array(

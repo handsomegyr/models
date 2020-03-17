@@ -9,7 +9,7 @@ class NotifyLog extends \App\Common\Models\Payment\NotifyLog
         $data = array();
         $data['channel'] = $channel;
         $data['message'] = $message;
-        $data['log_time'] = getCurrentTime($now);
+        $data['log_time'] = \App\Common\Utils\Helper::getCurrentTime($now);
         $data['memo'] = $memo;
         return $this->insert($data);
     }

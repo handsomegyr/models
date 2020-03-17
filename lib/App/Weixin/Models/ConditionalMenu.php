@@ -104,7 +104,7 @@ class ConditionalMenu extends \App\Common\Models\Weixin\ConditionalMenu
         $query['_id'] = $matchRule['_id'];
         
         $data['menuid'] = $menuid;
-        $data['menu_time'] = getCurrentTime();
+        $data['menu_time'] = \App\Common\Utils\Helper::getCurrentTime();
         $this->update($query, array(
             '$set' => $data
         ));

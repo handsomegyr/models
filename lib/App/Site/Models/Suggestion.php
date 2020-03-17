@@ -18,7 +18,7 @@ class Suggestion extends \App\Common\Models\Site\Suggestion
         $data['telephone'] = $telephone;
         $data['email'] = $email;
         $data['content'] = $content;
-        $data['log_time'] = getCurrentTime();
+        $data['log_time'] = \App\Common\Utils\Helper::getCurrentTime();
         
         $this->insert($data);
     }

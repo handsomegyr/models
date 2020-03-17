@@ -26,7 +26,7 @@ class UserToUserTag extends \App\Common\Models\Weixin2\User\UserToUserTag
     {
         $updateData = array();
         $updateData['is_tag'] = 1;
-        $updateData['tag_time'] = getCurrentTime($now);
+        $updateData['tag_time'] = \App\Common\Utils\Helper::getCurrentTime($now);
         return $this->update(array('_id' => $id), array('$set' => $updateData));
     }
 
@@ -34,7 +34,7 @@ class UserToUserTag extends \App\Common\Models\Weixin2\User\UserToUserTag
     {
         $updateData = array();
         $updateData['is_tag'] = 0;
-        $updateData['untag_time'] = getCurrentTime($now);
+        $updateData['untag_time'] = \App\Common\Utils\Helper::getCurrentTime($now);
         return $this->update(array('_id' => $id), array('$set' => $updateData));
     }
 }

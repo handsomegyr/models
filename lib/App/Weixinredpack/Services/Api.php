@@ -405,7 +405,7 @@ class Api
             'isOK' => false,
             'is_reissue' => true,
             'got_time' => array(
-                '$lte' => getCurrentTime($preTime)
+                '$lte' => \App\Common\Utils\Helper::getCurrentTime($preTime)
             ),
             'try_count' => array(
                 '$lte' => 2

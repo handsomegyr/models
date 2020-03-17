@@ -41,7 +41,7 @@ class Vote extends \App\Common\Models\Post\Vote
         $data = array();
         $data['post_id'] = $post_id;
         $data['user_id'] = $user_id;
-        $data['vote_time'] = getCurrentTime();
+        $data['vote_time'] = \App\Common\Utils\Helper::getCurrentTime();
         $data['num'] = $num;
         return $this->insert($data);
     }

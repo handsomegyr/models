@@ -66,7 +66,7 @@ class WeixinPayLog extends \App\Common\Models\Payment\WeixinPayLog
 
         $updateData['local_order_id'] = $local_order_id;
         $updateData['pay_method'] = $pay_method;
-        $updateData['notify_time'] = getCurrentTime($now);
+        $updateData['notify_time'] = \App\Common\Utils\Helper::getCurrentTime($now);
 
         $updateData['is_refund'] = empty($is_refund) ? 0 : 1;
         $updateData['refund_account'] = $refund_account;

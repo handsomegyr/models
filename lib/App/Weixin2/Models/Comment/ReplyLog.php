@@ -9,7 +9,7 @@ class ReplyLog extends \App\Common\Models\Weixin2\Comment\ReplyLog
     {
         $updateData = array();
         $updateData['is_created'] = 1;
-        $updateData['reply_time'] = getCurrentTime($now);
+        $updateData['reply_time'] = \App\Common\Utils\Helper::getCurrentTime($now);
         return $this->update(array('_id' => $id), array('$set' => $updateData));
     }
 
@@ -17,7 +17,7 @@ class ReplyLog extends \App\Common\Models\Weixin2\Comment\ReplyLog
     {
         $updateData = array();
         $updateData['is_created'] = 0;
-        $updateData['delete_reply_time'] = getCurrentTime($now);
+        $updateData['delete_reply_time'] = \App\Common\Utils\Helper::getCurrentTime($now);
         return $this->update(array('_id' => $id), array('$set' => $updateData));
     }
 
@@ -69,7 +69,7 @@ class ReplyLog extends \App\Common\Models\Weixin2\Comment\ReplyLog
                          */
                         $data['is_created'] = 1;
                         $data['content'] = $item['content'];
-                        $data['reply_time'] = getCurrentTime($item['create_time']);
+                        $data['reply_time'] = \App\Common\Utils\Helper::getCurrentTime($item['create_time']);
 
                         if (!empty($info)) {
                             $this->update(array('_id' => $info['_id']), array('$set' => $data));

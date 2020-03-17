@@ -29,7 +29,7 @@ class User extends \App\Common\Models\Game\User
         $data['user_nickname'] = trim($user_nickname); // 昵称
         $data['user_headimgurl'] = trim($user_headimgurl); // 头像
         $data['max_score'] = intval($max_score); // 最大游戏分数
-        $data['max_score_time'] = getCurrentTime($max_score_time); // 最大游戏分数游戏时间
+        $data['max_score_time'] = \App\Common\Utils\Helper::getCurrentTime($max_score_time); // 最大游戏分数游戏时间
         $data['total_score'] = intval($max_score); // 游戏总分数
         $data['total_num'] = 1; // 游戏次数
         $data['memo'] = $memo; // 备注

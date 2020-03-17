@@ -30,7 +30,7 @@ class Job extends \App\Common\Models\Cronjob\Job
      */
     public function getAll()
     {
-        $now = getCurrentTime();
+        $now = \App\Common\Utils\Helper::getCurrentTime();
         $nowTime = time();
         $cmds = $this->findAll(array(
             'start_time' => array(
@@ -55,7 +55,7 @@ class Job extends \App\Common\Models\Cronjob\Job
             '_id' => $_id
         ), array(
             '$set' => array(
-                'last_execute_time' => getCurrentTime(floor(time() / 60) * 60)
+                'last_execute_time' => \App\Common\Utils\Helper::getCurrentTime(floor(time() / 60) * 60)
             )
         ));
     }

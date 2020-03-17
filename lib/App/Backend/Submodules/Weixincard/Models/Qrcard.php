@@ -120,7 +120,7 @@ class Qrcard extends \App\Common\Models\Weixincard\Qrcard
         $data['qrcodeUrl'] = $qrcodeUrl;
         $data['show_qrcode_url'] = $show_qrcode_url;
 
-        $data['ticket_time'] = getCurrentTime();
+        $data['ticket_time'] = \App\Common\Utils\Helper::getCurrentTime();
         $data['is_created'] = true;
         $data['memo'] = $memo;
         $this->update($query, array(

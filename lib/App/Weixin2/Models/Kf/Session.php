@@ -26,7 +26,7 @@ class Session extends \App\Common\Models\Weixin2\Kf\Session
     {
         $updateData = array();
         $updateData['is_created'] = 1;
-        $updateData['kfsession_time'] = getCurrentTime($now);
+        $updateData['kfsession_time'] = \App\Common\Utils\Helper::getCurrentTime($now);
         return $this->update(array('_id' => $id), array('$set' => $updateData));
     }
 
@@ -58,14 +58,14 @@ class Session extends \App\Common\Models\Weixin2\Kf\Session
                     $data['invite_wx'] = $item['invite_wx'];
                 }
                 // if (! empty($item['invite_expire_time'])) {
-                $data['invite_expire_time'] = empty($item['invite_expire_time']) ? null : getCurrentTime($item['invite_expire_time']);
+                $data['invite_expire_time'] = empty($item['invite_expire_time']) ? null : \App\Common\Utils\Helper::getCurrentTime($item['invite_expire_time']);
                 // }
                 // if (! empty($item['invite_status'])) {
                 $data['invite_status'] = empty($item['invite_status']) ? "" : $item['invite_status'];
                 // }
 
                 $data['is_created'] = 1;
-                $data['kfsession_time'] = getCurrentTime($now);
+                $data['kfsession_time'] = \App\Common\Utils\Helper::getCurrentTime($now);
                 if (!empty($info)) {
                     $this->update(array('_id' => $info['_id']), array('$set' => $data));
                 } else {
@@ -95,7 +95,7 @@ class Session extends \App\Common\Models\Weixin2\Kf\Session
                 $data['accepted_case'] = $item['accepted_case'];
 
                 $data['is_created'] = 1;
-                $data['kfsession_time'] = getCurrentTime($now);
+                $data['kfsession_time'] = \App\Common\Utils\Helper::getCurrentTime($now);
                 if (!empty($info)) {
                     $this->update(array('_id' => $info['_id']), array('$set' => $data));
                 } else {

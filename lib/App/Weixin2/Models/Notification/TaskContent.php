@@ -23,7 +23,7 @@ class TaskContent extends \App\Common\Models\Weixin2\Notification\TaskContent
     {
         $updateData = array();
         $updateData['push_status'] = $status;
-        $updateData['push_time'] = getCurrentTime($now);
+        $updateData['push_time'] = \App\Common\Utils\Helper::getCurrentTime($now);
         return $this->update(array('_id' => $id), array('$set' => $updateData));
     }
 

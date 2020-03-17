@@ -55,7 +55,7 @@ class Conditional extends \App\Common\Models\Weixin2\Menu\Conditional
     {
         $updateData = array();
         $updateData['menuid'] = $menuid;
-        $updateData['menu_time'] = getCurrentTime($menu_time);
+        $updateData['menu_time'] = \App\Common\Utils\Helper::getCurrentTime($menu_time);
 
         $updateModel = $this->getModel()->where("matchrule", $matchrule_id);
         return $this->update($updateModel, $updateData);

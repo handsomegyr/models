@@ -248,7 +248,7 @@ trait BaseTrait
             $_id = new \MongoId();
             $datas['_id'] = $_id->__toString();
         }
-        $datas['__CREATE_TIME__'] = $datas['__MODIFY_TIME__'] = getCurrentTime();
+        $datas['__CREATE_TIME__'] = $datas['__MODIFY_TIME__'] = \App\Common\Utils\Helper::getCurrentTime();
         $datas['__REMOVED__'] = false;
 
         foreach ($datas as $field => $value) {
@@ -315,7 +315,7 @@ trait BaseTrait
             throw new \Exception("更新字段没有定义", -999);
         } else {
             $field = '__MODIFY_TIME__';
-            $value = getCurrentTime();
+            $value = \App\Common\Utils\Helper::getCurrentTime();
             $fieldKey = "[{$field}]";
             $fields[] = "{$fieldKey}=:{$field}:";
             $values[$field] = $this->changeValue4Save($value);
@@ -352,7 +352,7 @@ trait BaseTrait
         if (empty($field)) {
             return $field;
         }
-        return getCurrentTime(strtotime($field));
+        return \App\Common\Utils\Helper::getCurrentTime(strtotime($field));
         // if (is_date($field)) {
         // } else {
         // return json_decode($field, true);

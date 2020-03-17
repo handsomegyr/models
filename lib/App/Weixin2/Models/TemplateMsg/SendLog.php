@@ -26,7 +26,7 @@ class SendLog extends \App\Common\Models\Weixin2\TemplateMsg\SendLog
             'ToUserName' => empty($ToUserName) ? "" : $ToUserName,
             'FromUserName' => empty($FromUserName) ? "" : $FromUserName,
             'template_msg_content' => empty($template_msg_content) ? "" : $template_msg_content,
-            'log_time' => getCurrentTime($log_time)
+            'log_time' => \App\Common\Utils\Helper::getCurrentTime($log_time)
         );
         return $this->insert($datas);
     }

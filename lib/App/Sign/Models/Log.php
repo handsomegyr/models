@@ -32,7 +32,7 @@ class Log extends \App\Common\Models\Sign\Log
         $data['user_id'] = $user_id;
         $data['nickname'] = $nickname; // 用户昵称
         $data['headimgurl'] = $headimgurl; // 用户头像
-        $data['sign_time'] = getCurrentTime($sign_time);
+        $data['sign_time'] = \App\Common\Utils\Helper::getCurrentTime($sign_time);
         $data['ip'] = $ip;
         $data['channel'] = $channel;
         $data['memo'] = $memo;

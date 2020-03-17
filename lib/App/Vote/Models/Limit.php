@@ -39,7 +39,7 @@ class Limit extends \App\Common\Models\Vote\Limit
      */
     public function getLimitList($now, $activitys = array(), $subjects = array(), $items = array())
     {
-        $now = getCurrentTime($now);
+        $now = \App\Common\Utils\Helper::getCurrentTime($now);
         $query = array(
             'start_time' => array(
                 '$lte' => $now

@@ -64,7 +64,7 @@ class Order extends \App\Common\Models\Order\Order
         $order['buyer_avatar'] = $buyerInfo['buyer_avatar'];
         $order['buyer_register_by'] = $buyerInfo['buyer_register_by'];
         
-        $order['add_time'] = getCurrentTime();
+        $order['add_time'] = \App\Common\Utils\Helper::getCurrentTime();
         $order['payment_code'] = $payment_code;
         $order['order_state'] = ($payment_code == 'online' ? self::ORDER_STATE_NEW : self::ORDER_STATE_PAY);
         $order['shipping_fee'] = $shipping_fee;
@@ -154,7 +154,7 @@ class Order extends \App\Common\Models\Order\Order
         $data = array();
         $data['order_state'] = $order_state;
         if ($order_state == self::ORDER_STATE_PAY) {
-            $data['payment_time'] = getCurrentTime();
+            $data['payment_time'] = \App\Common\Utils\Helper::getCurrentTime();
         }
         $this->update($query, array(
             '$set' => $data

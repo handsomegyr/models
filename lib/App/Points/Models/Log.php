@@ -90,10 +90,10 @@ class Log extends \App\Common\Models\Points\Log
             'category' => $category
         );
         if (!empty($beginTime)) {
-            $query['log_time']['$gte'] = getCurrentTime($beginTime);
+            $query['log_time']['$gte'] = \App\Common\Utils\Helper::getCurrentTime($beginTime);
         }
         if (!empty($endTime)) {
-            $query['log_time']['$lte'] = getCurrentTime($endTime);
+            $query['log_time']['$lte'] = \App\Common\Utils\Helper::getCurrentTime($endTime);
         }
         if (!empty($otherConditions)) {
             $query = array_merge($query, $otherConditions);
@@ -128,7 +128,7 @@ class Log extends \App\Common\Models\Points\Log
         $data['user_name'] = $user_name;
         $data['user_headimgurl'] = $user_headimgurl;
         $data['points'] = $points;
-        $data['log_time'] = getCurrentTime($log_time);
+        $data['log_time'] = \App\Common\Utils\Helper::getCurrentTime($log_time);
         $data['unique_id'] = $unique_id;
         $data['point_rule_id'] = $point_rule_id;
         $data['point_rule_code'] = $point_rule_code;

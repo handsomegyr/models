@@ -10,7 +10,7 @@ class Qrcode extends \App\Common\Models\Weixin2\Qrcode\Qrcode
         $updateData = array();
         $updateData['ticket'] = $ticket;
         $updateData['url'] = $res['url'];
-        $updateData['ticket_time'] = getCurrentTime($now);
+        $updateData['ticket_time'] = \App\Common\Utils\Helper::getCurrentTime($now);
         $updateData['is_created'] = 1;
         return $this->update(array('_id' => $id), array('$set' => $updateData));
     }

@@ -223,7 +223,7 @@ class Pay
                                 if ($lottery_code_num > 0) {
                                     // 增加会员的积分
                                     // 参与云购每消费1元 1 10 生日当月享双倍福分
-                                    $currentTime = getCurrentTime();
+                                    $currentTime = \App\Common\Utils\Helper::getCurrentTime();
                                     $double = 1;
                                     if (!empty($buyerInfo['birthday']) && substr($buyerInfo['birthday'], 5) == date('m-d', $currentTime->sec)) {
                                         $double = 2;

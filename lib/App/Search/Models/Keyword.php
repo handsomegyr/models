@@ -18,7 +18,7 @@ class Keyword extends \App\Common\Models\Search\Keyword
         $query['content'] = $content;
 
         $updateData = array();
-        $updateData['search_time'] = getCurrentTime($now);
+        $updateData['search_time'] = \App\Common\Utils\Helper::getCurrentTime($now);
 
         $incData = array();
         $search_num = intval($search_num);

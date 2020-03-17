@@ -55,14 +55,14 @@ class Exchange extends \App\Common\Models\Lottery\Exchange
         }
 
         if (!empty($startTime)) {
-            $query['got_time']['$gte'] = getCurrentTime($startTime);
+            $query['got_time']['$gte'] = \App\Common\Utils\Helper::getCurrentTime($startTime);
         } else {
             // 防止中奖数据过多，增加条件只获取过去一年的数据
-            $query['got_time']['$gte'] = getCurrentTime(strtotime(date("Y-m-d")) - 365 * 86400);
+            $query['got_time']['$gte'] = \App\Common\Utils\Helper::getCurrentTime(strtotime(date("Y-m-d")) - 365 * 86400);
         }
 
         if (!empty($endTime)) {
-            $query['got_time']['$lt'] = getCurrentTime($endTime);
+            $query['got_time']['$lt'] = \App\Common\Utils\Helper::getCurrentTime($endTime);
         }
         $query['is_valid'] = true;
 
@@ -148,7 +148,7 @@ class Exchange extends \App\Common\Models\Lottery\Exchange
             'prize_id' => $prize_id,
             'is_valid' => $isValid,
             'source' => $source,
-            'got_time' => getCurrentTime($got_time)
+            'got_time' => \App\Common\Utils\Helper::getCurrentTime($got_time)
         );
 
         $data['prize_code'] = $prize_info['prize_code'];
@@ -256,8 +256,8 @@ class Exchange extends \App\Common\Models\Lottery\Exchange
         if ($is_today) {
             // 当天
             $today = date('Y-m-d');
-            $start = getCurrentTime(strtotime($today . ' 00:00:00'));
-            $end = getCurrentTime(strtotime($today . ' 23:59:59'));
+            $start = \App\Common\Utils\Helper::getCurrentTime(strtotime($today . ' 00:00:00'));
+            $end = \App\Common\Utils\Helper::getCurrentTime(strtotime($today . ' 23:59:59'));
             $query['got_time'] = array(
                 '$gte' => $start,
                 '$lte' => $end
@@ -302,8 +302,8 @@ class Exchange extends \App\Common\Models\Lottery\Exchange
 
         if ($is_today) { // 当天
             $today = date('Y-m-d');
-            $start = getCurrentTime(strtotime($today . ' 00:00:00'));
-            $end = getCurrentTime(strtotime($today . ' 23:59:59'));
+            $start = \App\Common\Utils\Helper::getCurrentTime(strtotime($today . ' 00:00:00'));
+            $end = \App\Common\Utils\Helper::getCurrentTime(strtotime($today . ' 23:59:59'));
             $query['got_time'] = array(
                 '$gte' => $start,
                 '$lte' => $end

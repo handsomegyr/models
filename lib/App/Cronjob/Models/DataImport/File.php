@@ -27,11 +27,11 @@ class File extends \App\Common\Models\Cronjob\DataImport\File
     public function log($cron_time, $data_file, $flag_file, $lock_file, $now, $data_count, $process_total = 0, $status = 0, $desc = '', $returnback_cronjobId = '')
     {
         $data = array();
-        $data['cron_time'] = getCurrentTime($cron_time);
+        $data['cron_time'] = \App\Common\Utils\Helper::getCurrentTime($cron_time);
         $data['data_file'] = $data_file;
         $data['flag_file'] = $flag_file;
         $data['lock_file'] = $lock_file;
-        $data['log_time'] = getCurrentTime($now);
+        $data['log_time'] = \App\Common\Utils\Helper::getCurrentTime($now);
         $data['data_count'] = intval($data_count);
         $data['process_total'] = intval($process_total);
         $data['status'] = intval($status);
@@ -49,7 +49,7 @@ class File extends \App\Common\Models\Cronjob\DataImport\File
         if (!is_null($status)) {
             $updateData['status'] = intval($status);
         }
-        $updateData['log_time'] = getCurrentTime($now);
+        $updateData['log_time'] = \App\Common\Utils\Helper::getCurrentTime($now);
         if (!empty($otherUpdateData)) {
             foreach ($otherUpdateData as $key => $value) {
                 $updateData[$key] = $value;

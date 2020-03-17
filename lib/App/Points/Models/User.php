@@ -96,7 +96,7 @@ class User extends \App\Common\Models\Points\User
         $query['_id'] = $id;
 
         $updateData = array();
-        $updateData['point_time'] = getCurrentTime($now);
+        $updateData['point_time'] = \App\Common\Utils\Helper::getCurrentTime($now);
 
         $points = intval($points);
         if ($points != 0) {
@@ -159,7 +159,7 @@ class User extends \App\Common\Models\Points\User
         $data['freeze'] = $freeze; // 冻结积分
         $data['consume'] = $consume; // 消费积分
         $data['expire'] = $expire; // 过期积分
-        $data['point_time'] = getCurrentTime($now); // 积分时间
+        $data['point_time'] = \App\Common\Utils\Helper::getCurrentTime($now); // 积分时间
         $data['memo'] = $memo; // 备注
         $info = $this->insert($data);
         return $info;

@@ -44,7 +44,7 @@ class MsgRecord extends \App\Common\Models\Weixin2\Kf\MsgRecord
                 $data['openid'] = $item['openid'];
                 $data['opercode'] = $item['opercode'];
                 $data['text'] = $item['text'];
-                $data['msgrecord_time'] = getCurrentTime($item['time']);
+                $data['msgrecord_time'] = \App\Common\Utils\Helper::getCurrentTime($item['time']);
 
                 $info = $this->getInfoByRecord($item['worker'], $item['openid'], $item['opercode'], $item['msgrecord_time'], $authorizer_appid, $component_appid);
 

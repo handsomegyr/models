@@ -20,7 +20,7 @@ class Log extends \App\Common\Models\Search\Log
     {
         $data = array();
         $data['content'] = trim($content);
-        $data['log_time'] = getCurrentTime($log_time);
+        $data['log_time'] = \App\Common\Utils\Helper::getCurrentTime($log_time);
         $data['member_id'] = trim($member_id);
         $data['user_id'] = $user_id;
         $data['channel'] = $channel;

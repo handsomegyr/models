@@ -61,7 +61,7 @@ class GotLog extends \App\Common\Models\Weixinredpack\GotLog
             'redpack' => $redpack_id,
             'total_num' => intval($total_num),
             'total_amount' => intval($total_amount),
-            'got_time' => getCurrentTime(),
+            'got_time' => \App\Common\Utils\Helper::getCurrentTime(),
             'isOK' => $isOK,
             'try_count' => $try_count,
             'is_reissue' => $is_reissue,
@@ -125,11 +125,11 @@ class GotLog extends \App\Common\Models\Weixinredpack\GotLog
             'redpack' => $redpack
         );
         if (! empty($start_time)) {
-            $query['got_time']['$gte'] = getCurrentTime($start_time);
+            $query['got_time']['$gte'] = \App\Common\Utils\Helper::getCurrentTime($start_time);
         }
         
         if (! empty($end_time)) {
-            $query['got_time']['$lte'] = getCurrentTime($end_time);
+            $query['got_time']['$lte'] = \App\Common\Utils\Helper::getCurrentTime($end_time);
         }
         
         return $this->count($query);
@@ -153,11 +153,11 @@ class GotLog extends \App\Common\Models\Weixinredpack\GotLog
             'redpack' => $redpack
         );
         if (! empty($start_time)) {
-            $query['got_time']['$gte'] = getCurrentTime($start_time);
+            $query['got_time']['$gte'] = \App\Common\Utils\Helper::getCurrentTime($start_time);
         }
         
         if (! empty($end_time)) {
-            $query['got_time']['$lte'] = getCurrentTime($end_time);
+            $query['got_time']['$lte'] = \App\Common\Utils\Helper::getCurrentTime($end_time);
         }
         
         return $this->findOne($query);

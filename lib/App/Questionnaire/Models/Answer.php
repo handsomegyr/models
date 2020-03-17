@@ -21,7 +21,7 @@ class Answer extends \App\Common\Models\Questionnaire\Answer
         $data['wrong_num'] = $wrong_num;
         $data['noanswer_num'] = $noanswer_num;
 
-        $data['answer_time'] = getCurrentTime($answer_time);
+        $data['answer_time'] = \App\Common\Utils\Helper::getCurrentTime($answer_time);
         $data['memo'] = $memo;
         return $this->insert($data);
     }

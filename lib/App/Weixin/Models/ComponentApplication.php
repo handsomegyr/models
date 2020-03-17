@@ -114,7 +114,7 @@ class ComponentApplication extends \App\Common\Models\Weixin\ComponentApplicatio
         $data = array(
             'access_token' => $access_token,
             'refresh_token' => $refresh_token,
-            'access_token_expire' => getCurrentTime(time() + intval($expires_in))
+            'access_token_expire' => \App\Common\Utils\Helper::getCurrentTime(time() + intval($expires_in))
         );
         if (empty($memo)) {
             $memo = array();
@@ -161,7 +161,7 @@ class ComponentApplication extends \App\Common\Models\Weixin\ComponentApplicatio
         );
         $data = array(
             'component_access_token' => $component_access_token,
-            'component_access_token_expire' => getCurrentTime(time() + intval($expires_in)),
+            'component_access_token_expire' => \App\Common\Utils\Helper::getCurrentTime(time() + intval($expires_in)),
             'component_verify_ticket' => $component_verify_ticket
         );
         if (empty($memo)) {
@@ -245,7 +245,7 @@ class ComponentApplication extends \App\Common\Models\Weixin\ComponentApplicatio
                             '$set' => array(
                                 'access_token' => $arrToken['authorizer_access_token'],
                                 'refresh_token' => $arrToken['authorizer_refresh_token'],
-                                'access_token_expire' => getCurrentTime(time() + intval($arrToken['expires_in']))
+                                'access_token_expire' => \App\Common\Utils\Helper::getCurrentTime(time() + intval($arrToken['expires_in']))
                             )
                         );
                         $cmd['new'] = true;
@@ -291,7 +291,7 @@ class ComponentApplication extends \App\Common\Models\Weixin\ComponentApplicatio
                         );
                         $cmd['update'] = array(
                             '$set' => array(
-                                'jsapi_ticket_expire' => getCurrentTime(time() + $arrJsApiTicket['expires_in']),
+                                'jsapi_ticket_expire' => \App\Common\Utils\Helper::getCurrentTime(time() + $arrJsApiTicket['expires_in']),
                                 'jsapi_ticket' => $arrJsApiTicket['ticket']
                             )
                         );
@@ -331,7 +331,7 @@ class ComponentApplication extends \App\Common\Models\Weixin\ComponentApplicatio
                         );
                         $cmd['update'] = array(
                             '$set' => array(
-                                'wx_card_api_ticket_expire' => getCurrentTime(time() + $ret['expires_in']),
+                                'wx_card_api_ticket_expire' => \App\Common\Utils\Helper::getCurrentTime(time() + $ret['expires_in']),
                                 'wx_card_api_ticket' => $ret['ticket']
                             )
                         );
@@ -377,7 +377,7 @@ class ComponentApplication extends \App\Common\Models\Weixin\ComponentApplicatio
                         $cmd['update'] = array(
                             '$set' => array(
                                 'component_access_token' => $arrToken['component_access_token'],
-                                'component_access_token_expire' => getCurrentTime(time() + intval($arrToken['expires_in']))
+                                'component_access_token_expire' => \App\Common\Utils\Helper::getCurrentTime(time() + intval($arrToken['expires_in']))
                             )
                         );
                         $cmd['new'] = true;

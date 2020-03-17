@@ -51,7 +51,7 @@ class ReplyMsg extends \App\Common\Models\Message\ReplyMsg
         $data['to_user_register_by'] = $to_user_register_by;
         $data['to_user_content'] = $to_user_content;
         
-        $data['msg_time'] = getCurrentTime();
+        $data['msg_time'] = \App\Common\Utils\Helper::getCurrentTime();
         $data['is_read'] = false;
         return $this->insert($data);
     }

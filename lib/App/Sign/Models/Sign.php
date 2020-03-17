@@ -76,7 +76,7 @@ class Sign extends \App\Common\Models\Sign\Sign
                     "update" => array(
                         '$set' => array(
                             "lastip" => $ip,
-                            "last_sign_time" => getCurrentTime($sign_time),
+                            "last_sign_time" => \App\Common\Utils\Helper::getCurrentTime($sign_time),
                             "is_continue_sign" => true,
                             'insameperiod_sign_count' => 1, // 连续签到则同一天的签到数重置
                             'valid_log_id' => $valid_log_id
@@ -96,8 +96,8 @@ class Sign extends \App\Common\Models\Sign\Sign
                             "is_continue_sign" => true,
                             "lastip" => $ip,
                             "continue_sign_count" => 1, // 重新计数连续签到
-                            "restart_sign_time" => getCurrentTime($sign_time), // 重新设置签到日期
-                            "last_sign_time" => getCurrentTime($sign_time),
+                            "restart_sign_time" => \App\Common\Utils\Helper::getCurrentTime($sign_time), // 重新设置签到日期
+                            "last_sign_time" => \App\Common\Utils\Helper::getCurrentTime($sign_time),
                             'insameperiod_sign_count' => 1,
                             'valid_log_id' => $valid_log_id
                         ),
@@ -113,7 +113,7 @@ class Sign extends \App\Common\Models\Sign\Sign
                     "update" => array(
                         '$set' => array(
                             "lastip" => $ip,
-                            "last_sign_time" => getCurrentTime($sign_time),
+                            "last_sign_time" => \App\Common\Utils\Helper::getCurrentTime($sign_time),
                             'valid_log_id' => $valid_log_id
                         ),
                         '$inc' => array(
@@ -133,9 +133,9 @@ class Sign extends \App\Common\Models\Sign\Sign
             $data['nickname'] = $nickname; // 用户昵称
             $data['headimgurl'] = $headimgurl; // 用户头像
 
-            $data['first_sign_time'] = getCurrentTime($sign_time); // 首次签到时间
-            $data['restart_sign_time'] = getCurrentTime($sign_time); // 重新开始签到时间
-            $data['last_sign_time'] = getCurrentTime($sign_time); // 最终签到时间
+            $data['first_sign_time'] = \App\Common\Utils\Helper::getCurrentTime($sign_time); // 首次签到时间
+            $data['restart_sign_time'] = \App\Common\Utils\Helper::getCurrentTime($sign_time); // 重新开始签到时间
+            $data['last_sign_time'] = \App\Common\Utils\Helper::getCurrentTime($sign_time); // 最终签到时间
 
             $data['total_sign_count'] = 1; // 总签到数量（同天累加）
             $data['total_sign_count2'] = 1; // 总签到数量2（同天不累加）

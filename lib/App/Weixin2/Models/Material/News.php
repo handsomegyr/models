@@ -75,7 +75,7 @@ class News extends \App\Common\Models\Weixin2\Material\News
     {
         $updateData = array();
         $updateData['media_id'] = $res['media_id'];
-        $updateData['media_time'] = getCurrentTime($now);
+        $updateData['media_time'] = \App\Common\Utils\Helper::getCurrentTime($now);
         return $this->update(array('_id' => $id), array('$set' => $updateData));
     }
 

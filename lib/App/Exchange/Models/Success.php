@@ -31,7 +31,7 @@ class Success extends \App\Common\Models\Exchange\Success
         $data['quantity'] = $quantity;
         $data['score'] = $score;
         $data['is_valid'] = true;
-        $data['exchange_time'] = getCurrentTime();
+        $data['exchange_time'] = \App\Common\Utils\Helper::getCurrentTime();
 
         $data['rule_id'] = $rule_info['_id'];
 

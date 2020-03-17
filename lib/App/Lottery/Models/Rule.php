@@ -18,7 +18,7 @@ class Rule extends \App\Common\Models\Lottery\Rule
     public function getRules($activity_id, $now, array $prize_ids = array(), array $exclude_prize_ids = array())
     {
         if ($this->_rules == null) {
-            $now = getCurrentTime($now);
+            $now = \App\Common\Utils\Helper::getCurrentTime($now);
             $query = array(
                 'activity_id' => $activity_id,
                 'allow_start_time' => array(
@@ -128,16 +128,16 @@ class Rule extends \App\Common\Models\Lottery\Rule
     public function create($activity_id, $prize_id, $allow_number = 0, $allow_probability = 0, $allow_start_time = 0, $allow_end_time = 0)
     {
         if (empty($allow_start_time)) {
-            $allow_start_time = getCurrentTime(strtotime('2016-01-01 00:00:00'));
+            $allow_start_time = \App\Common\Utils\Helper::getCurrentTime(strtotime('2016-01-01 00:00:00'));
         }
         if (empty($allow_end_time)) {
-            $allow_end_time = getCurrentTime(strtotime('2099-12-31 23:59:59'));
+            $allow_end_time = \App\Common\Utils\Helper::getCurrentTime(strtotime('2099-12-31 23:59:59'));
         }
         $data = array();
         $data['activity_id'] = $activity_id;
         $data['prize_id'] = $prize_id;
-        $data['allow_start_time'] = getCurrentTime($allow_start_time);
-        $data['allow_end_time'] = getCurrentTime($allow_end_time);
+        $data['allow_start_time'] = \App\Common\Utils\Helper::getCurrentTime($allow_start_time);
+        $data['allow_end_time'] = \App\Common\Utils\Helper::getCurrentTime($allow_end_time);
         $data['allow_number'] = $allow_number;
         $data['allow_probability'] = $allow_probability;
         $data['win_number'] = 0;

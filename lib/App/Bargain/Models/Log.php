@@ -73,7 +73,7 @@ class Log extends \App\Common\Models\Bargain\Log
             'bargain_num' => intval($bargain_num),
             'bargain_amount' => intval($bargain_amount),
             'is_system_bargain' => $is_system_bargain,
-            'bargain_time' => getCurrentTime($bargain_time),
+            'bargain_time' => \App\Common\Utils\Helper::getCurrentTime($bargain_time),
             'activity_id' => $activity_id,
             'memo' => $memo
         ));

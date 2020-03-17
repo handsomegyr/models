@@ -35,7 +35,7 @@ class Bargain extends \App\Common\Models\Bargain\Bargain
             'activity_id' => $activity_id
         );
 
-        $now = getCurrentTime($now);
+        $now = \App\Common\Utils\Helper::getCurrentTime($now);
         $queryDefault = array(
             'is_closed' => false,
             'quantity' => array(
@@ -92,7 +92,7 @@ class Bargain extends \App\Common\Models\Bargain\Bargain
             'user_id' => $user_id,
             'user_name' => $user_name,
             'user_headimgurl' => $user_headimgurl,
-            'launch_time' => getCurrentTime($launch_time),
+            'launch_time' => \App\Common\Utils\Helper::getCurrentTime($launch_time),
             'code' => $code,
             'name' => $name,
             'worth' => intval($worth),
@@ -105,15 +105,15 @@ class Bargain extends \App\Common\Models\Bargain\Bargain
             'is_closed' => $is_closed,
             'bargain_num_limit' => intval($bargain_num_limit),
             'is_both_bargain' => $is_both_bargain,
-            'start_time' => getCurrentTime($start_time),
-            'end_time' => getCurrentTime($end_time),
+            'start_time' => \App\Common\Utils\Helper::getCurrentTime($start_time),
+            'end_time' => \App\Common\Utils\Helper::getCurrentTime($end_time),
             'bargain_period' => $bargain_period,
             'total_bargain_num' => 0,
             'total_bargain_amount' => 0,
             'is_bargain_to_minworth' => false,
-            'bargain_to_minworth_time' => getCurrentTime($bargain_to_minworth_time),
-            'bargain_time' => getCurrentTime($launch_time),
-            'close_time' => getCurrentTime(strtotime('0001-01-01 00:00:00')),
+            'bargain_to_minworth_time' => \App\Common\Utils\Helper::getCurrentTime($bargain_to_minworth_time),
+            'bargain_time' => \App\Common\Utils\Helper::getCurrentTime($launch_time),
+            'close_time' => \App\Common\Utils\Helper::getCurrentTime(strtotime('0001-01-01 00:00:00')),
             'memo' => $memo
         ));
     }
@@ -146,7 +146,7 @@ class Bargain extends \App\Common\Models\Bargain\Bargain
                 'current_worth' => -$amount
             ),
             'set' => array(
-                'bargain_time' => getCurrentTime($now)
+                'bargain_time' => \App\Common\Utils\Helper::getCurrentTime($now)
             )
         );
         $options['new'] = true; // 返回更新之后的值
@@ -168,8 +168,8 @@ class Bargain extends \App\Common\Models\Bargain\Bargain
         ), array(
             '$set' => array(
                 'is_bargain_to_minworth' => true,
-                'bargain_time' => getCurrentTime($now),
-                'bargain_to_minworth_time' => getCurrentTime($now)
+                'bargain_time' => \App\Common\Utils\Helper::getCurrentTime($now),
+                'bargain_to_minworth_time' => \App\Common\Utils\Helper::getCurrentTime($now)
             )
         ));
     }
@@ -189,7 +189,7 @@ class Bargain extends \App\Common\Models\Bargain\Bargain
         $options['update'] = array(
             '$set' => array(
                 'is_closed' => true,
-                'close_time' => getCurrentTime($now),
+                'close_time' => \App\Common\Utils\Helper::getCurrentTime($now),
             )
         );
         $options['new'] = true; // 返回更新之后的值

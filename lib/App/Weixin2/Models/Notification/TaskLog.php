@@ -98,7 +98,7 @@ class TaskLog extends \App\Common\Models\Weixin2\Notification\TaskLog
     {
         $updateData = array();
         $updateData['push_status'] = $status;
-        $updateData['push_time'] = getCurrentTime($now);
+        $updateData['push_time'] = \App\Common\Utils\Helper::getCurrentTime($now);
         $updateData['is_ok'] = empty($is_ok) ? 0 : 1;
         if (empty($error)) {
             $updateData['error'] = "";

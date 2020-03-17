@@ -36,7 +36,7 @@ class News extends \App\Common\Models\Member\News
         $data['user_register_by'] = $user_register_by;
         $data['action'] = $action;
         $data['content_id'] = $content_id;
-        $data['news_time'] = getCurrentTime();
+        $data['news_time'] = \App\Common\Utils\Helper::getCurrentTime();
         $data['memo'] = $memo;
         return $this->insert($data);
     }

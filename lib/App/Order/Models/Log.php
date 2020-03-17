@@ -15,7 +15,7 @@ class Log extends \App\Common\Models\Order\Log
         $data = array();
         $data['order_id'] = $order_id;
         $data['order_state'] = $orderState;
-        $data['log_time'] = getCurrentTime();
+        $data['log_time'] = \App\Common\Utils\Helper::getCurrentTime();
         $data['msg'] = $msg;
         $data['role'] = $role;
         $data['user_id'] = $user_id;

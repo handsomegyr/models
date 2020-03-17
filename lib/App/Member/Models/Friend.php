@@ -89,7 +89,7 @@ class Friend extends \App\Common\Models\Member\Friend
         $data['to_user_email'] = $to_user_email;
         $data['to_user_mobile'] = $to_user_mobile;
         $data['to_user_register_by'] = $to_user_register_by;
-        $data['apply_time'] = getCurrentTime();
+        $data['apply_time'] = \App\Common\Utils\Helper::getCurrentTime();
         $data['state'] = self::STATE0;
         return $this->insert($data);
     }
@@ -125,7 +125,7 @@ class Friend extends \App\Common\Models\Member\Friend
         $query['to_user_id'] = $to_user_id;
         $data = array();
         $data['state'] = self::STATE1;
-        $data['agree_time'] = getCurrentTime();
+        $data['agree_time'] = \App\Common\Utils\Helper::getCurrentTime();
         return $this->update($query, array(
             '$set' => $data
         ));

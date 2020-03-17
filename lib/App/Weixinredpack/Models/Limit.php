@@ -18,7 +18,7 @@ class Limit extends \App\Common\Models\Weixinredpack\Limit
     public function getLimits($activity_id, $customer_id, $redpack_id)
     {
         if ($this->_limits == null) {
-            $now = getCurrentTime();
+            $now = \App\Common\Utils\Helper::getCurrentTime();
             $this->_limits = $this->findAll(array(
                 'activity' => $activity_id,
                 'customer' => $customer_id,

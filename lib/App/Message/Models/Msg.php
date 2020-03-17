@@ -10,7 +10,7 @@ class Msg extends \App\Common\Models\Message\Msg
         $data['from_user_id'] = $from_user_id;
         $data['to_user_id'] = $to_user_id;
         $data['content'] = $content;
-        $data['msg_time'] = getCurrentTime();
+        $data['msg_time'] = \App\Common\Utils\Helper::getCurrentTime();
         return $this->insert($data);
     }
 

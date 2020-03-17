@@ -62,7 +62,7 @@ class FileContent extends \App\Common\Models\Cronjob\DataImport\FileContent
     public function log($cron_time, $cronjob_id, $line_no, $content_type, $content, $content_sign, $now)
     {
         $insertData = array();
-        $insertData['cron_time'] = getCurrentTime($cron_time);
+        $insertData['cron_time'] = \App\Common\Utils\Helper::getCurrentTime($cron_time);
         $insertData['cronjob_id'] = $cronjob_id;
         $insertData['returnback_cronjobId'] = '';
 
@@ -74,17 +74,17 @@ class FileContent extends \App\Common\Models\Cronjob\DataImport\FileContent
         // 处理用
         $insertData['process_status'] = 0;
         $insertData['process_num'] = 0;
-        $insertData['process_time'] = getCurrentTime(strtotime('0001-01-01 00:00:00'));
+        $insertData['process_time'] = \App\Common\Utils\Helper::getCurrentTime(strtotime('0001-01-01 00:00:00'));
         $insertData['process_uniqueId'] = '';
         $insertData['process_desc'] = '';
 
         // 回退用
         $insertData['returnback_status'] = 0;
         $insertData['returnback_num'] = 0;
-        $insertData['returnback_time'] = getCurrentTime(strtotime('0001-01-01 00:00:00'));
+        $insertData['returnback_time'] = \App\Common\Utils\Helper::getCurrentTime(strtotime('0001-01-01 00:00:00'));
         $insertData['returnback_uniqueId'] = '';
 
-        $insertData['log_time'] = getCurrentTime($now);
+        $insertData['log_time'] = \App\Common\Utils\Helper::getCurrentTime($now);
         $result = $this->insert($insertData);
 
         return $result;

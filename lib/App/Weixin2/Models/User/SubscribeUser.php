@@ -28,7 +28,7 @@ class SubscribeUser extends \App\Common\Models\Weixin2\User\SubscribeUser
         $data['authorizer_appid'] = $authorizer_appid;
         $data['component_appid'] = $component_appid;
         $data['openid'] = $openid;
-        $data['get_time'] = getCurrentTime($now);
+        $data['get_time'] = \App\Common\Utils\Helper::getCurrentTime($now);
         $this->insert($data);
     }
 }

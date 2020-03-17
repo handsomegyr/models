@@ -45,7 +45,7 @@ class Visitor extends \App\Common\Models\Member\Visitor
             $data = array();
             $data['visited_user_id'] = $visited_user_id;
             $data['visit_user_id'] = $visit_user_id;
-            $data['browser_time'] = getCurrentTime();
+            $data['browser_time'] = \App\Common\Utils\Helper::getCurrentTime();
             $info = $this->insert($data);
         }
         return $info;

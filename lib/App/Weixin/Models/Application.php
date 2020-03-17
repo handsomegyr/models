@@ -170,7 +170,7 @@ class Application extends \App\Common\Models\Weixin\Application
                         $cmd['update'] = array(
                             '$set' => array(
                                 'access_token' => $arrToken['access_token'],
-                                'access_token_expire' => getCurrentTime(time() + 7200)
+                                'access_token_expire' => \App\Common\Utils\Helper::getCurrentTime(time() + 7200)
                             )
                         );
                         $cmd['new'] = true;
@@ -216,7 +216,7 @@ class Application extends \App\Common\Models\Weixin\Application
                         );
                         $cmd['update'] = array(
                             '$set' => array(
-                                'jsapi_ticket_expire' => getCurrentTime(time() + $arrJsApiTicket['expires_in']),
+                                'jsapi_ticket_expire' => \App\Common\Utils\Helper::getCurrentTime(time() + $arrJsApiTicket['expires_in']),
                                 'jsapi_ticket' => $arrJsApiTicket['ticket']
                             )
                         );
@@ -256,7 +256,7 @@ class Application extends \App\Common\Models\Weixin\Application
                         );
                         $cmd['update'] = array(
                             '$set' => array(
-                                'wx_card_api_ticket_expire' => getCurrentTime(time() + $ret['expires_in']),
+                                'wx_card_api_ticket_expire' => \App\Common\Utils\Helper::getCurrentTime(time() + $ret['expires_in']),
                                 'wx_card_api_ticket' => $ret['ticket']
                             )
                         );

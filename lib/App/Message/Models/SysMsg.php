@@ -9,7 +9,7 @@ class SysMsg extends \App\Common\Models\Message\SysMsg
         $data = array();
         $data['to_user_id'] = $to_user_id;
         $data['content'] = $content;
-        $data['msg_time'] = getCurrentTime();
+        $data['msg_time'] = \App\Common\Utils\Helper::getCurrentTime();
         $data['is_read'] = false;
         return $this->insert($data);
     }

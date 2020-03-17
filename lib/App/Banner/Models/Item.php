@@ -35,7 +35,7 @@ class Item extends \App\Common\Models\Banner\Item
      */
     public function getListByBannerId($banner_id, $now)
     {
-        $now = getCurrentTime($now);
+        $now = \App\Common\Utils\Helper::getCurrentTime($now);
         $query = array();
         $query['start_at'] = array(
             '$lte' => $now

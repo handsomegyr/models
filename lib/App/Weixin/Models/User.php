@@ -56,13 +56,13 @@ class User extends \App\Common\Models\Weixin\User
             if (! isset($userInfo['errcode'])) {
                 $userInfo['subscribe'] = $userInfo['subscribe'] == 1 ? true : false;
                 if (! empty($userInfo['subscribe'])) {
-                    $userInfo['subscribe_time'] = getCurrentTime($userInfo['subscribe_time']);
+                    $userInfo['subscribe_time'] = \App\Common\Utils\Helper::getCurrentTime($userInfo['subscribe_time']);
                 }
             } elseif (! $range) {
                 // 针对订阅号的情况，记录关注用户的openid
                 $userInfo = array();
                 $userInfo['subscribe'] = true;
-                $userInfo['subscribe_time'] = getCurrentTime();
+                $userInfo['subscribe_time'] = \App\Common\Utils\Helper::getCurrentTime();
             } else {
                 return false;
             }
@@ -113,7 +113,7 @@ class User extends \App\Common\Models\Weixin\User
         return $this->findOne(array(
             'openid' => $openid,
             '__MODIFY_TIME__' => array(
-                '$gt' => getCurrentTime(time() - 7 * 86400)
+                '$gt' => \App\Common\Utils\Helper::getCurrentTime(time() - 7 * 86400)
             )
         ));
     }

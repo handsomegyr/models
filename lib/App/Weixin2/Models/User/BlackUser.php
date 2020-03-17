@@ -26,7 +26,7 @@ class BlackUser extends \App\Common\Models\Weixin2\User\BlackUser
     {
         $updateData = array();
         $updateData['is_black'] = 1;
-        $updateData['black_time'] = getCurrentTime($now);
+        $updateData['black_time'] = \App\Common\Utils\Helper::getCurrentTime($now);
         return $this->update(array('_id' => $id), array('$set' => $updateData));
     }
 
@@ -34,7 +34,7 @@ class BlackUser extends \App\Common\Models\Weixin2\User\BlackUser
     {
         $updateData = array();
         $updateData['is_black'] = 0;
-        $updateData['unblack_time'] = getCurrentTime($now);
+        $updateData['unblack_time'] = \App\Common\Utils\Helper::getCurrentTime($now);
         return $this->update(array('_id' => $id), array('$set' => $updateData));
     }
 
@@ -45,7 +45,7 @@ class BlackUser extends \App\Common\Models\Weixin2\User\BlackUser
                 $info = $this->getInfoByOpenid($openid, $authorizer_appid, $component_appid);
                 $data = array();
                 $data['is_black'] = 1;
-                $data['black_time'] = getCurrentTime($now);
+                $data['black_time'] = \App\Common\Utils\Helper::getCurrentTime($now);
                 if (!empty($info)) {
                     $this->update(array('_id' => $info['_id']), array('$set' => $data));
                 } else {

@@ -98,12 +98,12 @@ class Invitation extends \App\Common\Models\Invitation\Invitation
         $data['worth2'] = $worth2; // 价值2
         $data['invited_num'] = 0; // 接受邀请次数
         $data['invited_total'] = $invited_total; // 接受邀请总次数，如果为0，不限制
-        $data['send_time'] = getCurrentTime($send_time); // 发送时间
+        $data['send_time'] = \App\Common\Utils\Helper::getCurrentTime($send_time); // 发送时间
         $data['is_need_subscribed'] = $is_need_subscribed; // 是否需要微信关注
         $data['subscibe_hint_url'] = $subscibe_hint_url; // 微信关注提示页面链接
         $data['personal_receive_num'] = $personal_receive_num; // 个人领取次数，如果为0，不限制
         $data['lock'] = false; // 未锁定
-        $data['expire'] = getCurrentTime(); // 过期时间
+        $data['expire'] = \App\Common\Utils\Helper::getCurrentTime(); // 过期时间
         $data['memo'] = $memo; // 备注
 
         $info = $this->insert($data);
@@ -188,7 +188,7 @@ class Invitation extends \App\Common\Models\Invitation\Invitation
         $options['update'] = array(
             '$set' => array(
                 'lock' => true,
-                'expire' => getCurrentTime(time() + 300)
+                'expire' => \App\Common\Utils\Helper::getCurrentTime(time() + 300)
             )
         );
         $options['new'] = false; // 返回更新之前的值
@@ -222,7 +222,7 @@ class Invitation extends \App\Common\Models\Invitation\Invitation
         ), array(
             '$set' => array(
                 'lock' => false,
-                'expire' => getCurrentTime()
+                'expire' => \App\Common\Utils\Helper::getCurrentTime()
             )
         ));
     }
@@ -237,7 +237,7 @@ class Invitation extends \App\Common\Models\Invitation\Invitation
         return $this->update(array(
             '_id' => ($invitationId),
             'expire' => array(
-                '$lte' => getCurrentTime()
+                '$lte' => \App\Common\Utils\Helper::getCurrentTime()
             )
         ), array(
             '$set' => array(

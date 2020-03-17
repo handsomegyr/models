@@ -13,7 +13,7 @@ class MsgStatistics extends \App\Common\Models\Message\MsgStatistics
             $data['user2_id'] = $user2_id;
             $data['content'] = $content;
             $data['msg_user_id'] = $user1_id;
-            $data['msg_time'] = getCurrentTime();
+            $data['msg_time'] = \App\Common\Utils\Helper::getCurrentTime();
             $data['msg_num'] = 1;
             $data['user1_unread_num'] = 0;
             $data['user2_unread_num'] = 1;
@@ -50,7 +50,7 @@ class MsgStatistics extends \App\Common\Models\Message\MsgStatistics
             '$set' => array(
                 'msg_user_id' => $msg_user_id,
                 'content' => $content,
-                'msg_time' => getCurrentTime()
+                'msg_time' => \App\Common\Utils\Helper::getCurrentTime()
             )
         ));
     }

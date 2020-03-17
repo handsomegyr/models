@@ -48,7 +48,7 @@ class Random extends \App\Common\Models\Questionnaire\Random
         ), array(
             '$set' => array(
                 'is_finish' => true,
-                'finish_time' => getCurrentTime($finish_time)
+                'finish_time' => \App\Common\Utils\Helper::getCurrentTime($finish_time)
             )
         ));
 

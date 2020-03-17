@@ -19,7 +19,7 @@ class ErrorLog extends \App\Common\Models\Activity\ErrorLog
         $data['activity_id'] = $activity_id;
         $data['error_code'] = intval($e->getCode());
         $data['error_message'] = $e->getMessage();
-        $data['happen_time'] = getCurrentTime($happen_time);
+        $data['happen_time'] = \App\Common\Utils\Helper::getCurrentTime($happen_time);
         $result = $this->insert($data);
         return $result;
     }

@@ -53,7 +53,7 @@ trait BaseTrait
         if ($field instanceof \MongoDate) {
             return $field;
         }
-        return getCurrentTime(strtotime($field));
+        return \App\Common\Utils\Helper::getCurrentTime(strtotime($field));
     }
 
     protected function getColumns(array $fields = array())

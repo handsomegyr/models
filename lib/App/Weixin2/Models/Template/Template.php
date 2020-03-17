@@ -26,7 +26,7 @@ class Template extends \App\Common\Models\Weixin2\Template\Template
     {
         $updateData = array();
         $updateData['is_created'] = 1;
-        $updateData['template_time'] = getCurrentTime($now);
+        $updateData['template_time'] = \App\Common\Utils\Helper::getCurrentTime($now);
         return $this->update(array('_id' => $id), array('$set' => $updateData));
     }
 
@@ -55,7 +55,7 @@ class Template extends \App\Common\Models\Weixin2\Template\Template
                 $data['content'] = $item['content'];
                 $data['example'] = $item['example'];
                 $data['is_created'] = 1;
-                $data['template_time'] = getCurrentTime($now);
+                $data['template_time'] = \App\Common\Utils\Helper::getCurrentTime($now);
 
                 if (!empty($info)) {
                     $this->update(array('_id' => $info['_id']), array('$set' => $data));

@@ -40,8 +40,8 @@ class SendLog extends \App\Common\Models\Weixin2\MassMsg\SendLog
             'mass_msg_content' => empty($mass_msg_content) ? "" : $mass_msg_content,
             'msg_id' => empty($msg_id) ? "" : $msg_id,
             'msg_data_id' => empty($msg_data_id) ? "" : $msg_data_id,
-            'msg_time' => getCurrentTime($log_time),
-            'log_time' => getCurrentTime($log_time),
+            'msg_time' => \App\Common\Utils\Helper::getCurrentTime($log_time),
+            'log_time' => \App\Common\Utils\Helper::getCurrentTime($log_time),
             'msg_status' => ""
         );
 
@@ -64,7 +64,7 @@ class SendLog extends \App\Common\Models\Weixin2\MassMsg\SendLog
         if (!empty($res['msg_data_id'])) {
             $updateData['msg_data_id'] = $res['msg_data_id'];
         }
-        $updateData['msg_time'] = getCurrentTime($now);
+        $updateData['msg_time'] = \App\Common\Utils\Helper::getCurrentTime($now);
         return $this->update(array('_id' => $id), array('$set' => $updateData));
     }
 

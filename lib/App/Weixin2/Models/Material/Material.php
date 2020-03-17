@@ -12,7 +12,7 @@ class Material extends \App\Common\Models\Weixin2\Material\Material
         if (!empty($res['url'])) {
             $updateData['url'] = $res['url'];
         }
-        $updateData['media_time'] = getCurrentTime($now);
+        $updateData['media_time'] = \App\Common\Utils\Helper::getCurrentTime($now);
         return $this->update(array('_id' => $id), array('$set' => $updateData));
     }
 
@@ -21,7 +21,7 @@ class Material extends \App\Common\Models\Weixin2\Material\Material
         $updateData = array();
         $updateData['media_id'] = "";
         $updateData['url'] = "";
-        $updateData['delete_media_time'] = getCurrentTime($now);
+        $updateData['delete_media_time'] = \App\Common\Utils\Helper::getCurrentTime($now);
         return $this->update(array('_id' => $id), array('$set' => $updateData));
     }
 }

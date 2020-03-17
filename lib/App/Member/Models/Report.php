@@ -28,7 +28,7 @@ class Report extends \App\Common\Models\Member\Report
         $data['to_user_register_by'] = $to_user_register_by;
         $data['type'] = $type;
         $data['content'] = $content;
-        $data['report_time'] = getCurrentTime();
+        $data['report_time'] = \App\Common\Utils\Helper::getCurrentTime();
         return $this->insert($data);
     }
 
@@ -63,7 +63,7 @@ class Report extends \App\Common\Models\Member\Report
         $query['to_user_id'] = $to_user_id;
         $data = array();
         $data['state'] = self::STATE1;
-        $data['agree_time'] = getCurrentTime();
+        $data['agree_time'] = \App\Common\Utils\Helper::getCurrentTime();
         return $this->update($query, array(
             '$set' => $data
         ));

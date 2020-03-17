@@ -21,7 +21,7 @@ class MassMsg extends \App\Common\Models\Weixin2\MassMsg\MassMsg
         if (!empty($res['msg_data_id'])) {
             $updateData['msg_data_id'] = $res['msg_data_id'];
         }
-        $updateData['msg_time'] = getCurrentTime($now);
+        $updateData['msg_time'] = \App\Common\Utils\Helper::getCurrentTime($now);
         return $this->update(array('_id' => $id), array('$set' => $updateData));
     }
 

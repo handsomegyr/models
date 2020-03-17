@@ -26,10 +26,10 @@ class Rule extends \App\Common\Models\Exchange\Rule
         $query = array();
         $query['activity_id'] = $activity_id;
         $query['allow_start_time'] = array(
-            '$lte' => getCurrentTime($now)
+            '$lte' => \App\Common\Utils\Helper::getCurrentTime($now)
         );
         $query['allow_end_time'] = array(
-            '$gte' => getCurrentTime($now)
+            '$gte' => \App\Common\Utils\Helper::getCurrentTime($now)
         );
 
         if (!empty($prize_ids)) {

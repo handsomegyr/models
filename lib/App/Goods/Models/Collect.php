@@ -42,7 +42,7 @@ class Collect extends \App\Common\Models\Goods\Collect
         $data['user_id'] = $user_id;
         $data['goods_id'] = $goods_id;
         $data['num'] = $num;
-        $data['collect_time'] = getCurrentTime();
+        $data['collect_time'] = \App\Common\Utils\Helper::getCurrentTime();
         return $this->insert($data);
     }
 

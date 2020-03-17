@@ -63,7 +63,7 @@ class Pay extends \App\Common\Models\Order\Pay
             $data['api_pay_state'] = self::STATE0; // 0默认未支付
         } else {
             $data['api_pay_state'] = self::STATE1; // 1已支付
-            $data['payment_time'] = getCurrentTime(); // 支付时间
+            $data['payment_time'] = \App\Common\Utils\Helper::getCurrentTime(); // 支付时间
         }
         $data['process_state'] = false;
         $data['process_task'] = $process_task;

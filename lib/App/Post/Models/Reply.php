@@ -112,7 +112,7 @@ class Reply extends \App\Common\Models\Post\Reply
         $data['ref_reply_id'] = $ref_reply_id;
         $data['floor'] = $floor;
         $data['ref_floor'] = $ref_floor;
-        $data['reply_time'] = getCurrentTime();
+        $data['reply_time'] = \App\Common\Utils\Helper::getCurrentTime();
         $data['num'] = 0;
         $data['del_num'] = 0;
         $data['is_del'] = false;

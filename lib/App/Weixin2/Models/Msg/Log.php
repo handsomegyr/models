@@ -113,8 +113,8 @@ class Log extends \App\Common\Models\Weixin2\Msg\Log
         $data['response'] = isset($info['response']) ? ($info['response']) : '';
         $data['aes_info'] = isset($info['aes_info']) ? \json_encode($info['aes_info']) : '';
         $data['is_aes'] = isset($info['is_aes']) ? intval($info['is_aes']) : 0;
-        $data['request_time'] = isset($info['request_time']) ? getCurrentTime($info['request_time']) : '';
-        $data['response_time'] = isset($info['response_time']) ? getCurrentTime($info['response_time']) : '';
+        $data['request_time'] = isset($info['request_time']) ? \App\Common\Utils\Helper::getCurrentTime($info['request_time']) : '';
+        $data['response_time'] = isset($info['response_time']) ? \App\Common\Utils\Helper::getCurrentTime($info['response_time']) : '';
         $data['interval'] = isset($info['interval']) ? $info['interval'] : 0;
 
         $data['lock_uniqueKey'] = isset($info['lock_uniqueKey']) ? $info['lock_uniqueKey'] : '';

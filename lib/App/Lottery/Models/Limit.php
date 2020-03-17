@@ -16,7 +16,7 @@ class Limit extends \App\Common\Models\Lottery\Limit
     public function getLimits($activity_id, $now)
     {
         if ($this->_limits == null) {
-            $now = getCurrentTime($now);
+            $now = \App\Common\Utils\Helper::getCurrentTime($now);
             $this->_limits = $this->findAll(array(
                 'activity_id' => $activity_id,
                 'start_time' => array(

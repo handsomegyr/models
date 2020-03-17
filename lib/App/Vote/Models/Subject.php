@@ -44,7 +44,7 @@ class Subject extends \App\Common\Models\Vote\Subject
      */
     public function getListByActivityId($activityId, $now)
     {
-        $now = getCurrentTime($now);
+        $now = \App\Common\Utils\Helper::getCurrentTime($now);
         $query = array(
             "is_closed" => false,
             'start_time' => array(
@@ -90,7 +90,7 @@ class Subject extends \App\Common\Models\Vote\Subject
      */
     public function getRank($myInfo, $now, array $otherConditions = array())
     {
-        $now = getCurrentTime($now);
+        $now = \App\Common\Utils\Helper::getCurrentTime($now);
         $query = array(
             "is_closed" => false,
             'start_time' => array(

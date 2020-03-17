@@ -40,7 +40,7 @@ class Log extends \App\Common\Models\Vote\Log
         $data['activity'] = $activity;
         $data['subject'] = $subject;
         $data['item'] = $item;
-        $data['vote_time'] = getCurrentTime($vote_time);
+        $data['vote_time'] = \App\Common\Utils\Helper::getCurrentTime($vote_time);
         $data['identity'] = $identity;
         $data['ip'] = $ip;
         $data['session_id'] = $session_id;
@@ -115,10 +115,10 @@ class Log extends \App\Common\Models\Vote\Log
         }
 
         if (!empty($startTime)) {
-            $query['vote_time']['$gte'] = getCurrentTime($startTime);
+            $query['vote_time']['$gte'] = \App\Common\Utils\Helper::getCurrentTime($startTime);
         }
         if (!empty($endTime)) {
-            $query['vote_time']['$lte'] = getCurrentTime($endTime);
+            $query['vote_time']['$lte'] = \App\Common\Utils\Helper::getCurrentTime($endTime);
         }
 
         if (intval($num) < 1) {

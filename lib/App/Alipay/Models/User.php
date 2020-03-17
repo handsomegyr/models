@@ -65,7 +65,7 @@ class User extends \App\Common\Models\Alipay\User
         return $this->findOne(array(
             'user_id' => $user_id,
             '__MODIFY_TIME__' => array(
-                '$gt' => getCurrentTime(time() - 7 * 86400)
+                '$gt' => \App\Common\Utils\Helper::getCurrentTime(time() - 7 * 86400)
             )
         ));
     }

@@ -62,7 +62,7 @@ class User extends \App\Common\Models\Weixin2\User\User
             'openid' => $openid,
             'authorizer_appid' => $authorizer_appid,
             'component_appid' =>  $component_appid,
-            'updated_at' => array('$gt' => getCurrentTime($now - 7 * 86400))
+            'updated_at' => array('$gt' => \App\Common\Utils\Helper::getCurrentTime($now - 7 * 86400))
         ));
         return $info;
     }
@@ -122,7 +122,7 @@ class User extends \App\Common\Models\Weixin2\User\User
             $data['groupid'] = isset($userInfo['groupid']) ? $userInfo['groupid'] : '';
             $data['tagid_list'] = isset($userInfo['tagid_list']) ? \json_encode($userInfo['tagid_list']) : '';
             $data['subscribe'] = isset($userInfo['subscribe']) ? intval($userInfo['subscribe']) : 0;
-            $data['subscribe_time'] = isset($userInfo['subscribe_time']) ? getCurrentTime($userInfo['subscribe_time']) : '';
+            $data['subscribe_time'] = isset($userInfo['subscribe_time']) ? \App\Common\Utils\Helper::getCurrentTime($userInfo['subscribe_time']) : '';
             $data['unionid'] = isset($userInfo['unionid']) ? $userInfo['unionid'] : '';
             $data['privilege'] = isset($userInfo['privilege']) ? \json_encode($userInfo['privilege']) : '';
             $data['access_token'] = isset($userInfo['access_token']) ? \json_encode($userInfo['access_token']) : '';
@@ -171,7 +171,7 @@ class User extends \App\Common\Models\Weixin2\User\User
                 $data['subscribe'] = intval($userInfo['subscribe']);
             }
             if (isset($userInfo['subscribe_time'])) {
-                $data['subscribe_time'] = getCurrentTime($userInfo['subscribe_time']);
+                $data['subscribe_time'] = \App\Common\Utils\Helper::getCurrentTime($userInfo['subscribe_time']);
             }
             if (isset($userInfo['unionid'])) {
                 $data['unionid'] = $userInfo['unionid'];

@@ -15,7 +15,7 @@ class ErrorLog extends \App\Common\Models\System\ErrorLog
         $data = array();
         $data['error_code'] = $e->getCode();
         $data['error_message'] = $e->getMessage();
-        $data['happen_time'] = getCurrentTime();
+        $data['happen_time'] = \App\Common\Utils\Helper::getCurrentTime();
         $result = $this->insert($data);
         
         return $result;

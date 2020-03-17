@@ -62,7 +62,7 @@ class Authorizer extends \App\Common\Models\Weixin2\Authorize\Authorizer
                     'component_appid' => $component_appid,
                     'appid' => $appid,
                     'access_token' => $access_token,
-                    'access_token_expire' => getCurrentTime(time() + $expires_in),
+                    'access_token_expire' => \App\Common\Utils\Helper::getCurrentTime(time() + $expires_in),
                     'refresh_token' => $refresh_token,
                     'func_info' => \json_encode($func_info),
                     'memo' => $memo
@@ -80,7 +80,7 @@ class Authorizer extends \App\Common\Models\Weixin2\Authorize\Authorizer
         $updateData = array();
         $updateData['access_token'] = $access_token;
         $updateData['refresh_token'] = $refresh_token;
-        $updateData['access_token_expire'] = getCurrentTime(time() + $expires_in);
+        $updateData['access_token_expire'] = \App\Common\Utils\Helper::getCurrentTime(time() + $expires_in);
         if (!empty($func_info)) {
             $updateData['func_info'] = \json_encode($func_info);
         }
@@ -102,7 +102,7 @@ class Authorizer extends \App\Common\Models\Weixin2\Authorize\Authorizer
     {
         $updateData = array();
         $updateData['jsapi_ticket'] = $jsapi_ticket;
-        $updateData['jsapi_ticket_expire'] = getCurrentTime(time() + $expires_in);
+        $updateData['jsapi_ticket_expire'] = \App\Common\Utils\Helper::getCurrentTime(time() + $expires_in);
         if (!empty($memo)) {
             $updateData["memo"] = $memo;
         }
@@ -122,7 +122,7 @@ class Authorizer extends \App\Common\Models\Weixin2\Authorize\Authorizer
     {
         $updateData = array();
         $updateData['wx_card_api_ticket'] = $wx_card_api_ticket;
-        $updateData['wx_card_api_ticket_expire'] = getCurrentTime(time() + $expires_in);
+        $updateData['wx_card_api_ticket_expire'] = \App\Common\Utils\Helper::getCurrentTime(time() + $expires_in);
         if (!empty($memo)) {
             $updateData["memo"] = $memo;
         }
