@@ -23,4 +23,9 @@ class Task extends Base
         $data['push_time'] = $this->changeToMongoDate($data['push_time']);
         return $data;
     }
+
+    public function getUploadPath()
+    {
+        return trim("weixin/notification/task", '/');
+    }
 }
