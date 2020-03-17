@@ -273,7 +273,7 @@ class Impl2 extends Base
             if (empty($info)) {
                 // 如果需要插入的话
                 if ($upsert) {
-                    array_walk_recursive($criteria, function (&$value, $key) {
+                    array_walk_recursive($criteria, function (&$value, $key) use($criteria) {
                         if (is_array($value)) {
                             unset($criteria[$key]);
                         }
