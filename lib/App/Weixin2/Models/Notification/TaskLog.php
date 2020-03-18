@@ -33,7 +33,7 @@ class TaskLog extends \App\Common\Models\Weixin2\Notification\TaskLog
         $data['custom_msg_id'] = $custom_msg_id;
         $data['notification_task_content_id'] = $notification_task_content_id;
         $data['notification_task_content_name'] = $notification_task_content_name;
-        $data['openids'] = $openids;
+        $data['openids'] = \json_encode($openids);
         $data['openid'] = $openid;
         $data['tag_id'] = $tag_id;
         $data['push_status'] = $push_status;

@@ -24,17 +24,17 @@ class TaskContent extends \App\Common\Models\Weixin2\Notification\TaskContent
      *
      * @param string $name            
      * @param string $notification_task_id            
-     * @param string $openids              
+     * @param array $openids              
      * @param string $tag_id            
      * @param number $now            
      * @return array
      */
-    public function logon($name, $notification_task_id, $openids, $tag_id, $now)
+    public function logon($name, $notification_task_id, array $openids, $tag_id, $now)
     {
         $data = array();
         $data['name'] = $name;
         $data['notification_task_id'] = $notification_task_id;
-        $data['openids'] = $openids;
+        $data['openids'] = \json_encode($openids);
         $data['tag_id'] = $tag_id;
         $data['push_status'] = 0;
         $data['push_time'] = \App\Common\Utils\Helper::getCurrentTime($now);
