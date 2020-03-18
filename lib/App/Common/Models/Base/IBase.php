@@ -130,4 +130,9 @@ interface IBase
      * @param array $query            
      */
     public function physicalRemove(array $query);
+
+    /**
+     * 直接执行sql查询
+     */
+    public function selectRaw($sql, array $data = array());
 }

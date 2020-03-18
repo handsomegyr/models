@@ -244,6 +244,11 @@ class Base implements IBase
         return $this->getModel()->physicalRemove($query);
     }
 
+    public function selectRaw($sql, array $data = array())
+    {
+        return $this->getModel()->selectRaw($sql, $data);
+    }
+
     public function getUploadPath()
     {
         return '';

@@ -221,6 +221,19 @@ class Impl2 extends Base
         return $result;
     }
 
+    public function selectRaw($sql, array $data = array())
+    {
+        $result = $this->executeDBQuery($sql, $data, 'query');
+        $ret = $result->fetchAll();
+        $list = array();
+        if (!empty($ret)) {
+            foreach ($ret as $key => $item) {
+                $list[$key] = $this->reorganize($item);
+            }
+        }
+        return $list;
+    }
+
     /**
      * 执行save操作
      *
@@ -324,21 +337,26 @@ class Impl2 extends Base
                 var_dump($data);
                 die('OK');
             }
-            $di = $this->getDI();
-            $db = $di['db'];
-            // 只有在读取数据的时候，如果设置了secondary的话
-            if ($method == 'query' && $this->getSecondary()) {
-                $db = $di['secondarydb'];
-            }
-            $result = $db->$method($phql, $data);
-            if ($method == 'query') {
-                $result->setFetchMode(\Phalcon\Db::FETCH_ASSOC);
-                return $result;
-            } else {
-                return $db->affectedRows();
-            }
+            return $this->executeDBQuery($phql, $data, $method);
         } catch (\Exception $e) {
             throw $e;
+        }
+    }
+
+    protected function executeDBQuery($phql, array $data, $method = 'query')
+    {
+        $di = $this->getDI();
+        $db = $di['db'];
+        // 只有在读取数据的时候，如果设置了secondary的话
+        if ($method == 'query' && $this->getSecondary()) {
+            $db = $di['secondarydb'];
+        }
+        $result = $db->$method($phql, $data);
+        if ($method == 'query') {
+            $result->setFetchMode(\Phalcon\Db::FETCH_ASSOC);
+            return $result;
+        } else {
+            return $db->affectedRows();
         }
     }
 }

@@ -209,4 +209,9 @@ class Base implements \App\Common\Models\Base\IBase
     {
         return $this->impl->physicalRemove($query);
     }
+
+    public function selectRaw($sql, array $data = array())
+    {
+        return $this->impl->selectRaw($sql, $data);
+    }
 }

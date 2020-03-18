@@ -19,6 +19,31 @@ class TaskContent extends \App\Common\Models\Weixin2\Notification\TaskContent
         return $ret;
     }
 
+    /**
+     * 登录
+     *
+     * @param string $name            
+     * @param string $notification_task_id            
+     * @param string $openids              
+     * @param string $tag_id            
+     * @param number $now            
+     * @return array
+     */
+    public function logon($name, $notification_task_id, $openids, $tag_id, $now)
+    {
+        $data = array();
+        $data['name'] = $name;
+        $data['notification_task_id'] = $notification_task_id;
+        $data['openids'] = $openids;
+        $data['tag_id'] = $tag_id;
+        $data['push_status'] = 0;
+        $data['push_time'] = \App\Common\Utils\Helper::getCurrentTime($now);
+        $data['task_process_total'] = 0;
+        $data['processed_num'] = 0;
+        $data['success_num'] = 0;
+        return $this->insert($data);
+    }
+
     public function updatePushState($id, $status, $now)
     {
         $updateData = array();
