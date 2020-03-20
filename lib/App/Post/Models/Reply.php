@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Post\Models;
 
 class Reply extends \App\Common\Models\Post\Reply
@@ -7,7 +8,7 @@ class Reply extends \App\Common\Models\Post\Reply
     public function getDefaultSort()
     {
         $sort = array();
-        $sort['reply_time'] = - 1;
+        $sort['reply_time'] = -1;
         return $sort;
     }
 
@@ -23,7 +24,7 @@ class Reply extends \App\Common\Models\Post\Reply
     public function getPageListByPostId($post_id, $page = 1, $limit = 10, array $otherConditions = array(), array $sort = array())
     {
         $query = array();
-        if (! empty($otherConditions)) {
+        if (!empty($otherConditions)) {
             $query = array_merge($otherConditions, $query);
         }
         if (empty($sort)) {
@@ -47,7 +48,7 @@ class Reply extends \App\Common\Models\Post\Reply
         $query = array();
         $query['ref_reply_id'] = $reply_id;
         $query['is_del'] = false;
-        if (! empty($otherConditions)) {
+        if (!empty($otherConditions)) {
             $query = array_merge($otherConditions, $query);
         }
         if (empty($sort)) {
@@ -81,8 +82,8 @@ class Reply extends \App\Common\Models\Post\Reply
                 $query2
             )
         );
-        
-        if (! empty($otherConditions)) {
+
+        if (!empty($otherConditions)) {
             $query = array_merge($otherConditions, $query);
         }
         if (empty($sort)) {
@@ -96,18 +97,18 @@ class Reply extends \App\Common\Models\Post\Reply
     {
         $data = array();
         $data['post_id'] = $post_id;
-        
+
         $data['user_id'] = $user_id;
         $data['user_name'] = $user_name;
         $data['user_avatar'] = $user_avatar;
         $data['user_register_by'] = $user_register_by;
         $data['user_content'] = $user_content;
-        
+
         $data['to_user_id'] = $to_user_id;
         $data['to_user_name'] = $to_user_name;
         $data['to_user_avatar'] = $to_user_avatar;
         $data['to_user_register_by'] = $to_user_register_by;
-        
+
         $data['to_user_content'] = $to_user_content;
         $data['ref_reply_id'] = $ref_reply_id;
         $data['floor'] = $floor;
@@ -129,30 +130,12 @@ class Reply extends \App\Common\Models\Post\Reply
     {
         $query = array();
         $query['_id'] = $reply_id;
-        
-        $this->update($query, array(
+
+        return $this->update($query, array(
             '$inc' => array(
                 'num' => $num
             )
         ));
-        
-        $option = array();
-        $option['query'] = array(
-            '_id' => $reply_id
-        );
-        $option['update'] = array(
-            '$inc' => array(
-                'num' => $num
-            )
-        );
-        $rst = $this->findAndModify($option);
-        if (empty($rst['ok'])) {
-            throw new \Exception("增加回复数量的findAndModify执行错误，返回结果为:" . json_encode($rst));
-        }
-        if (empty($rst['value'])) {
-            throw new \Exception("增加回复数量的findAndModify执行错误，返回结果为:" . json_encode($rst));
-        }
-        return $rst['value'];
     }
 
     /**
@@ -165,7 +148,7 @@ class Reply extends \App\Common\Models\Post\Reply
     {
         $query = array();
         $query['_id'] = $reply_id;
-        $this->update($query, array(
+        return $this->update($query, array(
             '$inc' => array(
                 'del_num' => $num
             )
@@ -182,7 +165,7 @@ class Reply extends \App\Common\Models\Post\Reply
     {
         $query = array();
         $query['_id'] = $reply_id;
-        $this->update($query, array(
+        return $this->update($query, array(
             '$set' => array(
                 'is_del' => $is_del
             )
@@ -204,8 +187,7 @@ class Reply extends \App\Common\Models\Post\Reply
                 $query2
             )
         );
-        
-        $this->update($query, array(
+        return $this->update($query, array(
             '$set' => array(
                 'is_del' => $is_del
             )

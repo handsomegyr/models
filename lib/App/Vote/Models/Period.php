@@ -34,21 +34,22 @@ class Period extends \App\Common\Models\Vote\Period
             $data['subject_id'] = $subject_id;
             $data['period'] = 1;
             $info = $this->insert($data);
-            return $info['period'];
         } else {
-            $options = array(
-                "query" => array(
-                    "_id" => $info['_id']
-                ),
-                "update" => array(
-                    '$inc' => array(
-                        'period' => 1
-                    )
-                ),
-                "new" => true
+            $query = array(
+                "_id" => $info['_id']
             );
-            $return_result = $this->findAndModify($options);
-            return $return_result["value"]['period'];
+            $updateData = array(
+                '$inc' => array(
+                    'period' => 1
+                )
+            );
+            $this->update($query, $updateData);
+            // 重新获取一次
+            $info = $this->getInfoById($info['_id']);
         }
+        if (empty($info)) {
+            throw new \Exception("根据主题ID:{$subject_id}获取最新的排行期数失败");
+        }
+        return $info['period'];
     }
 }

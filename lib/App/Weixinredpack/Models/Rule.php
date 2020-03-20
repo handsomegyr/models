@@ -1,6 +1,10 @@
 <?php
+
 namespace App\Weixinredpack\Models;
 
+/**
+ * @deprecated      
+ */
 class Rule extends \App\Common\Models\Weixinredpack\Rule
 {
     private $_rules = null;
@@ -13,7 +17,7 @@ class Rule extends \App\Common\Models\Weixinredpack\Rule
     public function getDefaultSort()
     {
         $sort = array(
-            '_id' => - 1
+            '_id' => -1
         );
         return $sort;
     }
@@ -42,12 +46,12 @@ class Rule extends \App\Common\Models\Weixinredpack\Rule
         if ($rule['quantity'] < $rule['personal_can_get_num']) {
             return false;
         }
-        
+
         // 如果金额小于最小现金的时候
         if ($rule['amount'] < $rule['min_cash'] * $rule['personal_can_get_num']) {
             return false;
         }
-        
+
         return true;
     }
 
@@ -87,16 +91,15 @@ class Rule extends \App\Common\Models\Weixinredpack\Rule
     {
         $groupList = array();
         // 按照allow_probability分组
-        array_map(function ($row) use(&$groupList)
-        {
+        array_map(function ($row) use (&$groupList) {
             //$key = "a{$row['activity']}_c{$row['customer']}_rp{$row['redpack']}_ap{$row['allow_probability']}";
             $key = $row['allow_probability'];
             $groupList[$key][] = $row;
         }, $list);
-        
+
         // 按照概率从底到的高次序排序
         ksort($groupList, SORT_NUMERIC);
-        
+
         // 按分组随机排序
         $resultList = array();
         foreach ($groupList as $key => $rows) {
@@ -112,9 +115,9 @@ class Rule extends \App\Common\Models\Weixinredpack\Rule
     public function getValidRule($activity_id, $customer_id, $redpack_id)
     {
         $rules = $this->getRules($activity_id, $customer_id, $redpack_id);
-        if (! empty($rules)) {
+        if (!empty($rules)) {
             foreach ($rules as $rule) {
-                $allow = $this->checkValid($rule);                
+                $allow = $this->checkValid($rule);
                 if (rand(0, 9999) < $rule['allow_probability'] && $allow)
                     return $rule;
             }
@@ -142,8 +145,8 @@ class Rule extends \App\Common\Models\Weixinredpack\Rule
         );
         $options['update'] = array(
             '$inc' => array(
-                'quantity' => - intval($quantity),
-                'amount' => - intval($amount)
+                'quantity' => -intval($quantity),
+                'amount' => -intval($amount)
             )
         );
         $options['new'] = true; // 返回更新之后的值
@@ -156,6 +159,4 @@ class Rule extends \App\Common\Models\Weixinredpack\Rule
         }
         return $rst['value'];
     }
-    
-    
 }

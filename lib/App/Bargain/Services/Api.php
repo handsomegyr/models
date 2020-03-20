@@ -217,7 +217,9 @@ class Api
         $bargain_num = $bargainAmountNumInfo['bargain_num'];
 
         // 更新砍价物的砍价信息
-        $newBargainInfo = $this->modelBargain->incBargain($bargainInfo, $bargain_amount_generator, $bargain_num, $now);
+        $this->modelBargain->incBargain($bargainInfo, $bargain_amount_generator, $bargain_num, $now);
+        // 重新获取
+        $newBargainInfo = $this->modelBargain->getInfoById($bargainInfo['_id']);
         if (empty($newBargainInfo)) {
             $ret['error_code'] = -10;
             $ret['error_msg'] = "砍价物的砍价信息更新失败";

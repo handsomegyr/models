@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Weixinredpack\Models;
 
 class GotLog extends \App\Common\Models\Weixinredpack\GotLog
@@ -10,7 +11,7 @@ class GotLog extends \App\Common\Models\Weixinredpack\GotLog
     public function getDefaultSort()
     {
         $sort = array(
-            '_id' => - 1
+            '_id' => -1
         );
         return $sort;
     }
@@ -82,29 +83,23 @@ class GotLog extends \App\Common\Models\Weixinredpack\GotLog
     {
         $data = array();
         $data['isOK'] = $isOK;
-        if (! empty($memo)) {
+        if (!empty($memo)) {
             $data["memo"] = $memo;
         }
-        if (! empty($errorLog)) {
+        if (!empty($errorLog)) {
             $data["error_logs"] = $errorLog;
         }
-        $options = array();
-        $options['query'] = array(
+        $query = array(
             '_id' => $logInfo['_id']
         );
-        $options['update'] = array(
+        $updateData = array(
             '$set' => $data
         );
-        
-        $options['new'] = true; // 返回更新之后的值
-        $rst = $this->findAndModify($options);
-        if (empty($rst['ok'])) {
-            throw new \Exception("记录日志处理结果的findAndModify执行错误，返回结果为:" . json_encode($rst));
+        $affectRows = 0;
+        if (!empty($updateData)) {
+            $affectRows = $this->update($query, $updateData);
         }
-        if (empty($rst['value'])) {
-            throw new \Exception("记录日志处理结果的findAndModify执行错误，返回结果为:" . json_encode($rst));
-        }
-        return $rst['value'];
+        return $affectRows;
     }
 
     /**
@@ -124,14 +119,14 @@ class GotLog extends \App\Common\Models\Weixinredpack\GotLog
             'customer' => $customer,
             'redpack' => $redpack
         );
-        if (! empty($start_time)) {
+        if (!empty($start_time)) {
             $query['got_time']['$gte'] = \App\Common\Utils\Helper::getCurrentTime($start_time);
         }
-        
-        if (! empty($end_time)) {
+
+        if (!empty($end_time)) {
             $query['got_time']['$lte'] = \App\Common\Utils\Helper::getCurrentTime($end_time);
         }
-        
+
         return $this->count($query);
     }
 
@@ -152,14 +147,14 @@ class GotLog extends \App\Common\Models\Weixinredpack\GotLog
             'customer' => $customer,
             'redpack' => $redpack
         );
-        if (! empty($start_time)) {
+        if (!empty($start_time)) {
             $query['got_time']['$gte'] = \App\Common\Utils\Helper::getCurrentTime($start_time);
         }
-        
-        if (! empty($end_time)) {
+
+        if (!empty($end_time)) {
             $query['got_time']['$lte'] = \App\Common\Utils\Helper::getCurrentTime($end_time);
         }
-        
+
         return $this->findOne($query);
     }
 
@@ -171,11 +166,11 @@ class GotLog extends \App\Common\Models\Weixinredpack\GotLog
         $updateData['$inc'] = array(
             'try_count' => $trycount
         );
-        if (! empty($errorLog)) {
+        if (!empty($errorLog)) {
             $updateData['$set'] = array(
                 'error_logs' => $errorLog
             );
         }
-        $this->update($query, $updateData);
+        return $this->update($query, $updateData);
     }
 }

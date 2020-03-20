@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Live\Models;
 
 class User extends \App\Common\Models\Live\User
@@ -10,7 +11,7 @@ class User extends \App\Common\Models\Live\User
     public function getDefaultSort()
     {
         $sort = array(
-            '_id' => - 1
+            '_id' => -1
         );
         return $sort;
     }
@@ -71,7 +72,7 @@ class User extends \App\Common\Models\Live\User
         if (empty($user_info_json)) {
             return array();
         }
-        
+
         return $user_info_json;
     }
 
@@ -84,11 +85,11 @@ class User extends \App\Common\Models\Live\User
     {
         // 记录用户信息到redis
         $info = $this->getRedisData($info);
-        if ($isForce || ! $this->redis->hexists($this->getRedisKey(), $info['user_id'])) {
+        if ($isForce || !$this->redis->hexists($this->getRedisKey(), $info['user_id'])) {
             $this->redis->hSet($this->getRedisKey(), $info['user_id'], json_encode($info));
         }
     }
-    
+
     // 用户信息KEY
     protected function getRedisKey()
     {
@@ -107,7 +108,7 @@ class User extends \App\Common\Models\Live\User
         $query = array(
             'openid' => $openid
         );
-        if (! empty($otherCondition)) {
+        if (!empty($otherCondition)) {
             $query = array_merge($query, $otherCondition);
         }
         $info = $this->findOne($query);
@@ -128,7 +129,7 @@ class User extends \App\Common\Models\Live\User
      * @param array $memo            
      * @return array
      */
-    public function create($openid, $nickname, $headimgurl, $redpack_user, $thirdparty_user, $worth = 0, $worth2 = 0, $room_id, $authtype, $source, $channel, $is_auchor = false, $is_vip = false, $is_test = false, array $memo = array('memo'=>''))
+    public function create($openid, $nickname, $headimgurl, $redpack_user, $thirdparty_user, $worth = 0, $worth2 = 0, $room_id, $authtype, $source, $channel, $is_auchor = false, $is_vip = false, $is_test = false, array $memo = array('memo' => ''))
     {
         $data = array();
         $data['openid'] = $openid; // 微信ID
@@ -138,16 +139,16 @@ class User extends \App\Common\Models\Live\User
         $data['thirdparty_user'] = $thirdparty_user; // 第3方账号
         $data['worth'] = intval($worth); // 价值
         $data['worth2'] = intval($worth2); // 价值2
-        
+
         $data['room_id'] = strval($room_id); // 直播房间
         $data['authtype'] = $authtype; // 登陆方式
         $data['source'] = $source; // 来源
         $data['channel'] = $channel; // 渠道
-        
+
         $data['is_auchor'] = $is_auchor; // 是否是主播
         $data['is_vip'] = $is_vip; // 是否是VIP用户
         $data['is_test'] = $is_test; // 是否是测试用户
-        
+
         $data['memo'] = $memo; // 备注
         $info = $this->insert($data);
         return $info;
@@ -190,45 +191,38 @@ class User extends \App\Common\Models\Live\User
     public function incWorth($idOrObject, $worth = 0, $worth2 = 0, array $otherIncData = array(), array $otherUpdateData = array())
     {
         if (is_string($idOrObject)) {
-            $info = $this->getInfoById($idOrObject);
+            $id = $idOrObject;
         } else {
-            $info = $idOrObject;
+            $id = empty($idOrObject['_id']) ? '' : $idOrObject['_id'];
         }
-        if (empty($info)) {
-            throw new Exception("记录不存在");
+        if (empty($id)) {
+            throw new \Exception("记录id不存在");
         }
+
         $query = array(
-            '_id' => $info['_id']
+            '_id' => $id
         );
-        
-        $options = array();
-        $options['query'] = $query;
-        
-        $update = array(
-            '$inc' => array(
-                'worth' => $worth
-            )
+
+        $updateData = array(
+            '$inc' => array()
         );
-        if (! empty($otherIncData)) {
-            $update['$inc'] = array_merge($update['$inc'], $otherIncData);
+
+        if (!empty($worth)) {
+            $updateData['$inc']['worth'] = $worth;
         }
-        
-        if (! empty($otherUpdateData)) {
-            $update['$set'] = $otherUpdateData;
+        if (!empty($worth2)) {
+            $updateData['$inc']['worth2'] = $worth2;
         }
-        
-        $options['update'] = $update;
-        $options['new'] = true; // 返回更新之后的值
-        
-        $rst = $this->findAndModify($options);
-        if (empty($rst['ok'])) {
-            throw new \Exception("findandmodify失败");
+        if (!empty($otherIncData)) {
+            $updateData['$inc'] = array_merge($updateData['$inc'], $otherIncData);
         }
-        
-        if (! empty($rst['value'])) {
-            return $rst['value'];
-        } else {
-            throw new \Exception("价值增加失败");
+        if (!empty($otherUpdateData)) {
+            $updateData['$set'] = $otherUpdateData;
         }
+        $affectRows = 0;
+        if (!empty($updateData)) {
+            $affectRows = $this->update($query, $updateData);
+        }
+        return $affectRows;
     }
 }

@@ -2,6 +2,9 @@
 
 namespace App\Invitation\Models;
 
+/**
+ * @deprecated
+ */
 class User extends \App\Common\Models\Invitation\User
 {
 
@@ -10,7 +13,7 @@ class User extends \App\Common\Models\Invitation\User
     /**
      * 设置排他
      *
-     * @param unknown $isExclusive            
+     * @param boolean $isExclusive            
      */
     public function setIsExclusive($isExclusive)
     {
@@ -90,6 +93,7 @@ class User extends \App\Common\Models\Invitation\User
 
     /**
      * 加锁
+     * @deprecated
      *
      * @param string $id            
      * @param boolean $isExclusive            
@@ -143,6 +147,7 @@ class User extends \App\Common\Models\Invitation\User
 
     /**
      * 解锁
+     * @deprecated
      *
      * @param string $id            
      */
@@ -163,6 +168,7 @@ class User extends \App\Common\Models\Invitation\User
 
     /**
      * 自动清除过期的锁
+     * @deprecated
      *
      * @param string $id            
      */

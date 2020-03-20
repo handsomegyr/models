@@ -132,14 +132,13 @@ class Bargain extends \App\Common\Models\Bargain\Bargain
     public function incBargain($bargainInfo, $amount, $num, $now)
     {
         $bargain_id = ($bargainInfo['_id']);
-        $options = array();
-        $options['query'] = array(
+        $query = array(
             '_id' => $bargainInfo['_id'],
             'current_worth' => array(
                 '$gte' => $amount
             )
         );
-        $options['update'] = array(
+        $updateData = array(
             '$inc' => array(
                 'total_bargain_num' => $num,
                 'total_bargain_amount' => $amount,
@@ -149,21 +148,20 @@ class Bargain extends \App\Common\Models\Bargain\Bargain
                 'bargain_time' => \App\Common\Utils\Helper::getCurrentTime($now)
             )
         );
-        $options['new'] = true; // 返回更新之后的值
-        $rst = $this->findAndModify($options);
-        if (empty($rst['ok'])) {
-            throw new \Exception("更新砍价物{$bargain_id}的砍价总金额和砍价次数的findAndModify执行错误，返回结果为:" . json_encode($rst));
+        $affectRows = 0;
+        if (!empty($updateData)) {
+            $affectRows = $this->update($query, $updateData);
         }
-        if (empty($rst['value'])) {
-            throw new \Exception("更新砍价物{$bargain_id}的砍价总金额和砍价次数的findAndModify执行错误，返回结果为:" . json_encode($rst));
+        if ($affectRows < 1) {
+            throw new \Exception("更新砍价物{$bargain_id}的砍价总金额和砍价次数的处理失败");
         }
-        return $rst['value'];
+        return $affectRows;
     }
 
     public function setBargainToMinworth($bargainInfo, $now)
     {
         // 如果砍到了最低价值的时候，设置一个标志位
-        $this->update(array(
+        return $this->update(array(
             '_id' => $bargainInfo['_id']
         ), array(
             '$set' => array(
@@ -181,25 +179,23 @@ class Bargain extends \App\Common\Models\Bargain\Bargain
      */
     public function doClosed($id, $now)
     {
-        $options = array();
-        $options['query'] = array(
+        $query = array(
             '_id' => ($id),
             'is_closed' => false
         );
-        $options['update'] = array(
+        $updateData = array(
             '$set' => array(
                 'is_closed' => true,
                 'close_time' => \App\Common\Utils\Helper::getCurrentTime($now),
             )
         );
-        $options['new'] = true; // 返回更新之后的值
-        $rst = $this->findAndModify($options);
-        if (empty($rst['ok'])) {
-            throw new \Exception("更新砍价物{$id}的下线处理的findAndModify执行错误，返回结果为:" . json_encode($rst));
+        $affectRows = 0;
+        if (!empty($updateData)) {
+            $affectRows = $this->update($query, $updateData);
         }
-        if (empty($rst['value'])) {
-            throw new \Exception("更新砍价物{$id}的下线处理的findAndModify执行错误，返回结果为:" . json_encode($rst));
+        if ($affectRows < 1) {
+            throw new \Exception("更新砍价物{$id}的下线处理的处理失败");
         }
-        return $rst['value'];
+        return $affectRows;
     }
 }

@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Weixinredpack\Services;
 
 class Api
@@ -23,10 +24,10 @@ class Api
     private $_isInstance = false;
 
     private $lockBag = array();
-    
+
     // 是否需要发送微信红包,默认是不发送
     public $isNeedSendRedpack = false;
-    
+
     // 发送微信红包所需的配置信息
     public $weixinRedpackSettings = array(
         'appid' => '',
@@ -43,7 +44,7 @@ class Api
     {
         $this->weixinRedpackSettings = $weixinRedpackSettings;
         $this->_rtnMsgType = $rtnMsgType;
-        
+
         $this->_redpack = new \App\Weixinredpack\Models\Redpack();
         $this->_gotLog = new \App\Weixinredpack\Models\GotLog();
         $this->_rule = new \App\Weixinredpack\Models\Rule();
@@ -62,7 +63,7 @@ class Api
      * @param number $amount            
      * @param array $info            
      */
-    public function sendRedpack($activity_id, $customer_id, $redpack_id, $re_openid, $amount = 0, array $info = array('openid'=>'','nickname'=>'','headimgurl'=>'','re_nickname'=>'','re_headimgurl'=>''))
+    public function sendRedpack($activity_id, $customer_id, $redpack_id, $re_openid, $amount = 0, array $info = array('openid' => '', 'nickname' => '', 'headimgurl' => '', 're_nickname' => '', 're_headimgurl' => ''))
     {
         $defaultInfo = array(
             'openid' => '', // 参加活动的用户ID
@@ -77,31 +78,31 @@ class Api
         } else {
             $info = array_merge($defaultInfo, $info);
         }
-        
+
         if ($this->_isInstance) {
-            return $this->error(- 1, "每个实例只能执行一次doSendRedpack方法，如需反复发送微信红包，请分别实例化Api类");
+            return $this->error(-1, "每个实例只能执行一次doSendRedpack方法，如需反复发送微信红包，请分别实例化Api类");
         }
-        
+
         if (empty($activity_id)) {
-            return $this->error(- 2, "活动编号为空");
+            return $this->error(-2, "活动编号为空");
         }
-        
+
         if (empty($customer_id)) {
-            return $this->error(- 3, "客户ID为空");
+            return $this->error(-3, "客户ID为空");
         }
-        
+
         if (empty($redpack_id)) {
-            return $this->error(- 4, "红包ID为空");
+            return $this->error(-4, "红包ID为空");
         }
-        
+
         if (empty($re_openid)) {
-            return $this->error(- 5, "微信ID为空");
+            return $this->error(-5, "微信ID为空");
         }
-        
+
         try {
-            
+
             $this->_isInstance = true;
-            
+
             // 锁定防止高并发
             $lockKey = "sendRedpack_a{$activity_id}_c{$customer_id}_u{$re_openid}";
             // $objLock = new \iLock($lockKey);
@@ -111,48 +112,48 @@ class Api
             // if ($objLock->lock()) {
             // return $this->error(- 99, "处于锁定状态，请稍后尝试");
             // }
-            
+
             // 检查客户信息
             $customerInfo = $this->_customer->getInfoById($customer_id);
             if (empty($customerInfo)) {
-                return $this->error(- 7, "该客户不存在");
+                return $this->error(-7, "该客户不存在");
             }
             // 获取客户的余额
             $customerRemainAmount = $this->_customer->getRemainAmount($customerInfo);
             if ($customerRemainAmount <= 0) {
-                return $this->error(- 12, "该客户余额不足");
+                return $this->error(-12, "该客户余额不足");
             }
             // 如果指定了发放红包金额并且客户余额已经小于发放金额的时候
             if ($amount > 0 && $customerRemainAmount < $amount) {
-                return $this->error(- 12, "该客户余额不足");
+                return $this->error(-12, "该客户余额不足");
             }
-            
+
             // 检查红包信息
             $redpackInfo = $this->_redpack->getInfoById($redpack_id);
             if (empty($redpackInfo)) {
-                return $this->error(- 8, "该红包不存在");
+                return $this->error(-8, "该红包不存在");
             }
-            
+
             // 检查微信红包获取情况和红包获得限制条件的关系
             $this->_limit->setLogModel($this->_gotLog);
             $limit = $this->_limit->checkLimit($activity_id, $customer_id, $redpack_id, $re_openid);
             if ($limit == false) {
-                return $this->error(- 10, "你未满足获取红包的条件");
+                return $this->error(-10, "你未满足获取红包的条件");
             }
-            
+
             // 检查中奖规则，检测用户是否中奖
             $rule = $this->_rule->getValidRule($activity_id, $customer_id, $redpack_id);
             if ($rule == false) {
-                return $this->error(- 11, "你来晚了,红包已发完");
+                return $this->error(-11, "你来晚了,红包已发完");
             }
-            
+
             // 获取最新的订单号
             // 商户订单号（每个必须唯一）组成： mch_id+yyyymmdd+10 位一天内 不重复
             $rand = mt_rand(0, 9999999999);
             $mch_billno = $this->weixinRedpackSettings["mch_id"] . date('Ymd') . str_pad($rand, 10, '0', STR_PAD_LEFT);
             $client_ip = empty($defaultInfo['client_ip']) ? getIp() : $defaultInfo['client_ip']; // '203.166.161.25';
             $total_num = 1; // $rule['personal_can_get_num'];
-            
+
             if ($amount <= 0) {
                 // 如果是小于等于0
                 $randAmount = rand($rule['min_cash'], $rule['max_cash']);
@@ -163,10 +164,10 @@ class Api
                 $total_amount = min($amount, $total_amount);
             }
             $total_amount = min($rule['amount'], $customerRemainAmount, $total_amount);
-            
+
             $min_value = $total_amount;
             $max_value = $total_amount;
-            
+
             $nick_name = empty($rule['nick_name']) ? $customerInfo['nick_name'] : $rule['nick_name'];
             $send_name = empty($rule['send_name']) ? $customerInfo['send_name'] : $rule['send_name'];
             $wishing = $rule['wishing'];
@@ -177,7 +178,7 @@ class Api
             $share_content = empty($rule['share_content']) ? "" : $rule['share_content'];
             $share_url = empty($rule['share_url']) ? "" : $rule['share_url'];
             $share_imgurl = empty($rule['share_imgurl']) ? "" : $rule['share_imgurl'];
-            
+
             // 记录LOG信息
             $isOK = false;
             $logMemo = array(
@@ -197,17 +198,17 @@ class Api
                 'share_url' => $share_url,
                 'share_imgurl' => $share_imgurl
             ); // 是否需要发送微信红包,默认是不发送
-            
+
             $try_count = 0; // 尝试次数,
             $is_reissue = false; // 是否有资格补发红包
             $logInfo = $this->_gotLog->record($mch_billno, $re_openid, $info['re_nickname'], $info['re_headimgurl'], $client_ip, $activity_id, $customer_id, $redpack_id, $total_num, $total_amount, $this->isNeedSendRedpack, $isOK, $try_count, $is_reissue, $logMemo);
-            
+
             // 更新该规则的剩余数量和金额
             $this->_rule->updateRemain($rule, $total_amount, $total_num);
-            
+
             // 更新客户的使用金额
             $this->_customer->incUsedAmount($customer_id, $total_amount);
-            
+
             // 通过以上2步骤的话,说明他是有资格领取微信红包的,事后可以补发
             $logInfoUpdateData = array(
                 'is_reissue' => true
@@ -217,11 +218,11 @@ class Api
             ), array(
                 '$set' => $logInfoUpdateData
             ));
-            
+
             try {
                 // 调用微信红包发送接口
                 $ret = $this->sendWeixinRedpack($mch_billno, $nick_name, $send_name, $re_openid, $total_amount, $min_value, $max_value, $total_num, $wishing, $client_ip, $act_id, $act_name, $remark, $logo_imgurl, $share_content, $share_url, $share_imgurl);
-                
+
                 // 处理结果
                 $isOK = true;
                 $errorLog = array();
@@ -230,24 +231,24 @@ class Api
                 $isOK = false;
                 $ret['error_code'] = $e->getCode();
                 if (empty($ret['error_code'])) {
-                    $ret['error_code'] = - 8888;
+                    $ret['error_code'] = -8888;
                 }
                 $ret['error_msg'] = $e->getMessage();
                 $errorLog = $ret;
             }
             // 更新LOG信息
             $memo = array_merge($ret, $logInfo);
-            $logInfo = $this->_gotLog->updateIsOK($logInfo, $isOK, $errorLog, $memo);
-            
+            $this->_gotLog->updateIsOK($logInfo, $isOK, $errorLog, $memo);
+            $logInfo = $this->_gotLog->getInfoById($logInfo['_id']);
             if ($isOK) {
-                return $this->result("OK", convertToPureArray($logInfo));
+                return $this->result("OK", ($logInfo));
             } else {
                 return $this->error($ret['error_code'], $ret['error_msg']);
             }
         } catch (\Exception $e) {
             $error_code = $e->getCode();
             if (empty($error_code)) {
-                $error_code = - 9999;
+                $error_code = -9999;
             }
             return $this->error($error_code, $e->getMessage());
         }
@@ -274,7 +275,7 @@ class Api
             'error_code' => $code,
             'error_msg' => $msg
         );
-        
+
         if ($this->_rtnMsgType == 'json') {
             return json_encode($rst);
         } else {
@@ -336,25 +337,25 @@ class Api
             $mchid = $this->weixinRedpackSettings["mch_id"]; // "1220225801";
             $sub_mch_id = empty($this->weixinRedpackSettings["sub_mch_id"]) ? '' : $this->weixinRedpackSettings["sub_mch_id"];
             $key = $this->weixinRedpackSettings["key"]; // "NG4HWVH26C733KWK6F98J8CK4BN3D2R7";
-                                                        
+
             // $cert = APPLICATION_PATH . "/../cert/weixinpay337/apiclient_cert.pem";
-                                                        
+
             // $certKey = APPLICATION_PATH . "/../cert/weixinpay337/apiclient_key.pem";
-            
+
             $fileName = $this->weixinRedpackSettings['cert.pem'];
             if (file_exists($fileName)) {
                 $cert = $fileName;
             } else {
                 throw new \Exception('cert.pem is not exist');
             }
-            
+
             $fileName = $this->weixinRedpackSettings['key.pem'];
             if (file_exists($fileName)) {
                 $certKey = $fileName;
             } else {
                 throw new \Exception('key.pem is not exist');
             }
-            
+
             $objWeixinPay = new \Weixin\Pay337();
             $objWeixinPay->setAppId($appid);
             $objWeixinPay->setAppSecret($secret);
@@ -387,7 +388,8 @@ class Api
      * 析构函数
      */
     public function __destruct()
-    {}
+    {
+    }
 
     /**
      * 以5分钟运行一次计划任务,补发红包
@@ -395,9 +397,9 @@ class Api
     public function cron()
     {
         if (empty($this->isNeedSendRedpack)) {
-            throw new \Exception('发送微信红包没有打开,请设置isNeedSendRedpack为true', - 9777);
+            throw new \Exception('发送微信红包没有打开,请设置isNeedSendRedpack为true', -9777);
         }
-        
+
         $errorList = array();
         $successList = array();
         $preTime = time() - 2 * 60; // 2分钟之前的记录
@@ -411,14 +413,14 @@ class Api
                 '$lte' => 2
             )
         );
-        
+
         $list = $this->_gotLog->find($query, array(
             'try_count' => 1,
             'got_time' => 1,
             '_id' => 1
         ), 0, 49);
-        
-        if (! empty($list['datas'])) {
+
+        if (!empty($list['datas'])) {
             foreach ($list['datas'] as $logInfo) {
                 $isOK = false;
                 $ret = array();
@@ -446,7 +448,7 @@ class Api
                     $share_content = $logInfo['memo']['share_content'];
                     $share_url = $logInfo['memo']['share_url'];
                     $share_imgurl = $logInfo['memo']['share_imgurl'];
-                    
+
                     $customerInfo = $this->_customer->getInfoById($customer_id);
                     if (empty($customerInfo)) {
                         throw new \Exception('客户信息不存在');
@@ -458,15 +460,16 @@ class Api
                         $act_id = $redpackInfo['code'];
                         $act_name = $redpackInfo['name'];
                     }
-                    
+
                     // 调用微信红包发送接口
                     $ret = $this->sendWeixinRedpack($mch_billno, $nick_name, $send_name, $re_openid, $total_amount, $min_value, $max_value, $total_num, $wishing, $client_ip, $act_id, $act_name, $remark, $logo_imgurl, $share_content, $share_url, $share_imgurl);
-                    
+
                     // 处理结果
                     $isOK = true;
                     $errorLog = array();
                     // 更新LOG信息
-                    $newlogInfo = $this->_gotLog->updateIsOK($logInfo, $isOK, $errorLog, $ret);
+                    $this->_gotLog->updateIsOK($logInfo, $isOK, $errorLog, $ret);
+                    $newlogInfo = $this->_gotLog->getInfoById($logInfo['_id']);
                     $successList[] = $newlogInfo;
                     // 记录补发日志
                     unset($logInfo['_id']);
@@ -476,7 +479,7 @@ class Api
                     $isOK = false;
                     $ret['error_code'] = $e->getCode();
                     if (empty($ret['error_code'])) {
-                        $ret['error_code'] = - 9999;
+                        $ret['error_code'] = -9999;
                     }
                     $ret['error_msg'] = "日志记录ID为{$logId}的处理失败:" . $e->getMessage();
                     $errorLog = $ret;
@@ -491,4 +494,3 @@ class Api
         );
     }
 }
-

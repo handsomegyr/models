@@ -263,7 +263,7 @@ class InvitationGotDetail extends \App\Common\Models\Invitation\InvitationGotDet
         $query = array();
         $query['invitation_id'] = $invitation_id; // 邀请函ID
         $query['got_user_id'] = $got_user_id; // 领邀请函的user_id
-        $this->update($query, array(
+        return $this->update($query, array(
             '$inc' => array(
                 'got_worth' => $worth,
                 'got_worth2' => $worth2

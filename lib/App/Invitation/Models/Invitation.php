@@ -156,6 +156,7 @@ class Invitation extends \App\Common\Models\Invitation\Invitation
 
     /**
      * 加锁
+     * @deprecated
      *
      * @param string $invitationId            
      * @param boolean $isExclusive            
@@ -174,15 +175,14 @@ class Invitation extends \App\Common\Models\Invitation\Invitation
         $lock = $this->findOne(array(
             '_id' => ($invitationId)
         ));
-        if ($lock == null) {
+        if (empty($lock)) {
             throw new \Exception("未初始化锁");
-        } else {
-            $query = array(
-                '_id' => $lock['_id'],
-                'lock' => false
-            );
         }
 
+        $query = array(
+            '_id' => $lock['_id'],
+            'lock' => false
+        );
         $options = array();
         $options['query'] = $query;
         $options['update'] = array(
@@ -209,6 +209,7 @@ class Invitation extends \App\Common\Models\Invitation\Invitation
 
     /**
      * 解锁
+     * @deprecated
      *
      * @param string $invitationId            
      */
@@ -229,7 +230,7 @@ class Invitation extends \App\Common\Models\Invitation\Invitation
 
     /**
      * 自动清除过期的锁
-     *
+     * @deprecated
      * @param string $invitationId            
      */
     public function expire($invitationId)
@@ -249,7 +250,7 @@ class Invitation extends \App\Common\Models\Invitation\Invitation
     /**
      * 增加接受邀请次数
      *
-     * @param mixed $idOrObject            
+     * @param array $info            
      * @param int $invited_num            
      * @param int $worth            
      * @param int $worth2            
@@ -258,16 +259,8 @@ class Invitation extends \App\Common\Models\Invitation\Invitation
      * @throws Exception
      * @return boolean
      */
-    public function incInvitedNum($idOrObject, $invited_num = 1, $worth = 0, $worth2 = 0, array $otherIncData = array(), array $otherUpdateData = array())
+    public function incInvitedNum($info, $invited_num = 1, $worth = 0, $worth2 = 0, array $otherIncData = array(), array $otherUpdateData = array())
     {
-        if (is_string($idOrObject)) {
-            $info = $this->getInfoById($idOrObject);
-        } else {
-            $info = $idOrObject;
-        }
-        if (empty($info)) {
-            throw new \Exception("邀请函记录不存在");
-        }
         $query = array(
             '_id' => $info['_id']
         );
@@ -285,34 +278,35 @@ class Invitation extends \App\Common\Models\Invitation\Invitation
         $options = array();
         $options['query'] = $query;
 
-        $update = array(
-            '$inc' => array(
-                'invited_num' => 1,
-                'worth' => $worth,
-                'worth2' => $worth2
-            )
+        $updateData = array(
+            '$inc' => array()
         );
+
+        if (!empty($invited_num)) {
+            $updateData['$inc']['invited_num'] = $invited_num;
+        }
+
+        if (!empty($worth)) {
+            $updateData['$inc']['worth'] = $worth;
+        }
+
+        if (!empty($worth2)) {
+            $updateData['$inc']['worth2'] = $worth2;
+        }
+
         if (!empty($otherIncData)) {
-            $update['$inc'] = array_merge($update['$inc'], $otherIncData);
+            $updateData['$inc'] = array_merge($updateData['$inc'], $otherIncData);
         }
 
         if (!empty($otherUpdateData)) {
-            $update['$set'] = $otherUpdateData;
+            $updateData['$set'] = $otherUpdateData;
         }
 
-        $options['update'] = $update;
-        $options['new'] = true; // 返回更新之后的值
-
-        $rst = $this->findAndModify($options);
-        if (empty($rst['ok'])) {
-            throw new \Exception("findandmodify失败");
+        $affectRows = 0;
+        if (!empty($updateData)) {
+            $affectRows = $this->update($query, $updateData);
         }
-
-        if (!empty($rst['value'])) {
-            return $rst['value'];
-        } else {
-            throw new \Exception("接受邀请次数增加失败");
-        }
+        return $affectRows;
     }
 
     /**
@@ -431,7 +425,7 @@ class Invitation extends \App\Common\Models\Invitation\Invitation
     {
         $query = array();
         $query['_id'] = $invitation_id; // 邀请函ID
-        $this->update($query, array(
+        return $this->update($query, array(
             '$inc' => array(
                 'worth' => $worth,
                 'worth2' => $worth2

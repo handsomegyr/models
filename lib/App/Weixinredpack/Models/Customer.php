@@ -1,15 +1,16 @@
 <?php
+
 namespace App\Weixinredpack\Models;
 
 class Customer extends \App\Common\Models\Weixinredpack\Customer
-{    
+{
     /**
      * 默认排序
      */
     public function getDefaultSort()
     {
         $sort = array(
-            '_id' => - 1
+            '_id' => -1
         );
         return $sort;
     }
@@ -32,28 +33,26 @@ class Customer extends \App\Common\Models\Weixinredpack\Customer
     public function incUsedAmount($customer_id, $total_amount)
     {
         $total_amount = intval($total_amount);
-        $options = array();
-        $options['query'] = array(
+        $query = array(
             '_id' => ($customer_id),
             'remain_amount' => array(
                 '$gte' => $total_amount
             )
         );
-        $options['update'] = array(
+        $updateData = array(
             '$inc' => array(
                 'used_amount' => $total_amount,
-                'remain_amount' => - $total_amount
+                'remain_amount' => -$total_amount
             )
         );
-        $options['new'] = true; // 返回更新之后的值
-        $rst = $this->findAndModify($options);
-        if (empty($rst['ok'])) {
-            throw new \Exception("更新客户总红包金额的findAndModify执行错误，返回结果为:" . json_encode($rst));
+        $affectRows = 0;
+        if (!empty($updateData)) {
+            $affectRows = $this->update($query, $updateData);
         }
-        if (empty($rst['value'])) {
-            throw new \Exception("更新客户总红包金额的findAndModify执行错误，返回结果为:" . json_encode($rst));
+        if ($affectRows < 1) {
+            throw new \Exception("更新客户总红包金额的处理失败");
         }
-        return $rst['value'];
+        return $affectRows;
     }
 
     /**
