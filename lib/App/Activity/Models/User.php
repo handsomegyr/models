@@ -128,7 +128,7 @@ class User extends \App\Common\Models\Activity\User
     {
         $info = $this->getInfoByUserid($user_id, $activity_id);
         if (empty($info)) {
-            $info = $this->create($activity_id, $user_id, $log_time, $nickname, $headimgurl, $redpack_user, $thirdparty_user, $worth, $worth2, $activity_id, $scene, $extendFields, $memo);
+            $info = $this->create($activity_id, $user_id, $log_time, $nickname, $headimgurl, $redpack_user, $thirdparty_user, $worth, $worth2, $scene, $extendFields, $memo);
         }
         return $info;
     }
@@ -141,51 +141,44 @@ class User extends \App\Common\Models\Activity\User
      * @param int $worth2            
      * @param array $otherIncData            
      * @param array $otherUpdateData            
-     * @throws Exception
+     * @throws \Exception
      * @return boolean
      */
     public function incWorth($idOrObject, $worth = 0, $worth2 = 0, array $otherIncData = array(), array $otherUpdateData = array())
     {
         if (is_string($idOrObject)) {
-            $info = $this->getInfoById($idOrObject);
+            $id = $idOrObject;
         } else {
-            $info = $idOrObject;
+            $id = empty($idOrObject['_id']) ? '' : $idOrObject['_id'];
         }
-        if (empty($info)) {
-            throw new Exception("记录不存在");
+        if (empty($id)) {
+            throw new \Exception("记录id不存在");
         }
+
         $query = array(
-            '_id' => $info['_id']
+            '_id' => $id
         );
 
-        $options = array();
-        $options['query'] = $query;
-
-        $update = array(
-            '$inc' => array(
-                'worth' => $worth
-            )
+        $updateData = array(
+            '$inc' => array()
         );
+
+        if (!empty($worth)) {
+            $updateData['$inc']['worth'] = $worth;
+        }
+        if (!empty($worth2)) {
+            $updateData['$inc']['worth2'] = $worth2;
+        }
         if (!empty($otherIncData)) {
-            $update['$inc'] = array_merge($update['$inc'], $otherIncData);
+            $updateData['$inc'] = array_merge($updateData['$inc'], $otherIncData);
         }
-
         if (!empty($otherUpdateData)) {
-            $update['$set'] = $otherUpdateData;
+            $updateData['$set'] = $otherUpdateData;
         }
-
-        $options['update'] = $update;
-        $options['new'] = true; // 返回更新之后的值
-
-        $rst = $this->findAndModify($options);
-        if (empty($rst['ok'])) {
-            throw new Exception("findandmodify失败");
+        $affectRows = 0;
+        if (!empty($updateData)) {
+            $affectRows = $this->update($query, $updateData);
         }
-
-        if (!empty($rst['value'])) {
-            return $rst['value'];
-        } else {
-            throw new Exception("价值增加失败");
-        }
+        return $affectRows;
     }
 }
