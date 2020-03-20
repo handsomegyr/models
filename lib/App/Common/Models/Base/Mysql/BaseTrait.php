@@ -352,6 +352,9 @@ trait BaseTrait
         if (empty($field)) {
             return $field;
         }
+        if ($field == '0000-00-00 00:00:00') {
+            $field = '0001-01-01 00:00:00';
+        }
         return \App\Common\Utils\Helper::getCurrentTime(strtotime($field));
         // if (is_date($field)) {
         // } else {
