@@ -53,6 +53,21 @@ class User extends \App\Common\Models\Activity\User
     }
 
     /**
+     * 锁住记录
+     *
+     * @param int $id            
+     */
+    public function lockUser($id)
+    {
+        $query = array(
+            '_id' => $id,
+            '__FOR_UPDATE__' => true
+        );
+        $info = $this->findOne($query);
+        return $info;
+    }
+
+    /**
      * 生成记录
      *
      * @param string $activity_id
@@ -66,10 +81,11 @@ class User extends \App\Common\Models\Activity\User
      * @param number $worth2            
      * @param string $activity_id              
      * @param string $scene          
+     * @param array $extendFields          
      * @param array $memo            
      * @return array
      */
-    public function create($activity_id, $user_id, $log_time, $nickname, $headimgurl, $redpack_user, $thirdparty_user, $worth = 0, $worth2 = 0, $scene = "", array $memo = array('memo' => ''))
+    public function create($activity_id, $user_id, $log_time, $nickname, $headimgurl, $redpack_user, $thirdparty_user, $worth = 0, $worth2 = 0, $scene = "", array $extendFields = array(), array $memo = array('memo' => ''))
     {
         $data = array();
         $data['activity_id'] = strval($activity_id); // 邀请活动
@@ -82,6 +98,11 @@ class User extends \App\Common\Models\Activity\User
         $data['worth2'] = intval($worth2); // 价值2
         $data['log_time'] = \App\Common\Utils\Helper::getCurrentTime($log_time);
         $data['scene'] = $scene; // 场景
+        if (!empty($extendFields)) {
+            foreach ($extendFields as $field => $value) {
+                $data[$field] = $value;
+            }
+        }
         $data['memo'] = $memo; // 备注
         $info = $this->insert($data);
         return $info;
@@ -98,15 +119,16 @@ class User extends \App\Common\Models\Activity\User
      * @param number $worth            
      * @param number $worth2            
      * @param string $activity_id               
-     * @param string $scene           
+     * @param string $scene            
+     * @param array $extendFields           
      * @param array $memo            
      * @return array
      */
-    public function getOrCreateByUserId($activity_id, $user_id, $log_time, $nickname, $headimgurl, $redpack_user, $thirdparty_user, $worth = 0, $worth2 = 0, $scene = "", array $memo = array())
+    public function getOrCreateByUserId($activity_id, $user_id, $log_time, $nickname, $headimgurl, $redpack_user, $thirdparty_user, $worth = 0, $worth2 = 0, $scene = "", array $extendFields = array(), array $memo = array())
     {
         $info = $this->getInfoByUserid($user_id, $activity_id);
         if (empty($info)) {
-            $info = $this->create($activity_id, $user_id, $log_time, $nickname, $headimgurl, $redpack_user, $thirdparty_user, $worth, $worth2, $activity_id, $scene, $memo);
+            $info = $this->create($activity_id, $user_id, $log_time, $nickname, $headimgurl, $redpack_user, $thirdparty_user, $worth, $worth2, $activity_id, $scene, $extendFields, $memo);
         }
         return $info;
     }
