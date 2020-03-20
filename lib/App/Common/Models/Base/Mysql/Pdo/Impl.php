@@ -205,7 +205,7 @@ class Impl extends Base
 
     public function remove(array $query)
     {
-        $sqlAndConditions = $this->getSqlAndConditions4Remove($query);
+        $sqlAndConditions = $this->getSqlAndConditions4Remove($query, false);
         $phql = $sqlAndConditions['sql'];
         $conditions = $sqlAndConditions['conditions'];
         $result = $this->executeQuery($phql, $conditions['bind'], 'execute');
@@ -214,7 +214,7 @@ class Impl extends Base
 
     public function physicalRemove(array $query)
     {
-        $sqlAndConditions = $this->getSqlAndConditions4Remove($query);
+        $sqlAndConditions = $this->getSqlAndConditions4Remove($query, true);
         $phql = $sqlAndConditions['sql'];
         $conditions = $sqlAndConditions['conditions'];
         $result = $this->executeQuery($phql, $conditions['bind'], 'execute');

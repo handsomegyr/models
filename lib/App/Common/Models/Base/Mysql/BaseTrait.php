@@ -590,7 +590,7 @@ trait BaseTrait
         );
     }
 
-    protected function getSqlAndConditions4Remove(array $query)
+    protected function getSqlAndConditions4Remove(array $query, $isPhysicalRemove = true)
     {
         if (empty($query)) {
             // throw new \Exception("删除数据的时候请指定条件", - 999);
@@ -604,7 +604,12 @@ trait BaseTrait
             $conditions['bind'] = array();
         }
         $className = $this->getSource();
-        $phql = "DELETE FROM {$className} WHERE {$conditions['conditions']}";
+        // 物理删除的话
+        if ($isPhysicalRemove) {
+            $phql = "DELETE FROM {$className} WHERE {$conditions['conditions']}";
+        } else {
+            $phql = "UPDATE {$className} SET `__REMOVED__` = 1 WHERE {$conditions['conditions']}";
+        }
         return array(
             'sql' => $phql,
             'conditions' => $conditions

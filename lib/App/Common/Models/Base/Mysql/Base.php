@@ -5,6 +5,9 @@ namespace App\Common\Models\Base\Mysql;
 class Base implements \App\Common\Models\Base\IBase
 {
 
+    //是否是物理删除
+    protected $isPhysicalRemove = false;
+
     protected $isDebug = false;
 
     protected $isPhql = false;
@@ -202,7 +205,12 @@ class Base implements \App\Common\Models\Base\IBase
 
     public function remove(array $query)
     {
-        return $this->impl->remove($query);
+        // 如果是物理删除的话
+        if ($this->isPhysicalRemove) {
+            return $this->impl->physicalRemove($query);
+        } else {
+            return $this->impl->remove($query);
+        }
     }
 
     public function physicalRemove(array $query)
