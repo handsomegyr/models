@@ -26,17 +26,27 @@ trait BaseTrait
         }
     }
 
-    protected function getConditions(array $where, $condition_op = "AND")
+    protected function getConditions(array $where, $condition_op = "AND", $level = 0)
     {
         $unique = uniqid();
         $conditions = array();
         $bind = array();
         $forUpdate = array();
-        // 如果__FOR_UPDATE__ 存在的话
-        if (array_key_exists("__FOR_UPDATE__", $where)) {
-            $forUpdate["for_update"] = $where["__FOR_UPDATE__"];
-            unset($where["__FOR_UPDATE__"]);
+
+        // 0级条件的时候才会有以下的判断
+        if ($level <= 0) {
+            // 如果没有这个条件那么增加这个条件
+            if (!array_key_exists("__REMOVED__", $where)) {
+                $where["__REMOVED__"] = 0;
+            }
+
+            // 如果__FOR_UPDATE__ 存在的话
+            if (array_key_exists("__FOR_UPDATE__", $where)) {
+                $forUpdate["for_update"] = $where["__FOR_UPDATE__"];
+                unset($where["__FOR_UPDATE__"]);
+            }
         }
+
 
         // 如果__QUERY_OR__ 存在的话
         if (array_key_exists("__QUERY_OR__", $where)) {
@@ -46,7 +56,7 @@ trait BaseTrait
             $bind = array();
             $conditions = array();
             foreach ($orConditions as $condition) {
-                $query = $this->getConditions($condition);
+                $query = $this->getConditions($condition, "AND", $level + 1);
                 $bind = array_merge($bind, $query['bind']);
                 $conditions[] = $query['conditions'];
             }
@@ -56,7 +66,7 @@ trait BaseTrait
         foreach ($where as $key => $item) {
             if ($key == '__OR__') {
                 // 解决OR查询
-                $orConditions = $this->getConditions($item, "OR");
+                $orConditions = $this->getConditions($item, "OR", $level + 1);
                 if (!empty($orConditions)) {
                     $conditions[] = $orConditions['conditions'];
                     $bind = array_merge($bind, $orConditions['bind']);
@@ -70,7 +80,7 @@ trait BaseTrait
                 } else {
                     $conditions[] = $item;
                 }
-                $orConditions = $this->getConditions($item, "OR");
+                $orConditions = $this->getConditions($item, "OR", $level + 1);
                 if (!empty($orConditions)) {
                     $conditions[] = $orConditions['conditions'];
                     $bind = array_merge($bind, $orConditions['bind']);
