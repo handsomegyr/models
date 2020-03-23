@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Backend\Models;
 
 use App\Backend\Models\Input;
@@ -12,7 +13,7 @@ trait Base
     public function getDefaultSort()
     {
         $sort = array(
-            '_id' => - 1
+            '_id' => -1
         );
         return $sort;
     }
@@ -82,17 +83,26 @@ trait Base
      */
     public function processInsertOrUpdate(Input $input, array $row = array())
     {
+        if (empty($_SESSION['admin_id'])) {
+            throw new \Exception('后台操作用户未登录');
+        }
+
         if (empty($_SESSION['processInsertOrUpdate'])) {
             $_SESSION['processInsertOrUpdate'] = time();
             try {
                 $data = $input->getFormData(true);
-                
                 // $this->setPhql(true);
                 if (empty($row) || empty($row['_id'])) {
+                    $data['__CREATE_USER_ID__'] = $_SESSION['admin_id'];
+                    $data['__CREATE_USER_NAME__'] = $_SESSION['admin_name'];
+                    $data['__MODIFY_USER_ID__'] = $_SESSION['admin_id'];
+                    $data['__MODIFY_USER_NAME__'] = $_SESSION['admin_name'];
                     $this->insert($data);
                 } else {
                     $query['_id'] = $row['_id'];
                     // $this->setDebug(true);
+                    $data['__MODIFY_USER_ID__'] = $_SESSION['admin_id'];
+                    $data['__MODIFY_USER_NAME__'] = $_SESSION['admin_name'];
                     $this->update($query, array(
                         '$set' => $data
                     ));
@@ -104,6 +114,32 @@ trait Base
             }
         } else {
             throw new \Exception('上次的操作未完成，请稍候再试');
+        }
+    }
+
+    /**
+     * 删除操作
+     *
+     * @param Input $input            
+     * @param array $row            
+     */
+    public function processDelete(Input $input, array $row = array())
+    {
+        if (empty($_SESSION['admin_id'])) {
+            throw new \Exception('后台操作用户未登录');
+        }
+        $query = array(
+            '_id' => $input->id
+        );
+        // 如果是物理删除的话
+        if ($this->isPhysicalRemove) {
+            return $this->physicalRemove($query);
+        } else {
+            $updateData = array();
+            $updateData['__REMOVED__'] = 1;
+            $updateData['__REMOVE_USER_ID__'] = $_SESSION['admin_id'];
+            $updateData['__REMOVE_USER_NAME__'] = $_SESSION['admin_name'];
+            return $this->update($query, array('$set' => $updateData));
         }
     }
 }

@@ -6,7 +6,7 @@ class Base implements \App\Common\Models\Base\IBase
 {
 
     //是否是物理删除
-    protected $isPhysicalRemove = false;
+    public $isPhysicalRemove = false;
 
     protected $isDebug = false;
 
