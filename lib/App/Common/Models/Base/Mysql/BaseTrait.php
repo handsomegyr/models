@@ -261,6 +261,12 @@ trait BaseTrait
         $datas['__CREATE_TIME__'] = $datas['__MODIFY_TIME__'] = \App\Common\Utils\Helper::getCurrentTime();
         $datas['__REMOVED__'] = false;
 
+        // 如果在后台进行操作数据表的话
+        if (!empty($_SESSION['admin_id'])) {
+            $datas['__CREATE_USER_ID__'] = $datas['__MODIFY_USER_ID__'] = $_SESSION['admin_id'];
+            $datas['__CREATE_USER_NAME__'] = $datas['__MODIFY_USER_NAME__'] = (isset($_SESSION['admin_name']) ? $_SESSION['admin_name'] : '');
+        }
+
         foreach ($datas as $field => $value) {
             $fieldKey = "[{$field}]";
             $fields[] = "{$fieldKey}";
@@ -329,6 +335,21 @@ trait BaseTrait
             $fieldKey = "[{$field}]";
             $fields[] = "{$fieldKey}=:{$field}:";
             $values[$field] = $this->changeValue4Save($value);
+
+            // 如果在后台进行操作数据表的话
+            if (!empty($_SESSION['admin_id'])) {
+                $field = '__MODIFY_USER_ID__';
+                $value = $_SESSION['admin_id'];
+                $fieldKey = "[{$field}]";
+                $fields[] = "{$fieldKey}=:{$field}:";
+                $values[$field] = $this->changeValue4Save($value);
+
+                $field = '__MODIFY_USER_NAME__';
+                $value = isset($_SESSION['admin_name']) ? $_SESSION['admin_name'] : '';
+                $fieldKey = "[{$field}]";
+                $fields[] = "{$fieldKey}=:{$field}:";
+                $values[$field] = $this->changeValue4Save($value);
+            }
 
             return array(
                 'fields' => implode(",", $fields),
@@ -608,7 +629,11 @@ trait BaseTrait
         if ($isPhysicalRemove) {
             $phql = "DELETE FROM {$className} WHERE {$conditions['conditions']}";
         } else {
-            $phql = "UPDATE {$className} SET `__REMOVED__` = 1 WHERE {$conditions['conditions']}";
+            // 如果在后台进行操作数据表的话            
+            $__REMOVE_TIME__ = \App\Common\Utils\Helper::getCurrentTime();
+            $__REMOVE_USER_ID__ = (isset($_SESSION['admin_id']) ? $_SESSION['admin_id'] : '');
+            $__REMOVE_USER_NAME__ = (isset($_SESSION['admin_name']) ? $_SESSION['admin_name'] : '');
+            $phql = "UPDATE {$className} SET `__REMOVED__` = 1,`__REMOVE_TIME__` = '{$__REMOVE_TIME__}',`__REMOVE_USER_ID__` = '{$__REMOVE_USER_ID__}',`__REMOVE_USER_NAME__` = '{$__REMOVE_USER_NAME__}' WHERE {$conditions['conditions']}";
         }
         return array(
             'sql' => $phql,

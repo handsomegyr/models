@@ -93,16 +93,10 @@ trait Base
                 $data = $input->getFormData(true);
                 // $this->setPhql(true);
                 if (empty($row) || empty($row['_id'])) {
-                    $data['__CREATE_USER_ID__'] = $_SESSION['admin_id'];
-                    $data['__CREATE_USER_NAME__'] = $_SESSION['admin_name'];
-                    $data['__MODIFY_USER_ID__'] = $_SESSION['admin_id'];
-                    $data['__MODIFY_USER_NAME__'] = $_SESSION['admin_name'];
                     $this->insert($data);
                 } else {
                     $query['_id'] = $row['_id'];
                     // $this->setDebug(true);
-                    $data['__MODIFY_USER_ID__'] = $_SESSION['admin_id'];
-                    $data['__MODIFY_USER_NAME__'] = $_SESSION['admin_name'];
                     $this->update($query, array(
                         '$set' => $data
                     ));
@@ -131,15 +125,6 @@ trait Base
         $query = array(
             '_id' => $input->id
         );
-        // 如果是物理删除的话
-        if ($this->isPhysicalRemove) {
-            return $this->physicalRemove($query);
-        } else {
-            $updateData = array();
-            $updateData['__REMOVED__'] = 1;
-            $updateData['__REMOVE_USER_ID__'] = $_SESSION['admin_id'];
-            $updateData['__REMOVE_USER_NAME__'] = $_SESSION['admin_name'];
-            return $this->update($query, array('$set' => $updateData));
-        }
+        $this->remove($query);
     }
 }
