@@ -625,18 +625,27 @@ trait BaseTrait
             $conditions['bind'] = array();
         }
         $className = $this->getSource();
+        $updateFieldValues = array();
         // 物理删除的话
         if ($isPhysicalRemove) {
             $phql = "DELETE FROM {$className} WHERE {$conditions['conditions']}";
         } else {
-            // 如果在后台进行操作数据表的话            
+            // 如果在后台进行操作数据表的话 
             $__REMOVE_TIME__ = \App\Common\Utils\Helper::getCurrentTime();
             $__REMOVE_USER_ID__ = (isset($_SESSION['admin_id']) ? $_SESSION['admin_id'] : '');
             $__REMOVE_USER_NAME__ = (isset($_SESSION['admin_name']) ? $_SESSION['admin_name'] : '');
-            $phql = "UPDATE {$className} SET `__REMOVED__` = 1,`__REMOVE_TIME__` = '{$__REMOVE_TIME__}',`__REMOVE_USER_ID__` = '{$__REMOVE_USER_ID__}',`__REMOVE_USER_NAME__` = '{$__REMOVE_USER_NAME__}' WHERE {$conditions['conditions']}";
+            $object = array('$set' => array(
+                '__REMOVED__' => 1,
+                '__REMOVE_TIME__' => $__REMOVE_TIME__,
+                '__REMOVE_USER_ID__' => $__REMOVE_USER_ID__,
+                '__REMOVE_USER_NAME__' => $__REMOVE_USER_NAME__,
+            ));
+            $updateFieldValues = $this->getUpdateContents($object);
+            $phql = "UPDATE {$className} SET {$updateFieldValues['fields']} WHERE {$conditions['conditions']} ";
         }
         return array(
             'sql' => $phql,
+            'updateFieldValues' => $updateFieldValues,
             'conditions' => $conditions
         );
     }

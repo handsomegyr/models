@@ -208,7 +208,9 @@ class Impl2 extends Base
         $sqlAndConditions = $this->getSqlAndConditions4Remove($query, false);
         $phql = $sqlAndConditions['sql'];
         $conditions = $sqlAndConditions['conditions'];
-        $result = $this->executeQuery($phql, $conditions['bind'], 'execute');
+        $updateFieldValues = $sqlAndConditions['updateFieldValues'];
+        $data = array_merge($updateFieldValues['values'], $conditions['bind']);
+        $result = $this->executeQuery($phql, $data, 'execute');
         return $result;
     }
 
