@@ -1,6 +1,8 @@
 <?php
 namespace App\Weixin\Models;
-
+/**
+ * @deprecated
+ */
 class ComponentApplication extends \App\Common\Models\Weixin\ComponentApplication
 {
 

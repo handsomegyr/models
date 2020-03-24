@@ -61,27 +61,16 @@ class Card extends \App\Common\Models\Weixincard\Card
             'card_id' => $card_id
         );
 
-        $options = array();
-        $options['query'] = $query;
-
-        $update = array(
+        $updateData = array(
             '$inc' => array(
                 'received_num' => $received_num
             )
         );
-
-        $options['update'] = $update;
-        $options['new'] = true; // 返回更新之后的值
-
-        $rst = $this->findAndModify($options);
-        if (empty($rst['ok'])) {
+        $affectRows = $this->update($query, $updateData);
+        if ($affectRows < 1) {
             throw new \Exception("卡券领取数增加失败");
-        }
-
-        if (!empty($rst['value'])) {
-            return $rst['value'];
         } else {
-            throw new \Exception("卡券领取数增加失败");
+            return true;
         }
     }
 
@@ -98,29 +87,18 @@ class Card extends \App\Common\Models\Weixincard\Card
         $query = array(
             'card_id' => $card_id
         );
-
-        $options = array();
-        $options['query'] = $query;
-
-        $update = array(
+        $updateData = array(
             '$inc' => array(
                 'give_by_friend_num' => $give_by_friend_num,
                 'received_num' => -$give_by_friend_num
             )
         );
 
-        $options['update'] = $update;
-        $options['new'] = true; // 返回更新之后的值
-
-        $rst = $this->findAndModify($options);
-        if (empty($rst['ok'])) {
+        $affectRows = $this->update($query, $updateData);
+        if ($affectRows < 1) {
             throw new \Exception("卡券转赠朋友数增加失败");
-        }
-
-        if (!empty($rst['value'])) {
-            return $rst['value'];
         } else {
-            throw new \Exception("卡券转赠朋友数增加失败");
+            return true;
         }
     }
 
@@ -137,28 +115,17 @@ class Card extends \App\Common\Models\Weixincard\Card
         $query = array(
             'card_id' => $card_id
         );
-
-        $options = array();
-        $options['query'] = $query;
-
-        $update = array(
+        $updateData = array(
             '$inc' => array(
                 'consumed_num' => $consumed_num
             )
         );
 
-        $options['update'] = $update;
-        $options['new'] = true; // 返回更新之后的值
-
-        $rst = $this->findAndModify($options);
-        if (empty($rst['ok'])) {
+        $affectRows = $this->update($query, $updateData);
+        if ($affectRows < 1) {
             throw new \Exception("卡券核销数增加失败");
-        }
-
-        if (!empty($rst['value'])) {
-            return $rst['value'];
         } else {
-            throw new \Exception("卡券核销数增加失败");
+            return true;
         }
     }
 
@@ -175,28 +142,16 @@ class Card extends \App\Common\Models\Weixincard\Card
         $query = array(
             'card_id' => $card_id
         );
-
-        $options = array();
-        $options['query'] = $query;
-
-        $update = array(
+        $updateData = array(
             '$inc' => array(
                 'deleted_num' => $deleted_num
             )
         );
-
-        $options['update'] = $update;
-        $options['new'] = true; // 返回更新之后的值
-
-        $rst = $this->findAndModify($options);
-        if (empty($rst['ok'])) {
+        $affectRows = $this->update($query, $updateData);
+        if ($affectRows < 1) {
             throw new \Exception("卡券删除数增加失败");
-        }
-
-        if (!empty($rst['value'])) {
-            return $rst['value'];
         } else {
-            throw new \Exception("卡券删除数增加失败");
+            return true;
         }
     }
 
@@ -213,28 +168,17 @@ class Card extends \App\Common\Models\Weixincard\Card
         $query = array(
             'card_id' => $card_id
         );
-
-        $options = array();
-        $options['query'] = $query;
-
-        $update = array(
+        $updateData = array(
             '$inc' => array(
                 'unavailable_num' => $unavailable_num
             )
         );
 
-        $options['update'] = $update;
-        $options['new'] = true; // 返回更新之后的值
-
-        $rst = $this->findAndModify($options);
-        if (empty($rst['ok'])) {
+        $affectRows = $this->update($query, $updateData);
+        if ($affectRows < 1) {
             throw new \Exception("卡券失效数增加失败");
-        }
-
-        if (!empty($rst['value'])) {
-            return $rst['value'];
         } else {
-            throw new \Exception("卡券失效数增加失败");
+            return true;
         }
     }
 

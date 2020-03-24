@@ -143,22 +143,14 @@ class CardBag extends \App\Common\Models\Weixincard\CardBag
             $query = array();
             $query['_id'] = $cardbagInfo['_id'];
             $query['is_got'] = false;
-
-            $options = array();
-            $options['query'] = $query;
-            $options['update'] = array(
+            $updateData = array(
                 '$set' => $info
             );
-            $options['new'] = true;
-            $options['upsert'] = true;
-            $rst = $this->findAndModify($options);
-            if (empty($rst['ok'])) {
-                throw new \Exception("卡券ID:{$card_id} Code:{$UserCardCode}的对应卡包领取失败" . json_encode($rst));
+            $affectRows = $this->update($query, $updateData);
+            if ($affectRows < 1) {
+                throw new \Exception("卡券ID:{$card_id} Code:{$UserCardCode}的对应卡包领取失败");
             }
-            if (empty($rst['value'])) {
-                throw new \Exception("卡券ID:{$card_id} Code:{$UserCardCode}的对应卡包领取失败" . json_encode($rst));
-            }
-            return $rst['value'];
+            return array_merge($cardbagInfo, $info);
         } else { // 新增一条记录
             $is_consumed = 0;
             $consume_time = 0;
@@ -210,22 +202,13 @@ class CardBag extends \App\Common\Models\Weixincard\CardBag
             $query = array();
             $query['_id'] = $cardbagInfo['_id'];
             $query['is_give_to_friend'] = 0;
-
-            $options = array();
-            $options['query'] = $query;
-            $options['update'] = array(
+            $updateData = array(
                 '$set' => $info
             );
-            $options['new'] = true;
-            $options['upsert'] = true;
-            $rst = $this->findAndModify($options);
-            if (empty($rst['ok'])) {
-                throw new Exception("卡券ID:{$card_id} Code:{$UserCardCode}的对应卡包更新失败" . json_encode($rst));
+            $affectRows = $this->update($query, $updateData);
+            if ($affectRows < 1) {
+                throw new \Exception("卡券ID:{$card_id} Code:{$UserCardCode}的对应卡包更新失败");
             }
-            if (empty($rst['value'])) {
-                throw new Exception("卡券ID:{$card_id} Code:{$UserCardCode}的对应卡包更新失败" . json_encode($rst));
-            }
-            return $rst['value'];
         } else {
             throw new \Exception("卡券ID:{$card_id} Code:{$UserCardCode}的对应卡包记录不存在");
         }
@@ -267,23 +250,13 @@ class CardBag extends \App\Common\Models\Weixincard\CardBag
             $query = array();
             $query['_id'] = $cardbagInfo['_id'];
             $query['is_consumed'] = 0;
-
-            $options = array();
-            $options['query'] = $query;
-            $options['update'] = array(
+            $updateData = array(
                 '$set' => $info
             );
-            $options['new'] = true;
-            $options['upsert'] = true;
-            $rst = $this->findAndModify($options);
-
-            if (empty($rst['ok'])) {
-                throw new \Exception("卡券ID:{$card_id} Code:{$UserCardCode}的对应卡包核销失败" . json_encode($rst));
+            $affectRows = $this->update($query, $updateData);
+            if ($affectRows < 1) {
+                throw new \Exception("卡券ID:{$card_id} Code:{$UserCardCode}的对应卡包核销失败");
             }
-            if (empty($rst['value'])) {
-                throw new \Exception("卡券ID:{$card_id} Code:{$UserCardCode}的对应卡包核销失败" . json_encode($rst));
-            }
-            return $rst['value'];
         } else {
             throw new \Exception("卡券ID:{$card_id} Code:{$UserCardCode}的对应卡包记录不存在");
         }
@@ -314,22 +287,13 @@ class CardBag extends \App\Common\Models\Weixincard\CardBag
             $query = array();
             $query['_id'] = $cardbagInfo['_id'];
             $query['is_deleted'] = 0;
-
-            $options = array();
-            $options['query'] = $query;
-            $options['update'] = array(
+            $updateData = array(
                 '$set' => $info
             );
-            $options['new'] = true;
-            $options['upsert'] = true;
-            $rst = $this->findAndModify($options);
-            if (empty($rst['ok'])) {
-                throw new \Exception("卡券ID:{$card_id} Code:{$UserCardCode}的对应卡包删除失败" . json_encode($rst));
+            $affectRows = $this->update($query, $updateData);
+            if ($affectRows < 1) {
+                throw new \Exception("卡券ID:{$card_id} Code:{$UserCardCode}的对应卡包删除失败");
             }
-            if (empty($rst['value'])) {
-                throw new \Exception("卡券ID:{$card_id} Code:{$UserCardCode}的对应卡包删除失败" . json_encode($rst));
-            }
-            return $rst['value'];
         } else {
             throw new \Exception("卡券ID:{$card_id} Code:{$UserCardCode}的对应卡包记录不存在");
         }
@@ -362,23 +326,14 @@ class CardBag extends \App\Common\Models\Weixincard\CardBag
             $query = array();
             $query['_id'] = $cardbagInfo['_id'];
             $query['is_unavailable'] = 0;
-
-            $options = array();
-            $options['query'] = $query;
-            $options['update'] = array(
+            $updateData = array(
                 '$set' => $info
             );
-            $options['new'] = true;
-            $options['upsert'] = true;
-            $rst = $this->findAndModify($options);
 
-            if (empty($rst['ok'])) {
-                throw new \Exception("卡券ID:{$card_id} Code:{$UserCardCode}的对应卡包设置卡券失效操作失败" . json_encode($rst));
+            $affectRows = $this->update($query, $updateData);
+            if ($affectRows < 1) {
+                throw new \Exception("卡券ID:{$card_id} Code:{$UserCardCode}的对应卡包设置卡券失效操作失败");
             }
-            if (empty($rst['value'])) {
-                throw new \Exception("卡券ID:{$card_id} Code:{$UserCardCode}的对应卡包设置卡券失效操作失败" . json_encode($rst));
-            }
-            return $rst['value'];
         } else {
             throw new \Exception("卡券ID:{$card_id} Code:{$UserCardCode}的对应卡包记录不存在");
         }

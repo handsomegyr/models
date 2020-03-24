@@ -133,8 +133,7 @@ class Rule extends \App\Common\Models\Weixinredpack\Rule
      */
     public function updateRemain($rule, $amount = 100, $quantity = 1)
     {
-        $options = array();
-        $options['query'] = array(
+        $query = array(
             '_id' => $rule['_id'],
             'quantity' => array(
                 '$gt' => 0
@@ -143,20 +142,18 @@ class Rule extends \App\Common\Models\Weixinredpack\Rule
                 '$gte' => $rule['min_cash']
             )
         );
-        $options['update'] = array(
+        $updateData = array(
             '$inc' => array(
                 'quantity' => -intval($quantity),
                 'amount' => -intval($amount)
             )
         );
-        $options['new'] = true; // 返回更新之后的值
-        $rst = $this->findAndModify($options);
-        if (empty($rst['ok'])) {
-            throw new \Exception("更新剩余数量和金额的findAndModify执行错误，返回结果为:" . json_encode($rst));
+
+        $affectRows = $this->update($query, $updateData);
+        if ($affectRows < 1) {
+            throw new \Exception('更新剩余数量和金额失败');
+        } else {
+            return true;
         }
-        if (empty($rst['value'])) {
-            throw new \Exception("更新剩余数量和金额的findAndModify执行错误，返回结果为:" . json_encode($rst));
-        }
-        return $rst['value'];
     }
 }

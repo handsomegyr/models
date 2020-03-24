@@ -36,8 +36,7 @@ class Code extends \App\Common\Models\Prize\Code
         while (true) {
             $code = $this->findOne($query);
             if (!empty($code)) {
-                $options = array();
-                $options['query'] = array(
+                $query = array(
                     '_id' => $code['_id'],
                     'prize_id' => $prize_id,
                     'is_used' => array(
@@ -50,15 +49,18 @@ class Code extends \App\Common\Models\Prize\Code
                         '$gt' => $now
                     )
                 );
-                $options['update'] = array(
+                $updateData = array(
                     '$set' => array(
                         'is_used' => true,
                         'activity_id' => $activity_id
                     )
                 );
-                $rst = $this->findAndModify($options);
-                if (!empty($rst['value']))
-                    return $rst['value'];
+                $affectRows = $this->update($query, $updateData);
+                if ($affectRows >= 1) {
+                    $code['is_used'] = true;
+                    $code['activity_id'] = $activity_id;
+                    return $code;
+                }
                 if ($loop++ >= 10) {
                     return false;
                 }
