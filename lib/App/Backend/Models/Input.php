@@ -108,6 +108,8 @@ class Input extends \stdClass
                             if (!empty($numArr[1])) {
                                 $where[$key]['$lte'] = $numArr[1];
                             }
+                        } elseif ($field['data']['type'] == "boolean") {
+                            $where[$key] = intval(urldecode($filter[$key]));
                         } else {
                             // $where[$key] = urldecode($filter[$key]);
                             $str1 = urldecode($filter[$key]);
@@ -218,7 +220,7 @@ class Input extends \stdClass
                         $data[$key] = trim($this->$key);
                     }
                 } elseif ($field['data']['type'] == "multifile") {
-                    unset($data[$key]);					
+                    unset($data[$key]);
                     if (isset($this->$key)) {
                         $data[$key] = ($this->$key);
                     }
