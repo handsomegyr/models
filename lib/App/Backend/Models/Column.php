@@ -24,6 +24,13 @@ class Column //extends \stdClass
         }
     }
 
+    public function getRow()
+    {
+        if (empty($this->rowModel)) {
+            $this->rowModel = new \stdClass();
+        }
+        return $this->rowModel;
+    }
     /**
      * Add a display callback.
      *
