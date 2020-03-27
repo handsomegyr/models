@@ -242,7 +242,7 @@ class Exchange extends \App\Common\Models\Exchange\Exchange
     {
         $query = array(
             'user_id' => $user_id,
-            'activity_id' => $activity_id,,
+            'activity_id' => $activity_id,
             'got_time' => array(
                 '$gte' => \App\Common\Utils\Helper::getCurrentTime($start_time),
                 '$lt' => \App\Common\Utils\Helper::getCurrentTime($end_time)

@@ -65,11 +65,11 @@ class Success extends \App\Common\Models\Exchange\Success
      *
      * @param string $user_id            
      * @param string $prize_id            
-     * @param \MongoDate $start_time            
-     * @param \MongoDate $end_time            
+     * @param number $start_time            
+     * @param number $end_time            
      * @return number
      */
-    public function getExchangeNum($user_id, $prize_id, \MongoDate $start_time, \MongoDate $end_time)
+    public function getExchangeNum($user_id, $prize_id, $start_time, $end_time)
     {
         $count = 0;
         $query = array(
@@ -77,8 +77,8 @@ class Success extends \App\Common\Models\Exchange\Success
             'prize_id' => $prize_id,
             'is_valid' => true,
             'exchange_time' => array(
-                '$gte' => $start_time,
-                '$lt' => $end_time
+                '$gte' => \App\Common\Utils\Helper::getCurrentTime($start_time),
+                '$lt' => \App\Common\Utils\Helper::getCurrentTime($end_time)
             )
         );
         $list = $this->findAll($query);
@@ -113,12 +113,12 @@ class Success extends \App\Common\Models\Exchange\Success
      * 获取兑换成功列表
      *
      * @param string $user_id            
-     * @param \MongoDate $start_time            
-     * @param \MongoDate $end_time            
+     * @param number $start_time            
+     * @param number $end_time            
      * @param array $prize_ids            
      * @return array
      */
-    public function getExchangeList($user_id, \MongoDate $start_time = null, \MongoDate $end_time = null, array $prize_ids = array())
+    public function getExchangeList($user_id, $start_time = 0, $end_time = 0, array $prize_ids = array())
     {
         $query = array(
             'user_id' => $user_id
@@ -130,10 +130,10 @@ class Success extends \App\Common\Models\Exchange\Success
         }
         $query['is_valid'] = true;
         if (!empty($start_time)) {
-            $query['exchange_time']['$gte'] = $start_time;
+            $query['exchange_time']['$gte'] = \App\Common\Utils\Helper::getCurrentTime($start_time);
         }
         if (!empty($end_time)) {
-            $query['exchange_time']['$lt'] = $end_time;
+            $query['exchange_time']['$lt'] = \App\Common\Utils\Helper::getCurrentTime($end_time);
         }
         $list = $this->findAll($query);
         return $list;

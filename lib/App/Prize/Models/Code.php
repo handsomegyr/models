@@ -78,8 +78,8 @@ class Code extends \App\Common\Models\Prize\Code
      * @param string $code            
      * @param string $pwd            
      * @param boolean $is_used            
-     * @param \MongoDate $start_time            
-     * @param \MongoDate $end_time            
+     * @param number $start_time            
+     * @param number $end_time            
      */
     public function create($prize_id, $code, $pwd = '', $is_used = false, $start_time = null, $end_time = null)
     {
