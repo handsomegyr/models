@@ -60,6 +60,14 @@ class Input extends \stdClass
         return $this->schemas;
     }
 
+    public function setSchemas($schemas)
+    {
+        if (empty($schemas)) {
+            throw new \Exception('schemas is empty');
+        }
+        return $this->schemas = $schemas;
+    }
+
     public function addSchema($key, array $field)
     {
         $this->schemas[$key] = $field;
