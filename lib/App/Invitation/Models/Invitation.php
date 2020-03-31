@@ -81,11 +81,12 @@ class Invitation extends \App\Common\Models\Invitation\Invitation
      * @param number $personal_receive_num            
      * @param boolean $is_need_subscribed            
      * @param string $subscibe_hint_url            
-     * @param string $activity_id            
+     * @param string $activity_id                
+     * @param array $extendFields         
      * @param array $memo            
      * @return array
      */
-    public function create($user_id, $user_name, $user_headimgurl, $url, $desc, $send_time, $worth = 0, $worth2 = 0, $invited_total = 0, $personal_receive_num = 0, $is_need_subscribed = false, $subscibe_hint_url = "", $activity_id = '', array $memo = array('memo' => ''))
+    public function create($user_id, $user_name, $user_headimgurl, $url, $desc, $send_time, $worth = 0, $worth2 = 0, $invited_total = 0, $personal_receive_num = 0, $is_need_subscribed = false, $subscibe_hint_url = "", $activity_id = '', array $extendFields = array(), array $memo = array('memo' => ''))
     {
         $data = array();
         $data['activity_id'] = $activity_id; // 邀请活动
@@ -104,6 +105,11 @@ class Invitation extends \App\Common\Models\Invitation\Invitation
         $data['personal_receive_num'] = $personal_receive_num; // 个人领取次数，如果为0，不限制
         $data['lock'] = false; // 未锁定
         $data['expire'] = \App\Common\Utils\Helper::getCurrentTime(); // 过期时间
+        if (!empty($extendFields)) {
+            foreach ($extendFields as $field => $value) {
+                $data[$field] = $value;
+            }
+        }
         $data['memo'] = $memo; // 备注
 
         $info = $this->insert($data);
@@ -125,15 +131,16 @@ class Invitation extends \App\Common\Models\Invitation\Invitation
      * @param number $personal_receive_num            
      * @param boolean $is_need_subscribed            
      * @param string $subscibe_hint_url            
-     * @param string $activity_id            
+     * @param string $activity_id                 
+     * @param array $extendFields            
      * @param array $memo            
      * @return array
      */
-    public function getOrCreateByUserId($user_id, $user_name, $user_headimgurl, $url, $desc, $send_time, $worth = 0, $worth2 = 0, $invited_total = 0, $personal_receive_num = 0, $is_need_subscribed = false, $subscibe_hint_url = "", $activity_id = '', array $memo = array())
+    public function getOrCreateByUserId($user_id, $user_name, $user_headimgurl, $url, $desc, $send_time, $worth = 0, $worth2 = 0, $invited_total = 0, $personal_receive_num = 0, $is_need_subscribed = false, $subscibe_hint_url = "", $activity_id = '', array $extendFields = array(), array $memo = array())
     {
         $info = $this->getInfoByUserId($user_id, $activity_id);
         if (empty($info)) {
-            $info = $this->create($user_id, $user_name, $user_headimgurl, $url, $desc, $send_time, $worth, $worth2, $invited_total, $personal_receive_num, $is_need_subscribed, $subscibe_hint_url, $activity_id, $memo);
+            $info = $this->create($user_id, $user_name, $user_headimgurl, $url, $desc, $send_time, $worth, $worth2, $invited_total, $personal_receive_num, $is_need_subscribed, $subscibe_hint_url, $activity_id, $extendFields, $memo);
         }
         return $info;
     }

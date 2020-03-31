@@ -35,11 +35,12 @@ class InvitationGotDetail extends \App\Common\Models\Invitation\InvitationGotDet
      * @param number $got_time            
      * @param int $got_worth 
      * @param int $got_worth2            
-     * @param string $activity_id            
+     * @param string $activity_id                 
+     * @param array $extendFields           
      * @param array $memo            
      * @return array
      */
-    public function create($invitation_id, $owner_user_id, $owner_user_name, $owner_user_headimgurl, $got_user_id, $got_user_name, $got_user_headimgurl, $got_time, $got_worth = 0, $got_worth2 = 0, $activity_id = '', array $memo = array())
+    public function create($invitation_id, $owner_user_id, $owner_user_name, $owner_user_headimgurl, $got_user_id, $got_user_name, $got_user_headimgurl, $got_time, $got_worth = 0, $got_worth2 = 0, $activity_id = '', array $extendFields = array(), array $memo = array())
     {
         $data = array();
         $data['activity_id'] = $activity_id; // 邀请活动
@@ -53,6 +54,11 @@ class InvitationGotDetail extends \App\Common\Models\Invitation\InvitationGotDet
         $data['got_time'] = \App\Common\Utils\Helper::getCurrentTime($got_time); // 获取时间
         $data['got_worth'] = $got_worth; // 获取价值
         $data['got_worth2'] = $got_worth2; // 获取价值2
+        if (!empty($extendFields)) {
+            foreach ($extendFields as $field => $value) {
+                $data[$field] = $value;
+            }
+        }
         $data['memo'] = $memo; // 备注
         $info = $this->insert($data);
         return $info;
