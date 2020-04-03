@@ -109,11 +109,19 @@ class Input extends \stdClass
                             }
                         } elseif ($field['data']['type'] == "integer") {
                             $num = urldecode($filter[$key]);
-                            $numArr = explode('|', $num);
-                            if (!empty($numArr[0])) {
+                            $numArr4Explode = explode('|', $num);
+                            $numArr = array();
+                            // 对应0|0的情况
+                            if (isset($numArr4Explode[0]) && strlen($numArr4Explode[0]) > 0) {
+                                $numArr[0] = ($numArr4Explode[0]);
+                            }
+                            if (isset($numArr4Explode[1]) && strlen($numArr4Explode[1]) > 0) {
+                                $numArr[1] = ($numArr4Explode[1]);
+                            }
+                            if (isset($numArr[0])) {
                                 $where[$key]['$gte'] = $numArr[0];
                             }
-                            if (!empty($numArr[1])) {
+                            if (isset($numArr[1])) {
                                 $where[$key]['$lte'] = $numArr[1];
                             }
                         } elseif ($field['data']['type'] == "boolean") {
