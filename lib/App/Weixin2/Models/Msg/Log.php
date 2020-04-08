@@ -5,11 +5,6 @@ namespace App\Weixin2\Models\Msg;
 class Log extends \App\Common\Models\Weixin2\Msg\Log
 {
 
-    protected $changeToArrayFields = array(
-        'request_params',
-        'aes_info'
-    );
-
     /**
      * 记录日志
      *
