@@ -849,7 +849,7 @@ class Service1
                 // 获取图文列表
                 $isFirst = empty($articles) ? true : false;
                 $modelReplyMsgNews = new \App\Weixin2\Models\ReplyMsg\News();
-                $articles1 = $modelReplyMsgNews->getArticlesByReplyMsgId($replyMsgs[0]['_id'], $replyMsgs[0]['authorizer_appid'], $replyMsgs[0]['component_appid'], $isFirst);
+                $articles1 = $modelReplyMsgNews->getArticlesByReplyMsgId($replyMsgs[0]['_id'], $replyMsgs[0]['authorizer_appid'], $replyMsgs[0]['component_appid'], $replyMsgs[0]['agentid'], $isFirst);
                 $articles = array_merge($articles, $articles1);
                 $replymsg = $objWeixin->getMsgManager()
                     ->getReplySender()
@@ -895,7 +895,7 @@ class Service1
 
         // 记录日志
         $modelReplyMsgSendLog = new \App\Weixin2\Models\ReplyMsg\SendLog();
-        $modelReplyMsgSendLog->record($replyMsgs[0]['component_appid'], $replyMsgs[0]['authorizer_appid'], $replyMsgs[0]['_id'], $replyMsgs[0]['name'], $replyMsgs[0]['msg_type'], $replyMsgs[0]['media'], $replyMsgs[0]['media_id'], $replyMsgs[0]['thumb_media'], $replyMsgs[0]['thumb_media_id'], $replyMsgs[0]['title'], $replyMsgs[0]['description'], $replyMsgs[0]['music'], $replyMsgs[0]['hqmusic'], $replyMsgs[0]['kf_account'], $match['_id'], $match['keyword'], $match['reply_msg_type'], $ToUserName, $FromUserName, $replymsg, time());
+        $modelReplyMsgSendLog->record($replyMsgs[0]['component_appid'], $replyMsgs[0]['authorizer_appid'], $replyMsgs[0]['agentid'], $replyMsgs[0]['_id'], $replyMsgs[0]['name'], $replyMsgs[0]['msg_type'], $replyMsgs[0]['media'], $replyMsgs[0]['media_id'], $replyMsgs[0]['thumb_media'], $replyMsgs[0]['thumb_media_id'], $replyMsgs[0]['title'], $replyMsgs[0]['description'], $replyMsgs[0]['music'], $replyMsgs[0]['hqmusic'], $replyMsgs[0]['kf_account'], $match['_id'], $match['keyword'], $match['reply_msg_type'], $ToUserName, $FromUserName, $replymsg, time());
 
         return $replymsg;
     }
@@ -925,7 +925,7 @@ class Service1
                     // 获取图文列表
                     $isFirst = empty($articles) ? true : false;
                     $modelCustomMsgNews = new \App\Weixin2\Models\CustomMsg\News();
-                    $articles1 = $modelCustomMsgNews->getArticlesByCustomMsgId($customMsgInfo['_id'], $customMsgInfo['authorizer_appid'], $customMsgInfo['component_appid'], $isFirst);
+                    $articles1 = $modelCustomMsgNews->getArticlesByCustomMsgId($customMsgInfo['_id'], $customMsgInfo['authorizer_appid'], $customMsgInfo['component_appid'], $customMsgInfo['agentid'], $isFirst);
                     $articles = array_merge($articles, $articles1);
                     $custommsg = $objWeixin->getMsgManager()
                         ->getCustomSender()
@@ -1023,7 +1023,7 @@ class Service1
         }
         // 记录日志
         $modelCustomMsgSendLog = new \App\Weixin2\Models\CustomMsg\SendLog();
-        $modelCustomMsgSendLog->record($customMsgInfo['component_appid'], $customMsgInfo['authorizer_appid'], $customMsgInfo['_id'], $customMsgInfo['name'], $customMsgInfo['msg_type'], $customMsgInfo['media'], $customMsgInfo['media_id'], $customMsgInfo['thumb_media'], $customMsgInfo['thumb_media_id'], $customMsgInfo['title'], $customMsgInfo['description'], $customMsgInfo['music'], $customMsgInfo['hqmusic'], $customMsgInfo['appid'], $customMsgInfo['pagepath'], $customMsgInfo['card_id'], $customMsgInfo['card_ext'], $customMsgInfo['kf_account'], $match['_id'], $match['keyword'], $match['custom_msg_type'], $ToUserName, $FromUserName, $custommsg, time());
+        $modelCustomMsgSendLog->record($customMsgInfo['component_appid'], $customMsgInfo['authorizer_appid'], $customMsgInfo['agentid'], $customMsgInfo['_id'], $customMsgInfo['name'], $customMsgInfo['msg_type'], $customMsgInfo['media'], $customMsgInfo['media_id'], $customMsgInfo['thumb_media'], $customMsgInfo['thumb_media_id'], $customMsgInfo['title'], $customMsgInfo['description'], $customMsgInfo['music'], $customMsgInfo['hqmusic'], $customMsgInfo['appid'], $customMsgInfo['pagepath'], $customMsgInfo['card_id'], $customMsgInfo['card_ext'], $customMsgInfo['kf_account'], $match['_id'], $match['keyword'], $match['custom_msg_type'], $ToUserName, $FromUserName, $custommsg, time());
 
         return array(
             'is_ok' => true,
@@ -1257,7 +1257,7 @@ class Service1
 
         // 记录日志
         $modelTemplateMsgSendLog = new \App\Weixin2\Models\TemplateMsg\SendLog();
-        $modelTemplateMsgSendLog->record($templateMsgInfo['component_appid'], $templateMsgInfo['authorizer_appid'], $templateMsgInfo['_id'], $templateMsgInfo['name'], $templateMsgInfo['template_id'], $templateMsgInfo['url'], $templateMsgInfo['data'], $templateMsgInfo['color'], $templateMsgInfo['appid'], $templateMsgInfo['pagepath'], $match['_id'], $match['keyword'], $ToUserName, $FromUserName, $templatemsg, time());
+        $modelTemplateMsgSendLog->record($templateMsgInfo['component_appid'], $templateMsgInfo['authorizer_appid'], $templateMsgInfo['agentid'], $templateMsgInfo['_id'], $templateMsgInfo['name'], $templateMsgInfo['template_id'], $templateMsgInfo['url'], $templateMsgInfo['data'], $templateMsgInfo['color'], $templateMsgInfo['appid'], $templateMsgInfo['pagepath'], $match['_id'], $match['keyword'], $ToUserName, $FromUserName, $templatemsg, time());
 
         return array(
             'is_ok' => true,

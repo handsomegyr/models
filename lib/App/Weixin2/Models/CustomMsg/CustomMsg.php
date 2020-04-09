@@ -17,12 +17,12 @@ class CustomMsg extends \App\Common\Models\Weixin2\CustomMsg\CustomMsg
     {
         if (!empty($match['custom_msg_ids'])) {
             $custom_msg_ids = implode("_", $match['custom_msg_ids']);
-            $cacheKey = "custom_msg:custom_msg_ids:{$custom_msg_ids}:authorizer_appid:{$match['authorizer_appid']}:component_appid:{$match['component_appid']}:msg_type:{$match['custom_msg_type']}";
+            $cacheKey = "custom_msg:custom_msg_ids:{$custom_msg_ids}:authorizer_appid:{$match['authorizer_appid']}:component_appid:{$match['component_appid']}:agentid:{$match['agentid']}:msg_type:{$match['custom_msg_type']}";
             $cacheKey = cacheKey(__FILE__, __CLASS__, $cacheKey);
             $cache = $this->getDI()->get('cache');
             $rst = $cache->get($cacheKey);
             if (true || empty($rst)) {
-                $rst = $this->getListByIdsAndCustomMsgType($match['custom_msg_ids'], $match['authorizer_appid'], $match['component_appid'], $match['custom_msg_type']);
+                $rst = $this->getListByIdsAndCustomMsgType($match['custom_msg_ids'], $match['authorizer_appid'], $match['component_appid'], $match['agentid'], $match['custom_msg_type']);
                 if (!empty($rst)) {
                     // 加缓存处理
                     $expire_time = 5 * 60;
@@ -35,10 +35,11 @@ class CustomMsg extends \App\Common\Models\Weixin2\CustomMsg\CustomMsg
         }
     }
 
-    public function getListByIdsAndCustomMsgType($ids, $authorizer_appid, $component_appid, $msg_type)
+    public function getListByIdsAndCustomMsgType($ids, $authorizer_appid, $component_appid, $agentid, $msg_type)
     {
         $ret = $this->findAll(array(
             '_id' => array('$in' => $ids),
+            'agentid' => $agentid,
             'authorizer_appid' => $authorizer_appid,
             'component_appid' => $component_appid,
             'msg_type' => $msg_type

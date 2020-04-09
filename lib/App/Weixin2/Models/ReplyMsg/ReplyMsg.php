@@ -15,12 +15,12 @@ class ReplyMsg extends \App\Common\Models\Weixin2\ReplyMsg\ReplyMsg
     {
         if (!empty($match['reply_msg_ids'])) {
             $reply_msg_ids = implode("_", $match['reply_msg_ids']);
-            $cacheKey = "reply_msg:reply_msg_ids:{$reply_msg_ids}:authorizer_appid:{$match['authorizer_appid']}:component_appid:{$match['component_appid']}:msg_type:{$match['reply_msg_type']}";
+            $cacheKey = "reply_msg:reply_msg_ids:{$reply_msg_ids}:authorizer_appid:{$match['authorizer_appid']}:component_appid:{$match['component_appid']}:agentid:{$match['agentid']}:msg_type:{$match['reply_msg_type']}";
             $cacheKey = cacheKey(__FILE__, __CLASS__, $cacheKey);
             $cache = $this->getDI()->get('cache');
             $rst = $cache->get($cacheKey);
             if (true || empty($rst)) {
-                $rst = $this->getListByIdsAndReplyMsgType($match['reply_msg_ids'], $match['authorizer_appid'], $match['component_appid'], $match['reply_msg_type']);
+                $rst = $this->getListByIdsAndReplyMsgType($match['reply_msg_ids'], $match['authorizer_appid'], $match['component_appid'], $match['agentid'], $match['reply_msg_type']);
                 if (!empty($rst)) {
                     // 加缓存处理
                     $expire_time = 5 * 60;
@@ -33,10 +33,11 @@ class ReplyMsg extends \App\Common\Models\Weixin2\ReplyMsg\ReplyMsg
         }
     }
 
-    public function getListByIdsAndReplyMsgType($ids, $authorizer_appid, $component_appid, $msg_type)
+    public function getListByIdsAndReplyMsgType($ids, $authorizer_appid, $component_appid, $agentid, $msg_type)
     {
         $ret = $this->findAll(array(
             '_id' => array('$in' => $ids),
+            'agentid' => $agentid,
             'authorizer_appid' => $authorizer_appid,
             'component_appid' => $component_appid,
             'msg_type' => $msg_type

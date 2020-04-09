@@ -14,7 +14,7 @@ class Word extends \App\Common\Models\Weixin2\Keyword\Word
         if (empty($id)) {
             $info = $this->findOne(array(
                 'content' => $msg,
-                'agentid' => $agentid,
+                'agentid' => intval($agentid),
                 'authorizer_appid' => $authorizer_appid,
                 'component_appid' => $component_appid,
             ));
@@ -33,7 +33,7 @@ class Word extends \App\Common\Models\Weixin2\Keyword\Word
         } else {
             $data = array();
             $data['content'] = $msg;
-            $data['agentid'] = $agentid;
+            $data['agentid'] = intval($agentid);
             $data['authorizer_appid'] = $authorizer_appid;
             $data['component_appid'] = $component_appid;
             $data['times'] = 1;
