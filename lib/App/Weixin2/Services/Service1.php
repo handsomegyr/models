@@ -701,7 +701,7 @@ class Service1
 
                     // 查找对应的群发图文消息
                     $modelMassMsgNews = new \App\Weixin2\Models\MassMsg\News();
-                    $articles = $modelMassMsgNews->getArticlesByMassMsgId($massMsgInfo['mass_msg_id'], $this->authorizer_appid, $this->component_appid);
+                    $articles = $modelMassMsgNews->getArticlesByMassMsgId($massMsgInfo['mass_msg_id'], $this->authorizer_appid, $this->component_appid, $massMsgInfo['agentid']);
                     if (empty($articles)) {
                         throw new \Exception("群发消息ID:{$massMsgInfo['mass_msg_id']}所对应的图文不存在");
                     }
@@ -778,7 +778,7 @@ class Service1
 
         // 记录日志
         $modelMassMsgSendLog = new \App\Weixin2\Models\MassMsg\SendLog();
-        $modelMassMsgSendLog->record($massMsgInfo['component_appid'], $massMsgInfo['authorizer_appid'], $massMsgInfo['_id'], $massMsgInfo['name'], $massMsgInfo['msg_type'], $massMsgInfo['media'], $massMsgInfo['media_id'], $massMsgInfo['thumb_media'], $massMsgInfo['thumb_media_id'], $massMsgInfo['title'], $massMsgInfo['description'], $massMsgInfo['card_id'], $massMsgInfo['card_ext'], $massMsgInfo['upload_media_id'], $massMsgInfo['upload_media_created_at'], $massMsgInfo['upload_media_type'], $is_to_all, $tag_id, \json_encode($toUsers), $send_ignore_reprint, $clientmsgid, $match['_id'], $match['keyword'], $match['mass_msg_type'], "", "", $massmsg, $msg_id, $msg_data_id, time());
+        $modelMassMsgSendLog->record($massMsgInfo['component_appid'], $massMsgInfo['authorizer_appid'], $massMsgInfo['agentid'], $massMsgInfo['_id'], $massMsgInfo['name'], $massMsgInfo['msg_type'], $massMsgInfo['media'], $massMsgInfo['media_id'], $massMsgInfo['thumb_media'], $massMsgInfo['thumb_media_id'], $massMsgInfo['title'], $massMsgInfo['description'], $massMsgInfo['card_id'], $massMsgInfo['card_ext'], $massMsgInfo['upload_media_id'], $massMsgInfo['upload_media_created_at'], $massMsgInfo['upload_media_type'], $is_to_all, $tag_id, \json_encode($toUsers), $send_ignore_reprint, $clientmsgid, $match['_id'], $match['keyword'], $match['mass_msg_type'], "", "", $massmsg, $msg_id, $msg_data_id, time());
 
         return array(
             'is_ok' => true,

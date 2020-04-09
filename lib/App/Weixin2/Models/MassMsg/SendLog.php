@@ -8,11 +8,12 @@ class SendLog extends \App\Common\Models\Weixin2\MassMsg\SendLog
     /**
      * 记录
      */
-    public function record($component_appid, $authorizer_appid, $mass_msg_id, $mass_msg_name, $msg_type, $media, $media_id, $thumb_media, $thumb_media_id, $title, $description, $card_id, $card_ext, $upload_media_id, $upload_media_created_at, $upload_media_type, $is_to_all, $tag_id, $touser, $send_ignore_reprint, $clientmsgid, $keyword_id, $keyword, $keyword_mass_msg_type, $ToUserName, $FromUserName, $mass_msg_content, $msg_id, $msg_data_id, $log_time)
+    public function record($component_appid, $authorizer_appid, $agentid, $mass_msg_id, $mass_msg_name, $msg_type, $media, $media_id, $thumb_media, $thumb_media_id, $title, $description, $card_id, $card_ext, $upload_media_id, $upload_media_created_at, $upload_media_type, $is_to_all, $tag_id, $touser, $send_ignore_reprint, $clientmsgid, $keyword_id, $keyword, $keyword_mass_msg_type, $ToUserName, $FromUserName, $mass_msg_content, $msg_id, $msg_data_id, $log_time)
     {
         $datas = array(
             'component_appid' => $component_appid,
             'authorizer_appid' => $authorizer_appid,
+            'agentid' => $agentid,
             'mass_msg_id' => empty($mass_msg_id) ? 0 : $mass_msg_id,
             'mass_msg_name' => empty($mass_msg_name) ? "" : $mass_msg_name,
             'msg_type' => empty($msg_type) ? "" : $msg_type,
