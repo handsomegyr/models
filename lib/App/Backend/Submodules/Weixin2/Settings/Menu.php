@@ -49,6 +49,16 @@ class Menu
         );
         $tree[] = $item;
 
+        // 代理运用设置
+        $item = array(
+            'menu_name' => '代理运用设置',
+            'menu_model' => 'weixin2-agent',
+            'level' => '平台应用管理',
+            'icon' => '',
+            'model' => '\App\Backend\Submodules\Weixin2\Models\Agent\Agent'
+        );
+        $tree[] = $item;
+
         // 登录授权发起执行时间跟踪统计
         $item = array(
             'menu_name' => '登录授权发起执行时间跟踪统计',

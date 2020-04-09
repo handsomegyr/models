@@ -5,15 +5,16 @@ namespace App\Weixin2\Models\Keyword;
 class Word extends \App\Common\Models\Weixin2\Keyword\Word
 {
 
-    public function record($msg, $authorizer_appid, $component_appid)
+    public function record($msg, $authorizer_appid, $component_appid, $agentid)
     {
-        $cacheKey = "word:authorizer_appid:{$authorizer_appid}:component_appid:{$component_appid}:content:{$msg}";
+        $cacheKey = "word:authorizer_appid:{$authorizer_appid}:component_appid:{$component_appid}:agentid:{$agentid}:content:{$msg}";
         $cacheKey = cacheKey(__FILE__, __CLASS__, $cacheKey);
         $cache = $this->getDI()->get('cache');
         $id = $cache->get($cacheKey);
         if (empty($id)) {
             $info = $this->findOne(array(
                 'content' => $msg,
+                'agentid' => $agentid,
                 'authorizer_appid' => $authorizer_appid,
                 'component_appid' => $component_appid,
             ));
@@ -31,9 +32,10 @@ class Word extends \App\Common\Models\Weixin2\Keyword\Word
             $affectRows =  $this->update(array('_id' => $id), array('$inc' => $updateData));
         } else {
             $data = array();
+            $data['content'] = $msg;
+            $data['agentid'] = $agentid;
             $data['authorizer_appid'] = $authorizer_appid;
             $data['component_appid'] = $component_appid;
-            $data['content'] = $msg;
             $data['times'] = 1;
             $this->insert($data);
         }

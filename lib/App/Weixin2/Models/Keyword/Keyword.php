@@ -10,15 +10,15 @@ class Keyword extends \App\Common\Models\Weixin2\Keyword\Keyword
      * @param bool $fuzzy            
      * @return array
      */
-    public function getKeywordByType($authorizer_appid, $component_appid, $fuzzy)
+    public function getKeywordByType($authorizer_appid, $component_appid, $agentid, $fuzzy)
     {
         $keywordList = array();
-        $cacheKey = "keyword:authorizer_appid:{$authorizer_appid}:component_appid:{$component_appid}:fuzzy:{$fuzzy}";
+        $cacheKey = "keyword:authorizer_appid:{$authorizer_appid}:component_appid:{$component_appid}:agentid:{$agentid}:fuzzy:{$fuzzy}";
         $cacheKey = cacheKey(__FILE__, __CLASS__, $cacheKey);
         $cache = $this->getDI()->get('cache');
         $keywordList = $cache->get($cacheKey);
         if (empty($keywordList)) {
-            $rst = $this->getListByFuzzy($authorizer_appid, $component_appid, $fuzzy);
+            $rst = $this->getListByFuzzy($authorizer_appid, $component_appid, $agentid, $fuzzy);
             $keywordList = array();
             if (!empty($rst)) {
                 foreach ($rst as $row) {
@@ -34,17 +34,17 @@ class Keyword extends \App\Common\Models\Weixin2\Keyword\Keyword
         return $keywordList;
     }
 
-    public function matchKeyWord($msg, $authorizer_appid, $component_appid, $fuzzy = false)
+    public function matchKeyWord($msg, $authorizer_appid, $component_appid, $agentid, $fuzzy = false)
     {
         $msg = trim($msg);
-        $keywordList = $this->getKeywordByType($authorizer_appid, $component_appid, $fuzzy);
+        $keywordList = $this->getKeywordByType($authorizer_appid, $component_appid, $agentid, $fuzzy);
         if (!$fuzzy) {
             $msg = strtolower($msg);
             if (isset($keywordList[$msg])) {
                 $this->incHitNumber($keywordList[$msg]['_id']);
                 return $keywordList[$msg];
             } else {
-                return $this->matchKeyWord($msg, $authorizer_appid, $component_appid, true);
+                return $this->matchKeyWord($msg, $authorizer_appid, $component_appid, $agentid, true);
             }
         } else {
             $split = $this->split($msg, 1, 10);
@@ -143,10 +143,11 @@ class Keyword extends \App\Common\Models\Weixin2\Keyword\Keyword
         }, $str);
     }
 
-    public function getListByFuzzy($authorizer_appid, $component_appid, $fuzzy)
+    public function getListByFuzzy($authorizer_appid, $component_appid, $agentid, $fuzzy)
     {
         $is_fuzzy = intval($fuzzy);
         $ret = $this->findAll(array(
+            'agentid' => $agentid,
             'authorizer_appid' => $authorizer_appid,
             'component_appid' => $component_appid,
             'is_fuzzy' => (empty($is_fuzzy) ? false : true)
