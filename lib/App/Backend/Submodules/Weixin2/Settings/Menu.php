@@ -249,6 +249,16 @@ class Menu
         );
         $tree[] = $item;
 
+        // 应用消息管理
+        $item = array(
+            'menu_name' => '应用消息管理',
+            'menu_model' => '',
+            'level' => '消息相关管理',
+            'icon' => '',
+            'model' => ''
+        );
+        $tree[] = $item;
+
         // 被动回复用户消息设定
         $item = array(
             'menu_name' => '被动回复用户消息设定',
@@ -446,6 +456,47 @@ class Menu
             'level' => '群发管理',
             'icon' => '',
             'model' => '\App\Backend\Submodules\Weixin2\Models\Comment\ReplyLog'
+        );
+        $tree[] = $item;
+
+
+        // 应用消息
+        $item = array(
+            'menu_name' => '应用消息',
+            'menu_model' => 'weixin2-agentmsg',
+            'level' => '应用消息管理',
+            'icon' => '',
+            'model' => '\App\Backend\Submodules\Weixin2\Models\AgentMsg\AgentMsg'
+        );
+        $tree[] = $item;
+
+        // 应用消息图文设置
+        $item = array(
+            'menu_name' => '应用消息图文设置',
+            'menu_model' => 'weixin2-agentmsgnews',
+            'level' => '应用消息管理',
+            'icon' => '',
+            'model' => '\App\Backend\Submodules\Weixin2\Models\AgentMsg\News'
+        );
+        $tree[] = $item;
+
+        // 应用消息发送方式
+        $item = array(
+            'menu_name' => '应用消息发送方式',
+            'menu_model' => 'weixin2-agentmsgsendmethod',
+            'level' => '应用消息管理',
+            'icon' => '',
+            'model' => '\App\Backend\Submodules\Weixin2\Models\AgentMsg\SendMethod'
+        );
+        $tree[] = $item;
+
+        // 应用消息发送日志
+        $item = array(
+            'menu_name' => '应用消息发送日志',
+            'menu_model' => 'weixin2-agentmsgsendlog',
+            'level' => '应用消息管理',
+            'icon' => '',
+            'model' => '\App\Backend\Submodules\Weixin2\Models\AgentMsg\SendLog'
         );
         $tree[] = $item;
 
@@ -656,6 +707,16 @@ class Menu
             'level' => '系统配置管理',
             'icon' => '',
             'model' => '\App\Backend\Submodules\Weixin2\Models\MassMsg\Type'
+        );
+        $tree[] = $item;
+
+        // 应用消息类型
+        $item = array(
+            'menu_name' => '应用消息类型',
+            'menu_model' => 'weixin2-agentmsgtype',
+            'level' => '系统配置管理',
+            'icon' => '',
+            'model' => '\App\Backend\Submodules\Weixin2\Models\AgentMsg\Type'
         );
         $tree[] = $item;
 

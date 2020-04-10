@@ -1,15 +1,15 @@
 <?php
 
-namespace App\Common\Models\Weixin2\CustomMsg;
+namespace App\Common\Models\Weixin2\AgentMsg;
 
 use App\Common\Models\Base\Base;
 
-class CustomMsg extends Base
+class AgentMsg extends Base
 {
 
     function __construct()
     {
-        $this->setModel(new \App\Common\Models\Weixin2\Mysql\CustomMsg\CustomMsg());
+        $this->setModel(new \App\Common\Models\Weixin2\Mysql\AgentMsg\AgentMsg());
     }
 
     /**
@@ -34,6 +34,6 @@ class CustomMsg extends Base
 
     public function getUploadPath()
     {
-        return trim("weixin2/custommsg", '/');
+        return trim("weixin2/agentmsg", '/');
     }
 }

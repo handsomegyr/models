@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Weixin2\Models\CustomMsg;
+namespace App\Weixin2\Models\AgentMsg;
 
-class News extends \App\Common\Models\Weixin2\CustomMsg\News
+class News extends \App\Common\Models\Weixin2\AgentMsg\News
 {
 
-    public function getListByCustomMsgId($custom_msg_id, $authorizer_appid, $component_appid, $agentid)
+    public function getListByAgentMsgId($custom_msg_id, $authorizer_appid, $component_appid, $agentid)
     {
         $ret = $this->findAll(array(
             'custom_msg_id' => $custom_msg_id,
@@ -17,15 +17,15 @@ class News extends \App\Common\Models\Weixin2\CustomMsg\News
         return $ret;
     }
 
-    public function getArticlesByCustomMsgId($custom_msg_id, $authorizer_appid, $component_appid, $agentid, $isFirst = true)
+    public function getArticlesByAgentMsgId($custom_msg_id, $authorizer_appid, $component_appid, $agentid, $isFirst = true)
     {
         $articles = array();
-        $cacheKey = "custommsgnews:custom_msg_id:{$custom_msg_id}:authorizer_appid:{$authorizer_appid}:component_appid:{$component_appid}:agentid:{$agentid}";
+        $cacheKey = "agentmsgnews:custom_msg_id:{$custom_msg_id}:authorizer_appid:{$authorizer_appid}:component_appid:{$component_appid}:agentid:{$agentid}";
         $cacheKey = cacheKey(__FILE__, __CLASS__, $cacheKey);
         $cache = $this->getDI()->get('cache');
         $articles = $cache->get($cacheKey);
         if (true || empty($articles)) {
-            $rst = $this->getListByCustomMsgId($custom_msg_id, $authorizer_appid, $component_appid, $agentid);
+            $rst = $this->getListByAgentMsgId($custom_msg_id, $authorizer_appid, $component_appid, $agentid);
             $articles = array();
             if (!empty($rst)) {
                 foreach ($rst as $row) {
