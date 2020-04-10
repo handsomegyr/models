@@ -21,8 +21,8 @@ class SendLog extends Base
         $data['log_time'] = $this->changeToMongoDate($data['log_time']);
         $data['msg_time'] = $this->changeToMongoDate($data['msg_time']);
 
-        $data['is_to_all'] = $this->changeToBoolean($data['is_to_all']);
         $data['send_ignore_reprint'] = $this->changeToBoolean($data['send_ignore_reprint']);
+        $data['is_to_all'] = $this->changeToBoolean($data['is_to_all']);
 
         return $data;
     }

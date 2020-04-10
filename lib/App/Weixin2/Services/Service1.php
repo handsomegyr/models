@@ -589,7 +589,7 @@ class Service1
 
             // 发送方式
             $is_to_all = empty($sendMethodInfo['is_to_all']) ? false : true;
-            $send_ignore_reprint = empty($sendMethodInfo['send_ignore_reprint']) ? 0 : 1;
+            $send_ignore_reprint = empty($massMsgInfo['send_ignore_reprint']) ? 0 : 1;
             $clientmsgid = empty($sendMethodInfo['clientmsgid']) ? "" : $sendMethodInfo['clientmsgid'];
 
             // 文本

@@ -18,7 +18,6 @@ class SendMethod extends Base
     {
         $data = parent::reorganize($data);
         $data['is_to_all'] = $this->changeToBoolean($data['is_to_all']);
-        $data['send_ignore_reprint'] = $this->changeToBoolean($data['send_ignore_reprint']);
 
         return $data;
     }

@@ -14,4 +14,11 @@ class MassMsg extends Base
     {
         return 'iweixin2_mass_msg';
     }
+    public function reorganize(array $data)
+    {
+        $data = parent::reorganize($data);
+        $data['send_ignore_reprint'] = $this->changeToBoolean($data['send_ignore_reprint']);
+
+        return $data;
+    }
 }
