@@ -588,7 +588,7 @@ class Service1
             $thumb_media_id = empty($massMsgInfo['thumb_media_id']) ? "" : $massMsgInfo['thumb_media_id'];
 
             // 发送方式
-            $is_to_all = empty($sendMethodInfo['is_to_all']) ? false : true;
+            $is_to_all = !empty($sendMethodInfo['send_method']) ? false : true;
             $send_ignore_reprint = empty($massMsgInfo['send_ignore_reprint']) ? 0 : 1;
             $clientmsgid = empty($sendMethodInfo['clientmsgid']) ? "" : $sendMethodInfo['clientmsgid'];
 

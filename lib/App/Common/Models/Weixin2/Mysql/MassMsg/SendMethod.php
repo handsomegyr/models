@@ -14,11 +14,4 @@ class SendMethod extends Base
     {
         return 'iweixin2_mass_msg_send_method';
     }
-    public function reorganize(array $data)
-    {
-        $data = parent::reorganize($data);
-        $data['is_to_all'] = $this->changeToBoolean($data['is_to_all']);
-
-        return $data;
-    }
 }
