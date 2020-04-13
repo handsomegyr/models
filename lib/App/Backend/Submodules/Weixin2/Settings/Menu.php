@@ -910,6 +910,16 @@ class Menu
         );
         $tree[] = $item;
 
+        // 关键词和应用消息对应设定
+        $item = array(
+            'menu_name' => '关键词和应用消息对应设定',
+            'menu_model' => 'weixin2-keywordtoagentmsg',
+            'level' => '关键词回复管理',
+            'icon' => '',
+            'model' => '\App\Backend\Submodules\Weixin2\Models\Keyword\KeywordToAgentMsg'
+        );
+        $tree[] = $item;
+
         // 关键词和服务对应设定
         $item = array(
             'menu_name' => '关键词和服务对应设定',
