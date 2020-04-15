@@ -17,7 +17,7 @@ class News extends \App\Common\Models\Weixin2\CustomMsg\News
         return $ret;
     }
 
-    public function getArticlesByCustomMsgId($custom_msg_id, $authorizer_appid, $component_appid, $agentid, $isFirst = true)
+    public function getArticlesByCustomMsgId($custom_msg_id, $authorizer_appid, $component_appid, $agentid, $msg_type, $isFirst = true)
     {
         $articles = array();
         $cacheKey = "custommsgnews:custom_msg_id:{$custom_msg_id}:authorizer_appid:{$authorizer_appid}:component_appid:{$component_appid}:agentid:{$agentid}";

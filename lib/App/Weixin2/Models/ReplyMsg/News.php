@@ -16,7 +16,7 @@ class News extends \App\Common\Models\Weixin2\ReplyMsg\News
         return $ret;
     }
 
-    public function getArticlesByReplyMsgId($reply_msg_id, $authorizer_appid, $component_appid, $agentid, $isFirst = true)
+    public function getArticlesByReplyMsgId($reply_msg_id, $authorizer_appid, $component_appid, $agentid, $msg_type, $isFirst = true)
     {
         $articles = array();
         $cacheKey = "replymsgnews:reply_msg_id:{$reply_msg_id}:authorizer_appid:{$authorizer_appid}:component_appid:{$component_appid}:agentid:{$agentid}";

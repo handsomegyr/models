@@ -15,7 +15,7 @@ class News extends \App\Common\Models\Weixin2\MassMsg\News
         return $ret;
     }
 
-    public function getArticlesByMassMsgId($mass_msg_id, $authorizer_appid, $component_appid, $agentid)
+    public function getArticlesByMassMsgId($mass_msg_id, $authorizer_appid, $component_appid, $msg_type, $agentid)
     {
         $articles = array();
         $cacheKey = "materialnews:mass_msg_id:{$mass_msg_id}:authorizer_appid:{$authorizer_appid}:component_appid:{$component_appid}:agentid:{$agentid}";

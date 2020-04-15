@@ -18,6 +18,9 @@ class AgentMsg extends Base
     public function reorganize(array $data)
     {
         $data = parent::reorganize($data);
+
+        $data['content_item'] = $this->changeToArray($data['content_item']);
+        $data['btn'] = $this->changeToArray($data['btn']);
         $data['emphasis_first_item'] = $this->changeToBoolean($data['emphasis_first_item']);
         $data['safe'] = $this->changeToBoolean($data['safe']);
         $data['enable_id_trans'] = $this->changeToBoolean($data['enable_id_trans']);
