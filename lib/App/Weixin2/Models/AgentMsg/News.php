@@ -5,27 +5,23 @@ namespace App\Weixin2\Models\AgentMsg;
 class News extends \App\Common\Models\Weixin2\AgentMsg\News
 {
 
-    public function getListByAgentMsgId($agent_msg_id, $authorizer_appid, $component_appid, $agentid)
+    public function getListByAgentMsgId($agent_msg_id)
     {
         $ret = $this->findAll(array(
-            'agent_msg_id' => $agent_msg_id,
-            'agentid' => $agentid,
-            'authorizer_appid' => $authorizer_appid,
-            'component_appid' => $component_appid,
             'agent_msg_id' => $agent_msg_id
         ), array('index' => 1, '_id' => -1));
         return $ret;
     }
 
-    public function getArticlesByAgentMsgId($agent_msg_id, $authorizer_appid, $component_appid, $agentid, $msg_type, $isFirst = true)
+    public function getArticlesByAgentMsgId($agent_msg_id, $msg_type, $isFirst = true)
     {
         $articles = array();
-        $cacheKey = "agentmsgnews:agent_msg_id:{$agent_msg_id}:authorizer_appid:{$authorizer_appid}:component_appid:{$component_appid}:agentid:{$agentid}";
+        $cacheKey = "agentmsgnews:agent_msg_id:{$agent_msg_id}:msg_type:{$msg_type}";
         $cacheKey = cacheKey(__FILE__, __CLASS__, $cacheKey);
         $cache = $this->getDI()->get('cache');
         $articles = $cache->get($cacheKey);
         if (true || empty($articles)) {
-            $rst = $this->getListByAgentMsgId($agent_msg_id, $authorizer_appid, $component_appid, $agentid);
+            $rst = $this->getListByAgentMsgId($agent_msg_id);
             $articles = array();
             if (!empty($rst)) {
                 foreach ($rst as $row) {

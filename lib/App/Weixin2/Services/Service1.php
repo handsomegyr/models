@@ -151,7 +151,7 @@ class Service1
 
         // 查找对应的永久图文素材
         $modelMaterialNews = new \App\Weixin2\Models\Material\News();
-        $articles = $modelMaterialNews->getArticlesByMaterialId($material_id, $this->authorizer_appid, $this->component_appid);
+        $articles = $modelMaterialNews->getArticlesByMaterialId($material_id);
 
         if (empty($articles)) {
             throw new \Exception("永久素材记录ID:{$material_id}所对应的永久图文素材不存在");
@@ -178,7 +178,7 @@ class Service1
 
         // 查找对应的永久图文素材
         $modelMaterialNews = new \App\Weixin2\Models\Material\News();
-        $articles = $modelMaterialNews->getArticlesByMaterialId($material_id, $this->authorizer_appid, $this->component_appid);
+        $articles = $modelMaterialNews->getArticlesByMaterialId($material_id);
 
         if (empty($articles)) {
             throw new \Exception("永久素材记录ID:{$material_id}所对应的永久图文素材不存在");
@@ -701,7 +701,7 @@ class Service1
 
                     // 查找对应的群发图文消息
                     $modelMassMsgNews = new \App\Weixin2\Models\MassMsg\News();
-                    $articles = $modelMassMsgNews->getArticlesByMassMsgId($massMsgInfo['mass_msg_id'], $this->authorizer_appid, $this->component_appid, $massMsgInfo['agentid'], "mpnews");
+                    $articles = $modelMassMsgNews->getArticlesByMassMsgId($massMsgInfo['mass_msg_id'], "mpnews");
                     if (empty($articles)) {
                         throw new \Exception("群发消息ID:{$massMsgInfo['mass_msg_id']}所对应的图文不存在");
                     }
@@ -849,7 +849,7 @@ class Service1
                 // 获取图文列表
                 $isFirst = empty($articles) ? true : false;
                 $modelReplyMsgNews = new \App\Weixin2\Models\ReplyMsg\News();
-                $articles1 = $modelReplyMsgNews->getArticlesByReplyMsgId($replyMsgs[0]['_id'], $replyMsgs[0]['authorizer_appid'], $replyMsgs[0]['component_appid'], $replyMsgs[0]['agentid'], 'news', $isFirst);
+                $articles1 = $modelReplyMsgNews->getArticlesByReplyMsgId($replyMsgs[0]['_id'], 'news', $isFirst);
                 $articles = array_merge($articles, $articles1);
                 $replymsg = $objWeixin->getMsgManager()
                     ->getReplySender()
@@ -925,7 +925,7 @@ class Service1
                     // 获取图文列表
                     $isFirst = empty($articles) ? true : false;
                     $modelCustomMsgNews = new \App\Weixin2\Models\CustomMsg\News();
-                    $articles1 = $modelCustomMsgNews->getArticlesByCustomMsgId($customMsgInfo['_id'], $customMsgInfo['authorizer_appid'], $customMsgInfo['component_appid'], $customMsgInfo['agentid'], 'news', $isFirst);
+                    $articles1 = $modelCustomMsgNews->getArticlesByCustomMsgId($customMsgInfo['_id'], 'news', $isFirst);
                     $articles = array_merge($articles, $articles1);
                     $custommsg = $objWeixin->getMsgManager()
                         ->getCustomSender()

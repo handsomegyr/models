@@ -4,26 +4,23 @@ namespace App\Weixin2\Models\MassMsg;
 
 class News extends \App\Common\Models\Weixin2\MassMsg\News
 {
-    public function getListByMassMsgId($mass_msg_id, $authorizer_appid, $component_appid, $agentid)
+    public function getListByMassMsgId($mass_msg_id)
     {
         $ret = $this->findAll(array(
-            'mass_msg_id' => $mass_msg_id,
-            'agentid' => $agentid,
-            'authorizer_appid' => $authorizer_appid,
-            'component_appid' => $component_appid
+            'mass_msg_id' => $mass_msg_id
         ), array('index' => 1, '_id' => -1));
         return $ret;
     }
 
-    public function getArticlesByMassMsgId($mass_msg_id, $authorizer_appid, $component_appid, $msg_type, $agentid)
+    public function getArticlesByMassMsgId($mass_msg_id, $msg_type)
     {
         $articles = array();
-        $cacheKey = "materialnews:mass_msg_id:{$mass_msg_id}:authorizer_appid:{$authorizer_appid}:component_appid:{$component_appid}:agentid:{$agentid}";
+        $cacheKey = "materialnews:mass_msg_id:{$mass_msg_id}:msg_type:{$msg_type}";
         $cacheKey = cacheKey(__FILE__, __CLASS__, $cacheKey);
         $cache = $this->getDI()->get('cache');
         $articles = $cache->get($cacheKey);
         if (true || empty($articles)) {
-            $rst = $this->getListByMassMsgId($mass_msg_id, $authorizer_appid, $component_appid, $agentid);
+            $rst = $this->getListByMassMsgId($mass_msg_id);
             $articles = array();
             if (!empty($rst)) {
                 foreach ($rst as $row) {

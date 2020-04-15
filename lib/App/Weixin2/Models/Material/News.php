@@ -5,25 +5,23 @@ namespace App\Weixin2\Models\Material;
 class News extends \App\Common\Models\Weixin2\Material\News
 {
 
-    public function getListByMaterialId($material_id, $authorizer_appid, $component_appid)
+    public function getListByMaterialId($material_id)
     {
         $ret = $this->findAll(array(
-            'material_id' => $material_id,
-            'authorizer_appid' => $authorizer_appid,
-            'component_appid' => $component_appid
+            'material_id' => $material_id
         ), array('index' => 1, '_id' => -1));
         return $ret;
     }
 
-    public function getArticlesByMaterialId($material_id, $authorizer_appid, $component_appid)
+    public function getArticlesByMaterialId($material_id)
     {
         $articles = array();
-        $cacheKey = "materialnews:material_id:{$material_id}:authorizer_appid:{$authorizer_appid}:component_appid:{$component_appid}";
+        $cacheKey = "materialnews:material_id:{$material_id}";
         $cacheKey = cacheKey(__FILE__, __CLASS__, $cacheKey);
         $cache = $this->getDI()->get('cache');
         $articles = $cache->get($cacheKey);
         if (true || empty($articles)) {
-            $rst = $this->getListByMaterialId($material_id, $authorizer_appid, $component_appid);
+            $rst = $this->getListByMaterialId($material_id);
             $articles = array();
             if (!empty($rst)) {
                 foreach ($rst as $row) {
