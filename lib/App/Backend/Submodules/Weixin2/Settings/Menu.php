@@ -429,16 +429,6 @@ class Menu
         );
         $tree[] = $item;
 
-        // 群发消息发送方式
-        $item = array(
-            'menu_name' => '群发消息发送方式',
-            'menu_model' => 'weixin2-massmsgsendmethod',
-            'level' => '群发管理',
-            'icon' => '',
-            'model' => '\App\Backend\Submodules\Weixin2\Models\MassMsg\SendMethod'
-        );
-        $tree[] = $item;
-
         // 群发消息发送日志
         $item = array(
             'menu_name' => '群发消息发送日志',
@@ -497,16 +487,6 @@ class Menu
             'level' => '应用消息管理',
             'icon' => '',
             'model' => '\App\Backend\Submodules\Weixin2\Models\AgentMsg\News'
-        );
-        $tree[] = $item;
-
-        // 应用消息发送方式
-        $item = array(
-            'menu_name' => '应用消息发送方式',
-            'menu_model' => 'weixin2-agentmsgsendmethod',
-            'level' => '应用消息管理',
-            'icon' => '',
-            'model' => '\App\Backend\Submodules\Weixin2\Models\AgentMsg\SendMethod'
         );
         $tree[] = $item;
 
@@ -577,16 +557,6 @@ class Menu
             'level' => '互联企业消息管理',
             'icon' => '',
             'model' => '\App\Backend\Submodules\Weixin2\Models\LinkedcorpMsg\News'
-        );
-        $tree[] = $item;
-
-        // 互联企业消息发送方式
-        $item = array(
-            'menu_name' => '互联企业消息发送方式',
-            'menu_model' => 'weixin2-linkedcorpmsgsendmethod',
-            'level' => '互联企业消息管理',
-            'icon' => '',
-            'model' => '\App\Backend\Submodules\Weixin2\Models\LinkedcorpMsg\SendMethod'
         );
         $tree[] = $item;
 
@@ -810,6 +780,16 @@ class Menu
         );
         $tree[] = $item;
 
+        // 群发消息发送方式
+        $item = array(
+            'menu_name' => '群发消息发送方式',
+            'menu_model' => 'weixin2-massmsgsendmethod',
+            'level' => '系统配置管理',
+            'icon' => '',
+            'model' => '\App\Backend\Submodules\Weixin2\Models\MassMsg\SendMethod'
+        );
+        $tree[] = $item;
+
         // 应用消息类型
         $item = array(
             'menu_name' => '应用消息类型',
@@ -817,6 +797,16 @@ class Menu
             'level' => '系统配置管理',
             'icon' => '',
             'model' => '\App\Backend\Submodules\Weixin2\Models\AgentMsg\Type'
+        );
+        $tree[] = $item;
+
+        // 应用消息发送方式
+        $item = array(
+            'menu_name' => '应用消息发送方式',
+            'menu_model' => 'weixin2-agentmsgsendmethod',
+            'level' => '系统配置管理',
+            'icon' => '',
+            'model' => '\App\Backend\Submodules\Weixin2\Models\AgentMsg\SendMethod'
         );
         $tree[] = $item;
 
@@ -837,6 +827,16 @@ class Menu
             'level' => '系统配置管理',
             'icon' => '',
             'model' => '\App\Backend\Submodules\Weixin2\Models\LinkedcorpMsg\Type'
+        );
+        $tree[] = $item;
+
+        // 互联企业消息发送方式
+        $item = array(
+            'menu_name' => '互联企业消息发送方式',
+            'menu_model' => 'weixin2-linkedcorpmsgsendmethod',
+            'level' => '系统配置管理',
+            'icon' => '',
+            'model' => '\App\Backend\Submodules\Weixin2\Models\LinkedcorpMsg\SendMethod'
         );
         $tree[] = $item;
 
