@@ -269,6 +269,16 @@ class Menu
         );
         $tree[] = $item;
 
+        // 互联企业消息管理
+        $item = array(
+            'menu_name' => '互联企业消息管理',
+            'menu_model' => '',
+            'level' => '消息相关管理',
+            'icon' => '',
+            'model' => ''
+        );
+        $tree[] = $item;
+
         // 被动回复用户消息设定
         $item = array(
             'menu_name' => '被动回复用户消息设定',
@@ -550,6 +560,46 @@ class Menu
         );
         $tree[] = $item;
 
+        // 互联企业消息
+        $item = array(
+            'menu_name' => '互联企业消息',
+            'menu_model' => 'weixin2-linkedcorpmsg',
+            'level' => '互联企业消息管理',
+            'icon' => '',
+            'model' => '\App\Backend\Submodules\Weixin2\Models\LinkedcorpMsg\LinkedcorpMsg'
+        );
+        $tree[] = $item;
+
+        // 互联企业消息图文设置
+        $item = array(
+            'menu_name' => '互联企业消息图文设置',
+            'menu_model' => 'weixin2-linkedcorpmsgnews',
+            'level' => '互联企业消息管理',
+            'icon' => '',
+            'model' => '\App\Backend\Submodules\Weixin2\Models\LinkedcorpMsg\News'
+        );
+        $tree[] = $item;
+
+        // 互联企业消息发送方式
+        $item = array(
+            'menu_name' => '互联企业消息发送方式',
+            'menu_model' => 'weixin2-linkedcorpmsgsendmethod',
+            'level' => '互联企业消息管理',
+            'icon' => '',
+            'model' => '\App\Backend\Submodules\Weixin2\Models\LinkedcorpMsg\SendMethod'
+        );
+        $tree[] = $item;
+
+        // 互联企业消息发送日志
+        $item = array(
+            'menu_name' => '互联企业消息发送日志',
+            'menu_model' => 'weixin2-linkedcorpmsgsendlog',
+            'level' => '互联企业消息管理',
+            'icon' => '',
+            'model' => '\App\Backend\Submodules\Weixin2\Models\LinkedcorpMsg\SendLog'
+        );
+        $tree[] = $item;
+
         // 自定义菜单相关管理
         $item = array(
             'menu_name' => '自定义菜单相关管理',
@@ -777,6 +827,16 @@ class Menu
             'level' => '系统配置管理',
             'icon' => '',
             'model' => '\App\Backend\Submodules\Weixin2\Models\AppchatMsg\Type'
+        );
+        $tree[] = $item;
+
+        // 互联企业消息类型
+        $item = array(
+            'menu_name' => '互联企业消息类型',
+            'menu_model' => 'weixin2-linkedcorpmsgtype',
+            'level' => '系统配置管理',
+            'icon' => '',
+            'model' => '\App\Backend\Submodules\Weixin2\Models\LinkedcorpMsg\Type'
         );
         $tree[] = $item;
 
