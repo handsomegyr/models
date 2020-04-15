@@ -31,6 +31,27 @@ class News extends \App\Common\Models\Weixin2\AgentMsg\News
                 foreach ($rst as $row) {
                     if ($msg_type == 'news') {
                         /**
+                         * title	是	标题，不超过128个字节，超过会自动截断（支持id转译）
+                         * thumb_media_id	是	图文消息缩略图的media_id, 可以通过素材管理接口获得。此处thumb_media_id即上传接口返回的media_id
+                         * author	否	图文消息的作者，不超过64个字节
+                         * content_source_url	否	图文消息点击“阅读原文”之后的页面链接
+                         * content	是	图文消息的内容，支持html标签，不超过666 K个字节（支持id转译）
+                         * digest	否	图文消息的描述，不超过512个字节，超过会自动截断（支持id转译）
+                         */
+                        $article = array();
+                        $article['title'] = $row['title'];
+                        $article['thumb_media'] = $row['thumb_media'];
+                        if (!empty($row['author'])) {
+                            $article['author'] = $row['author'];
+                        }
+                        if (!empty($row['digest'])) {
+                            $article['digest'] = $row['digest'];
+                        }
+                        $article['content'] = $row['description'];
+                        $article['content_source_url'] = trim($row['url']);
+                        $articles[] = $article;
+                    } elseif ($msg_type == 'news') {
+                        /**
                          * Title 是 图文消息标题
                          * Description 是 图文消息描述
                          * PicUrl 是 图片链接，支持JPG、PNG格式，较好的效果为大图360*200，小图200*200
