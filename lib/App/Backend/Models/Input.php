@@ -81,6 +81,15 @@ class Input extends \stdClass
             throw new \Exception("{$method} is not set or callable", -1);
     }
 
+    protected $defaultQuery = array();
+    public function setDefaultQuery($defaultQuery)
+    {
+        if (empty($defaultQuery)) {
+            $defaultQuery = array();
+        }
+        $this->defaultQuery = $defaultQuery;
+    }
+
     /**
      * 根据画面条件获取查询条件
      *
@@ -140,6 +149,11 @@ class Input extends \stdClass
                     }
                 }
             }
+        }
+
+        // 如果有默认条件的话进行合并
+        if (!empty($this->defaultQuery)) {
+            $where = array_merge($where, $this->defaultQuery);
         }
         return $where;
     }
