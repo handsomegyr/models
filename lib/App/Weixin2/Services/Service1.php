@@ -2241,4 +2241,34 @@ class Service1
             }
         }
     }
+
+    private function replaceDescription($desc)
+    {
+        if (empty($desc) || !is_string($desc)) {
+            return '';
+        }
+        $pattern = '/<img(.*)src(.*)=(.*)"(.*)"/U';
+        preg_replace_callback($pattern, function ($matches) use (&$desc) {
+            if (isset($matches[4])) {
+                $img_tag_src = array_pop($matches);
+                // 如果不是微信服务器上的图片
+                if (strpos($img_tag_src, 'http://mmbiz.qpic.cn/') === false) {
+                    $img_url = $this->getWeixinObject()->getMediaManager()->uploadImg($img_tag_src);
+                    // $this->_opt_log->write(__METHOD__, $img_url, '上传素材');
+                    if (isset($img_url['errcode'])) {
+                        throw new \Exception($img_url['errmsg'], $img_url['errcode']);
+                    }
+                    if (empty($img_url['url'])) {
+                        // var_dump($img_url);
+                        // $this->_opt_log->write(__METHOD__, $img_url, '上上传图片到微信服务器失败');
+                        throw new \Exception('上传图片到微信服务器失败', -101);
+                    }
+                    $img_url['url'] = str_replace('\/', '/', $img_url['url']);
+                    $desc = str_replace($img_tag_src, $img_url['url'], $desc);
+                }
+            }
+        }, $desc);
+
+        return $desc;
+    }
 }
