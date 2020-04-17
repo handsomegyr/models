@@ -42,9 +42,10 @@ class Log extends \App\Common\Models\Weixin2\Comment\Log
      * @param string $index            
      * @param string $openid            
      * @param string $authorizer_appid            
-     * @param string $component_appid            
+     * @param string $component_appid             
+     * @param string $agentid           
      */
-    public function getInfoByKey($msg_data_id, $index, $user_comment_id, $openid, $authorizer_appid, $component_appid)
+    public function getInfoByKey($msg_data_id, $index, $user_comment_id, $openid, $authorizer_appid, $component_appid, $agentid)
     {
         $info = $this->findOne(array(
             'msg_data_id' => $msg_data_id,
@@ -52,13 +53,14 @@ class Log extends \App\Common\Models\Weixin2\Comment\Log
             'user_comment_id' => $user_comment_id,
             'openid' => $openid,
             'authorizer_appid' => $authorizer_appid,
-            'component_appid' => $component_appid
+            'component_appid' => $component_appid,
+            'agentid' => $agentid
         ));
 
         return $info;
     }
 
-    public function syncCommentList($authorizer_appid, $component_appid, $msg_data_id, $index, $res, $now)
+    public function syncCommentList($authorizer_appid, $component_appid, $agentid, $msg_data_id, $index, $res, $now)
     {
         if (!empty($res['comment'])) {
             foreach ($res['comment'] as $item) {
@@ -66,7 +68,7 @@ class Log extends \App\Common\Models\Weixin2\Comment\Log
                 $user_comment_id = $item['user_comment_id'];
                 $openid = $item['openid'];
 
-                $info = $this->getInfoByKey($msg_data_id, $index, $user_comment_id, $openid, $authorizer_appid, $component_appid);
+                $info = $this->getInfoByKey($msg_data_id, $index, $user_comment_id, $openid, $authorizer_appid, $component_appid, $agentid);
                 $data = array();
                 /**
                  * “user_comment_id” : USER_COMMENT_ID //用户评论id
@@ -84,6 +86,7 @@ class Log extends \App\Common\Models\Weixin2\Comment\Log
                 } else {
                     $data['authorizer_appid'] = $authorizer_appid;
                     $data['component_appid'] = $component_appid;
+                    $data['agentid'] = $agentid;
                     $data['msg_data_id'] = $msg_data_id;
                     $data['index'] = $index;
                     $data['user_comment_id'] = $user_comment_id;

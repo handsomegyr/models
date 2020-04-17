@@ -2034,10 +2034,10 @@ class Service1
          */
         $now = time();
         $modelCommentLog = new \App\Weixin2\Models\Comment\Log();
-        $modelCommentLog->syncCommentList($commentInfo['authorizer_appid'], $commentInfo['component_appid'], $commentInfo['msg_data_id'], $commentInfo['index'], $res, $now);
+        $modelCommentLog->syncCommentList($commentInfo['authorizer_appid'], $commentInfo['component_appid'], $commentInfo['agentid'], $commentInfo['msg_data_id'], $commentInfo['index'], $res, $now);
 
         $modelCommentReplyLog = new \App\Weixin2\Models\Comment\ReplyLog();
-        $modelCommentReplyLog->syncReplyList($commentInfo['authorizer_appid'], $commentInfo['component_appid'], $commentInfo['msg_data_id'], $commentInfo['index'], $res, $now);
+        $modelCommentReplyLog->syncReplyList($commentInfo['authorizer_appid'], $commentInfo['component_appid'], $commentInfo['agentid'], $commentInfo['msg_data_id'], $commentInfo['index'], $res, $now);
 
         return $res;
     }

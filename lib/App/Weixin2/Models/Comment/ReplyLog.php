@@ -28,9 +28,10 @@ class ReplyLog extends \App\Common\Models\Weixin2\Comment\ReplyLog
      * @param string $index            
      * @param string $openid            
      * @param string $authorizer_appid            
-     * @param string $component_appid            
+     * @param string $component_appid             
+     * @param string $agentid           
      */
-    public function getInfoByKey($msg_data_id, $index, $user_comment_id, $openid, $authorizer_appid, $component_appid)
+    public function getInfoByKey($msg_data_id, $index, $user_comment_id, $openid, $authorizer_appid, $component_appid, $agentid)
     {
         $info = $this->findOne(array(
             'msg_data_id' => $msg_data_id,
@@ -39,11 +40,12 @@ class ReplyLog extends \App\Common\Models\Weixin2\Comment\ReplyLog
             'openid' => $openid,
             'authorizer_appid' => $authorizer_appid,
             'component_appid' => $component_appid,
+            'agentid' => $agentid,
         ));
         return $info;
     }
 
-    public function syncReplyList($authorizer_appid, $component_appid, $msg_data_id, $index, $res, $now)
+    public function syncReplyList($authorizer_appid, $component_appid, $agentid, $msg_data_id, $index, $res, $now)
     {
         if (!empty($res['comment'])) {
             foreach ($res['comment'] as $comment) {
@@ -53,7 +55,7 @@ class ReplyLog extends \App\Common\Models\Weixin2\Comment\ReplyLog
 
                 if (!empty($comment['reply'])) {
                     foreach ($comment['reply'] as $item) {
-                        $info = $this->getInfoByKey($msg_data_id, $index, $user_comment_id, $openid, $authorizer_appid, $component_appid);
+                        $info = $this->getInfoByKey($msg_data_id, $index, $user_comment_id, $openid, $authorizer_appid, $component_appid, $agentid);
                         $data = array();
                         /**
                          * “user_comment_id” : USER_COMMENT_ID //用户评论id
@@ -76,6 +78,7 @@ class ReplyLog extends \App\Common\Models\Weixin2\Comment\ReplyLog
                         } else {
                             $data['authorizer_appid'] = $authorizer_appid;
                             $data['component_appid'] = $component_appid;
+                            $data['agentid'] = $agentid;
                             $data['msg_data_id'] = $msg_data_id;
                             $data['index'] = $index;
                             $data['user_comment_id'] = $user_comment_id;
