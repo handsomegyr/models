@@ -1109,7 +1109,7 @@ class Service1
          * ]
          * }
          */
-        $modelKfAccount->syncKfAccountList($this->authorizer_appid, $this->component_appid, $res, time());
+        $modelKfAccount->syncKfAccountList($this->authorizer_appid, $this->component_appid, $this->agentid, $res, time());
         return $res;
     }
 
@@ -1145,7 +1145,7 @@ class Service1
          * ]
          * }
          */
-        $modelKfAccount->syncOnlineKfAccountList($this->authorizer_appid, $this->component_appid, $res, time());
+        $modelKfAccount->syncOnlineKfAccountList($this->authorizer_appid, $this->component_appid, $this->agentid, $res, time());
         return $res;
     }
 
@@ -1357,7 +1357,7 @@ class Service1
          * "msgid":20165267
          * }
          */
-        $modelMsgRecord->syncMsgRecordList($this->authorizer_appid, $this->component_appid, $res, time());
+        $modelMsgRecord->syncMsgRecordList($this->authorizer_appid, $this->component_appid, $this->agentid, $res, time());
         return $res;
     }
 
