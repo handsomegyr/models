@@ -13,6 +13,8 @@ class Service1
 
     private $authorizerConfig = array();
 
+    private $agentid = "";
+
     private $objWeixin = null;
 
     private $objWeixinComponent = null;
@@ -564,7 +566,7 @@ class Service1
          * "next_openid":"OPENID10000"
          * }
          */
-        $modelBlackUser->syncBlackList($this->authorizer_appid, $this->component_appid, $res, time());
+        $modelBlackUser->syncBlackList($this->authorizer_appid, $this->component_appid, $this->agentid, $res, time());
         return $res;
     }
 
