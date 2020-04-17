@@ -1208,7 +1208,7 @@ class Service1
          * }]
          * }
          */
-        $modelTemplate->syncTemplateList($this->authorizer_appid, $this->component_appid, $res, time());
+        $modelTemplate->syncTemplateList($this->authorizer_appid, $this->component_appid, $this->agentid, $res, time());
         return $res;
     }
 
