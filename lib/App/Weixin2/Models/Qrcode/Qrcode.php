@@ -15,7 +15,7 @@ class Qrcode extends \App\Common\Models\Weixin2\Qrcode\Qrcode
         return $this->update(array('_id' => $id), array('$set' => $updateData));
     }
 
-    public function incSubscribeEventNum($authorizer_appid, $component_appid, $scene, $num = 1)
+    public function incSubscribeEventNum($authorizer_appid, $component_appid, $agentid, $scene, $num = 1)
     {
         if (empty($num)) {
             return 0;
@@ -25,13 +25,14 @@ class Qrcode extends \App\Common\Models\Weixin2\Qrcode\Qrcode
         $query = array(
             'scene' => $scene,
             'authorizer_appid' => $authorizer_appid,
-            'component_appid' => $component_appid
+            'component_appid' => $component_appid,
+            'agentid' => $agentid
         );
         $affectRows = $this->update($query, array('$inc' => $incData));
         return $affectRows;
     }
 
-    public function incScanEventNum($authorizer_appid, $component_appid, $scene, $num = 1)
+    public function incScanEventNum($authorizer_appid, $component_appid, $agentid, $scene, $num = 1)
     {
         if (empty($num)) {
             return 0;
@@ -42,7 +43,8 @@ class Qrcode extends \App\Common\Models\Weixin2\Qrcode\Qrcode
         $query = array(
             'scene' => $scene,
             'authorizer_appid' => $authorizer_appid,
-            'component_appid' => $component_appid
+            'component_appid' => $component_appid,
+            'agentid' => $agentid
         );
         $affectRows = $this->update($query, array('$inc' => $incData));
         return $affectRows;
