@@ -1385,7 +1385,7 @@ class Service1
          * ]
          * }
          */
-        $modelDataCubeUserSummary->syncUserSummary($this->authorizer_appid, $this->component_appid, $res, time());
+        $modelDataCubeUserSummary->syncUserSummary($this->authorizer_appid, $this->component_appid, $this->agentid, $res, time());
         return $res;
     }
 
@@ -1411,7 +1411,7 @@ class Service1
          * ]
          * }
          */
-        $modelDataCubeUserCumulate->syncUserCumulate($this->authorizer_appid, $this->component_appid, $res, time());
+        $modelDataCubeUserCumulate->syncUserCumulate($this->authorizer_appid, $this->component_appid, $this->agentid, $res, time());
         return $res;
     }
 
@@ -1441,7 +1441,7 @@ class Service1
          * ]
          * }
          */
-        $modelDataCubeInterfaceSummary->syncInterfaceSummary($this->authorizer_appid, $this->component_appid, $res, time());
+        $modelDataCubeInterfaceSummary->syncInterfaceSummary($this->authorizer_appid, $this->component_appid, $this->agentid, $res, time());
         return $res;
     }
 
@@ -1472,7 +1472,7 @@ class Service1
          * ]
          * }
          */
-        $modelDataCubeInterfaceSummaryHour->syncInterfaceSummaryHour($this->authorizer_appid, $this->component_appid, $res, time());
+        $modelDataCubeInterfaceSummaryHour->syncInterfaceSummaryHour($this->authorizer_appid, $this->component_appid, $this->agentid, $res, time());
         return $res;
     }
 
@@ -1501,7 +1501,7 @@ class Service1
          * ]
          * }
          */
-        $modelDataCubeUpstreamMsg->syncUpstreamMsg($this->authorizer_appid, $this->component_appid, $res, time());
+        $modelDataCubeUpstreamMsg->syncUpstreamMsg($this->authorizer_appid, $this->component_appid, $this->agentid, $res, time());
         return $res;
     }
 
@@ -1531,7 +1531,7 @@ class Service1
          * ]
          * }
          */
-        $modelDataCubeUpstreamMsgHour->syncUpstreamMsgHour($this->authorizer_appid, $this->component_appid, $res, time());
+        $modelDataCubeUpstreamMsgHour->syncUpstreamMsgHour($this->authorizer_appid, $this->component_appid, $this->agentid, $res, time());
         return $res;
     }
 
@@ -1560,7 +1560,7 @@ class Service1
          * ]
          * }
          */
-        $modelDataCubeUpstreamMsgWeek->syncUpstreamMsgWeek($this->authorizer_appid, $this->component_appid, $res, time());
+        $modelDataCubeUpstreamMsgWeek->syncUpstreamMsgWeek($this->authorizer_appid, $this->component_appid, $this->agentid, $res, time());
         return $res;
     }
 
@@ -1589,7 +1589,7 @@ class Service1
          * ]
          * }
          */
-        $modelDataCubeUpstreamMsgMonth->syncUpstreamMsgMonth($this->authorizer_appid, $this->component_appid, $res, time());
+        $modelDataCubeUpstreamMsgMonth->syncUpstreamMsgMonth($this->authorizer_appid, $this->component_appid, $this->agentid, $res, time());
         return $res;
     }
 
@@ -1617,7 +1617,7 @@ class Service1
          * ]
          * }
          */
-        $modelDataCubeUpstreamMsgDist->syncUpstreamMsgDist($this->authorizer_appid, $this->component_appid, $res, time());
+        $modelDataCubeUpstreamMsgDist->syncUpstreamMsgDist($this->authorizer_appid, $this->component_appid, $this->agentid, $res, time());
         return $res;
     }
 
@@ -1645,7 +1645,7 @@ class Service1
          * ]
          * }
          */
-        $modelDataCubeUpstreamMsgDistHour->syncUpstreamMsgDistHour($this->authorizer_appid, $this->component_appid, $res, time());
+        $modelDataCubeUpstreamMsgDistHour->syncUpstreamMsgDistHour($this->authorizer_appid, $this->component_appid, $this->agentid, $res, time());
         return $res;
     }
 
@@ -1672,7 +1672,7 @@ class Service1
          * ]
          * }
          */
-        $modelDataCubeUpstreamMsgDistWeek->syncUpstreamMsgDistWeek($this->authorizer_appid, $this->component_appid, $res, time());
+        $modelDataCubeUpstreamMsgDistWeek->syncUpstreamMsgDistWeek($this->authorizer_appid, $this->component_appid, $this->agentid, $res, time());
         return $res;
     }
 
@@ -1699,7 +1699,7 @@ class Service1
          * ]
          * }
          */
-        $modelDataCubeUpstreamMsgDistMonth->syncUpstreamMsgDistMonth($this->authorizer_appid, $this->component_appid, $res, time());
+        $modelDataCubeUpstreamMsgDistMonth->syncUpstreamMsgDistMonth($this->authorizer_appid, $this->component_appid, $this->agentid, $res, time());
         return $res;
     }
 
@@ -1735,7 +1735,7 @@ class Service1
          * ]
          * }
          */
-        $modelDataCubeArticleSummary->syncArticleSummary($this->authorizer_appid, $this->component_appid, $res, time());
+        $modelDataCubeArticleSummary->syncArticleSummary($this->authorizer_appid, $this->component_appid, $this->agentid, $res, time());
         return $res;
     }
 
@@ -1791,7 +1791,7 @@ class Service1
          * ]
          * }
          */
-        $modelDataCubeArticleTotal->syncArticleTotal($this->authorizer_appid, $this->component_appid, $res, time());
+        $modelDataCubeArticleTotal->syncArticleTotal($this->authorizer_appid, $this->component_appid, $this->agentid, $res, time());
         return $res;
     }
 
@@ -1824,7 +1824,7 @@ class Service1
          * ]
          * }
          */
-        $modelDataCubeUserRead->syncUserRead($this->authorizer_appid, $this->component_appid, $res, time());
+        $modelDataCubeUserRead->syncUserRead($this->authorizer_appid, $this->component_appid, $this->agentid, $res, time());
         return $res;
     }
 
@@ -1900,7 +1900,7 @@ class Service1
          * ]
          * }
          */
-        $modelDataCubeUserReadHour->syncUserReadHour($this->authorizer_appid, $this->component_appid, $res, time());
+        $modelDataCubeUserReadHour->syncUserReadHour($this->authorizer_appid, $this->component_appid, $this->agentid, $res, time());
         return $res;
     }
 
@@ -1934,7 +1934,7 @@ class Service1
          * ]
          * }
          */
-        $modelDataCubeUserShare->syncUserShare($this->authorizer_appid, $this->component_appid, $res, time());
+        $modelDataCubeUserShare->syncUserShare($this->authorizer_appid, $this->component_appid, $this->agentid, $res, time());
         return $res;
     }
 
@@ -1963,7 +1963,7 @@ class Service1
          * ]
          * }
          */
-        $modelDataCubeUserShareHour->syncUserShareHour($this->authorizer_appid, $this->component_appid, $res, time());
+        $modelDataCubeUserShareHour->syncUserShareHour($this->authorizer_appid, $this->component_appid, $this->agentid, $res, time());
         return $res;
     }
 

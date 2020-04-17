@@ -12,28 +12,30 @@ class ArticleTotal extends \App\Common\Models\Weixin2\DataCube\ArticleTotal
      * @param string $msgid            
      * @param string $stat_date            
      * @param string $authorizer_appid            
-     * @param string $component_appid            
+     * @param string $component_appid             
+     * @param string $agentid            
      */
-    public function getInfoByRefDate($ref_date, $msgid, $stat_date, $authorizer_appid, $component_appid)
+    public function getInfoByRefDate($ref_date, $msgid, $stat_date, $authorizer_appid, $component_appid, $agentid)
     {
         $info = $this->findOne(array(
             'ref_date' => $ref_date,
             'msgid' => $msgid,
             'stat_date' => $stat_date,
             'authorizer_appid' => $authorizer_appid,
-            'component_appid' => $component_appid
+            'component_appid' => $component_appid,
+            'agentid' => $agentid,
         ));
         return $info;
     }
 
-    public function syncArticleTotal($authorizer_appid, $component_appid, $res, $now)
+    public function syncArticleTotal($authorizer_appid, $component_appid, $agentid, $res, $now)
     {
         if (!empty($res['list'])) {
             foreach ($res['list'] as $l) {
                 foreach ($l['details'] as $item) {
                     $ref_date = $l['ref_date'] . " 00:00:00";
                     $stat_date = $item['stat_date'] . " 00:00:00";
-                    $info = $this->getInfoByRefDate($ref_date, $l['msgid'], $stat_date, $authorizer_appid, $component_appid);
+                    $info = $this->getInfoByRefDate($ref_date, $l['msgid'], $stat_date, $authorizer_appid, $component_appid, $agentid);
                     $data = array();
                     /**
                      * "ref_date": "2014-12-14",
@@ -119,6 +121,7 @@ class ArticleTotal extends \App\Common\Models\Weixin2\DataCube\ArticleTotal
                     } else {
                         $data['authorizer_appid'] = $authorizer_appid;
                         $data['component_appid'] = $component_appid;
+                        $data['agentid'] = $agentid;
                         $data['ref_date'] = $ref_date;
                         $data['msgid'] = $l['msgid'];
                         $data['stat_date'] = $stat_date;

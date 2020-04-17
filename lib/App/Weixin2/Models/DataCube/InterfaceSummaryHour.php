@@ -11,25 +11,27 @@ class InterfaceSummaryHour extends \App\Common\Models\Weixin2\DataCube\Interface
      * @param string $ref_date            
      * @param number $ref_hour            
      * @param string $authorizer_appid            
-     * @param string $component_appid            
+     * @param string $component_appid             
+     * @param string $agentid            
      */
-    public function getInfoByRefDateAndHour($ref_date, $ref_hour, $authorizer_appid, $component_appid)
+    public function getInfoByRefDateAndHour($ref_date, $ref_hour, $authorizer_appid, $component_appid, $agentid)
     {
         $info = $this->findOne(array(
             'ref_date' => $ref_date,
             'ref_hour' => $ref_hour,
             'authorizer_appid' => $authorizer_appid,
-            'component_appid' => $component_appid
+            'component_appid' => $component_appid,
+            'agentid' => $agentid,
         ));
         return $info;
     }
 
-    public function syncInterfaceSummaryHour($authorizer_appid, $component_appid, $res, $now)
+    public function syncInterfaceSummaryHour($authorizer_appid, $component_appid, $agentid, $res, $now)
     {
         if (!empty($res['list'])) {
             foreach ($res['list'] as $item) {
                 $ref_date = $item['ref_date'] . " 00:00:00";
-                $info = $this->getInfoByRefDateAndHour($ref_date, $item['ref_hour'], $authorizer_appid, $component_appid);
+                $info = $this->getInfoByRefDateAndHour($ref_date, $item['ref_hour'], $authorizer_appid, $component_appid, $agentid);
                 $data = array();
                 // [ref_date] => 2014-12-07
                 // [ref_hour] => 0
@@ -47,6 +49,7 @@ class InterfaceSummaryHour extends \App\Common\Models\Weixin2\DataCube\Interface
                 } else {
                     $data['authorizer_appid'] = $authorizer_appid;
                     $data['component_appid'] = $component_appid;
+                    $data['agentid'] = $agentid;
                     $data['ref_date'] = $ref_date;
                     $data['ref_hour'] = $item['ref_hour'];
                     $this->insert($data);

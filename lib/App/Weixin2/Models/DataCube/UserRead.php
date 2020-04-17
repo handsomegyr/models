@@ -10,24 +10,26 @@ class UserRead extends \App\Common\Models\Weixin2\DataCube\UserRead
      *
      * @param string $ref_date            
      * @param string $authorizer_appid            
-     * @param string $component_appid            
+     * @param string $component_appid             
+     * @param string $agentid            
      */
-    public function getInfoByRefDate($ref_date, $authorizer_appid, $component_appid)
+    public function getInfoByRefDate($ref_date, $authorizer_appid, $component_appid, $agentid)
     {
         $info = $this->findOne(array(
             'ref_date' => $ref_date,
             'authorizer_appid' => $authorizer_appid,
-            'component_appid' => $component_appid
+            'component_appid' => $component_appid,
+            'agentid' => $agentid,
         ));
         return $info;
     }
 
-    public function syncUserRead($authorizer_appid, $component_appid, $res, $now)
+    public function syncUserRead($authorizer_appid, $component_appid, $agentid, $res, $now)
     {
         if (!empty($res['list'])) {
             foreach ($res['list'] as $item) {
                 $ref_date = $item['ref_date'] . " 00:00:00";
-                $info = $this->getInfoByRefDate($ref_date, $authorizer_appid, $component_appid);
+                $info = $this->getInfoByRefDate($ref_date, $authorizer_appid, $component_appid, $agentid);
                 $data = array();
                 // [ref_date] => 2014-12-07
                 // [user_source] => 0
@@ -44,6 +46,7 @@ class UserRead extends \App\Common\Models\Weixin2\DataCube\UserRead
                 } else {
                     $data['authorizer_appid'] = $authorizer_appid;
                     $data['component_appid'] = $component_appid;
+                    $data['agentid'] = $agentid;
                     $data['ref_date'] = $ref_date;
                     $this->insert($data);
                 }
