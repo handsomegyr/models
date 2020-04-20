@@ -52,13 +52,6 @@ class Task extends \App\Common\Models\Weixin2\Notification\Task
         return $this->update(array('_id' => $id), array('$set' => $updateData));
     }
 
-    public function incProcessNum($id, $process_num, $is_success = true)
-    {
-        $updateData = array();
-        $updateData['task_process_total'] = $task_process_total;
-        return $this->update(array('_id' => $id), array('$set' => $updateData));
-    }
-
     public function incProcessedNum($id, $processed_num, $is_success = false)
     {
         $updateData = array();
