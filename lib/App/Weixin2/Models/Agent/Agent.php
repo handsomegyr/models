@@ -9,9 +9,9 @@ class Agent extends \App\Common\Models\Weixin2\Agent\Agent
      *
      * @return array
      */
-    public function getInfoByAgentId($component_agentid, $authorizer_appid, $agentid, $is_get_latest = false)
+    public function getInfoByAppid($component_agentid, $authorizer_appid, $agentid, $is_get_latest = false)
     {
-        $cacheKey = $this->getCacheKey4AgentId($component_agentid, $authorizer_appid, $agentid);
+        $cacheKey = $this->getCacheKey4AppId($component_agentid, $authorizer_appid, $agentid);
         $cache = $this->getDI()->get('cache');
         $application = $cache->get($cacheKey);
 
@@ -19,7 +19,7 @@ class Agent extends \App\Common\Models\Weixin2\Agent\Agent
             $application = $this->findOne(array(
                 'agentid' => $agentid,
                 'authorizer_appid' => $authorizer_appid,
-                'component_agentid' => $component_agentid
+                'component_appid' => $component_agentid
             ));
             if (!empty($application)) {
                 // 加缓存处理
@@ -36,9 +36,9 @@ class Agent extends \App\Common\Models\Weixin2\Agent\Agent
      * @throws Exception
      * @return mixed array
      */
-    public function getTokenByAgentId($component_agentid, $authorizer_appid, $agentid)
+    public function getTokenByAppid($component_agentid, $authorizer_appid, $agentid)
     {
-        $token = $this->getInfoByAgentId($component_agentid, $authorizer_appid, $agentid, true);
+        $token = $this->getInfoByAppid($component_agentid, $authorizer_appid, $agentid, true);
         if ($token == null) {
             return null;
         }
@@ -64,7 +64,7 @@ class Agent extends \App\Common\Models\Weixin2\Agent\Agent
         if (!empty($newInfo)) {
             $expire_time = 5 * 60;
             $cache = $this->getDI()->get('cache');
-            $cache->save($this->getCacheKey4AgentId($newInfo['component_agentid'], $newInfo['authorizer_appid'], $newInfo['agentid']), $newInfo, $expire_time);
+            $cache->save($this->getCacheKey4AppId($newInfo['component_appid'], $newInfo['authorizer_appid'], $newInfo['agentid']), $newInfo, $expire_time);
         }
         return $newInfo;
     }
@@ -74,9 +74,9 @@ class Agent extends \App\Common\Models\Weixin2\Agent\Agent
         return sha1($openid . "|" . $secretKey . "|" . $timestamp);
     }
 
-    private function getCacheKey4AgentId($component_agentid, $authorizer_appid, $agentid)
+    private function getCacheKey4AppId($component_agentid, $authorizer_appid, $agentid)
     {
-        $cacheKey = "agent:component_agentid:{$component_agentid}:authorizer_appid:{$authorizer_appid}:agentid:{$agentid}";
+        $cacheKey = "agent:component_appid:{$component_agentid}:authorizer_appid:{$authorizer_appid}:agentid:{$agentid}";
         $cacheKey = cacheKey(__FILE__, __CLASS__, $cacheKey);
         return $cacheKey;
     }
@@ -84,8 +84,8 @@ class Agent extends \App\Common\Models\Weixin2\Agent\Agent
     private function refreshInfo($token)
     {
         if (empty($token['access_token_expire']) || strtotime($token['access_token_expire']) <= time()) {
-            if (!empty($token['component_agentid']) && !empty($token['authorizer_appid']) && !empty($token['agentid'])) {
-                $lockKey = cacheKey(__FILE__, __CLASS__, __METHOD__, __LINE__, $token['component_agentid'], $token['authorizer_appid'], $token['agentid']);
+            if (!empty($token['component_appid']) && !empty($token['authorizer_appid']) && !empty($token['agentid'])) {
+                $lockKey = cacheKey(__FILE__, __CLASS__, __METHOD__, __LINE__, $token['component_appid'], $token['authorizer_appid'], $token['agentid']);
                 $objLock = new \iLock($lockKey);
                 if (!$objLock->lock()) {
                     $objToken = new \Weixin\Qy\Token\Server($token['agentid'], $token['secret']);

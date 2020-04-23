@@ -17,9 +17,13 @@ class Keyword extends Base
      *
      * @return array
      */
-    public function getAll()
+    public function getAll($field_type = '')
     {
-        $list = $this->findAll(array(), array('_id' => 1));
+        $query = array();
+        if (!empty($field_type)) {
+            $query[$field_type] = array('$ne' => '');
+        }
+        $list = $this->findAll($query, array('_id' => 1));
         $options = array();
         foreach ($list as $item) {
             $options[$item['_id']] = $item['keyword'];

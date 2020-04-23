@@ -2,7 +2,7 @@
 
 namespace App\Weixin2\Services;
 
-class Service1
+class WeixinService
 {
 
     private $authorizer_appid = "";
@@ -15,12 +15,24 @@ class Service1
 
     private $agentid = 0;
 
+    /**
+     * @var \Weixin\Client
+     */
     private $objWeixin = null;
 
+    /**
+     * @var \Weixin\Component
+     */
     private $objWeixinComponent = null;
 
+    /**
+     * @var \App\Weixin2\Models\Component\Component
+     */
     private $modelWeixinopenComponent;
 
+    /**
+     * @var \App\Weixin2\Models\Authorize\Authorizer
+     */
     private $modelWeixinopenAuthorizer;
 
     public function __construct($authorizer_appid, $component_appid)

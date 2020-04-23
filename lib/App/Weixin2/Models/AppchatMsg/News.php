@@ -5,7 +5,7 @@ namespace App\Weixin2\Models\AppchatMsg;
 class News extends \App\Common\Models\Weixin2\AppchatMsg\News
 {
 
-    public function getListByAgentMsgId($appchat_msg_id)
+    public function getListByAppchatMsgId($appchat_msg_id)
     {
         $ret = $this->findAll(array(
             'appchat_msg_id' => $appchat_msg_id
@@ -13,15 +13,15 @@ class News extends \App\Common\Models\Weixin2\AppchatMsg\News
         return $ret;
     }
 
-    public function getArticlesByAgentMsgId($appchat_msg_id, $msg_type, $isFirst = true)
+    public function getArticlesByAppchatMsgId($appchat_msg_id, $msg_type, $isFirst = true)
     {
         $articles = array();
-        $cacheKey = "agentmsgnews:appchat_msg_id:{$appchat_msg_id}:msg_type:{$msg_type}";
+        $cacheKey = "appchatmsgnews:appchat_msg_id:{$appchat_msg_id}:msg_type:{$msg_type}";
         $cacheKey = cacheKey(__FILE__, __CLASS__, $cacheKey);
         $cache = $this->getDI()->get('cache');
         $articles = $cache->get($cacheKey);
         if (true || empty($articles)) {
-            $rst = $this->getListByAgentMsgId($appchat_msg_id);
+            $rst = $this->getListByAppchatMsgId($appchat_msg_id);
             $articles = array();
             if (!empty($rst)) {
                 foreach ($rst as $row) {
