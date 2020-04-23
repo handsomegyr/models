@@ -183,7 +183,7 @@ class Authorizer extends \App\Common\Models\Weixin2\Authorize\Authorizer
                 $lockKey = cacheKey(__FILE__, __CLASS__, __METHOD__, __LINE__, $token['component_appid'], $token['appid']);
                 $objLock = new \iLock($lockKey);
                 if (!$objLock->lock()) {
-                    $modelComponent = new \App\Components\Weixinopen\Services\Models\Component\ComponentModel();
+                    $modelComponent = new \App\Weixin2\Models\Component\Component();
                     $componentInfo = $modelComponent->getInfoByAppId($token['component_appid'], true);
                     // 如果是微信开放平台的话
                     if (!empty($componentInfo['is_weixin_open_platform'])) {

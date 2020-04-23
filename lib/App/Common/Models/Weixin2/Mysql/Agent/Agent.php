@@ -14,4 +14,13 @@ class Agent extends Base
     {
         return 'iweixin2_agent';
     }
+
+    public function reorganize(array $data)
+    {
+        $data = parent::reorganize($data);
+
+        $data['access_token_expire'] = $this->changeToMongoDate($data['access_token_expire']);
+
+        return $data;
+    }
 }

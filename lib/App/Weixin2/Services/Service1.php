@@ -13,7 +13,7 @@ class Service1
 
     private $authorizerConfig = array();
 
-    private $agentid = "";
+    private $agentid = 0;
 
     private $objWeixin = null;
 
@@ -239,7 +239,7 @@ class Service1
     public function createMenu()
     {
         $modelMenu = new \App\Weixin2\Models\Menu\Menu();
-        $menus = $modelMenu->buildMenu($this->authorizer_appid, $this->component_appid);
+        $menus = $modelMenu->buildMenu($this->authorizer_appid, $this->component_appid, $this->agentid);
         // return $menus;
         $res = $this->getWeixinObject()
             ->getMenuManager()
