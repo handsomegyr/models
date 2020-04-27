@@ -24,4 +24,47 @@ class Task extends \App\Common\Models\Cronjob\Task
         $query = array();
         return $query;
     }
+
+    /**
+     * 完成任务
+     */
+    public function finishTask($task, $do_time, array $memo = array())
+    {
+        $query = array('_id' => $task['_id']);
+        $updateArr = array(
+            'is_done' => true,
+            'do_time' => \App\Common\Utils\Helper::getCurrentTime($do_time),
+        );
+        if (!empty($memo)) {
+            $task['memo'][] = $memo;
+            $updateArr['memo'] = $task['memo'];
+        }
+        $updateData = array();
+        $updateData['$set'] = $updateArr;
+        $updateData['$inc'] = array(
+            'do_num' => 1,
+        );
+        return $this->update($query, $updateData);
+    }
+
+    public function recordTaskInfo($task, $is_done, $do_time, $memo)
+    {
+        $query = array('_id' => $task['_id']);
+        $updateArr = array(
+            'do_time' => \App\Common\Utils\Helper::getCurrentTime($do_time),
+        );
+        if (!empty($is_done)) {
+            $updateArr['is_done'] = true;
+        }
+        if (!empty($memo)) {
+            $task['memo'][] = $memo;
+            $updateArr['memo'] = $task['memo'];
+        }
+        $updateData = array();
+        $updateData['$set'] = $updateArr;
+        $updateData['$inc'] = array(
+            'do_num' => 1,
+        );
+        return $this->update($query, $updateData);
+    }
 }
