@@ -179,26 +179,24 @@ class Authorizer extends \App\Common\Models\Qyweixin\Authorize\Authorizer
     private function refreshInfo($token)
     {
         if (empty($token['access_token_expire']) || strtotime($token['access_token_expire']) <= time()) {
-            if (!empty($token['provider_appid']) && !empty($token['refresh_token']) && !empty($token['appid'])) {
+            if (!empty($token['refresh_token']) && !empty($token['appid'])) {
                 $lockKey = cacheKey(__FILE__, __CLASS__, __METHOD__, __LINE__, $token['provider_appid'], $token['appid']);
                 $objLock = new \iLock($lockKey);
                 if (!$objLock->lock()) {
-                    $modelProvider = new \App\Qyweixin\Models\Provider\Provider();
-                    $providerInfo = $modelProvider->getInfoByAppId($token['provider_appid'], true);
-                    // 如果是微信开放平台的话
-                    if (!empty($providerInfo['is_weixin_open_platform'])) {
+                    if (!empty($token['provider_appid'])) {
+                        $modelProvider = new \App\Qyweixin\Models\Provider\Provider();
+                        $providerInfo = $modelProvider->getInfoByAppId($token['provider_appid'], true);
                         $objToken = new \Weixin\Component($providerInfo['appid'], $providerInfo['appsecret']);
                         $objToken->setAccessToken($providerInfo['access_token']);
                         $arrToken = $objToken->apiAuthorizerToken($token['appid'], $token['refresh_token']);
                         $token = $this->updateAccessToken($token['_id'], $arrToken['authorizer_access_token'], $arrToken['authorizer_refresh_token'], $arrToken['expires_in'], null);
                     } else {
-                        // 如果不是微信开放平台的话
-                        $objToken = new \Weixin\Token\Server($token['appid'], $token['appsecret']);
-                        $arrToken = $objToken->getAccessToken();
-                        if (!isset($arrToken['access_token'])) {
-                            throw new \Exception(json_encode($arrToken));
-                        }
-                        $token = $this->updateAccessToken($token['_id'], $arrToken['access_token'], $arrToken['refresh_token'], $arrToken['expires_in'], null);
+                        // $objToken = new \Weixin\Qy\Server($token['appid'], $token['appsecret']);
+                        // $arrToken = $objToken->getAccessToken();
+                        // if (!isset($arrToken['access_token'])) {
+                        //     throw new \Exception(json_encode($arrToken));
+                        // }
+                        // $token = $this->updateAccessToken($token['_id'], $arrToken['access_token'], $arrToken['refresh_token'], $arrToken['expires_in'], null);
                     }
                 }
             }
@@ -209,40 +207,40 @@ class Authorizer extends \App\Common\Models\Qyweixin\Authorize\Authorizer
             $this->_expire = strtotime($token['access_token_expire']) - time();
         }
 
-        jsnoLock:
-        // 获取jsapi_ticket
-        if (empty($token['jsapi_ticket_expire']) || strtotime($token['jsapi_ticket_expire']) <= time()) {
-            if (!empty($token['access_token'])) {
-                $lockKey = cacheKey(__FILE__, __CLASS__, __METHOD__, __LINE__, $token['appid']);
-                $objLock = new \iLock($lockKey);
-                if (!$objLock->lock()) {
-                    // 获取jsapi_ticket
-                    $objJssdk = new \Weixin\Jssdk();
-                    $objJssdk->setAppId($token['appid']);
-                    $objJssdk->setAccessToken($token['access_token']);
-                    $arrJsApiTicket = $objJssdk->getJsApiTicket();
-                    $token = $this->updateJsapiTicket($token['_id'], $arrJsApiTicket['ticket'], $arrJsApiTicket['expires_in']);
-                }
-            }
-        }
+        // jsnoLock:
+        // // 获取jsapi_ticket
+        // if (empty($token['jsapi_ticket_expire']) || strtotime($token['jsapi_ticket_expire']) <= time()) {
+        //     if (!empty($token['access_token'])) {
+        //         $lockKey = cacheKey(__FILE__, __CLASS__, __METHOD__, __LINE__, $token['appid']);
+        //         $objLock = new \iLock($lockKey);
+        //         if (!$objLock->lock()) {
+        //             // 获取jsapi_ticket
+        //             $objJssdk = new \Weixin\Jssdk();
+        //             $objJssdk->setAppId($token['appid']);
+        //             $objJssdk->setAccessToken($token['access_token']);
+        //             $arrJsApiTicket = $objJssdk->getJsApiTicket();
+        //             $token = $this->updateJsapiTicket($token['_id'], $arrJsApiTicket['ticket'], $arrJsApiTicket['expires_in']);
+        //         }
+        //     }
+        // }
 
-        weixincardnoLock:
-        // 获取微信卡券的api_ticket
-        if (!empty($token['is_weixin_card'])) {
-            if (empty($token['wx_card_api_ticket_expire']) || strtotime($token['wx_card_api_ticket_expire']) <= time()) {
-                if (!empty($token['access_token'])) {
-                    $lockKey = cacheKey(__FILE__, __CLASS__, __METHOD__, __LINE__, $token['appid']);
-                    $objLock = new \iLock($lockKey);
-                    if (!$objLock->lock()) {
-                        // 获取微信卡券的api_ticket
-                        $weixin = new \Weixin\Client();
-                        $weixin->setAccessToken($token['access_token']);
-                        $ret = $weixin->getCardManager()->getApiTicket();
-                        $token = $this->updateWxcardApiTicket($token['_id'], $ret['ticket'], $ret['expires_in']);
-                    }
-                }
-            }
-        }
+        // weixincardnoLock:
+        // // 获取微信卡券的api_ticket
+        // if (!empty($token['is_weixin_card'])) {
+        //     if (empty($token['wx_card_api_ticket_expire']) || strtotime($token['wx_card_api_ticket_expire']) <= time()) {
+        //         if (!empty($token['access_token'])) {
+        //             $lockKey = cacheKey(__FILE__, __CLASS__, __METHOD__, __LINE__, $token['appid']);
+        //             $objLock = new \iLock($lockKey);
+        //             if (!$objLock->lock()) {
+        //                 // 获取微信卡券的api_ticket
+        //                 $weixin = new \Weixin\Client();
+        //                 $weixin->setAccessToken($token['access_token']);
+        //                 $ret = $weixin->getCardManager()->getApiTicket();
+        //                 $token = $this->updateWxcardApiTicket($token['_id'], $ret['ticket'], $ret['expires_in']);
+        //             }
+        //         }
+        //     }
+        // }
         return $token;
     }
 
