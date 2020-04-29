@@ -84,7 +84,7 @@ class Agent extends \App\Common\Models\Qyweixin\Agent\Agent
     private function refreshInfo($token)
     {
         if (empty($token['access_token_expire']) || strtotime($token['access_token_expire']) <= time()) {
-            if (!empty($token['provider_appid']) && !empty($token['authorizer_appid']) && !empty($token['agentid'])) {
+            if (!empty($token['authorizer_appid']) && !empty($token['agentid'])) {
                 $lockKey = cacheKey(__FILE__, __CLASS__, __METHOD__, __LINE__, $token['provider_appid'], $token['authorizer_appid'], $token['agentid']);
                 $objLock = new \iLock($lockKey);
                 if (!$objLock->lock()) {
