@@ -51,7 +51,7 @@ class Menu
 
         // 运用设置
         $item = array(
-            'menu_name' => '运用设置',
+            'menu_name' => '应用设置',
             'menu_model' => 'qyweixin-agent',
             'level' => '企业平台应用管理',
             'icon' => '',
