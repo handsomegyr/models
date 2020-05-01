@@ -49,16 +49,6 @@ class Menu
         );
         $tree[] = $item;
 
-        // 代理运用设置
-        $item = array(
-            'menu_name' => '代理运用设置',
-            'menu_model' => 'weixin2-agent',
-            'level' => '平台应用管理',
-            'icon' => '',
-            'model' => '\App\Backend\Submodules\Weixin2\Models\Agent\Agent'
-        );
-        $tree[] = $item;
-
         // 登录授权发起执行时间跟踪统计
         $item = array(
             'menu_name' => '登录授权发起执行时间跟踪统计',
@@ -242,36 +232,6 @@ class Menu
         // 群发管理
         $item = array(
             'menu_name' => '群发管理',
-            'menu_model' => '',
-            'level' => '消息相关管理',
-            'icon' => '',
-            'model' => ''
-        );
-        $tree[] = $item;
-
-        // 应用消息管理
-        $item = array(
-            'menu_name' => '应用消息管理',
-            'menu_model' => '',
-            'level' => '消息相关管理',
-            'icon' => '',
-            'model' => ''
-        );
-        $tree[] = $item;
-
-        // 群聊会话消息管理
-        $item = array(
-            'menu_name' => '群聊会话消息管理',
-            'menu_model' => '',
-            'level' => '消息相关管理',
-            'icon' => '',
-            'model' => ''
-        );
-        $tree[] = $item;
-
-        // 互联企业消息管理
-        $item = array(
-            'menu_name' => '互联企业消息管理',
             'menu_model' => '',
             'level' => '消息相关管理',
             'icon' => '',
@@ -466,107 +426,6 @@ class Menu
             'level' => '群发管理',
             'icon' => '',
             'model' => '\App\Backend\Submodules\Weixin2\Models\Comment\ReplyLog'
-        );
-        $tree[] = $item;
-
-
-        // 应用消息
-        $item = array(
-            'menu_name' => '应用消息',
-            'menu_model' => 'weixin2-agentmsg',
-            'level' => '应用消息管理',
-            'icon' => '',
-            'model' => '\App\Backend\Submodules\Weixin2\Models\AgentMsg\AgentMsg'
-        );
-        $tree[] = $item;
-
-        // 应用消息图文设置
-        $item = array(
-            'menu_name' => '应用消息图文设置',
-            'menu_model' => 'weixin2-agentmsgnews',
-            'level' => '应用消息管理',
-            'icon' => '',
-            'model' => '\App\Backend\Submodules\Weixin2\Models\AgentMsg\News'
-        );
-        $tree[] = $item;
-
-        // 应用消息发送日志
-        $item = array(
-            'menu_name' => '应用消息发送日志',
-            'menu_model' => 'weixin2-agentmsgsendlog',
-            'level' => '应用消息管理',
-            'icon' => '',
-            'model' => '\App\Backend\Submodules\Weixin2\Models\AgentMsg\SendLog'
-        );
-        $tree[] = $item;
-
-        // 群聊会话
-        $item = array(
-            'menu_name' => '群聊会话',
-            'menu_model' => 'weixin2-appchat',
-            'level' => '群聊会话消息管理',
-            'icon' => '',
-            'model' => '\App\Backend\Submodules\Weixin2\Models\AppchatMsg\Appchat'
-        );
-        $tree[] = $item;
-
-        // 群聊会话消息
-        $item = array(
-            'menu_name' => '群聊会话消息',
-            'menu_model' => 'weixin2-appchatmsg',
-            'level' => '群聊会话消息管理',
-            'icon' => '',
-            'model' => '\App\Backend\Submodules\Weixin2\Models\AppchatMsg\AppchatMsg'
-        );
-        $tree[] = $item;
-
-        // 群聊会话消息图文设置
-        $item = array(
-            'menu_name' => '群聊会话消息图文设置',
-            'menu_model' => 'weixin2-appchatmsgnews',
-            'level' => '群聊会话消息管理',
-            'icon' => '',
-            'model' => '\App\Backend\Submodules\Weixin2\Models\AppchatMsg\News'
-        );
-        $tree[] = $item;
-
-        // 群聊会话消息发送日志
-        $item = array(
-            'menu_name' => '群聊会话消息发送日志',
-            'menu_model' => 'weixin2-appchatmsgsendlog',
-            'level' => '群聊会话消息管理',
-            'icon' => '',
-            'model' => '\App\Backend\Submodules\Weixin2\Models\AppchatMsg\SendLog'
-        );
-        $tree[] = $item;
-
-        // 互联企业消息
-        $item = array(
-            'menu_name' => '互联企业消息',
-            'menu_model' => 'weixin2-linkedcorpmsg',
-            'level' => '互联企业消息管理',
-            'icon' => '',
-            'model' => '\App\Backend\Submodules\Weixin2\Models\LinkedcorpMsg\LinkedcorpMsg'
-        );
-        $tree[] = $item;
-
-        // 互联企业消息图文设置
-        $item = array(
-            'menu_name' => '互联企业消息图文设置',
-            'menu_model' => 'weixin2-linkedcorpmsgnews',
-            'level' => '互联企业消息管理',
-            'icon' => '',
-            'model' => '\App\Backend\Submodules\Weixin2\Models\LinkedcorpMsg\News'
-        );
-        $tree[] = $item;
-
-        // 互联企业消息发送日志
-        $item = array(
-            'menu_name' => '互联企业消息发送日志',
-            'menu_model' => 'weixin2-linkedcorpmsgsendlog',
-            'level' => '互联企业消息管理',
-            'icon' => '',
-            'model' => '\App\Backend\Submodules\Weixin2\Models\LinkedcorpMsg\SendLog'
         );
         $tree[] = $item;
 
@@ -790,56 +649,6 @@ class Menu
         );
         $tree[] = $item;
 
-        // 应用消息类型
-        $item = array(
-            'menu_name' => '应用消息类型',
-            'menu_model' => 'weixin2-agentmsgtype',
-            'level' => '系统配置管理',
-            'icon' => '',
-            'model' => '\App\Backend\Submodules\Weixin2\Models\AgentMsg\Type'
-        );
-        $tree[] = $item;
-
-        // 应用消息发送方式
-        $item = array(
-            'menu_name' => '应用消息发送方式',
-            'menu_model' => 'weixin2-agentmsgsendmethod',
-            'level' => '系统配置管理',
-            'icon' => '',
-            'model' => '\App\Backend\Submodules\Weixin2\Models\AgentMsg\SendMethod'
-        );
-        $tree[] = $item;
-
-        // 群聊会话消息类型
-        $item = array(
-            'menu_name' => '群聊会话消息类型',
-            'menu_model' => 'weixin2-appchatmsgtype',
-            'level' => '系统配置管理',
-            'icon' => '',
-            'model' => '\App\Backend\Submodules\Weixin2\Models\AppchatMsg\Type'
-        );
-        $tree[] = $item;
-
-        // 互联企业消息类型
-        $item = array(
-            'menu_name' => '互联企业消息类型',
-            'menu_model' => 'weixin2-linkedcorpmsgtype',
-            'level' => '系统配置管理',
-            'icon' => '',
-            'model' => '\App\Backend\Submodules\Weixin2\Models\LinkedcorpMsg\Type'
-        );
-        $tree[] = $item;
-
-        // 互联企业消息发送方式
-        $item = array(
-            'menu_name' => '互联企业消息发送方式',
-            'menu_model' => 'weixin2-linkedcorpmsgsendmethod',
-            'level' => '系统配置管理',
-            'icon' => '',
-            'model' => '\App\Backend\Submodules\Weixin2\Models\LinkedcorpMsg\SendMethod'
-        );
-        $tree[] = $item;
-
         // 客服消息类型
         $item = array(
             'menu_name' => '客服消息类型',
@@ -1027,16 +836,6 @@ class Menu
             'level' => '关键词回复管理',
             'icon' => '',
             'model' => '\App\Backend\Submodules\Weixin2\Models\Keyword\KeywordToTemplateMsg'
-        );
-        $tree[] = $item;
-
-        // 关键词和应用消息对应设定
-        $item = array(
-            'menu_name' => '关键词和应用消息对应设定',
-            'menu_model' => 'weixin2-keywordtoagentmsg',
-            'level' => '关键词回复管理',
-            'icon' => '',
-            'model' => '\App\Backend\Submodules\Weixin2\Models\Keyword\KeywordToAgentMsg'
         );
         $tree[] = $item;
 
