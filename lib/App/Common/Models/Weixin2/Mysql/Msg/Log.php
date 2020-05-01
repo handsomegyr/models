@@ -35,10 +35,6 @@ class Log extends Base
         $data['SendLocationInfo'] = $this->changeToBoolean($data['SendLocationInfo']);
         $data['CopyrightCheckResult'] = $this->changeToBoolean($data['CopyrightCheckResult']);
 
-        $data['contact_ExtAttr'] = $this->changeToArray($data['contact_ExtAttr']);
-        $data['BatchJob'] = $this->changeToArray($data['BatchJob']);
-        $data['ApprovalInfo'] = $this->changeToArray($data['ApprovalInfo']);
-
         return $data;
     }
 }
