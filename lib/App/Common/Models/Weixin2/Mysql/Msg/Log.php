@@ -34,7 +34,6 @@ class Log extends Base
         $data['SendPicsInfo'] = $this->changeToBoolean($data['SendPicsInfo']);
         $data['SendLocationInfo'] = $this->changeToBoolean($data['SendLocationInfo']);
         $data['CopyrightCheckResult'] = $this->changeToBoolean($data['CopyrightCheckResult']);
-
         return $data;
     }
 }
