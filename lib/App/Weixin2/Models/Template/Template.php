@@ -10,16 +10,14 @@ class Template extends \App\Common\Models\Weixin2\Template\Template
      *
      * @param string $template_id            
      * @param string $authorizer_appid            
-     * @param string $component_appid            
-     * @param string $agentid            
+     * @param string $component_appid    
      */
-    public function getInfoByTemplateId($template_id, $authorizer_appid, $component_appid, $agentid)
+    public function getInfoByTemplateId($template_id, $authorizer_appid, $component_appid)
     {
         $info = $this->findOne(array(
             'template_id' => $template_id,
             'authorizer_appid' => $authorizer_appid,
-            'component_appid' => $component_appid,
-            'agentid' => $agentid
+            'component_appid' => $component_appid
         ));
         return $info;
     }
@@ -39,11 +37,11 @@ class Template extends \App\Common\Models\Weixin2\Template\Template
         return $this->update(array('_id' => $id), array('$set' => $updateData));
     }
 
-    public function syncTemplateList($authorizer_appid, $component_appid, $agentid, $res, $now)
+    public function syncTemplateList($authorizer_appid, $component_appid, $res, $now)
     {
         if (!empty($res['template_list'])) {
             foreach ($res['template_list'] as $item) {
-                $info = $this->getInfoByTemplateId($item['template_id'], $authorizer_appid, $component_appid, $agentid);
+                $info = $this->getInfoByTemplateId($item['template_id'], $authorizer_appid, $component_appid);
                 $data = array();
                 // "template_id": "iPk5sOIt5X_flOVKn5GrTFpncEYTojx6ddbt8WYoV5s",
                 // "title": "领取奖金提醒",
@@ -64,7 +62,6 @@ class Template extends \App\Common\Models\Weixin2\Template\Template
                 } else {
                     $data['authorizer_appid'] = $authorizer_appid;
                     $data['component_appid'] = $component_appid;
-                    $data['agentid'] = $agentid;
                     $data['template_id'] = $item['template_id'];
                     $this->insert($data);
                 }

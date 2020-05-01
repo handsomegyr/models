@@ -4,9 +4,9 @@ namespace App\Weixin2\Models;
 
 class Callbackurls extends \App\Common\Models\Weixin2\Callbackurls
 {
-    public function getValidCallbackUrlList($authorizer_appid, $component_appid, $agentid, $is_get_latest = false)
+    public function getValidCallbackUrlList($authorizer_appid, $component_appid, $is_get_latest = false)
     {
-        $cacheKey = "callbackurls:authorizer_appid:{$authorizer_appid}:component_appid:{$component_appid}:agentid:{$agentid}:callbackurllist";
+        $cacheKey = "callbackurls:authorizer_appid:{$authorizer_appid}:component_appid:{$component_appid}:callbackurllist";
         $cacheKey = cacheKey(__FILE__, __CLASS__, $cacheKey);
         $cache = $this->getDI()->get('cache');
         $list = $cache->get($cacheKey);
@@ -15,7 +15,6 @@ class Callbackurls extends \App\Common\Models\Weixin2\Callbackurls
             $ret = $this->findAll(array(
                 'authorizer_appid' => $authorizer_appid,
                 'component_appid' => $component_appid,
-                'agentid' => $agentid,
                 'is_valid' => true
             ));
             $list = array();
@@ -33,9 +32,9 @@ class Callbackurls extends \App\Common\Models\Weixin2\Callbackurls
         return $list;
     }
 
-    public function isValid($authorizer_appid, $component_appid, $agentid, $url)
+    public function isValid($authorizer_appid, $component_appid, $url)
     {
-        $callbackUrls = $this->getValidCallbackUrlList($authorizer_appid, $component_appid, $agentid);
+        $callbackUrls = $this->getValidCallbackUrlList($authorizer_appid, $component_appid);
         if (empty($callbackUrls)) {
             return false;
         }

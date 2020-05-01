@@ -5,14 +5,8 @@ namespace App\Qyweixin\Models\Authorize;
 class Authorizer extends \App\Common\Models\Qyweixin\Authorize\Authorizer
 {
 
-    //应用类型 1:公众号 2:小程序 3:企业号 4:订阅号
-    const APPTYPE_PUB = 1;
-
-    const APPTYPE_MICROAPP = 2;
-
-    const APPTYPE_QY = 3;
-
-    const APPTYPE_SUB = 4;
+    //应用类型 1:企业号
+    const APPTYPE_QY = 1;
 
     /**
      * 获取应用的信息

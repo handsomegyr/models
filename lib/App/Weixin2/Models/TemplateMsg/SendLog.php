@@ -8,12 +8,11 @@ class SendLog extends \App\Common\Models\Weixin2\TemplateMsg\SendLog
     /**
      * 记录
      */
-    public function record($component_appid, $authorizer_appid, $agentid, $template_msg_id, $template_msg_name, $template_id, $url, $data, $color, $appid, $pagepath, $keyword_id, $keyword, $ToUserName, $FromUserName, $template_msg_content, $log_time)
+    public function record($component_appid, $authorizer_appid, $template_msg_id, $template_msg_name, $template_id, $url, $data, $color, $appid, $pagepath, $keyword_id, $keyword, $ToUserName, $FromUserName, $template_msg_content, $log_time)
     {
         $datas = array(
             'component_appid' => $component_appid,
             'authorizer_appid' => $authorizer_appid,
-            'agentid' => $agentid,
             'template_msg_id' => empty($template_msg_id) ? 0 : $template_msg_id,
             'template_msg_name' => empty($template_msg_name) ? "" : $template_msg_name,
             'template_id' => empty($template_id) ? "" : $template_id,

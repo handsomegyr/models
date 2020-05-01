@@ -13,10 +13,9 @@ class MsgRecord extends \App\Common\Models\Weixin2\Kf\MsgRecord
      * @param string $opercode            
      * @param string $msgrecord_time            
      * @param string $authorizer_appid            
-     * @param string $component_appid             
-     * @param string $agentid            
+     * @param string $component_appid            
      */
-    public function getInfoByRecord($worker, $openid, $opercode, $msgrecord_time, $authorizer_appid, $component_appid, $agentid)
+    public function getInfoByRecord($worker, $openid, $opercode, $msgrecord_time, $authorizer_appid, $component_appid)
     {
         $info = $this->findOne(array(
             'worker' => $worker,
@@ -24,13 +23,12 @@ class MsgRecord extends \App\Common\Models\Weixin2\Kf\MsgRecord
             'msgrecord_time' => $msgrecord_time,
             'opercode' => $opercode,
             'authorizer_appid' => $authorizer_appid,
-            'component_appid' => $component_appid,
-            'agentid' => $agentid
+            'component_appid' => $component_appid
         ));
         return $info;
     }
 
-    public function syncMsgRecordList($authorizer_appid, $component_appid, $agentid, $res, $now)
+    public function syncMsgRecordList($authorizer_appid, $component_appid, $res, $now)
     {
         if (!empty($res['recordlist'])) {
             foreach ($res['recordlist'] as $item) {
@@ -48,14 +46,13 @@ class MsgRecord extends \App\Common\Models\Weixin2\Kf\MsgRecord
                 $data['text'] = $item['text'];
                 $data['msgrecord_time'] = \App\Common\Utils\Helper::getCurrentTime($item['time']);
 
-                $info = $this->getInfoByRecord($item['worker'], $item['openid'], $item['opercode'], $item['msgrecord_time'], $authorizer_appid, $component_appid, $agentid);
+                $info = $this->getInfoByRecord($item['worker'], $item['openid'], $item['opercode'], $item['msgrecord_time'], $authorizer_appid, $component_appid);
 
                 if (!empty($info)) {
                     $this->update(array('_id' => $info['_id']), array('$set' => $data));
                 } else {
                     $data['authorizer_appid'] = $authorizer_appid;
                     $data['component_appid'] = $component_appid;
-                    $data['agentid'] = $agentid;
                     $this->insert($data);
                 }
             }

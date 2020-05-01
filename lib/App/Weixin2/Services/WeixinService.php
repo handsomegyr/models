@@ -13,8 +13,6 @@ class WeixinService
 
     private $authorizerConfig = array();
 
-    private $agentid = 0;
-
     /**
      * @var \Weixin\Client
      */
@@ -251,7 +249,7 @@ class WeixinService
     public function createMenu()
     {
         $modelMenu = new \App\Weixin2\Models\Menu\Menu();
-        $menus = $modelMenu->buildMenu($this->authorizer_appid, $this->component_appid, $this->agentid);
+        $menus = $modelMenu->buildMenu($this->authorizer_appid, $this->component_appid);
         // return $menus;
         $res = $this->getWeixinObject()
             ->getMenuManager()
@@ -578,7 +576,7 @@ class WeixinService
          * "next_openid":"OPENID10000"
          * }
          */
-        $modelBlackUser->syncBlackList($this->authorizer_appid, $this->component_appid, $this->agentid, $res, time());
+        $modelBlackUser->syncBlackList($this->authorizer_appid, $this->component_appid, $res, time());
         return $res;
     }
 
@@ -792,7 +790,7 @@ class WeixinService
 
         // 记录日志
         $modelMassMsgSendLog = new \App\Weixin2\Models\MassMsg\SendLog();
-        $modelMassMsgSendLog->record($massMsgInfo['component_appid'], $massMsgInfo['authorizer_appid'], $massMsgInfo['agentid'], $massMsgInfo['_id'], $massMsgInfo['name'], $massMsgInfo['msg_type'], $massMsgInfo['media'], $massMsgInfo['media_id'], $massMsgInfo['thumb_media'], $massMsgInfo['thumb_media_id'], $massMsgInfo['title'], $massMsgInfo['description'], $massMsgInfo['card_id'], $massMsgInfo['card_ext'], $massMsgInfo['upload_media_id'], $massMsgInfo['upload_media_created_at'], $massMsgInfo['upload_media_type'], $is_to_all, $tag_id, \json_encode($toUsers), $send_ignore_reprint, $clientmsgid, $match['_id'], $match['keyword'], $match['mass_msg_type'], "", "", $massmsg, $msg_id, $msg_data_id, time());
+        $modelMassMsgSendLog->record($massMsgInfo['component_appid'], $massMsgInfo['authorizer_appid'], $massMsgInfo['_id'], $massMsgInfo['name'], $massMsgInfo['msg_type'], $massMsgInfo['media'], $massMsgInfo['media_id'], $massMsgInfo['thumb_media'], $massMsgInfo['thumb_media_id'], $massMsgInfo['title'], $massMsgInfo['description'], $massMsgInfo['card_id'], $massMsgInfo['card_ext'], $massMsgInfo['upload_media_id'], $massMsgInfo['upload_media_created_at'], $massMsgInfo['upload_media_type'], $is_to_all, $tag_id, \json_encode($toUsers), $send_ignore_reprint, $clientmsgid, $match['_id'], $match['keyword'], $match['mass_msg_type'], "", "", $massmsg, $msg_id, $msg_data_id, time());
 
         return array(
             'is_ok' => true,
@@ -909,7 +907,7 @@ class WeixinService
 
         // 记录日志
         $modelReplyMsgSendLog = new \App\Weixin2\Models\ReplyMsg\SendLog();
-        $modelReplyMsgSendLog->record($replyMsgs[0]['component_appid'], $replyMsgs[0]['authorizer_appid'], $replyMsgs[0]['agentid'], $replyMsgs[0]['_id'], $replyMsgs[0]['name'], $replyMsgs[0]['msg_type'], $replyMsgs[0]['media'], $replyMsgs[0]['media_id'], $replyMsgs[0]['thumb_media'], $replyMsgs[0]['thumb_media_id'], $replyMsgs[0]['title'], $replyMsgs[0]['description'], $replyMsgs[0]['music'], $replyMsgs[0]['hqmusic'], $replyMsgs[0]['kf_account'], $match['_id'], $match['keyword'], $match['reply_msg_type'], $ToUserName, $FromUserName, $replymsg, time());
+        $modelReplyMsgSendLog->record($replyMsgs[0]['component_appid'], $replyMsgs[0]['authorizer_appid'], $replyMsgs[0]['_id'], $replyMsgs[0]['name'], $replyMsgs[0]['msg_type'], $replyMsgs[0]['media'], $replyMsgs[0]['media_id'], $replyMsgs[0]['thumb_media'], $replyMsgs[0]['thumb_media_id'], $replyMsgs[0]['title'], $replyMsgs[0]['description'], $replyMsgs[0]['music'], $replyMsgs[0]['hqmusic'], $replyMsgs[0]['kf_account'], $match['_id'], $match['keyword'], $match['reply_msg_type'], $ToUserName, $FromUserName, $replymsg, time());
 
         return $replymsg;
     }
@@ -1037,7 +1035,7 @@ class WeixinService
         }
         // 记录日志
         $modelCustomMsgSendLog = new \App\Weixin2\Models\CustomMsg\SendLog();
-        $modelCustomMsgSendLog->record($customMsgInfo['component_appid'], $customMsgInfo['authorizer_appid'], $customMsgInfo['agentid'], $customMsgInfo['_id'], $customMsgInfo['name'], $customMsgInfo['msg_type'], $customMsgInfo['media'], $customMsgInfo['media_id'], $customMsgInfo['thumb_media'], $customMsgInfo['thumb_media_id'], $customMsgInfo['title'], $customMsgInfo['description'], $customMsgInfo['music'], $customMsgInfo['hqmusic'], $customMsgInfo['appid'], $customMsgInfo['pagepath'], $customMsgInfo['card_id'], $customMsgInfo['card_ext'], $customMsgInfo['kf_account'], $match['_id'], $match['keyword'], $match['custom_msg_type'], $ToUserName, $FromUserName, $custommsg, time());
+        $modelCustomMsgSendLog->record($customMsgInfo['component_appid'], $customMsgInfo['authorizer_appid'], $customMsgInfo['_id'], $customMsgInfo['name'], $customMsgInfo['msg_type'], $customMsgInfo['media'], $customMsgInfo['media_id'], $customMsgInfo['thumb_media'], $customMsgInfo['thumb_media_id'], $customMsgInfo['title'], $customMsgInfo['description'], $customMsgInfo['music'], $customMsgInfo['hqmusic'], $customMsgInfo['appid'], $customMsgInfo['pagepath'], $customMsgInfo['card_id'], $customMsgInfo['card_ext'], $customMsgInfo['kf_account'], $match['_id'], $match['keyword'], $match['custom_msg_type'], $ToUserName, $FromUserName, $custommsg, time());
 
         return array(
             'is_ok' => true,
@@ -1121,7 +1119,7 @@ class WeixinService
          * ]
          * }
          */
-        $modelKfAccount->syncKfAccountList($this->authorizer_appid, $this->component_appid, $this->agentid, $res, time());
+        $modelKfAccount->syncKfAccountList($this->authorizer_appid, $this->component_appid, $res, time());
         return $res;
     }
 
@@ -1157,7 +1155,7 @@ class WeixinService
          * ]
          * }
          */
-        $modelKfAccount->syncOnlineKfAccountList($this->authorizer_appid, $this->component_appid, $this->agentid, $res, time());
+        $modelKfAccount->syncOnlineKfAccountList($this->authorizer_appid, $this->component_appid, $res, time());
         return $res;
     }
 
@@ -1220,7 +1218,7 @@ class WeixinService
          * }]
          * }
          */
-        $modelTemplate->syncTemplateList($this->authorizer_appid, $this->component_appid, $this->agentid, $res, time());
+        $modelTemplate->syncTemplateList($this->authorizer_appid, $this->component_appid, $res, time());
         return $res;
     }
 
@@ -1271,7 +1269,7 @@ class WeixinService
 
         // 记录日志
         $modelTemplateMsgSendLog = new \App\Weixin2\Models\TemplateMsg\SendLog();
-        $modelTemplateMsgSendLog->record($templateMsgInfo['component_appid'], $templateMsgInfo['authorizer_appid'], $templateMsgInfo['agentid'], $templateMsgInfo['_id'], $templateMsgInfo['name'], $templateMsgInfo['template_id'], $templateMsgInfo['url'], $templateMsgInfo['data'], $templateMsgInfo['color'], $templateMsgInfo['appid'], $templateMsgInfo['pagepath'], $match['_id'], $match['keyword'], $ToUserName, $FromUserName, $templatemsg, time());
+        $modelTemplateMsgSendLog->record($templateMsgInfo['component_appid'], $templateMsgInfo['authorizer_appid'], $templateMsgInfo['_id'], $templateMsgInfo['name'], $templateMsgInfo['template_id'], $templateMsgInfo['url'], $templateMsgInfo['data'], $templateMsgInfo['color'], $templateMsgInfo['appid'], $templateMsgInfo['pagepath'], $match['_id'], $match['keyword'], $ToUserName, $FromUserName, $templatemsg, time());
 
         return array(
             'is_ok' => true,
@@ -1369,7 +1367,7 @@ class WeixinService
          * "msgid":20165267
          * }
          */
-        $modelMsgRecord->syncMsgRecordList($this->authorizer_appid, $this->component_appid, $this->agentid, $res, time());
+        $modelMsgRecord->syncMsgRecordList($this->authorizer_appid, $this->component_appid, $res, time());
         return $res;
     }
 
@@ -1397,7 +1395,7 @@ class WeixinService
          * ]
          * }
          */
-        $modelDataCubeUserSummary->syncUserSummary($this->authorizer_appid, $this->component_appid, $this->agentid, $res, time());
+        $modelDataCubeUserSummary->syncUserSummary($this->authorizer_appid, $this->component_appid, $res, time());
         return $res;
     }
 
@@ -1423,7 +1421,7 @@ class WeixinService
          * ]
          * }
          */
-        $modelDataCubeUserCumulate->syncUserCumulate($this->authorizer_appid, $this->component_appid, $this->agentid, $res, time());
+        $modelDataCubeUserCumulate->syncUserCumulate($this->authorizer_appid, $this->component_appid, $res, time());
         return $res;
     }
 
@@ -1453,7 +1451,7 @@ class WeixinService
          * ]
          * }
          */
-        $modelDataCubeInterfaceSummary->syncInterfaceSummary($this->authorizer_appid, $this->component_appid, $this->agentid, $res, time());
+        $modelDataCubeInterfaceSummary->syncInterfaceSummary($this->authorizer_appid, $this->component_appid, $res, time());
         return $res;
     }
 
@@ -1484,7 +1482,7 @@ class WeixinService
          * ]
          * }
          */
-        $modelDataCubeInterfaceSummaryHour->syncInterfaceSummaryHour($this->authorizer_appid, $this->component_appid, $this->agentid, $res, time());
+        $modelDataCubeInterfaceSummaryHour->syncInterfaceSummaryHour($this->authorizer_appid, $this->component_appid, $res, time());
         return $res;
     }
 
@@ -1513,7 +1511,7 @@ class WeixinService
          * ]
          * }
          */
-        $modelDataCubeUpstreamMsg->syncUpstreamMsg($this->authorizer_appid, $this->component_appid, $this->agentid, $res, time());
+        $modelDataCubeUpstreamMsg->syncUpstreamMsg($this->authorizer_appid, $this->component_appid, $res, time());
         return $res;
     }
 
@@ -1543,7 +1541,7 @@ class WeixinService
          * ]
          * }
          */
-        $modelDataCubeUpstreamMsgHour->syncUpstreamMsgHour($this->authorizer_appid, $this->component_appid, $this->agentid, $res, time());
+        $modelDataCubeUpstreamMsgHour->syncUpstreamMsgHour($this->authorizer_appid, $this->component_appid, $res, time());
         return $res;
     }
 
@@ -1572,7 +1570,7 @@ class WeixinService
          * ]
          * }
          */
-        $modelDataCubeUpstreamMsgWeek->syncUpstreamMsgWeek($this->authorizer_appid, $this->component_appid, $this->agentid, $res, time());
+        $modelDataCubeUpstreamMsgWeek->syncUpstreamMsgWeek($this->authorizer_appid, $this->component_appid, $res, time());
         return $res;
     }
 
@@ -1601,7 +1599,7 @@ class WeixinService
          * ]
          * }
          */
-        $modelDataCubeUpstreamMsgMonth->syncUpstreamMsgMonth($this->authorizer_appid, $this->component_appid, $this->agentid, $res, time());
+        $modelDataCubeUpstreamMsgMonth->syncUpstreamMsgMonth($this->authorizer_appid, $this->component_appid, $res, time());
         return $res;
     }
 
@@ -1629,7 +1627,7 @@ class WeixinService
          * ]
          * }
          */
-        $modelDataCubeUpstreamMsgDist->syncUpstreamMsgDist($this->authorizer_appid, $this->component_appid, $this->agentid, $res, time());
+        $modelDataCubeUpstreamMsgDist->syncUpstreamMsgDist($this->authorizer_appid, $this->component_appid, $res, time());
         return $res;
     }
 
@@ -1657,7 +1655,7 @@ class WeixinService
          * ]
          * }
          */
-        $modelDataCubeUpstreamMsgDistHour->syncUpstreamMsgDistHour($this->authorizer_appid, $this->component_appid, $this->agentid, $res, time());
+        $modelDataCubeUpstreamMsgDistHour->syncUpstreamMsgDistHour($this->authorizer_appid, $this->component_appid, $res, time());
         return $res;
     }
 
@@ -1684,7 +1682,7 @@ class WeixinService
          * ]
          * }
          */
-        $modelDataCubeUpstreamMsgDistWeek->syncUpstreamMsgDistWeek($this->authorizer_appid, $this->component_appid, $this->agentid, $res, time());
+        $modelDataCubeUpstreamMsgDistWeek->syncUpstreamMsgDistWeek($this->authorizer_appid, $this->component_appid, $res, time());
         return $res;
     }
 
@@ -1711,7 +1709,7 @@ class WeixinService
          * ]
          * }
          */
-        $modelDataCubeUpstreamMsgDistMonth->syncUpstreamMsgDistMonth($this->authorizer_appid, $this->component_appid, $this->agentid, $res, time());
+        $modelDataCubeUpstreamMsgDistMonth->syncUpstreamMsgDistMonth($this->authorizer_appid, $this->component_appid, $res, time());
         return $res;
     }
 
@@ -1747,7 +1745,7 @@ class WeixinService
          * ]
          * }
          */
-        $modelDataCubeArticleSummary->syncArticleSummary($this->authorizer_appid, $this->component_appid, $this->agentid, $res, time());
+        $modelDataCubeArticleSummary->syncArticleSummary($this->authorizer_appid, $this->component_appid, $res, time());
         return $res;
     }
 
@@ -1803,7 +1801,7 @@ class WeixinService
          * ]
          * }
          */
-        $modelDataCubeArticleTotal->syncArticleTotal($this->authorizer_appid, $this->component_appid, $this->agentid, $res, time());
+        $modelDataCubeArticleTotal->syncArticleTotal($this->authorizer_appid, $this->component_appid, $res, time());
         return $res;
     }
 
@@ -1836,7 +1834,7 @@ class WeixinService
          * ]
          * }
          */
-        $modelDataCubeUserRead->syncUserRead($this->authorizer_appid, $this->component_appid, $this->agentid, $res, time());
+        $modelDataCubeUserRead->syncUserRead($this->authorizer_appid, $this->component_appid, $res, time());
         return $res;
     }
 
@@ -1912,7 +1910,7 @@ class WeixinService
          * ]
          * }
          */
-        $modelDataCubeUserReadHour->syncUserReadHour($this->authorizer_appid, $this->component_appid, $this->agentid, $res, time());
+        $modelDataCubeUserReadHour->syncUserReadHour($this->authorizer_appid, $this->component_appid, $res, time());
         return $res;
     }
 
@@ -1946,7 +1944,7 @@ class WeixinService
          * ]
          * }
          */
-        $modelDataCubeUserShare->syncUserShare($this->authorizer_appid, $this->component_appid, $this->agentid, $res, time());
+        $modelDataCubeUserShare->syncUserShare($this->authorizer_appid, $this->component_appid, $res, time());
         return $res;
     }
 
@@ -1975,7 +1973,7 @@ class WeixinService
          * ]
          * }
          */
-        $modelDataCubeUserShareHour->syncUserShareHour($this->authorizer_appid, $this->component_appid, $this->agentid, $res, time());
+        $modelDataCubeUserShareHour->syncUserShareHour($this->authorizer_appid, $this->component_appid, $res, time());
         return $res;
     }
 
@@ -2046,10 +2044,10 @@ class WeixinService
          */
         $now = time();
         $modelCommentLog = new \App\Weixin2\Models\Comment\Log();
-        $modelCommentLog->syncCommentList($commentInfo['authorizer_appid'], $commentInfo['component_appid'], $commentInfo['agentid'], $commentInfo['msg_data_id'], $commentInfo['index'], $res, $now);
+        $modelCommentLog->syncCommentList($commentInfo['authorizer_appid'], $commentInfo['component_appid'], $commentInfo['msg_data_id'], $commentInfo['index'], $res, $now);
 
         $modelCommentReplyLog = new \App\Weixin2\Models\Comment\ReplyLog();
-        $modelCommentReplyLog->syncReplyList($commentInfo['authorizer_appid'], $commentInfo['component_appid'], $commentInfo['agentid'], $commentInfo['msg_data_id'], $commentInfo['index'], $res, $now);
+        $modelCommentReplyLog->syncReplyList($commentInfo['authorizer_appid'], $commentInfo['component_appid'], $commentInfo['msg_data_id'], $commentInfo['index'], $res, $now);
 
         return $res;
     }

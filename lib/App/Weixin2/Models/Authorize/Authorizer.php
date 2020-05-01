@@ -5,14 +5,12 @@ namespace App\Weixin2\Models\Authorize;
 class Authorizer extends \App\Common\Models\Weixin2\Authorize\Authorizer
 {
 
-    //应用类型 1:公众号 2:小程序 3:企业号 4:订阅号
+    //应用类型 1:公众号 2:小程序 3:订阅号
     const APPTYPE_PUB = 1;
 
     const APPTYPE_MICROAPP = 2;
 
-    const APPTYPE_QY = 3;
-
-    const APPTYPE_SUB = 4;
+    const APPTYPE_SUB = 3;
 
     /**
      * 获取应用的信息

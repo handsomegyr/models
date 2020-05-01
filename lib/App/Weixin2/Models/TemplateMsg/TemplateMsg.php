@@ -15,12 +15,12 @@ class TemplateMsg extends \App\Common\Models\Weixin2\TemplateMsg\TemplateMsg
     {
         if (!empty($match['template_msg_ids'])) {
             $template_msg_ids = implode("_", $match['template_msg_ids']);
-            $cacheKey = "template_msg:template_msg_ids:{$template_msg_ids}:authorizer_appid:{$match['authorizer_appid']}:component_appid:{$match['component_appid']}:agentid:{$match['agentid']}";
+            $cacheKey = "template_msg:template_msg_ids:{$template_msg_ids}:authorizer_appid:{$match['authorizer_appid']}:component_appid:{$match['component_appid']}}";
             $cacheKey = cacheKey(__FILE__, __CLASS__, $cacheKey);
             $cache = $this->getDI()->get('cache');
             $rst = $cache->get($cacheKey);
             if (true || empty($rst)) {
-                $rst = $this->getListByIdsAndTemplateMsgType($match['template_msg_ids'], $match['authorizer_appid'], $match['component_appid'], $match['agentid']);
+                $rst = $this->getListByIdsAndTemplateMsgType($match['template_msg_ids'], $match['authorizer_appid'], $match['component_appid']);
                 if (!empty($rst)) {
                     // 加缓存处理
                     $expire_time = 5 * 60;
@@ -33,11 +33,10 @@ class TemplateMsg extends \App\Common\Models\Weixin2\TemplateMsg\TemplateMsg
         }
     }
 
-    public function getListByIdsAndTemplateMsgType($ids, $authorizer_appid, $component_appid, $agentid)
+    public function getListByIdsAndTemplateMsgType($ids, $authorizer_appid, $component_appid)
     {
         $ret = $this->findAll(array(
             '_id' => array('$in' => $ids),
-            'agentid' => $agentid,
             'authorizer_appid' => $authorizer_appid,
             'component_appid' => $component_appid
         ), array('priority' => -1, '_id' => -1));

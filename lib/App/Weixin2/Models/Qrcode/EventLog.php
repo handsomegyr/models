@@ -8,12 +8,11 @@ class EventLog extends \App\Common\Models\Weixin2\Qrcode\EventLog
     /**
      * 记录日志
      */
-    public function record($authorizer_appid, $component_appid, $agentid, $scene, $FromUserName, $ToUserName, $CreateTime, $MsgType, $Event, $EventKey, $Ticket)
+    public function record($authorizer_appid, $component_appid, $scene, $FromUserName, $ToUserName, $CreateTime, $MsgType, $Event, $EventKey, $Ticket)
     {
         $datas = array(
             'component_appid' => $component_appid,
             'authorizer_appid' => $authorizer_appid,
-            'agentid' => $agentid,
             'scene' => $scene,
             'ToUserName' => $ToUserName,
             'FromUserName' => $FromUserName,

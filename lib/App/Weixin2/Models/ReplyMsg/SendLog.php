@@ -8,12 +8,11 @@ class SendLog extends \App\Common\Models\Weixin2\ReplyMsg\SendLog
     /**
      * 记录
      */
-    public function record($component_appid, $authorizer_appid, $agentid, $reply_msg_id, $reply_msg_name, $msg_type, $media, $media_id, $thumb_media, $thumb_media_id, $title, $description, $music, $hqmusic, $kf_account, $keyword_id, $keyword, $keyword_reply_msg_type, $ToUserName, $FromUserName, $reply_msg_content, $log_time)
+    public function record($component_appid, $authorizer_appid, $reply_msg_id, $reply_msg_name, $msg_type, $media, $media_id, $thumb_media, $thumb_media_id, $title, $description, $music, $hqmusic, $kf_account, $keyword_id, $keyword, $keyword_reply_msg_type, $ToUserName, $FromUserName, $reply_msg_content, $log_time)
     {
         $datas = array(
             'component_appid' => $component_appid,
             'authorizer_appid' => $authorizer_appid,
-            'agentid' => $agentid,
             'reply_msg_id' => empty($reply_msg_id) ? 0 : $reply_msg_id,
             'reply_msg_name' => empty($reply_msg_name) ? "" : $reply_msg_name,
             'msg_type' => empty($msg_type) ? "" : $msg_type,

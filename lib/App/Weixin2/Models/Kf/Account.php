@@ -10,10 +10,9 @@ class Account extends \App\Common\Models\Weixin2\Kf\Account
      *
      * @param string $kf_account            
      * @param string $authorizer_appid            
-     * @param string $component_appid            
-     * @param string $agentid            
+     * @param string $component_appid          
      */
-    public function getInfoByKfAccount($kf_account, $authorizer_appid, $component_appid, $agentid)
+    public function getInfoByKfAccount($kf_account, $authorizer_appid, $component_appid)
     {
         $info = $this->findOne(array(
             'kf_account' => $kf_account,
@@ -38,11 +37,11 @@ class Account extends \App\Common\Models\Weixin2\Kf\Account
         return $this->update(array('_id' => $id), array('$set' => $updateData));
     }
 
-    public function syncKfAccountList($authorizer_appid, $component_appid, $agentid, $res, $now)
+    public function syncKfAccountList($authorizer_appid, $component_appid, $res, $now)
     {
         if (!empty($res['kf_list'])) {
             foreach ($res['kf_list'] as $item) {
-                $info = $this->getInfoByKfAccount($item['kf_account'], $authorizer_appid, $component_appid, $agentid);
+                $info = $this->getInfoByKfAccount($item['kf_account'], $authorizer_appid, $component_appid);
                 $data = array();
                 // [kf_account] => frank@it_intone
                 // [kf_headimgurl] =>
@@ -72,7 +71,6 @@ class Account extends \App\Common\Models\Weixin2\Kf\Account
                 } else {
                     $data['authorizer_appid'] = $authorizer_appid;
                     $data['component_appid'] = $component_appid;
-                    $data['agentid'] = $agentid;
                     $data['kf_account'] = $item['kf_account'];
                     $this->insert($data);
                 }
@@ -80,11 +78,11 @@ class Account extends \App\Common\Models\Weixin2\Kf\Account
         }
     }
 
-    public function syncOnlineKfAccountList($authorizer_appid, $component_appid, $agentid, $res, $now)
+    public function syncOnlineKfAccountList($authorizer_appid, $component_appid, $res, $now)
     {
         if (!empty($res['kf_online_list'])) {
             foreach ($res['kf_online_list'] as $item) {
-                $info = $this->getInfoByKfAccount($item['kf_account'], $authorizer_appid, $component_appid, $agentid);
+                $info = $this->getInfoByKfAccount($item['kf_account'], $authorizer_appid, $component_appid);
                 $data = array();
                 /**
                  * "kf_account" :"test1@test" ,
@@ -103,7 +101,6 @@ class Account extends \App\Common\Models\Weixin2\Kf\Account
                 } else {
                     $data['authorizer_appid'] = $authorizer_appid;
                     $data['component_appid'] = $component_appid;
-                    $data['agentid'] = $agentid;
                     $data['kf_account'] = $item['kf_account'];
                     $this->insert($data);
                 }

@@ -12,13 +12,12 @@ class BlackUser extends \App\Common\Models\Weixin2\User\BlackUser
      * @param string $authorizer_appid            
      * @param string $component_appid            
      */
-    public function getInfoByOpenid($openid, $authorizer_appid, $component_appid, $agentid)
+    public function getInfoByOpenid($openid, $authorizer_appid, $component_appid)
     {
         $info = $this->findOne(array(
             'openid' => $openid,
             'authorizer_appid' => $authorizer_appid,
-            'component_appid' => $component_appid,
-            'agentid' => $agentid
+            'component_appid' => $component_appid
         ));
         return $info;
     }
@@ -39,11 +38,11 @@ class BlackUser extends \App\Common\Models\Weixin2\User\BlackUser
         return $this->update(array('_id' => $id), array('$set' => $updateData));
     }
 
-    public function syncBlackList($authorizer_appid, $component_appid, $agentid, $res, $now)
+    public function syncBlackList($authorizer_appid, $component_appid, $res, $now)
     {
         if (!empty($res['data']['openid'])) {
             foreach ($res['data']['openid'] as $openid) {
-                $info = $this->getInfoByOpenid($openid, $authorizer_appid, $component_appid, $agentid);
+                $info = $this->getInfoByOpenid($openid, $authorizer_appid, $component_appid);
                 $data = array();
                 $data['is_black'] = 1;
                 $data['black_time'] = \App\Common\Utils\Helper::getCurrentTime($now);
@@ -52,7 +51,6 @@ class BlackUser extends \App\Common\Models\Weixin2\User\BlackUser
                 } else {
                     $data['authorizer_appid'] = $authorizer_appid;
                     $data['component_appid'] = $component_appid;
-                    $data['agentid'] = $agentid;
                     $data['openid'] = $openid;
                     $this->insert($data);
                 }
