@@ -177,18 +177,20 @@ class Authorizer extends \App\Common\Models\Weixin2\Authorize\Authorizer
     private function refreshInfo($token)
     {
         if (empty($token['access_token_expire']) || strtotime($token['access_token_expire']) <= time()) {
-            if (!empty($token['component_appid']) && !empty($token['refresh_token']) && !empty($token['appid'])) {
+            if (!empty($token['refresh_token']) && !empty($token['appid'])) {
                 $lockKey = cacheKey(__FILE__, __CLASS__, __METHOD__, __LINE__, $token['component_appid'], $token['appid']);
                 $objLock = new \iLock($lockKey);
                 if (!$objLock->lock()) {
-                    $modelComponent = new \App\Weixin2\Models\Component\Component();
-                    $componentInfo = $modelComponent->getInfoByAppId($token['component_appid'], true);
                     // 如果是微信开放平台的话
-                    if (!empty($componentInfo['is_weixin_open_platform'])) {
-                        $objToken = new \Weixin\Component($componentInfo['appid'], $componentInfo['appsecret']);
-                        $objToken->setAccessToken($componentInfo['access_token']);
-                        $arrToken = $objToken->apiAuthorizerToken($token['appid'], $token['refresh_token']);
-                        $token = $this->updateAccessToken($token['_id'], $arrToken['authorizer_access_token'], $arrToken['authorizer_refresh_token'], $arrToken['expires_in'], null);
+                    if (!empty($token['component_appid'])) {
+                        $modelComponent = new \App\Weixin2\Models\Component\Component();
+                        $componentInfo = $modelComponent->getInfoByAppId($token['component_appid'], true);
+                        if (!empty($componentInfo)) {
+                            $objToken = new \Weixin\Component($componentInfo['appid'], $componentInfo['appsecret']);
+                            $objToken->setAccessToken($componentInfo['access_token']);
+                            $arrToken = $objToken->apiAuthorizerToken($token['appid'], $token['refresh_token']);
+                            $token = $this->updateAccessToken($token['_id'], $arrToken['authorizer_access_token'], $arrToken['authorizer_refresh_token'], $arrToken['expires_in'], null);
+                        }
                     } else {
                         // 如果不是微信开放平台的话
                         $objToken = new \Weixin\Token\Server($token['appid'], $token['appsecret']);
