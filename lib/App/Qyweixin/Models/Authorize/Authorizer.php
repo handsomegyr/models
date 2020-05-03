@@ -101,7 +101,9 @@ class Authorizer extends \App\Common\Models\Qyweixin\Authorize\Authorizer
         $updateData = array();
         $updateData['access_token'] = $access_token;
         $updateData['refresh_token'] = $refresh_token;
-        $updateData['permanent_code'] = $permanent_code;
+        if (!empty($permanent_code)) {
+            $updateData['permanent_code'] = $permanent_code;
+        }
         $updateData['access_token_expire'] = \App\Common\Utils\Helper::getCurrentTime(time() + $expires_in);
         if (!empty($extInfo)) {
             if (!empty($extInfo['dealer_corp_info'])) {
@@ -233,20 +235,20 @@ class Authorizer extends \App\Common\Models\Qyweixin\Authorize\Authorizer
                 $lockKey = cacheKey(__FILE__, __CLASS__, __METHOD__, __LINE__, $token['provider_appid'], $token['appid']);
                 $objLock = new \iLock($lockKey);
                 if (!$objLock->lock()) {
+                    // 第3方应用的时候
                     if (!empty($token['provider_appid'])) {
-                        $modelProvider = new \App\Qyweixin\Models\Provider\Provider();
-                        $providerInfo = $modelProvider->getInfoByAppId($token['provider_appid'], true);
-                        $objToken = new \Weixin\Component($providerInfo['appid'], $providerInfo['appsecret']);
-                        $objToken->setAccessToken($providerInfo['access_token']);
-                        $arrToken = $objToken->apiAuthorizerToken($token['appid'], $token['refresh_token']);
-                        $token = $this->updateAccessToken($token['_id'], $arrToken['authorizer_access_token'], $arrToken['authorizer_refresh_token'], $arrToken['expires_in'], "", null);
+                        if (!empty($token['suite_access_token']) && !empty($token['permanent_code']) && !empty($token['auth_corpid'])) {
+                            $objToken = new \Weixin\Qy\Service();
+                            $arrToken = $objToken->getCorpToken($token['suite_access_token'], $token['auth_corpid'], $token['permanent_code']);
+                            $token = $this->updateAccessToken($token['_id'], $arrToken['access_token'], $arrToken['access_token'], $arrToken['expires_in'], "", null);
+                        }
                     } else {
-                        // $objToken = new \Weixin\Qy\Server($token['appid'], $token['appsecret']);
-                        // $arrToken = $objToken->getAccessToken();
-                        // if (!isset($arrToken['access_token'])) {
-                        //     throw new \Exception(json_encode($arrToken));
-                        // }
-                        // $token = $this->updateAccessToken($token['_id'], $arrToken['access_token'], $arrToken['refresh_token'], $arrToken['expires_in'], null);
+                        $objToken = new \Weixin\Qy\Token\Server($token['appid'], $token['appsecret']);
+                        $arrToken = $objToken->getAccessToken();
+                        if (!isset($arrToken['access_token'])) {
+                            throw new \Exception(\json_encode($arrToken));
+                        }
+                        $token = $this->updateAccessToken($token['_id'], $arrToken['access_token'], $arrToken['access_token'], $arrToken['expires_in'], "", null);
                     }
                 }
             }
