@@ -56,11 +56,11 @@ class QyService
         return $this->providerConfig;
     }
 
-    public function getWeixinProvider()
+    public function getQyweixinProvider()
     {
         $this->getToken4Provider();
 
-        $this->objQyWeixinProvider = new \Weixin\Qy\Service($this->providerConfig['appid'], $this->providerConfig['appsecret']);
+        $this->objQyWeixinProvider = new \Weixin\Qy\Service();
         if (!empty($this->providerConfig['access_token'])) {
             $this->objQyWeixinProvider->setAccessToken($this->providerConfig['access_token']);
         }
@@ -129,7 +129,7 @@ class QyService
         if (empty($authorizerInfo)) {
             throw new \Exception("对应的授权方不存在");
         }
-        $res = $this->getWeixinProvider()->apiGetAuthorizerInfo($this->authorizer_appid);
+        $res = $this->getQyweixinProvider()->apiGetAuthorizerInfo($this->authorizer_appid);
         $modelAuthorizer->updateAuthorizerInfo($authorizerInfo['id'], $res, $authorizerInfo['memo']);
         return $res;
     }

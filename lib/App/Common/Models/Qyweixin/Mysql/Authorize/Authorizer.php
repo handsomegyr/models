@@ -23,6 +23,8 @@ class Authorizer extends Base
         $data['jsapi_ticket_expire'] = $this->changeToMongoDate($data['jsapi_ticket_expire']);
         $data['wx_card_api_ticket_expire'] = $this->changeToMongoDate($data['wx_card_api_ticket_expire']);
 
+        $data['suite_access_token_expire'] = $this->changeToMongoDate($data['suite_access_token_expire']);
+
         return $data;
     }
 }

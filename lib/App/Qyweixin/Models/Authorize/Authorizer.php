@@ -53,7 +53,7 @@ class Authorizer extends \App\Common\Models\Qyweixin\Authorize\Authorizer
         return $token;
     }
 
-    public function createAndUpdateAuthorizer($provider_appid, $appid, $access_token, $refresh_token, $expires_in, $func_info, $memo = array())
+    public function createAndUpdateAuthorizer($provider_appid, $appid, $access_token, $refresh_token, $expires_in, $permanent_code, $extInfo, $memo = array())
     {
         $lockKey = $this->getCacheKey4Appid($provider_appid, $appid);
         $objLock = new \iLock($lockKey);
@@ -67,25 +67,61 @@ class Authorizer extends \App\Common\Models\Qyweixin\Authorize\Authorizer
                     'access_token' => $access_token,
                     'access_token_expire' => \App\Common\Utils\Helper::getCurrentTime(time() + $expires_in),
                     'refresh_token' => $refresh_token,
-                    'func_info' => \json_encode($func_info),
+                    'permanent_code' => $permanent_code,
                     'memo' => $memo
                 );
+                if (!empty($extInfo['dealer_corp_info'])) {
+                    $datas['dealer_corp_info'] = \json_encode($extInfo['dealer_corp_info']);
+                }
+                if (!empty($extInfo['auth_corp_info'])) {
+                    $datas['auth_corp_info'] = \json_encode($extInfo['auth_corp_info']);
+                }
+                if (!empty($extInfo['auth_info'])) {
+                    $datas['auth_info'] = \json_encode($extInfo['auth_info']);
+                }
+                if (!empty($extInfo['auth_user_info'])) {
+                    $datas['auth_user_info'] = \json_encode($extInfo['auth_user_info']);
+                }
+                if (!empty($extInfo['register_code_info'])) {
+                    $datas['register_code_info'] = \json_encode($extInfo['register_code_info']);
+                }
+                if (!empty($extInfo['admin'])) {
+                    $datas['admin_list'] = \json_encode($extInfo['admin']);
+                }
                 return $this->insert($datas);
             } else {
                 $memo = array_merge($token['memo'], $memo);
-                return $this->updateAccessToken($token['_id'], $access_token, $refresh_token, $expires_in, $func_info, $memo);
+                return $this->updateAccessToken($token['_id'], $access_token, $refresh_token, $expires_in, $permanent_code, $extInfo, $memo);
             }
         }
     }
 
-    public function updateAccessToken($id, $access_token, $refresh_token, $expires_in, $func_info, $memo = array())
+    public function updateAccessToken($id, $access_token, $refresh_token, $expires_in, $permanent_code, $extInfo, $memo = array())
     {
         $updateData = array();
         $updateData['access_token'] = $access_token;
         $updateData['refresh_token'] = $refresh_token;
+        $updateData['permanent_code'] = $permanent_code;
         $updateData['access_token_expire'] = \App\Common\Utils\Helper::getCurrentTime(time() + $expires_in);
-        if (!empty($func_info)) {
-            $updateData['func_info'] = \json_encode($func_info);
+        if (!empty($extInfo)) {
+            if (!empty($extInfo['dealer_corp_info'])) {
+                $datas['dealer_corp_info'] = \json_encode($extInfo['dealer_corp_info']);
+            }
+            if (!empty($extInfo['auth_corp_info'])) {
+                $datas['auth_corp_info'] = \json_encode($extInfo['auth_corp_info']);
+            }
+            if (!empty($extInfo['auth_info'])) {
+                $datas['auth_info'] = \json_encode($extInfo['auth_info']);
+            }
+            if (!empty($extInfo['auth_user_info'])) {
+                $datas['auth_user_info'] = \json_encode($extInfo['auth_user_info']);
+            }
+            if (!empty($extInfo['register_code_info'])) {
+                $datas['register_code_info'] = \json_encode($extInfo['register_code_info']);
+            }
+            if (!empty($extInfo['admin'])) {
+                $datas['admin_list'] = \json_encode($extInfo['admin']);
+            }
         }
         if (!empty($memo)) {
             $updateData["memo"] = $memo;
@@ -158,6 +194,26 @@ class Authorizer extends \App\Common\Models\Qyweixin\Authorize\Authorizer
         return $affectRows;
     }
 
+    public function updateSuiteAccessToken($id, $suite_access_token, $expires_in, $suite_ticket, $memo = array())
+    {
+        $updateData = array();
+        $updateData['suite_access_token'] = $suite_access_token;
+        $updateData['suite_access_token_expire'] = \App\Common\Utils\Helper::getCurrentTime(time() + $expires_in);
+        $updateData['suite_ticket'] = $suite_ticket;
+        if (!empty($memo)) {
+            $updateData["memo"] = $memo;
+        }
+        $affectRows = $this->update(array('_id' => $id), array('$set' => $updateData));
+        // 重新获取数据
+        $newInfo = $this->getInfoById($id);
+        if (!empty($newInfo)) {
+            $expire_time = 5 * 60;
+            $cache = $this->getDI()->get('cache');
+            $cache->save($this->getCacheKey4Appid($newInfo['provider_appid'], $newInfo['appid']), $newInfo, $expire_time);
+        }
+        return $newInfo;
+    }
+
     public function getSignKey($openid, $secretKey, $timestamp = 0)
     {
         return sha1($openid . "|" . $secretKey . "|" . $timestamp);
@@ -183,7 +239,7 @@ class Authorizer extends \App\Common\Models\Qyweixin\Authorize\Authorizer
                         $objToken = new \Weixin\Component($providerInfo['appid'], $providerInfo['appsecret']);
                         $objToken->setAccessToken($providerInfo['access_token']);
                         $arrToken = $objToken->apiAuthorizerToken($token['appid'], $token['refresh_token']);
-                        $token = $this->updateAccessToken($token['_id'], $arrToken['authorizer_access_token'], $arrToken['authorizer_refresh_token'], $arrToken['expires_in'], null);
+                        $token = $this->updateAccessToken($token['_id'], $arrToken['authorizer_access_token'], $arrToken['authorizer_refresh_token'], $arrToken['expires_in'], "", null);
                     } else {
                         // $objToken = new \Weixin\Qy\Server($token['appid'], $token['appsecret']);
                         // $arrToken = $objToken->getAccessToken();
