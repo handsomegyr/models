@@ -122,6 +122,16 @@ class QyService
         return $agentInfo;
     }
 
+    public function getAccessToken4Authorizer()
+    {
+        $modelAuthorizer = new \App\Qyweixin\Models\Authorize\Authorizer();
+        $authorizerInfo = $modelAuthorizer->getTokenByAppid($this->provider_appid, $this->authorizer_appid);
+        if (empty($authorizerInfo)) {
+            throw new \Exception("对应的授权方不存在");
+        }
+        return $authorizerInfo;
+    }
+
     public function getAuthorizerInfo()
     {
         $modelAuthorizer = new \App\Qyweixin\Models\Authorize\Authorizer();

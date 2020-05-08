@@ -17,14 +17,14 @@ class User extends \App\Common\Models\Weixin2\User\User
      *
      * @param string $userid            
      * @param string $authorizer_appid            
-     * @param string $component_appid            
+     * @param string $provider_appid            
      */
-    public function getInfoByUserId($userid, $authorizer_appid, $component_appid)
+    public function getInfoByUserId($userid, $authorizer_appid, $provider_appid)
     {
         $info = $this->findOne(array(
             'userid' => $userid,
             'authorizer_appid' => $authorizer_appid,
-            'component_appid' => $component_appid
+            'provider_appid' => $provider_appid
         ));
         return $info;
     }
@@ -34,13 +34,13 @@ class User extends \App\Common\Models\Weixin2\User\User
      *
      * @param string $userid            
      * @param string $authorizer_appid            
-     * @param string $component_appid            
+     * @param string $provider_appid            
      * @param array $userInfo            
      */
-    public function updateUserInfoBySns($userid, $authorizer_appid, $component_appid, $userInfo)
+    public function updateUserInfoBySns($userid, $authorizer_appid, $provider_appid, $userInfo)
     {
-        $checkInfo = $this->getInfoByUserId($userid, $authorizer_appid, $component_appid);
-        $data = $this->getPrepareData($userInfo, $authorizer_appid, $component_appid, $checkInfo);
+        $checkInfo = $this->getInfoByUserId($userid, $authorizer_appid, $provider_appid);
+        $data = $this->getPrepareData($userInfo, $authorizer_appid, $provider_appid, $checkInfo);
         if (!empty($checkInfo)) {
             $affectRows = $this->update(array('_id' => $checkInfo['_id']), array('$set' => $data));
             return $affectRows;
@@ -54,14 +54,14 @@ class User extends \App\Common\Models\Weixin2\User\User
      *
      * @param string $userid            
      * @param string $authorizer_appid            
-     * @param string $component_appid            
+     * @param string $provider_appid            
      */
-    public function getUserInfoByIdLastWeek($userid, $authorizer_appid, $component_appid, $now)
+    public function getUserInfoByIdLastWeek($userid, $authorizer_appid, $provider_appid, $now)
     {
         $info = $this->findOne(array(
             'userid' => $userid,
             'authorizer_appid' => $authorizer_appid,
-            'component_appid' =>  $component_appid,
+            'provider_appid' =>  $provider_appid,
             'updated_at' => array('$gt' => \App\Common\Utils\Helper::getCurrentTime($now - 7 * 86400))
         ));
         return $info;
@@ -71,9 +71,9 @@ class User extends \App\Common\Models\Weixin2\User\User
      * 根据用户的互动行为，通过服务器端token获取该用户的个人信息
      * userid不存在或者随机100次执行一次更新用户信息
      */
-    public function updateUserInfoByAction($userid, $authorizer_appid, $component_appid, $range = true)
+    public function updateUserInfoByAction($userid, $authorizer_appid, $provider_appid, $range = true)
     {
-        $checkInfo = $this->getInfoByUserId($userid, $authorizer_appid, $component_appid);
+        $checkInfo = $this->getInfoByUserId($userid, $authorizer_appid, $provider_appid);
         // $range = (rand(0, 100) === 1);
         if (empty($checkInfo) || $range) { // || empty($checkInfo['subscribe'])
             try {
@@ -84,7 +84,7 @@ class User extends \App\Common\Models\Weixin2\User\User
                 $userInfo['error_msg'] = $e->getMessage();
             }
 
-            $data = $this->getPrepareData($userInfo, $authorizer_appid, $component_appid, $checkInfo);
+            $data = $this->getPrepareData($userInfo, $authorizer_appid, $provider_appid, $checkInfo);
 
             if (!empty($checkInfo)) {
                 $affectRows = $this->update(array('_id' => $checkInfo['_id']), array('$set' => $data));
@@ -99,17 +99,17 @@ class User extends \App\Common\Models\Weixin2\User\User
     public function updateUserInfoById($checkInfo, $userInfo)
     {
         $authorizer_appid = $checkInfo['authorizer_appid'];
-        $component_appid = $checkInfo['component_appid'];
-        $data = $this->getPrepareData($userInfo, $authorizer_appid, $component_appid, $checkInfo);
+        $provider_appid = $checkInfo['provider_appid'];
+        $data = $this->getPrepareData($userInfo, $authorizer_appid, $provider_appid, $checkInfo);
         return $this->update(array('_id' => $checkInfo['_id']), array('$set' => $data));
     }
 
-    private function getPrepareData($userInfo, $authorizer_appid, $component_appid, $checkInfo)
+    private function getPrepareData($userInfo, $authorizer_appid, $provider_appid, $checkInfo)
     {
         if (empty($checkInfo)) {
             $data = array();
             $data['authorizer_appid'] = $authorizer_appid;
-            $data['component_appid'] = $component_appid;
+            $data['provider_appid'] = $provider_appid;
             $data['userid'] = isset($userInfo['userid']) ? $userInfo['userid'] : '';
             $data['name'] = isset($userInfo['name']) ? $userInfo['name'] : '';
             $data['gender'] = isset($userInfo['gender']) ? $userInfo['gender'] : '0';
@@ -128,7 +128,7 @@ class User extends \App\Common\Models\Weixin2\User\User
             $data['is_leader_in_dept'] = isset($userInfo['is_leader_in_dept']) ? \json_encode($userInfo['is_leader_in_dept']) : '';
             $data['order'] = isset($userInfo['order']) ? \json_encode($userInfo['order']) : '';
             $data['open_userid'] = isset($userInfo['open_userid']) ? $userInfo['open_userid'] : '';
-            $data['hide_mobile'] = isset($userInfo['hide_mobile']) ? $userInfo['hide_mobile'] : '';
+            $data['hide_mobile'] = isset($userInfo['hide_mobile']) ? $userInfo['hide_mobile'] : '0';
             $data['english_name'] = isset($userInfo['english_name']) ? $userInfo['english_name'] : '';
             $data['mobile'] = isset($userInfo['mobile']) ? $userInfo['mobile'] : '';
             $data['avatar_mediaid_recid'] = isset($userInfo['avatar_mediaid_recid']) ? $userInfo['avatar_mediaid_recid'] : '0';
@@ -138,7 +138,7 @@ class User extends \App\Common\Models\Weixin2\User\User
             $data['external_position'] = isset($userInfo['external_position']) ? \json_encode($userInfo['external_position']) : '';
             $data['address'] = isset($userInfo['address']) ? $userInfo['address'] : '';
             $data['main_department'] = isset($userInfo['main_department']) ? $userInfo['main_department'] : '';
-            
+
             $data['session_key'] = isset($userInfo['session_key']) ? $userInfo['session_key'] : '';
             $data['oss_headimgurl'] = isset($userInfo['oss_headimgurl']) ? $userInfo['oss_headimgurl'] : '';
             $data['access_token'] = isset($userInfo['access_token']) ? \json_encode($userInfo['access_token']) : '';

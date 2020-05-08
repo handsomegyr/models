@@ -231,7 +231,7 @@ class Authorizer extends \App\Common\Models\Qyweixin\Authorize\Authorizer
     private function refreshInfo($token)
     {
         if (empty($token['access_token_expire']) || strtotime($token['access_token_expire']) <= time()) {
-            if (!empty($token['refresh_token']) && !empty($token['appid'])) {
+            if (!empty($token['appid'])) {
                 $lockKey = cacheKey(__FILE__, __CLASS__, __METHOD__, __LINE__, $token['provider_appid'], $token['appid']);
                 $objLock = new \iLock($lockKey);
                 if (!$objLock->lock()) {
