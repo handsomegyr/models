@@ -59,53 +59,7 @@ class Log extends \App\Common\Models\Qyweixin\Msg\Log
         $data['Precision'] = isset($info['Precision']) ? $info['Precision'] : 0;
         //发送任务卡片消息
         $data['TaskId'] = isset($info['TaskId']) ? $info['TaskId'] : ''; //TaskId 与发送任务卡片消息时指定的task_id相同
-
-        $data['bizmsgmenuid'] = isset($info['bizmsgmenuid']) ? $info['bizmsgmenuid'] : '';
-
         $data['Status'] = isset($info['Status']) ? $info['Status'] : '';
-        $data['TotalCount'] = isset($info['TotalCount']) ? $info['TotalCount'] : 0;
-        $data['FilterCount'] = isset($info['FilterCount']) ? $info['FilterCount'] : 0;
-        $data['SentCount'] = isset($info['SentCount']) ? $info['SentCount'] : 0;
-        $data['ErrorCount'] = isset($info['ErrorCount']) ? $info['ErrorCount'] : 0;
-        $data['CopyrightCheckResult'] = isset($info['CopyrightCheckResult']) ? \json_encode($info['CopyrightCheckResult']) : '';
-
-        $data['CardId'] = isset($info['CardId']) ? $info['CardId'] : '';
-        $data['RefuseReason'] = isset($info['RefuseReason']) ? $info['RefuseReason'] : '';
-        $data['IsGiveByFriend'] = isset($info['IsGiveByFriend']) ? $info['IsGiveByFriend'] : 0;
-        $data['FriendUserName'] = isset($info['FriendUserName']) ? $info['FriendUserName'] : '';
-        $data['UserCardCode'] = isset($info['UserCardCode']) ? $info['UserCardCode'] : '';
-        $data['OldUserCardCode'] = isset($info['OldUserCardCode']) ? $info['OldUserCardCode'] : '';
-        $data['OuterStr'] = isset($info['OuterStr']) ? $info['OuterStr'] : '';
-        $data['IsRestoreMemberCard'] = isset($info['IsRestoreMemberCard']) ? $info['IsRestoreMemberCard'] : 0;
-        $data['UnionId'] = isset($info['UnionId']) ? $info['UnionId'] : '';
-        $data['IsReturnBack'] = isset($info['IsReturnBack']) ? intval($info['IsReturnBack']) : 0;
-        $data['IsChatRoom'] = isset($info['IsChatRoom']) ? intval($info['IsChatRoom']) : 0;
-        $data['ConsumeSource'] = isset($info['ConsumeSource']) ? $info['ConsumeSource'] : '';
-        $data['LocationName'] = isset($info['LocationName']) ? $info['LocationName'] : '';
-        $data['StaffOpenId'] = isset($info['StaffOpenId']) ? $info['StaffOpenId'] : '';
-        $data['VerifyCode'] = isset($info['VerifyCode']) ? $info['VerifyCode'] : '';
-        $data['RemarkAmount'] = isset($info['RemarkAmount']) ? $info['RemarkAmount'] : '';
-        $data['TransId'] = isset($info['TransId']) ? $info['TransId'] : '';
-        $data['LocationId'] = isset($info['LocationId']) ? $info['LocationId'] : '';
-        $data['Fee'] = isset($info['Fee']) ? $info['Fee'] : 0;
-        $data['OriginalFee'] = isset($info['OriginalFee']) ? $info['OriginalFee'] : 0;
-        $data['ModifyBonus'] = isset($info['ModifyBonus']) ? $info['ModifyBonus'] : 0;
-        $data['ModifyBalance'] = isset($info['ModifyBalance']) ? $info['ModifyBalance'] : 0;
-        $data['Detail'] = isset($info['Detail']) ? $info['Detail'] : '';
-        $data['CreateOrderTime'] = isset($info['CreateOrderTime']) ? $info['CreateOrderTime'] : 0;
-        $data['PayFinishTime'] = isset($info['PayFinishTime']) ? $info['PayFinishTime'] : 0;
-        $data['Desc'] = isset($info['Desc']) ? $info['Desc'] : '';
-        $data['FreeCoinCount'] = isset($info['FreeCoinCount']) ? $info['FreeCoinCount'] : 0;
-        $data['PayCoinCount'] = isset($info['PayCoinCount']) ? $info['PayCoinCount'] : 0;
-        $data['RefundFreeCoinCount'] = isset($info['RefundFreeCoinCount']) ? $info['RefundFreeCoinCount'] : 0;
-        $data['RefundPayCoinCount'] = isset($info['RefundPayCoinCount']) ? $info['RefundPayCoinCount'] : 0;
-        $data['OrderType'] = isset($info['OrderType']) ? $info['OrderType'] : '';
-        $data['Memo'] = isset($info['Memo']) ? $info['Memo'] : '';
-        $data['ReceiptInfo'] = isset($info['ReceiptInfo']) ? $info['ReceiptInfo'] : '';
-        $data['PageId'] = isset($info['PageId']) ? $info['PageId'] : '';
-        $data['OrderId'] = isset($info['OrderId']) ? $info['OrderId'] : '';
-        $data['SuccOrderId'] = isset($info['SuccOrderId']) ? $info['SuccOrderId'] : '';
-        $data['FailOrderId'] = isset($info['FailOrderId']) ? $info['FailOrderId'] : '';
         $data['AppId'] = isset($info['AppId']) ? $info['AppId'] : '';
         $data['Source'] = isset($info['Source']) ? $info['Source'] : '';
 
