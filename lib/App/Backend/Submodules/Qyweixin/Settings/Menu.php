@@ -129,15 +129,15 @@ class Menu
         );
         $tree[] = $item;
 
-        // // 用户
-        // $item = array(
-        //     'menu_name' => '用户',
-        //     'menu_model' => 'qyweixin-user',
-        //     'level' => '企业平台用户管理',
-        //     'icon' => '',
-        //     'model' => '\App\Backend\Submodules\Qyweixin\Models\User\User'
-        // );
-        // $tree[] = $item;
+        // 企业用户
+        $item = array(
+            'menu_name' => '企业用户',
+            'menu_model' => 'qyweixin-user',
+            'level' => '企业平台用户管理',
+            'icon' => '',
+            'model' => '\App\Backend\Submodules\Qyweixin\Models\User\User'
+        );
+        $tree[] = $item;
 
         // // 用户标签
         // $item = array(

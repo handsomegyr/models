@@ -5,12 +5,15 @@ namespace App\Qyweixin\Models\User;
 class User extends \App\Common\Models\Weixin2\User\User
 {
 
-    // private $_weixin;
+    /**
+     * @var \Weixin\Qy\Client
+     */
+    private $_qyweixin;
 
-    // public function setWeixinInstance(\Weixin\Client $weixin)
-    // {
-    //     $this->_weixin = $weixin;
-    // }
+    public function setQyweixinInstance(\Weixin\Qy\Client $qyweixin)
+    {
+        $this->_qyweixin = $qyweixin;
+    }
 
     /**
      * 获取用户信息
@@ -77,7 +80,10 @@ class User extends \App\Common\Models\Weixin2\User\User
         // $range = (rand(0, 100) === 1);
         if (empty($checkInfo) || $range) { // || empty($checkInfo['subscribe'])
             try {
-                $userInfo = $this->_weixin->getUserManager()->getUserInfo($userid);
+                $userInfo = $this->_qyweixin->getUserManager()->get($userid);
+                // $e = new \Exception(\json_encode($userInfo));
+                // $modelErrorLog = new \App\Activity\Models\ErrorLog();
+                // $modelErrorLog->log(2, $e, time());
             } catch (\Exception $e) {
                 $userInfo = array();
                 $userInfo['userid'] = $userid;
@@ -106,6 +112,32 @@ class User extends \App\Common\Models\Weixin2\User\User
 
     private function getPrepareData($userInfo, $authorizer_appid, $provider_appid, $checkInfo)
     {
+        /**
+         * "errcode": 0, 
+         * "errmsg": "ok", 
+         * "userid": "GuoYongRong", 
+         * "name": "郭永荣", 
+         * "department": [ ], 
+         * "position": "", 
+         * "mobile": "13564100096", 
+         * "gender": "1", 
+         * "email": "", 
+         * "avatar": "http://wework.qpic.cn/bizmail/3781P7vBiadFNmvYJic4sy6n3uDrPfwvea0J0rjbrcC9vQdGOMOAgICg/0", 
+         * "status": 1, 
+         * "isleader": 0, 
+         * "extattr": {
+         *     "attrs": [ ]
+         * }, 
+         * "telephone": "", 
+         * "enable": 1, 
+         * "hide_mobile": 0, 
+         * "order": [ ], 
+         * "main_department": 0, 
+         * "qr_code": "https://open.work.weixin.qq.com/wwopen/userQRCode?vcode=vc2d24fd99a0f6208c", 
+         * "alias": "", 
+         * "is_leader_in_dept": [ ], 
+         * "thumb_avatar": "http://wework.qpic.cn/bizmail/3781P7vBiadFNmvYJic4sy6n3uDrPfwvea0J0rjbrcC9vQdGOMOAgICg/100"
+         */
         if (empty($checkInfo)) {
             $data = array();
             $data['authorizer_appid'] = $authorizer_appid;
@@ -126,14 +158,14 @@ class User extends \App\Common\Models\Weixin2\User\User
             $data['status'] = isset($userInfo['status']) ? intval($userInfo['status']) : 0;
             $data['qr_code'] = isset($userInfo['qr_code']) ? $userInfo['qr_code'] : '';
             $data['is_leader_in_dept'] = isset($userInfo['is_leader_in_dept']) ? \json_encode($userInfo['is_leader_in_dept']) : '';
-            $data['order'] = isset($userInfo['order']) ? \json_encode($userInfo['order']) : '';
+            $data['department_order'] = isset($userInfo['order']) ? \json_encode($userInfo['order']) : '';
             $data['open_userid'] = isset($userInfo['open_userid']) ? $userInfo['open_userid'] : '';
             $data['hide_mobile'] = isset($userInfo['hide_mobile']) ? $userInfo['hide_mobile'] : '0';
             $data['english_name'] = isset($userInfo['english_name']) ? $userInfo['english_name'] : '';
             $data['mobile'] = isset($userInfo['mobile']) ? $userInfo['mobile'] : '';
             $data['avatar_mediaid_recid'] = isset($userInfo['avatar_mediaid_recid']) ? $userInfo['avatar_mediaid_recid'] : '0';
             $data['avatar_mediaid'] = isset($userInfo['avatar_mediaid']) ? $userInfo['avatar_mediaid'] : '';
-            $data['extattr'] = isset($userInfo['extattr']) ? $userInfo['extattr'] : '';
+            $data['extattr'] = isset($userInfo['extattr']) ? \json_encode($userInfo['extattr']) : '';
             $data['external_profile'] = isset($userInfo['external_profile']) ? \json_encode($userInfo['external_profile']) : '';
             $data['external_position'] = isset($userInfo['external_position']) ? \json_encode($userInfo['external_position']) : '';
             $data['address'] = isset($userInfo['address']) ? $userInfo['address'] : '';
@@ -193,7 +225,7 @@ class User extends \App\Common\Models\Weixin2\User\User
                 $data['is_leader_in_dept'] = \json_encode($userInfo['is_leader_in_dept']);
             }
             if (isset($userInfo['order'])) {
-                $data['order'] = \json_encode($userInfo['order']);
+                $data['department_order'] = \json_encode($userInfo['order']);
             }
             if (isset($userInfo['access_token'])) {
                 $data['access_token'] = \json_encode($userInfo['access_token']);
@@ -223,7 +255,7 @@ class User extends \App\Common\Models\Weixin2\User\User
                 $data['avatar_mediaid'] = $userInfo['avatar_mediaid'];
             }
             if (isset($userInfo['extattr'])) {
-                $data['extattr'] = $userInfo['extattr'];
+                $data['extattr'] = \json_encode($userInfo['extattr']);
             }
             if (isset($userInfo['external_profile'])) {
                 $data['external_profile'] = \json_encode($userInfo['external_profile']);
