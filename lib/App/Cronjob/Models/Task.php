@@ -25,6 +25,17 @@ class Task extends \App\Common\Models\Cronjob\Task
         return $query;
     }
 
+    public function log($type, array $content, array $memo = array('memo' => ''))
+    {
+        $data = array();
+        $data['type'] = intval($type);
+        $data['content'] = \json_encode($content);
+        $data['is_done'] = false;
+        $data['do_num'] = 0;
+        $data['memo'] = $memo;
+        return $this->insert($data);
+    }
+
     /**
      * 完成任务
      */
