@@ -31,7 +31,6 @@ class Job extends \App\Common\Models\Cronjob\Job
     public function getAll()
     {
         $now = \App\Common\Utils\Helper::getCurrentTime();
-        $nowTime = time();
         $cmds = $this->findAll(array(
             'start_time' => array(
                 '$lte' => $now
@@ -66,17 +65,8 @@ class Job extends \App\Common\Models\Cronjob\Job
      * @param string $_id            
      * @param string $result            
      */
-    public function recordResult($_id, $result, $startTime)
+    public function recordResult($_id, $result, $scriptExecuteTime)
     {
-        $scriptExecuteTime = sprintf("%08.2f", microtime(true) - $startTime);
-
-        $log = new Log();
-        $log->insert(array(
-            'job_name' => $_id,
-            'execute_result' => $result,
-            'script_execute_time' => $scriptExecuteTime
-        ));
-
         return $this->update(array(
             '_id' => $_id
         ), array(
