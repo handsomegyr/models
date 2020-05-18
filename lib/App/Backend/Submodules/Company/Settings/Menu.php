@@ -39,6 +39,16 @@ class Menu
         );
         $tree[] = $item;
 
+        // 服务管理
+        $item = array(
+            'menu_name' => '服务管理',
+            'menu_model' => 'company-service',
+            'level' => '公司CUT系统管理',
+            'icon' => '',
+            'model' => '\App\Backend\Submodules\Company\Models\Service'
+        );
+        $tree[] = $item;
+
         return $tree;
     }
 }
