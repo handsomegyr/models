@@ -80,11 +80,6 @@ trait BaseTrait
                 } else {
                     $conditions[] = $item;
                 }
-                $orConditions = $this->getConditions($item, "OR", $level + 1);
-                if (!empty($orConditions)) {
-                    $conditions[] = $orConditions['conditions'];
-                    $bind = array_merge($bind, $orConditions['bind']);
-                }
             } else {
                 $fieldKey = "[{$key}]";
                 $bindKey = "__{$key}{$unique}__";
