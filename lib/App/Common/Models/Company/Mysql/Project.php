@@ -21,7 +21,9 @@ class Project extends Base
         $data = parent::reorganize($data);
         $data['last_upload_time'] = $this->changeToMongoDate($data['last_upload_time']);
         $data['enabled'] = $this->changeToBoolean($data['enabled']);
-        $data['online'] = $this->changeToBoolean($data['online']);
+        // $data['online'] = $this->changeToBoolean($data['online']);
+        $data['ae'] = $this->changeToArray($data['ae']);
+        $data['executives'] = $this->changeToArray($data['executives']);
         return $data;
     }
 }
