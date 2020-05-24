@@ -39,7 +39,7 @@ class Role extends \App\Common\Models\System\Role
     }
 
     /**
-     * 获取所有活动列表
+     * 获取所有角色列表
      *
      * @return array
      */

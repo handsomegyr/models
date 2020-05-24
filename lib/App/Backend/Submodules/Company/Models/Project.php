@@ -8,7 +8,7 @@ class Project extends \App\Common\Models\Company\Project
     use \App\Backend\Models\Base;
 
     /**
-     * 获取所有活动列表
+     * 获取所有项目列表
      *
      * @return array
      */

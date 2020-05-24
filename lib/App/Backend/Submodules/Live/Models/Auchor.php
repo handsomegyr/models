@@ -6,7 +6,7 @@ class Auchor extends \App\Common\Models\Live\Auchor
     use \App\Backend\Models\Base;
     
     /**
-     * 获取所有活动列表
+     * 获取所有授权者列表
      *
      * @return array
      */
