@@ -22,7 +22,7 @@ class Menu
         // 数据库管理
         $item = array(
             'menu_name' => '数据库管理',
-            'menu_model' => 'database-project',
+            'menu_model' => '',
             'level' => 'iDB管理',
             'icon' => '',
             'model' => '\App\Backend\Submodules\Database\Models\Project'
@@ -32,7 +32,7 @@ class Menu
         // 插件管理
         $item = array(
             'menu_name' => '插件管理',
-            'menu_model' => 'database-plugin',
+            'menu_model' => '',
             'level' => 'iDB管理',
             'icon' => '',
             'model' => '\App\Backend\Submodules\Database\Models\Plugin'
@@ -49,10 +49,20 @@ class Menu
         );
         $tree[] = $item;
 
+        // 数据库管理
+        $item = array(
+            'menu_name' => '数据库管理',
+            'menu_model' => 'database-project',
+            'level' => '数据库管理',
+            'icon' => '',
+            'model' => '\App\Backend\Submodules\Database\Models\Project'
+        );
+        $tree[] = $item;
+
         // 表管理
         $item = array(
             'menu_name' => '表管理',
-            'menu_model' => 'database-projectcollection',
+            'menu_model' => '',
             'level' => '数据库管理',
             'icon' => '',
             'model' => '\App\Backend\Submodules\Database\Models\Project\Collection'
@@ -79,6 +89,15 @@ class Menu
         );
         $tree[] = $item;
 
+        // 表管理
+        $item = array(
+            'menu_name' => '表管理',
+            'menu_model' => 'database-projectcollection',
+            'level' => '表管理',
+            'icon' => '',
+            'model' => '\App\Backend\Submodules\Database\Models\Project\Collection'
+        );
+        $tree[] = $item;
 
         // 表结构管理
         $item = array(
@@ -131,11 +150,31 @@ class Menu
         $tree[] = $item;
 
 
+        // 插件管理
+        $item = array(
+            'menu_name' => '插件管理',
+            'menu_model' => 'database-plugin',
+            'level' => '插件管理',
+            'icon' => '',
+            'model' => '\App\Backend\Submodules\Database\Models\Plugin'
+        );
+        $tree[] = $item;
+
+        // 插件表管理
+        $item = array(
+            'menu_name' => '插件表管理',
+            'menu_model' => '',
+            'level' => '插件管理',
+            'icon' => '',
+            'model' => '\App\Backend\Submodules\Database\Models\Plugin\Collection'
+        );
+        $tree[] = $item;
+
         // 插件表管理
         $item = array(
             'menu_name' => '插件表管理',
             'menu_model' => 'database-plugincollection',
-            'level' => '插件管理',
+            'level' => '插件表管理',
             'icon' => '',
             'model' => '\App\Backend\Submodules\Database\Models\Plugin\Collection'
         );
