@@ -19,7 +19,7 @@ class Mapping extends Base
     public function reorganize(array $data)
     {
         $data = parent::reorganize($data);
-        $data['active'] = $this->changeToBoolean($data['active']);
+        $data['is_actived'] = $this->changeToBoolean($data['is_actived']);
         return $data;
     }
 }

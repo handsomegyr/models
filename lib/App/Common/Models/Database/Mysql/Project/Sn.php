@@ -19,9 +19,9 @@ class Sn extends Base
     public function reorganize(array $data)
     {
         $data = parent::reorganize($data);
-        $data['active'] = $this->changeToBoolean($data['active']);
-        $data['default'] = $this->changeToBoolean($data['default']);
-        $data['expire'] = $this->changeToMongoDate($data['expire']);
+        $data['is_actived'] = $this->changeToBoolean($data['is_actived']);
+        $data['is_default'] = $this->changeToBoolean($data['is_default']);
+        $data['expire_time'] = $this->changeToMongoDate($data['expire_time']);
         return $data;
     }
 }
