@@ -35,11 +35,12 @@ class Base implements IBase
     public static function getEntityModel($source)
     {
         $model = new \App\Common\Models\Base\Mysql\Base();
-        $model->setSource($source);
-
+        // $model->setSource($source);
+        // $model->setDebug(true);
         $objEntity = new \App\Common\Models\Base\Base();
         $objEntity->setModel($model);
         $objEntity->setSource($source);
+        // $objEntity->setDebug(true);
         return $objEntity;
     }
 

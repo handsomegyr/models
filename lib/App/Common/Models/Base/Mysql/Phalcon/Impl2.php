@@ -20,10 +20,10 @@ class Impl2 extends Base
             throw new \Exception('Model设置错误2');
         }
         $this->model = $model;
-        $this->setPhql($this->model->getPhql());
-        $this->setDebug($this->model->getDebug());
-        $this->setDb($this->model->getDb());
-        $this->setSource($this->getPrefix() . $this->model->getSource());
+        // $this->setPhql($this->model->getPhql());
+        // $this->setDebug($this->model->getDebug());
+        // $this->setDb($this->model->getDb());
+        // $this->setSource($this->model->getSource());
     }
 
     /**
@@ -34,6 +34,31 @@ class Impl2 extends Base
     public function getModel()
     {
         return $this->model;
+    }
+
+    public function getPhql()
+    {
+        return $this->getModel()->getPhql();
+    }
+
+    public function getDebug()
+    {
+        return $this->getModel()->getDebug();
+    }
+
+    public function getDb()
+    {
+        return $this->getModel()->getDb();
+    }
+
+    public function getSource()
+    {
+        return $this->getPrefix() . $this->getModel()->getSource();
+    }
+
+    public function getSecondary()
+    {
+        return $this->getModel()->getSecondary();
     }
 
     /**
