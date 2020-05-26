@@ -32,6 +32,17 @@ class Base implements IBase
 
     use BaseTrait;
 
+    public static function getEntityModel($source)
+    {
+        $model = new \App\Common\Models\Base\Mysql\Base();
+        $model->setSource($source);
+
+        $objEntity = new \App\Common\Models\Base\Base();
+        $objEntity->setModel($model);
+        $objEntity->setSource($source);
+        return $objEntity;
+    }
+
     /**
      * model
      *
@@ -39,7 +50,7 @@ class Base implements IBase
      */
     private $_model = null;
 
-    protected function setModel(\App\Common\Models\Base\IBase $model)
+    public function setModel(\App\Common\Models\Base\IBase $model)
     {
         if (empty($model)) {
             throw new \Exception('Model设置错误');
@@ -51,7 +62,7 @@ class Base implements IBase
         $this->setSource($this->name);
     }
 
-    protected function getModel()
+    public function getModel()
     {
         if (empty($this->_model)) {
             throw new \Exception('Model没有设置');
