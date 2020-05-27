@@ -7,7 +7,7 @@ class ConditionalMenu extends Base
 {
 
     /**
-     * 微信个性化菜单管理
+     * 微信-个性化菜单管理
      * This model is mapped to the table iweixin_menu_conditional
      */
     public function getSource()

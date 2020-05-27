@@ -7,7 +7,7 @@ class GoodsCommon extends Base
 {
 
     /**
-     * 商品公共内容表管理
+     * 商品-商品公共内容表管理
      * This model is mapped to the table igoods_common
      */
     public function getSource()

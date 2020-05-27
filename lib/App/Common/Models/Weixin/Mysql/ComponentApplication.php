@@ -7,7 +7,7 @@ class ComponentApplication extends Base
 {
 
     /**
-     * 第三方平台应用管理
+     * 微信-第三方平台应用管理
      * This model is mapped to the table iweixin_component_application
      */
     public function getSource()

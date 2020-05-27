@@ -7,7 +7,7 @@ class TypeBrand extends Base
 {
 
     /**
-     * 商品类型与品牌对应表管理
+     * 商品-商品类型与品牌对应表管理
      * This model is mapped to the table igoods_type_brand
      */
     public function getSource()

@@ -7,7 +7,7 @@ class Source extends Base
 {
 
     /**
-     * 微信原始数据
+     * 微信-原始数据
      * This model is mapped to the table iweixin_source
      */
     public function getSource()

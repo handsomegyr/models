@@ -7,7 +7,7 @@ class Keyword extends Base
 {
 
     /**
-     * 微信关键词设定
+     * 微信-关键词设定
      * This model is mapped to the table iweixin_keyword
      */
     public function getSource()

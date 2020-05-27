@@ -7,7 +7,7 @@ class Gift extends Base
 {
 
     /**
-     * 商品赠品表管理
+     * 商品-商品赠品表管理
      * This model is mapped to the table igoods_gift
      */
     public function getSource()

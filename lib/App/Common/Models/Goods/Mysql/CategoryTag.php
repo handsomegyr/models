@@ -7,7 +7,7 @@ class CategoryTag extends Base
 {
 
     /**
-     * 商品分类TAG表管理
+     * 商品-商品分类TAG表管理
      * This model is mapped to the table igoods_category_tag
      */
     public function getSource()

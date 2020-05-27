@@ -7,7 +7,7 @@ class ConditionalMenuMatchRule extends Base
 {
 
     /**
-     * 微信个性化菜单匹配规则管理
+     * 微信-个性化菜单匹配规则管理
      * This model is mapped to the table iweixin_menu_conditional_matchrule
      */
     public function getSource()

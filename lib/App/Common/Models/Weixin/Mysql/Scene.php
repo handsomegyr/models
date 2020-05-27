@@ -7,7 +7,7 @@ class Scene extends Base
 {
 
     /**
-     * 微信二维码场景管理
+     * 微信-二维码场景管理
      * This model is mapped to the table iweixin_scene
      */
     public function getSource()

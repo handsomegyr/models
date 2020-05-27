@@ -8,7 +8,7 @@ class Job extends Base
 {
 
     /**
-     * 计划任务表管理
+     * 计划任务-任务管理
      * This model is mapped to the table icronjob_job
      */
     public function getSource()

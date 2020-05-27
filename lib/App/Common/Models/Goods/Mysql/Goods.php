@@ -7,7 +7,7 @@ class Goods extends Base
 {
 
     /**
-     * 商品表管理
+     * 商品-商品表管理
      * This model is mapped to the table igoods_goods
      */
     public function getSource()

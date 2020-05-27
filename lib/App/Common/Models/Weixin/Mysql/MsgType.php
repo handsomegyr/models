@@ -7,7 +7,7 @@ class MsgType extends Base
 {
 
     /**
-     * 微信消息类型
+     * 微信-消息类型
      * This model is mapped to the table iweixin_msg_type
      */
     public function getSource()

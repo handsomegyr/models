@@ -7,7 +7,7 @@ class Fcode extends Base
 {
 
     /**
-     * 商品F码管理
+     * 商品-商品F码管理
      * This model is mapped to the table igoods_fcode
      */
     public function getSource()

@@ -7,7 +7,7 @@ class Category extends Base
 {
 
     /**
-     * 商品分类表管理
+     * 商品-商品分类表管理
      * This model is mapped to the table igoods_category
      */
     public function getSource()

@@ -7,7 +7,7 @@ class Page extends Base
 {
 
     /**
-     * 微信自定义页面
+     * 微信-自定义页面
      * This model is mapped to the table iweixin_page
      */
     public function getSource()

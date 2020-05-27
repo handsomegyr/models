@@ -7,7 +7,7 @@ class ReplyType extends Base
 {
 
     /**
-     * 微信回复类型
+     * 微信-回复类型
      * This model is mapped to the table iweixin_reply_type
      */
     public function getSource()

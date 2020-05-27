@@ -7,7 +7,7 @@ class AttrIndex extends Base
 {
 
     /**
-     * 商品与属性对应表管理
+     * 商品-商品与属性对应表管理
      * This model is mapped to the table igoods_attr_index
      */
     public function getSource()

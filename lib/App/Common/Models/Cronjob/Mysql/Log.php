@@ -8,7 +8,7 @@ class Log extends Base
 {
 
     /**
-     * 计划任务执行日志管理
+     * 计划任务-任务执行日志管理
      * This model is mapped to the table icronjob_log
      */
     public function getSource()

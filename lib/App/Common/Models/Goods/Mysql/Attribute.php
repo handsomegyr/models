@@ -7,7 +7,7 @@ class Attribute extends Base
 {
 
     /**
-     * 商品属性表管理
+     * 商品-商品属性表管理
      * This model is mapped to the table igoods_attribute
      */
     public function getSource()

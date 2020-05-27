@@ -7,7 +7,7 @@ class Settings extends Base
 {
 
     /**
-     * 短信-短信设置表管理
+     * 短信-设置表管理
      * This model is mapped to the table isms_settings
      */
     public function getSource()

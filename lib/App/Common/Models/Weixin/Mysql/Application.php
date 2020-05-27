@@ -7,7 +7,7 @@ class Application extends Base
 {
 
     /**
-     * 微信应用管理
+     * 微信-应用管理
      * This model is mapped to the table iweixin_application
      */
     public function getSource()

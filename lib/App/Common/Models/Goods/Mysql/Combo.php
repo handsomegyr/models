@@ -7,7 +7,7 @@ class Combo extends Base
 {
 
     /**
-     * 商品推荐组合表管理
+     * 商品-商品推荐组合表管理
      * This model is mapped to the table igoods_combo
      */
     public function getSource()

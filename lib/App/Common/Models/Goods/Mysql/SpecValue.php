@@ -7,7 +7,7 @@ class SpecValue extends Base
 {
 
     /**
-     * 商品规格值表管理
+     * 商品-商品规格值表管理
      * This model is mapped to the table igoods_spec_value
      */
     public function getSource()

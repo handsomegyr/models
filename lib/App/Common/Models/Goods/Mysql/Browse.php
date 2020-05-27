@@ -7,7 +7,7 @@ class Browse extends Base
 {
 
     /**
-     * 商品浏览历史表管理
+     * 商品-商品浏览历史表管理
      * This model is mapped to the table igoods_browse
      */
     public function getSource()

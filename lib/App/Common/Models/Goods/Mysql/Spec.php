@@ -7,7 +7,7 @@ class Spec extends Base
 {
 
     /**
-     * 商品规格表管理
+     * 商品-商品规格表管理
      * This model is mapped to the table igoods_spec
      */
     public function getSource()
