@@ -8,7 +8,7 @@ class Item extends Base
 {
 
     /**
-     * banner-item管理
+     * 横幅广告-广告内容管理
      * This model is mapped to the table ibanner_item
      */
     public function getSource()

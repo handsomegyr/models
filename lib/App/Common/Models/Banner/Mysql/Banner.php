@@ -8,7 +8,7 @@ class Banner extends Base
 {
 
     /**
-     * banner-banner管理
+     * 横幅广告-横幅广告管理
      * This model is mapped to the table ibanner_banner
      */
     public function getSource()
