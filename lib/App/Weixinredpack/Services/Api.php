@@ -424,7 +424,7 @@ class Api
             foreach ($list['datas'] as $logInfo) {
                 $isOK = false;
                 $ret = array();
-                $logId = myMongoId($logInfo['_id']);
+                $logId = ($logInfo['_id']);
                 try {
                     $activity_id = $logInfo['activity'];
                     $customer_id = $logInfo['customer'];

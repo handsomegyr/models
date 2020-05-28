@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Live\Services\Swoole;
 
 use Swoole;
@@ -30,19 +31,20 @@ class Server extends Swoole\Protocol\CometServer
     public function __construct($config = array())
     {
         parent::__construct($config);
-        
+
         // 跨域设置
         $this->origin = $config['server']['origin'];
-        
-        $this->_id = myMongoId(new \MongoId());
+
+        $objMongoId = new \MongoId();
+        $this->_id = $objMongoId->__toString();
         $this->_users = array();
-        
+
         // 初始化日志
         $this->initLogger();
-        
+
         // 初始化存储服务
         $this->initStorer();
-        
+
         // 初始化命令
         $this->initCommand();
     }
@@ -60,19 +62,19 @@ class Server extends Swoole\Protocol\CometServer
             $this->sendErrorMessage($client_id, 400001, "消息体格式不正确", $ws);
             return;
         }
-        
+
         // 获取参数 cmd
         if (empty($msg['cmd'])) {
             $this->sendErrorMessage($client_id, 400002, "消息体中的cmd值为空", $msg);
             return;
         }
-        
+
         $msg['server_id'] = $this->_id;
         $msg['client_id'] = $client_id;
         $msg['users'] = $this->_users;
-        
+
         $cmd = $msg['cmd'];
-        
+
         // 如果是polling的话,直播服务端向所有的客户端发送polling消息，使得客户端保持连接
         if ($cmd == 'polling') {
             $server = $this->getSwooleServer();
@@ -102,7 +104,7 @@ class Server extends Swoole\Protocol\CometServer
         $req = unserialize($data);
         if ($req) {
             $command = $this->getCommand($req['cmd']);
-            if (! empty($command)) {
+            if (!empty($command)) {
                 $command->execute($this, $req);
             }
         }
@@ -147,7 +149,7 @@ class Server extends Swoole\Protocol\CometServer
             'msg_type' => 'system_error',
             'msg' => $msg
         );
-        if (! empty($data)) {
+        if (!empty($data)) {
             $message['data'] = $data;
         }
         $message['client_id'] = $client_id;
@@ -206,7 +208,7 @@ class Server extends Swoole\Protocol\CometServer
                 continue;
             }
             // 如果指定了发送用户返回
-            if (! empty($broadcastUsers)) {
+            if (!empty($broadcastUsers)) {
                 $user_id = $userInfo['user_id'];
                 if (in_array($user_id, $broadcastUsers)) {
                     $this->send($client_id, $msg);
@@ -232,12 +234,12 @@ class Server extends Swoole\Protocol\CometServer
             // 加载脏词库
             // $this->resTrie = trie_filter_load($config['webim']['blackword_file']);
         }
-        if (! empty($this->resTrie)) {
+        if (!empty($this->resTrie)) {
             $small_str = strtolower($str);
             $ret = trie_filter_search($this->resTrie, $small_str);
-            if (! empty($ret)) {
+            if (!empty($ret)) {
                 $arrRet = trie_filter_search_all($this->resTrie, $small_str);
-                
+
                 foreach ($arrRet as $k => $v) {
                     $str = substr_replace($str, str_repeat('*', $v[1]), $v[0], $v[1]);
                 }
@@ -254,7 +256,7 @@ class Server extends Swoole\Protocol\CometServer
      */
     protected function getCommand($cmd)
     {
-        if (! key_exists($cmd, $this->_commands)) {
+        if (!key_exists($cmd, $this->_commands)) {
             return null;
         }
         return $this->_commands[$cmd];
@@ -265,10 +267,10 @@ class Server extends Swoole\Protocol\CometServer
         // 检测日志目录是否存在
         $log_file = $this->config['webim']['log_file'];
         $log_dir = dirname($log_file);
-        if (! is_dir($log_dir)) {
+        if (!is_dir($log_dir)) {
             mkdir($log_dir, 0777, true);
         }
-        if (! empty($log_file)) {
+        if (!empty($log_file)) {
             $logger = new \Swoole\Log\FileLog($log_file);
         } else {
             $logger = new \Swoole\Log\EchoLog();
@@ -342,4 +344,3 @@ class Server extends Swoole\Protocol\CometServer
         }
     }
 }
-

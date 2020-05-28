@@ -27,7 +27,7 @@ class ConditionalMenu extends \App\Common\Models\Weixin\ConditionalMenu
      */
     public function buildMenusWithMatchrule(array $matchRule)
     {
-        $matchRuleParent = myMongoId($matchRule['_id']);
+        $matchRuleParent = ($matchRule['_id']);
         $ruleInfo = array();
         foreach (array(
             "group_id",

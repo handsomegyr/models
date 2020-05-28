@@ -29,7 +29,7 @@ class Logo extends \App\Common\Models\Weixincard\Logo
     public function updateIsUploaded($id, $logo_url, $is_uploaded = true)
     {
         $query = array();
-        $query['_id'] = myMongoId($id);
+        $query['_id'] = ($id);
         $data = array();
         $data['logo_url'] = $logo_url;
         $data['is_uploaded'] = $is_uploaded;

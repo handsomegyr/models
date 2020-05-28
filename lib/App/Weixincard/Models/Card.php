@@ -1103,7 +1103,7 @@ class Card extends \App\Common\Models\Weixincard\Card
     public function delCard($id)
     {
         $this->remove(array(
-            '_id' => myMongoId($id)
+            '_id' => ($id)
         ));
     }
 

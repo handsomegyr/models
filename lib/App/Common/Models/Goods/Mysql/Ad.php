@@ -7,7 +7,7 @@ class Ad extends Base
 {
 
     /**
-     * 商品广告位表管理
+     * 商品-商品广告位表管理
      * This model is mapped to the table igoods_ad
      */
     public function getSource()

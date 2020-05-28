@@ -52,7 +52,8 @@ class Robot
 
     function __construct(\App\Live\Services\Swoole\RobotServer $server)
     {
-        $this->_id = myMongoId(new \MongoId());
+        $objMongoId= new \MongoId();        
+        $this->_id = $objMongoId->__toString();
         $this->server = $server;
         $objServer = ($this->server->protocol);
         $this->storer = $objServer->getStorer();
