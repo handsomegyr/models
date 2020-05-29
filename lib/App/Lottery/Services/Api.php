@@ -177,6 +177,9 @@ class Api
                             }
                         }
                     }
+                } else {
+                    // 如果是实物奖的话固定即时生效
+                    $isValid = true;
                 }
 
                 // 记录中奖记录
