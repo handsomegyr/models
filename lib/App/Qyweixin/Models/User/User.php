@@ -6,11 +6,11 @@ class User extends \App\Common\Models\Weixin2\User\User
 {
 
     /**
-     * @var \Weixin\Qy\Client
+     * @var \Qyweixin\Client
      */
     private $_qyweixin;
 
-    public function setQyweixinInstance(\Weixin\Qy\Client $qyweixin)
+    public function setQyweixinInstance(\Qyweixin\Client $qyweixin)
     {
         $this->_qyweixin = $qyweixin;
     }

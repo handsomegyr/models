@@ -88,7 +88,7 @@ class Agent extends \App\Common\Models\Qyweixin\Agent\Agent
                 $lockKey = cacheKey(__FILE__, __CLASS__, __METHOD__, __LINE__, $token['provider_appid'], $token['authorizer_appid'], $token['agentid']);
                 $objLock = new \iLock($lockKey);
                 if (!$objLock->lock()) {
-                    $objToken = new \Weixin\Qy\Token\Server($token['agentid'], $token['secret']);
+                    $objToken = new \Qyweixin\Token\Server($token['agentid'], $token['secret']);
                     $arrToken = $objToken->getAccessToken();
                     if (!isset($arrToken['access_token'])) {
                         throw new \Exception(json_encode($arrToken));

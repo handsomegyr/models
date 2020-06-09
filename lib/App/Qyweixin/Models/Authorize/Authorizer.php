@@ -238,12 +238,12 @@ class Authorizer extends \App\Common\Models\Qyweixin\Authorize\Authorizer
                     // 第3方应用的时候
                     if (!empty($token['provider_appid'])) {
                         if (!empty($token['suite_access_token']) && !empty($token['permanent_code']) && !empty($token['auth_corpid'])) {
-                            $objToken = new \Weixin\Qy\Service();
+                            $objToken = new \Qyweixin\Service();
                             $arrToken = $objToken->getCorpToken($token['suite_access_token'], $token['auth_corpid'], $token['permanent_code']);
                             $token = $this->updateAccessToken($token['_id'], $arrToken['access_token'], $arrToken['access_token'], $arrToken['expires_in'], "", null);
                         }
                     } else {
-                        $objToken = new \Weixin\Qy\Token\Server($token['appid'], $token['appsecret']);
+                        $objToken = new \Qyweixin\Token\Server($token['appid'], $token['appsecret']);
                         $arrToken = $objToken->getAccessToken();
                         if (!isset($arrToken['access_token'])) {
                             throw new \Exception(\json_encode($arrToken));

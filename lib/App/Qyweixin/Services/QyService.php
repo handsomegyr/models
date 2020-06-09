@@ -16,7 +16,7 @@ class QyService
     private $agentid = 0;
 
     /**
-     * @var \Weixin\Qy\Client
+     * @var \Qyweixin\Client
      */
     private $objQyWeixin = null;
 
@@ -60,7 +60,7 @@ class QyService
     {
         $this->getToken4Provider();
 
-        $this->objQyWeixinProvider = new \Weixin\Qy\Service();
+        $this->objQyWeixinProvider = new \Qyweixin\Service();
         if (!empty($this->providerConfig['access_token'])) {
             $this->objQyWeixinProvider->setAccessToken($this->providerConfig['access_token']);
         }
@@ -78,13 +78,13 @@ class QyService
         $this->getToken4Authorizer();
 
         if (empty($this->agentid)) {
-            $this->objQyWeixin = new \Weixin\Qy\Client($this->authorizerConfig['appid'], $this->authorizerConfig['appsecret']);
+            $this->objQyWeixin = new \Qyweixin\Client($this->authorizerConfig['appid'], $this->authorizerConfig['appsecret']);
             if (!empty($this->authorizerConfig['access_token'])) {
                 $this->objQyWeixin->setAccessToken($this->authorizerConfig['access_token']);
             }
         } else {
             $agentInfo = $this->modelQyweixinAgent->getTokenByAppid($this->provider_appid, $this->authorizer_appid, $this->agentid);
-            $this->objQyWeixin = new \Weixin\Qy\Client($this->authorizerConfig['appid'], $agentInfo['secret']);
+            $this->objQyWeixin = new \Qyweixin\Client($this->authorizerConfig['appid'], $agentInfo['secret']);
             if (!empty($agentInfo['access_token'])) {
                 $this->objQyWeixin->setAccessToken($agentInfo['access_token']);
             }
@@ -308,28 +308,28 @@ class QyService
             switch ($match['agent_msg_type']) {
 
                 case 'text':
-                    $objMsg = new \Weixin\Qy\Model\Message\Text($agentid, $agentMsgInfo['description'], $FromUserName);
+                    $objMsg = new \Qyweixin\Model\Message\Text($agentid, $agentMsgInfo['description'], $FromUserName);
                     break;
                 case 'voice':
                     $media_id = $this->getMediaId4AgentMsg('voice', $agentMsgInfo);
-                    $objMsg = new \Weixin\Qy\Model\Message\Voice($agentid, $media_id, $FromUserName);
+                    $objMsg = new \Qyweixin\Model\Message\Voice($agentid, $media_id, $FromUserName);
                     break;
                 case 'video':
                     $media_id = $this->getMediaId4AgentMsg('video', $agentMsgInfo);
-                    $objMsg = new \Weixin\Qy\Model\Message\Video($agentid, $media_id, $FromUserName);
+                    $objMsg = new \Qyweixin\Model\Message\Video($agentid, $media_id, $FromUserName);
                     $objMsg->title = $agentMsgInfo['title'];
                     $objMsg->description = $agentMsgInfo['description'];
                     break;
                 case 'file':
                     $media_id = $this->getMediaId4AgentMsg('file', $agentMsgInfo);
-                    $objMsg = new \Weixin\Qy\Model\Message\File($agentid, $media_id, $FromUserName);
+                    $objMsg = new \Qyweixin\Model\Message\File($agentid, $media_id, $FromUserName);
                     break;
                 case 'image':
                     $media_id = $this->getMediaId4AgentMsg('image', $agentMsgInfo);
-                    $objMsg = new \Weixin\Qy\Model\Message\Image($agentid, $media_id, $FromUserName);
+                    $objMsg = new \Qyweixin\Model\Message\Image($agentid, $media_id, $FromUserName);
                     break;
                 case 'textcard':
-                    $objMsg = new \Weixin\Qy\Model\Message\TextCard($agentid, $agentMsgInfo['title'], $agentMsgInfo['description'], $agentMsgInfo['url'], $FromUserName);
+                    $objMsg = new \Qyweixin\Model\Message\TextCard($agentid, $agentMsgInfo['title'], $agentMsgInfo['description'], $agentMsgInfo['url'], $FromUserName);
                     $objMsg->btntxt = $agentMsgInfo['btntxt'];
                     break;
                 case 'news':
@@ -339,7 +339,7 @@ class QyService
                     $modelAgentMsgNews = new \App\Qyweixin\Models\AgentMsg\News();
                     $articles1 = $modelAgentMsgNews->getArticlesByAgentMsgId($agentMsgInfo['id'], 'news', $isFirst);
                     $articles = array_merge($articles, $articles1);
-                    $objMsg = new \Weixin\Qy\Model\Message\News($agentid, $articles, $FromUserName);
+                    $objMsg = new \Qyweixin\Model\Message\News($agentid, $articles, $FromUserName);
                     break;
                 case 'mpnews':
                     // 获取图文列表
@@ -354,20 +354,20 @@ class QyService
                         $article['thumb_media_id'] = $res4ThumbMedia['media_id'];
                         unset($article['thumb_media']);
                     }
-                    $objMsg = new \Weixin\Qy\Model\Message\Mpnews($agentid, $articles, $FromUserName);
+                    $objMsg = new \Qyweixin\Model\Message\Mpnews($agentid, $articles, $FromUserName);
                     break;
                 case 'markdown':
-                    $objMsg = new \Weixin\Qy\Model\Message\Markdown($agentid, $agentMsgInfo['description'], $FromUserName);
+                    $objMsg = new \Qyweixin\Model\Message\Markdown($agentid, $agentMsgInfo['description'], $FromUserName);
                     break;
                 case 'miniprogram_notice':
-                    $objMsg = new \Weixin\Qy\Model\Message\MiniprogramNotice($agentMsgInfo['appid'], $agentMsgInfo['title'], $FromUserName);
+                    $objMsg = new \Qyweixin\Model\Message\MiniprogramNotice($agentMsgInfo['appid'], $agentMsgInfo['title'], $FromUserName);
                     $objMsg->page = $agentMsgInfo['pagepath'];
                     $objMsg->description = $agentMsgInfo['description'];
                     $objMsg->emphasis_first_item = $agentMsgInfo['emphasis_first_item'];
                     $objMsg->content_item = $agentMsgInfo['content_item'];
                     break;
                 case 'taskcard':
-                    $objMsg = new \Weixin\Qy\Model\Message\TaskCard($agentid, $agentMsgInfo['title'], $agentMsgInfo['description'], $agentMsgInfo['task_id'], $agentMsgInfo['btn'], $FromUserName);
+                    $objMsg = new \Qyweixin\Model\Message\TaskCard($agentid, $agentMsgInfo['title'], $agentMsgInfo['description'], $agentMsgInfo['task_id'], $agentMsgInfo['btn'], $FromUserName);
                     $objMsg->url = $agentMsgInfo['url'];
                     break;
             }
@@ -440,28 +440,28 @@ class QyService
         try {
             switch ($match['appchat_msg_type']) {
                 case 'text':
-                    $objMsg = new \Weixin\Qy\Model\AppchatMsg\Text($chatid, $appchatMsgInfo['description']);
+                    $objMsg = new \Qyweixin\Model\AppchatMsg\Text($chatid, $appchatMsgInfo['description']);
                     break;
                 case 'voice':
                     $media_id = $this->getMediaId4AppchatMsg('voice', $appchatMsgInfo);
-                    $objMsg = new \Weixin\Qy\Model\AppchatMsg\Voice($chatid, $media_id);
+                    $objMsg = new \Qyweixin\Model\AppchatMsg\Voice($chatid, $media_id);
                     break;
                 case 'video':
                     $media_id = $this->getMediaId4AppchatMsg('video', $appchatMsgInfo);
-                    $objMsg = new \Weixin\Qy\Model\AppchatMsg\Video($chatid, $media_id);
+                    $objMsg = new \Qyweixin\Model\AppchatMsg\Video($chatid, $media_id);
                     $objMsg->title = $appchatMsgInfo['title'];
                     $objMsg->description = $appchatMsgInfo['description'];
                     break;
                 case 'file':
                     $media_id = $this->getMediaId4AppchatMsg('file', $appchatMsgInfo);
-                    $objMsg = new \Weixin\Qy\Model\AppchatMsg\File($chatid, $media_id);
+                    $objMsg = new \Qyweixin\Model\AppchatMsg\File($chatid, $media_id);
                     break;
                 case 'image':
                     $media_id = $this->getMediaId4AppchatMsg('image', $appchatMsgInfo);
-                    $objMsg = new \Weixin\Qy\Model\AppchatMsg\Image($chatid, $media_id);
+                    $objMsg = new \Qyweixin\Model\AppchatMsg\Image($chatid, $media_id);
                     break;
                 case 'textcard':
-                    $objMsg = new \Weixin\Qy\Model\AppchatMsg\TextCard($chatid, $appchatMsgInfo['title'], $appchatMsgInfo['description'], $appchatMsgInfo['url']);
+                    $objMsg = new \Qyweixin\Model\AppchatMsg\TextCard($chatid, $appchatMsgInfo['title'], $appchatMsgInfo['description'], $appchatMsgInfo['url']);
                     $objMsg->btntxt = $appchatMsgInfo['btntxt'];
                     break;
                 case 'news':
@@ -471,7 +471,7 @@ class QyService
                     $modelAppchatMsgNews = new \App\Qyweixin\Models\AppchatMsg\News();
                     $articles1 = $modelAppchatMsgNews->getArticlesByAppchatMsgId($appchatMsgInfo['id'], 'news', $isFirst);
                     $articles = array_merge($articles, $articles1);
-                    $objMsg = new \Weixin\Qy\Model\AppchatMsg\News($chatid, $articles);
+                    $objMsg = new \Qyweixin\Model\AppchatMsg\News($chatid, $articles);
                     break;
                 case 'mpnews':
                     // 获取图文列表
@@ -486,15 +486,15 @@ class QyService
                         $article['thumb_media_id'] = $res4ThumbMedia['media_id'];
                         unset($article['thumb_media']);
                     }
-                    $objMsg = new \Weixin\Qy\Model\AppchatMsg\Mpnews($chatid, $articles);
+                    $objMsg = new \Qyweixin\Model\AppchatMsg\Mpnews($chatid, $articles);
                     break;
                 case 'markdown':
-                    $objMsg = new \Weixin\Qy\Model\AppchatMsg\Markdown($chatid, $appchatMsgInfo['description']);
+                    $objMsg = new \Qyweixin\Model\AppchatMsg\Markdown($chatid, $appchatMsgInfo['description']);
                     break;
             }
 
             $objMsg->safe = intval($appchatMsgInfo['safe']);
-            $appchatmsg = $objQyWeixin->getLinkedcorpMessageManager()->send($objMsg);
+            $appchatmsg = $objQyWeixin->getAppchatManager()->send($objMsg);
             if (!empty($appchatmsg['errcode'])) {
                 throw new \Exception($appchatmsg['errmsg'], $appchatmsg['errcode']);
             }
@@ -548,28 +548,28 @@ class QyService
         try {
             switch ($match['linkedcorp_msg_type']) {
                 case 'text':
-                    $objMsg = new \Weixin\Qy\Model\LinkedcorpMsg\Text($agentid, $linkedcorpMsgInfo['description']);
+                    $objMsg = new \Qyweixin\Model\LinkedcorpMsg\Text($agentid, $linkedcorpMsgInfo['description']);
                     break;
                 case 'voice':
                     $media_id = $this->getMediaId4LinkedcorpMsg('voice', $linkedcorpMsgInfo);
-                    $objMsg = new \Weixin\Qy\Model\LinkedcorpMsg\Voice($agentid, $media_id);
+                    $objMsg = new \Qyweixin\Model\LinkedcorpMsg\Voice($agentid, $media_id);
                     break;
                 case 'video':
                     $media_id = $this->getMediaId4LinkedcorpMsg('video', $linkedcorpMsgInfo);
-                    $objMsg = new \Weixin\Qy\Model\LinkedcorpMsg\Video($agentid, $media_id);
+                    $objMsg = new \Qyweixin\Model\LinkedcorpMsg\Video($agentid, $media_id);
                     $objMsg->title = $linkedcorpMsgInfo['title'];
                     $objMsg->description = $linkedcorpMsgInfo['description'];
                     break;
                 case 'file':
                     $media_id = $this->getMediaId4LinkedcorpMsg('file', $linkedcorpMsgInfo);
-                    $objMsg = new \Weixin\Qy\Model\LinkedcorpMsg\File($agentid, $media_id);
+                    $objMsg = new \Qyweixin\Model\LinkedcorpMsg\File($agentid, $media_id);
                     break;
                 case 'image':
                     $media_id = $this->getMediaId4LinkedcorpMsg('image', $linkedcorpMsgInfo);
-                    $objMsg = new \Weixin\Qy\Model\LinkedcorpMsg\Image($agentid, $media_id);
+                    $objMsg = new \Qyweixin\Model\LinkedcorpMsg\Image($agentid, $media_id);
                     break;
                 case 'textcard':
-                    $objMsg = new \Weixin\Qy\Model\LinkedcorpMsg\TextCard($agentid, $linkedcorpMsgInfo['title'], $linkedcorpMsgInfo['description'], $linkedcorpMsgInfo['url']);
+                    $objMsg = new \Qyweixin\Model\LinkedcorpMsg\TextCard($agentid, $linkedcorpMsgInfo['title'], $linkedcorpMsgInfo['description'], $linkedcorpMsgInfo['url']);
                     $objMsg->btntxt = $linkedcorpMsgInfo['btntxt'];
                     break;
                 case 'news':
@@ -579,7 +579,7 @@ class QyService
                     $modelLinkedcorpMsgNews = new \App\Qyweixin\Models\LinkedcorpMsg\News();
                     $articles1 = $modelLinkedcorpMsgNews->getArticlesByLinkedcorpMsgId($linkedcorpMsgInfo['id'], 'news', $isFirst);
                     $articles = array_merge($articles, $articles1);
-                    $objMsg = new \Weixin\Qy\Model\LinkedcorpMsg\News($agentid, $articles);
+                    $objMsg = new \Qyweixin\Model\LinkedcorpMsg\News($agentid, $articles);
                     break;
                 case 'mpnews':
                     // 获取图文列表
@@ -594,13 +594,13 @@ class QyService
                         $article['thumb_media_id'] = $res4ThumbMedia['media_id'];
                         unset($article['thumb_media']);
                     }
-                    $objMsg = new \Weixin\Qy\Model\LinkedcorpMsg\Mpnews($agentid, $articles);
+                    $objMsg = new \Qyweixin\Model\LinkedcorpMsg\Mpnews($agentid, $articles);
                     break;
                 case 'markdown':
-                    $objMsg = new \Weixin\Qy\Model\LinkedcorpMsg\Markdown($agentid, $linkedcorpMsgInfo['description']);
+                    $objMsg = new \Qyweixin\Model\LinkedcorpMsg\Markdown($agentid, $linkedcorpMsgInfo['description']);
                     break;
                 case 'miniprogram_notice':
-                    $objMsg = new \Weixin\Qy\Model\LinkedcorpMsg\MiniprogramNotice($linkedcorpMsgInfo['appid'], $linkedcorpMsgInfo['title']);
+                    $objMsg = new \Qyweixin\Model\LinkedcorpMsg\MiniprogramNotice($linkedcorpMsgInfo['appid'], $linkedcorpMsgInfo['title']);
                     $objMsg->page = $linkedcorpMsgInfo['pagepath'];
                     $objMsg->description = $linkedcorpMsgInfo['description'];
                     $objMsg->emphasis_first_item = $linkedcorpMsgInfo['emphasis_first_item'];
