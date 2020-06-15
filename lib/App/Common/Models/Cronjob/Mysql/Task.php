@@ -8,7 +8,7 @@ class Task extends Base
 {
 
     /**
-     * 计划任务-临时任务
+     * 计划任务-任务
      * This model is mapped to the table icronjob_task
      */
     public function getSource()

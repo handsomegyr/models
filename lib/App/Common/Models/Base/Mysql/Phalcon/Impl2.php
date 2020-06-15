@@ -77,22 +77,19 @@ class Impl2 extends Base
 
     public function begin()
     {
-        return $this->getDI()
-            ->getDb()
+        return $this->getDbFromDi()
             ->begin();
     }
 
     public function commit()
     {
-        return $this->getDI()
-            ->getDb()
+        return $this->getDbFromDi()
             ->commit();
     }
 
     public function rollback()
     {
-        return $this->getDI()
-            ->getDb()
+        return $this->getDbFromDi()
             ->rollback();
     }
 
@@ -372,10 +369,10 @@ class Impl2 extends Base
 
     protected function executeDBQuery($phql, array $data, $method = 'query')
     {
-        $di = $this->getDI();
-        $db = $di['db'];
+        $db = $this->getDbFromDi();
         // 只有在读取数据的时候，如果设置了secondary的话
         if ($method == 'query' && $this->getSecondary()) {
+            $di = $this->getDI();
             $db = $di['secondarydb'];
         }
         $result = $db->$method($phql, $data);
@@ -385,5 +382,16 @@ class Impl2 extends Base
         } else {
             return $db->affectedRows();
         }
+    }
+
+    protected function getDbFromDi()
+    {
+        $dbname = $this->getDb();
+        if (empty($dbname)) {
+            $dbname = 'db';
+        }
+        $di = $this->getDI();
+        $db = $di[$dbname];
+        return $db;
     }
 }

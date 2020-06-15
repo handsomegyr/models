@@ -15,4 +15,12 @@ class Index extends Base
     {
         return 'idatabase_project_collection_index';
     }
+
+    public function reorganize(array $data)
+    {
+        $data = parent::reorganize($data);
+        $data['indexes'] = $this->changeToArray($data['indexes']);
+        $data['options'] = $this->changeToArray($data['options']);
+        return $data;
+    }
 }

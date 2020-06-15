@@ -141,10 +141,25 @@ trait BaseTrait
                             $bind['gte_' . $bindKey] = $value;
                         }
 
+                        // '$like'=> '%xxx%'
                         if ($op == '$like') {
                             // 解决like查询
                             $conditions[] = "{$fieldKey} LIKE :like_{$bindKey}:";
                             $bind['like_' . $bindKey] = $value;
+                        }
+
+                        // '$or'=>array('$gte'=>1,'lte'=>10)
+                        if ($op == '$or') {
+                            if (empty($value) || !is_array($value)) {
+                                throw new \Exception('$or条件查询格式不正确');
+                            }
+                            $item2 = array($key => $value);
+                            // 解决OR查询
+                            $orConditions = $this->getConditions($item2, "OR", $level + 1);
+                            if (!empty($orConditions)) {
+                                $conditions[] = $orConditions['conditions'];
+                                $bind = array_merge($bind, $orConditions['bind']);
+                            }
                         }
                     }
                 } else {
@@ -474,7 +489,10 @@ trait BaseTrait
         if (!empty($order['order'])) {
             $orderBy = "ORDER BY {$order['order']}";
         }
-        $phql = "SELECT * FROM {$className} WHERE {$conditions['conditions']} {$orderBy} LIMIT {$conditions['limit']} OFFSET {$conditions['offset']} ";
+
+        $fieldsSql = $this->getFieldsSql($fields);
+
+        $phql = "SELECT {$fieldsSql} FROM {$className} WHERE {$conditions['conditions']} {$orderBy} LIMIT {$conditions['limit']} OFFSET {$conditions['offset']} ";
         if (!empty($conditions['for_update'])) {
             $phql = $phql . "  FOR UPDATE ";
             unset($conditions['for_update']);
@@ -500,7 +518,9 @@ trait BaseTrait
         if (!empty($order['order'])) {
             $orderBy = "ORDER BY {$order['order']}";
         }
-        $phql = "SELECT * FROM {$className} WHERE {$conditions['conditions']} {$orderBy} ";
+        $fieldsSql = $this->getFieldsSql($fields);
+
+        $phql = "SELECT {$fieldsSql} FROM {$className} WHERE {$conditions['conditions']} {$orderBy} ";
         if (!empty($conditions['for_update'])) {
             $phql = $phql . "  FOR UPDATE ";
             unset($conditions['for_update']);
@@ -643,5 +663,25 @@ trait BaseTrait
             'updateFieldValues' => $updateFieldValues,
             'conditions' => $conditions
         );
+    }
+
+    protected function getFieldsSql($fields)
+    {
+        $fieldsSql = array();
+        if (!empty($fields)) {
+            foreach ($fields as $field => $selected) {
+                if ($selected) {
+                    $fieldsSql[$field] = $field;
+                }
+            }
+        }
+        if (empty($fieldsSql)) {
+            $fieldsSql = '*';
+        } else {
+            // 无条件的加上_id字段
+            unset($fieldsSql['_id']);
+            $fieldsSql = '_id,' . implode(',', array_keys($fieldsSql));
+        }
+        return $fieldsSql;
     }
 }

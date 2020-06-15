@@ -26,7 +26,6 @@ class Structure extends Base
         $data['export'] = $this->changeToBoolean($data['export']);
         $data['encipher'] = $this->changeToBoolean($data['encipher']);
         $data['showImage'] = $this->changeToBoolean($data['showImage']);
-        $data['is_smtp'] = $this->changeToBoolean($data['is_smtp']);
         $data['displayFileId'] = $this->changeToBoolean($data['displayFileId']);
         $data['isBoxSelect'] = $this->changeToBoolean($data['isBoxSelect']);
         $data['isFatherField'] = $this->changeToBoolean($data['isFatherField']);
