@@ -75,16 +75,15 @@ class QyService
 
     public function getQyWeixinObject()
     {
-        $this->getToken4Authorizer();
-
         if (empty($this->agentid)) {
+            $this->getToken4Authorizer();
             $this->objQyWeixin = new \Qyweixin\Client($this->authorizerConfig['appid'], $this->authorizerConfig['appsecret']);
             if (!empty($this->authorizerConfig['access_token'])) {
                 $this->objQyWeixin->setAccessToken($this->authorizerConfig['access_token']);
             }
         } else {
             $agentInfo = $this->modelQyweixinAgent->getTokenByAppid($this->provider_appid, $this->authorizer_appid, $this->agentid);
-            $this->objQyWeixin = new \Qyweixin\Client($this->authorizerConfig['appid'], $agentInfo['secret']);
+            $this->objQyWeixin = new \Qyweixin\Client($agentInfo['authorizer_appid'], $agentInfo['secret']);
             if (!empty($agentInfo['access_token'])) {
                 $this->objQyWeixin->setAccessToken($agentInfo['access_token']);
             }
