@@ -20,6 +20,7 @@ class Agent extends Base
         $data = parent::reorganize($data);
 
         $data['access_token_expire'] = $this->changeToMongoDate($data['access_token_expire']);
+        $data['jsapi_ticket_expire'] = $this->changeToMongoDate($data['jsapi_ticket_expire']);
 
         return $data;
     }

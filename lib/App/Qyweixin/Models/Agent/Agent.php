@@ -69,6 +69,25 @@ class Agent extends \App\Common\Models\Qyweixin\Agent\Agent
         return $newInfo;
     }
 
+    public function updateJsapiTicket($id, $jsapi_ticket,  $expires_in, $memo = array())
+    {
+        $updateData = array();
+        $updateData['jsapi_ticket'] = $jsapi_ticket;
+        $updateData['jsapi_ticket_expire'] = \App\Common\Utils\Helper::getCurrentTime(time() + $expires_in);
+        if (!empty($memo)) {
+            $updateData["memo"] = $memo;
+        }
+        $affectRows = $this->update(array('_id' => $id), array('$set' => $updateData));
+        // 重新获取数据
+        $newInfo = $this->getInfoById($id);
+        if (!empty($newInfo)) {
+            $expire_time = 5 * 60;
+            $cache = $this->getDI()->get('cache');
+            $cache->save($this->getCacheKey4AppId($newInfo['provider_appid'], $newInfo['authorizer_appid'], $newInfo['agentid']), $newInfo, $expire_time);
+        }
+        return $newInfo;
+    }
+
     public function getSignKey($openid, $secretKey, $timestamp = 0)
     {
         return sha1($openid . "|" . $secretKey . "|" . $timestamp);
@@ -93,7 +112,7 @@ class Agent extends \App\Common\Models\Qyweixin\Agent\Agent
                     if (!isset($arrToken['access_token'])) {
                         throw new \Exception(json_encode($arrToken));
                     }
-                    $token = $this->updateAccessToken($token['_id'], $arrToken['access_token'], $arrToken['expires_in'], null);
+                    $token = $this->updateAccessToken($token['_id'], $arrToken['access_token'], $arrToken['expires_in']);
                 }
             }
         }
@@ -103,6 +122,28 @@ class Agent extends \App\Common\Models\Qyweixin\Agent\Agent
             $this->_expire = strtotime($token['access_token_expire']) - time();
         }
 
+        // 
+        jsnoLock:
+        // 获取jsapi_ticket
+        if (empty($token['jsapi_ticket_expire']) || strtotime($token['jsapi_ticket_expire']) <= time()) {
+            if (!empty($token['access_token'])) {
+                $lockKey = cacheKey(__FILE__, __CLASS__, __METHOD__, __LINE__, $token['provider_appid'], $token['authorizer_appid'], $token['agentid'], 'jsapi_ticket');
+                $objLock = new \iLock($lockKey);
+                if (!$objLock->lock()) {
+                    // 获取jsapi_ticket
+                    $objJssdk = new \Qyweixin\Jssdk();
+                    // 企业内部应用的时候
+                    if (empty($token['agent_type'])) {
+                        // 获取企业的jsapi_ticket
+                        $arrJsApiTicket = $objJssdk->getJsApiTicket($token['access_token']);
+                    } else {
+                        // 获取应用的jsapi_ticket
+                        $arrJsApiTicket = $objJssdk->getJsApiTicket4Agent($token['access_token']);
+                    }
+                    $token = $this->updateJsapiTicket($token['id'], $arrJsApiTicket['ticket'], $arrJsApiTicket['expires_in']);
+                }
+            }
+        }
         return $token;
     }
 
