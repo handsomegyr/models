@@ -156,6 +156,9 @@ class Api
                             throw new \Exception('虚拟券不足!', -10);
                         }
                     }
+                } else {
+                    // 实物奖固定即时生效
+                    $isValid = true;
                 }
 
                 // 虚拟奖品的券码

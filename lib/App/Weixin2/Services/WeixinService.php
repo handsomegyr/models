@@ -1191,7 +1191,7 @@ class WeixinService
             throw new \Exception($res['errmsg'], $res['errcode']);
         }
 
-        $templateInfo->removeCreatedStatus($template_rec_id, time());
+        $modelTemplate->removeCreatedStatus($template_rec_id, time());
 
         return $res;
     }

@@ -660,6 +660,54 @@ class QyService
         );
     }
 
+    public function GetFollowUserList()
+    {
+        $modelFollowUser = new \App\Qyweixin\Models\ExternalContact\FollowUser();
+        $res = $this->getQyWeixinObject()
+            ->getExternalContactManager()
+            ->getFollowUserList();
+        if (!empty($res['errcode'])) {
+            throw new \Exception($res['errmsg'], $res['errcode']);
+        }
+        /**
+         * {
+         * "errcode": 0,
+         * "errmsg": "ok",
+         * "follow_user":[
+         *     "zhangsan",
+         *     "lissi"
+         *  ]
+         * }
+         */
+        $modelFollowUser->syncFollowUserList($this->authorizer_appid, $this->provider_appid, $res, time());
+        return $res;
+    }
+    
+    //获取客户列表
+    public function GetExternalUserList($userid)
+    {
+        $modelExternalUser = new \App\Qyweixin\Models\ExternalContact\ExternalUser();
+        $res = $this->getQyWeixinObject()
+            ->getExternalContactManager()
+            ->list($userid);
+        if (!empty($res['errcode'])) {
+            throw new \Exception($res['errmsg'], $res['errcode']);
+        }
+        /**
+         * {
+         * "errcode": 0,
+         * "errmsg": "ok",
+         * "external_userid":
+         * [
+         *    "woAJ2GCAAAXtWyujaWJHDDGi0mACAAA",
+         *    "wmqfasd1e1927831291723123109rAAA"
+         * ]
+         * }
+         */
+        $modelExternalUser->syncExternalUserList($this->authorizer_appid, $this->provider_appid, $res, time());
+        return $res;
+    }
+
     private function getMediaId4ReplyMsg($type, $reply)
     {
         if (!empty($reply['media'])) {
