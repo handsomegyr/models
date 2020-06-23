@@ -353,13 +353,17 @@ class Impl2 extends Base
     protected function executeQuery($phql, array $data, $method = 'query')
     {
         try {
+            if ($this->getDebug()) {
+                echo "<pre><br/>";
+                echo $phql . "<br/>";
+                var_dump($data);
+            }
             $phql = preg_replace('/:(.*?):/i', ':$1', $phql);
             $phql = preg_replace('/\[(.*?)\]/i', '`$1`', $phql);
             if ($this->getDebug()) {
                 echo "<pre><br/>";
                 echo $phql . "<br/>";
-                var_dump($data);
-                die('OK');
+                // die('OK');
             }
             return $this->executeDBQuery($phql, $data, $method);
         } catch (\Exception $e) {

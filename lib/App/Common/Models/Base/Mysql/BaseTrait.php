@@ -582,7 +582,7 @@ trait BaseTrait
             $conditions['bind'] = array();
         }
         $className = $this->getSource();
-        $phql = "select DISTINCT {$field} FROM {$className} WHERE {$conditions['conditions']}";
+        $phql = "select DISTINCT [{$field}] FROM {$className} WHERE {$conditions['conditions']}";
         if (!empty($conditions['for_update'])) {
             $phql = $phql . "  FOR UPDATE ";
             unset($conditions['for_update']);
@@ -671,7 +671,8 @@ trait BaseTrait
         if (!empty($fields)) {
             foreach ($fields as $field => $selected) {
                 if ($selected) {
-                    $fieldsSql[$field] = $field;
+                    $field = trim($field, '`');
+                    $fieldsSql["[{$field}]"] = $field;
                 }
             }
         }
@@ -679,8 +680,8 @@ trait BaseTrait
             $fieldsSql = '*';
         } else {
             // 无条件的加上_id字段
-            unset($fieldsSql['_id']);
-            $fieldsSql = '_id,' . implode(',', array_keys($fieldsSql));
+            unset($fieldsSql['[_id]']);
+            $fieldsSql = '[_id],' . implode(',', array_keys($fieldsSql));
         }
         return $fieldsSql;
     }
