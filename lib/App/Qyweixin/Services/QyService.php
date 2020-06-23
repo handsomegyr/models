@@ -230,6 +230,7 @@ class QyService
         return $res;
     }
 
+    // 添加企业群发消息任务
     public function addMsgTemplate($msgTemplateInfo)
     {
         $modelMsgTemplate = new \App\Qyweixin\Models\ExternalContact\MsgTemplate();
@@ -247,8 +248,17 @@ class QyService
         $text = new \Qyweixin\Model\ExternalContact\Conclusion\Text($msgTemplateInfo['text_content']);
         $msgTemplate->text = $text;
 
-        if (!empty($msgTemplateInfo['image_media_id']) || !empty($msgTemplateInfo['image_pic_url'])) {
-            $image = new \Qyweixin\Model\ExternalContact\Conclusion\Image($msgTemplateInfo['image_media_id'], $msgTemplateInfo['image_pic_url']);
+        if (!empty($msgTemplateInfo['image_media'])) {
+            if (!empty($msgTemplateInfo['image_pic_url'])) {
+                $image = new \Qyweixin\Model\ExternalContact\Conclusion\Image("", $msgTemplateInfo['image_pic_url']);
+            } else {
+                $res = $this->uploadMediaByApi($msgTemplateInfo['image_media'], "image", $msgTemplateInfo['image_media_id'], $msgTemplateInfo['image_media_created_at']);
+                // 发生了改变就更新
+                if ($res['media_id'] != $msgTemplateInfo['image_media_id']) {
+                    $modelMsgTemplate->recordMediaId($msgTemplateInfo['id'], $res, time());
+                }
+                $image = new \Qyweixin\Model\ExternalContact\Conclusion\Image($res['media_id'], "");
+            }
             $msgTemplate->image = $image;
         }
 
@@ -258,10 +268,17 @@ class QyService
         }
 
         if (!empty($msgTemplateInfo['miniprogram_appid'])) {
-            $miniprogram = new \Qyweixin\Model\ExternalContact\Conclusion\Miniprogram($msgTemplateInfo['miniprogram_title'], $msgTemplateInfo['miniprogram_pic_media_id'], $msgTemplateInfo['miniprogram_appid'], $msgTemplateInfo['miniprogram_page']);
+
+            if (!empty($msgTemplateInfo['miniprogram_pic_media'])) {
+                $res2 = $this->uploadMediaByApi($msgTemplateInfo['miniprogram_pic_media'], "image", $msgTemplateInfo['miniprogram_pic_media_id'], $msgTemplateInfo['miniprogram_pic_media_created_at']);
+                // 发生了改变就更新
+                if ($res2['media_id'] != $msgTemplateInfo['miniprogram_pic_media_id']) {
+                    $modelMsgTemplate->recordMediaId4Miniprogram($msgTemplateInfo['id'], $res2, time());
+                }
+            }
+            $miniprogram = new \Qyweixin\Model\ExternalContact\Conclusion\Miniprogram($msgTemplateInfo['miniprogram_title'], $res2['media_id'], $msgTemplateInfo['miniprogram_appid'], $msgTemplateInfo['miniprogram_page']);
             $msgTemplate->miniprogram = $miniprogram;
         }
-
 
         $res = $this->getQyWeixinObject()
             ->getExternalContactManager()
@@ -276,6 +293,7 @@ class QyService
         return $res;
     }
 
+    // 获取群发消息发送结果
     public function getGroupMsgResult($msgTemplateInfo)
     {
         $modelMsgTemplate = new \App\Qyweixin\Models\ExternalContact\MsgTemplate();
@@ -308,6 +326,7 @@ class QyService
         return $res;
     }
 
+    // 配置客户联系「联系我」方式
     public function addContactWay($contactWayInfo)
     {
         $modelContactWay = new \App\Qyweixin\Models\ExternalContact\ContactWay();
@@ -340,8 +359,17 @@ class QyService
             $text = new \Qyweixin\Model\ExternalContact\Conclusion\Text($contactWayInfo['conclusions_text_content']);
             $conclusion->text = $text;
 
-            if (!empty($contactWayInfo['conclusions_image_media_id']) || !empty($contactWayInfo['conclusions_image_pic_url'])) {
-                $image = new \Qyweixin\Model\ExternalContact\Conclusion\Image($contactWayInfo['conclusions_image_media_id'], $contactWayInfo['conclusions_image_pic_url']);
+            if (!empty($contactWayInfo['conclusions_image_media'])) {
+                if (!empty($contactWayInfo['conclusions_image_pic_url'])) {
+                    $image = new \Qyweixin\Model\ExternalContact\Conclusion\Image("", $contactWayInfo['conclusions_image_pic_url']);
+                } else {
+                    $res = $this->uploadMediaByApi($contactWayInfo['conclusions_image_media'], "image", $contactWayInfo['conclusions_image_media_id'], $contactWayInfo['conclusions_image_media_created_at']);
+                    // 发生了改变就更新
+                    if ($res['media_id'] != $contactWayInfo['conclusions_image_media_id']) {
+                        $modelContactWay->recordMediaId($contactWayInfo['id'], $res, time());
+                    }
+                    $image = new \Qyweixin\Model\ExternalContact\Conclusion\Image($res['media_id'], "");
+                }
                 $conclusion->image = $image;
             }
 
@@ -351,7 +379,14 @@ class QyService
             }
 
             if (!empty($contactWayInfo['conclusions_miniprogram_appid'])) {
-                $miniprogram = new \Qyweixin\Model\ExternalContact\Conclusion\Miniprogram($contactWayInfo['conclusions_miniprogram_title'], $contactWayInfo['conclusions_miniprogram_pic_media_id'], $contactWayInfo['conclusions_miniprogram_appid'], $contactWayInfo['conclusions_miniprogram_page']);
+                if (!empty($contactWayInfo['conclusions_miniprogram_pic_media'])) {
+                    $res2 = $this->uploadMediaByApi($contactWayInfo['conclusions_miniprogram_pic_media'], "image", $contactWayInfo['conclusions_miniprogram_pic_media_id'], $contactWayInfo['conclusions_miniprogram_pic_media_created_at']);
+                    // 发生了改变就更新
+                    if ($res2['media_id'] != $contactWayInfo['conclusions_miniprogram_pic_media_id']) {
+                        $modelContactWay->recordMediaId4Miniprogram($contactWayInfo['id'], $res2, time());
+                    }
+                }
+                $miniprogram = new \Qyweixin\Model\ExternalContact\Conclusion\Miniprogram($contactWayInfo['conclusions_miniprogram_title'], $res2['media_id'], $contactWayInfo['conclusions_miniprogram_appid'], $contactWayInfo['conclusions_miniprogram_page']);
                 $conclusion->miniprogram = $miniprogram;
             }
             $contactWay->conclusion = $conclusion;
@@ -366,6 +401,112 @@ class QyService
 
         // "config_id":"42b34949e138eb6e027c123cba77fAAA"
         $modelContactWay->recordConfigId($contactWayInfo['id'], $res, time());
+        return $res;
+    }
+
+    // 发送新客户欢迎语
+    public function sendWelcomeMsg($welcome_code, $welcomeMsgInfo)
+    {
+        $modelWelcomeMsg = new \App\Qyweixin\Models\ExternalContact\WelcomeMsg();
+
+        $welcomeMsg = new \Qyweixin\Model\ExternalContact\WelcomeMsg($welcome_code);
+        $text = new \Qyweixin\Model\ExternalContact\Conclusion\Text($welcomeMsgInfo['text_content']);
+        $welcomeMsg->text = $text;
+
+        if (!empty($welcomeMsgInfo['image_media'])) {
+            if (!empty($welcomeMsgInfo['image_pic_url'])) {
+                $image = new \Qyweixin\Model\ExternalContact\Conclusion\Image("", $welcomeMsgInfo['image_pic_url']);
+            } else {
+                $res = $this->uploadMediaByApi($welcomeMsgInfo['image_media'], "image", $welcomeMsgInfo['image_media_id'], $welcomeMsgInfo['image_media_created_at']);
+                // 发生了改变就更新
+                if ($res['media_id'] != $welcomeMsgInfo['image_media_id']) {
+                    $modelWelcomeMsg->recordMediaId($welcomeMsgInfo['id'], $res, time());
+                }
+                $image = new \Qyweixin\Model\ExternalContact\Conclusion\Image($res['media_id'], "");
+            }
+            $welcomeMsg->image = $image;
+        }
+
+        if (!empty($welcomeMsgInfo['link_url'])) {
+            $link = new \Qyweixin\Model\ExternalContact\Conclusion\Link($welcomeMsgInfo['link_title'], $welcomeMsgInfo['link_picurl'], $welcomeMsgInfo['link_desc'], $welcomeMsgInfo['link_url']);
+            $welcomeMsg->link = $link;
+        }
+
+        if (!empty($welcomeMsgInfo['miniprogram_appid'])) {
+            if (!empty($welcomeMsgInfo['miniprogram_pic_media'])) {
+                $res2 = $this->uploadMediaByApi($welcomeMsgInfo['miniprogram_pic_media'], "image", $welcomeMsgInfo['miniprogram_pic_media_id'], $welcomeMsgInfo['miniprogram_pic_media_created_at']);
+                // 发生了改变就更新
+                if ($res2['media_id'] != $welcomeMsgInfo['miniprogram_pic_media_id']) {
+                    $modelWelcomeMsg->recordMediaId4Miniprogram($welcomeMsgInfo['id'], $res2, time());
+                }
+            }
+            $miniprogram = new \Qyweixin\Model\ExternalContact\Conclusion\Miniprogram($welcomeMsgInfo['miniprogram_title'], $res2['media_id'], $welcomeMsgInfo['miniprogram_appid'], $welcomeMsgInfo['miniprogram_page']);
+            $welcomeMsg->miniprogram = $miniprogram;
+        }
+
+        $res = $this->getQyWeixinObject()
+            ->getExternalContactManager()
+            ->sendWelcomeMsg($welcomeMsg);
+        if (!empty($res['errcode'])) {
+            throw new \Exception($res['errmsg'], $res['errcode']);
+        }
+
+        $updateData = array();
+        $updateData['send_time'] = date('Y-m-d H:i:s', time());
+        $modelWelcomeMsg->updateById($welcomeMsgInfo['id'], $updateData);
+
+        return $res;
+    }
+    
+    // 添加群欢迎语素材
+    public function addGroupWelcomeTemplate($groupWelcomeTemplateInfo)
+    {
+        $modelGroupWelcomeTemplate = new \App\Components\Qyweixin\Services\Models\ExternalContact\GroupWelcomeTemplateModel();
+
+        $groupWelcomeTemplate = new \Qyweixin\Model\ExternalContact\GroupWelcomeTemplate();
+
+        $text = new \Qyweixin\Model\ExternalContact\Conclusion\Text($groupWelcomeTemplateInfo['text_content']);
+        $groupWelcomeTemplate->text = $text;
+
+        if (!empty($groupWelcomeTemplateInfo['image_media'])) {
+            if (!empty($groupWelcomeTemplateInfo['image_pic_url'])) {
+                $image = new \Qyweixin\Model\ExternalContact\Conclusion\Image("", $groupWelcomeTemplateInfo['image_pic_url']);
+            } else {
+                $res = $this->uploadMediaByApi($groupWelcomeTemplateInfo['image_media'], "image", $groupWelcomeTemplateInfo['image_media_id'], $groupWelcomeTemplateInfo['image_media_created_at']);
+                // 发生了改变就更新
+                if ($res['media_id'] != $groupWelcomeTemplateInfo['image_media_id']) {
+                    $modelGroupWelcomeTemplate->recordMediaId($groupWelcomeTemplateInfo['id'], $res, time());
+                }
+                $image = new \Qyweixin\Model\ExternalContact\Conclusion\Image($res['media_id'], "");
+            }
+            $groupWelcomeTemplate->image = $image;
+        }
+
+        if (!empty($groupWelcomeTemplateInfo['link_url'])) {
+            $link = new \Qyweixin\Model\ExternalContact\Conclusion\Link($groupWelcomeTemplateInfo['link_title'], $groupWelcomeTemplateInfo['link_picurl'], $groupWelcomeTemplateInfo['link_desc'], $groupWelcomeTemplateInfo['link_url']);
+            $groupWelcomeTemplate->link = $link;
+        }
+
+        if (!empty($groupWelcomeTemplateInfo['miniprogram_appid'])) {
+            if (!empty($groupWelcomeTemplateInfo['miniprogram_pic_media'])) {
+                $res2 = $this->uploadMediaByApi($groupWelcomeTemplateInfo['miniprogram_pic_media'], "image", $groupWelcomeTemplateInfo['miniprogram_pic_media_id'], $groupWelcomeTemplateInfo['miniprogram_pic_media_created_at']);
+                // 发生了改变就更新
+                if ($res2['media_id'] != $groupWelcomeTemplateInfo['miniprogram_pic_media_id']) {
+                    $modelGroupWelcomeTemplate->recordMediaId4Miniprogram($groupWelcomeTemplateInfo['id'], $res2, time());
+                }
+            }
+            $miniprogram = new \Qyweixin\Model\ExternalContact\Conclusion\Miniprogram($groupWelcomeTemplateInfo['miniprogram_title'], $res2['media_id'], $groupWelcomeTemplateInfo['miniprogram_appid'], $groupWelcomeTemplateInfo['miniprogram_page']);
+            $groupWelcomeTemplate->miniprogram = $miniprogram;
+        }
+
+        $res = $this->getQyWeixinObject()
+            ->getExternalContactManager()
+            ->getGroupWelcomeTemplateManager()->add($groupWelcomeTemplate);
+        if (!empty($res['errcode'])) {
+            throw new \Exception($res['errmsg'], $res['errcode']);
+        }
+
+        $modelGroupWelcomeTemplate->recordTemplateId($groupWelcomeTemplateInfo['id'], $res, time());
         return $res;
     }
 
@@ -935,6 +1076,45 @@ class QyService
         return $res;
     }
 
+    //修改客户备注信息
+    public function remarkExternalUser($userInfo4Remark)
+    {
+        $modelExternalUserRemark = new \App\Qyweixin\Models\ExternalContact\ExternalUserRemark();
+        $remark = new \Qyweixin\Model\ExternalContact\Remark($userInfo4Remark['userid'], $userInfo4Remark['external_userid']);
+        $remark->remark = $userInfo4Remark['remark'];
+        $remark->description = $userInfo4Remark['description'];
+        $remark->remark_company = $userInfo4Remark['remark_company'];
+        if (!empty($userInfo4Remark['remark_mobiles'])) {
+            $remark->remark_mobiles = \json_decode($userInfo4Remark['remark_mobiles'], true);
+        }
+
+        if (!empty($userInfo4Remark['remark_pic_media'])) {
+            $res = $this->uploadMediaByApi($userInfo4Remark['remark_pic_media'], "image", $userInfo4Remark['remark_pic_mediaid'], $userInfo4Remark['remark_pic_media_created_at']);
+            // 发生了改变就更新
+            if ($res['media_id'] != $userInfo4Remark['remark_pic_mediaid']) {
+                $modelExternalUserRemark->recordMediaId($userInfo4Remark['id'], $res, time());
+            }
+            $remark->remark_pic_mediaid = $res['media_id'];
+        }
+
+        $res = $this->getQyWeixinObject()
+            ->getExternalContactManager()
+            ->remark($remark);
+        if (!empty($res['errcode'])) {
+            throw new \Exception($res['errmsg'], $res['errcode']);
+        }
+        /**
+         * {
+         * "errcode": 0,
+         * "errmsg": "ok"
+         */
+        $updateData = array();
+        $updateData['update_remark_time'] = date('Y-m-d H:i:s', time());
+        $modelExternalUserRemark->updateById($userInfo4Remark['id'], $updateData);
+
+        return $res;
+    }
+
     //获取企业标签库
     public function getCorpTagList($tag_id)
     {
@@ -980,6 +1160,39 @@ class QyService
          * }
          */
         $modelCorpTag->syncCorpTagList($this->authorizer_appid, $this->provider_appid, $res, time());
+        return $res;
+    }
+
+    //编辑客户企业标签
+    public function markCorpTag($corpTag4Mark)
+    {
+        $modelCorpTagMark = new \App\Qyweixin\Models\ExternalContact\CorpTagMark();
+
+        $add_tag = array();
+        if (!empty($corpTag4Mark['add_tag'])) {
+            $add_tag = \json_decode($corpTag4Mark['add_tag'], true);
+        }
+
+        $remove_tag = array();
+        if (!empty($corpTag4Mark['remove_tag'])) {
+            $remove_tag = \json_decode($corpTag4Mark['remove_tag'], true);
+        }
+
+        $res = $this->getQyWeixinObject()
+            ->getExternalContactManager()
+            ->markTag($corpTag4Mark['userid'], $corpTag4Mark['external_userid'], $add_tag, $remove_tag);
+        if (!empty($res['errcode'])) {
+            throw new \Exception($res['errmsg'], $res['errcode']);
+        }
+        /**
+         * {
+         * "errcode": 0,
+         * "errmsg": "ok"
+         */
+        $updateData = array();
+        $updateData['mark_tag_time'] = date('Y-m-d H:i:s', time());
+        $modelCorpTagMark->updateById($corpTag4Mark['id'], $updateData);
+
         return $res;
     }
 
