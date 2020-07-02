@@ -120,7 +120,7 @@ class Api
                     }
                 }
                 // 检查中奖情况和中奖限制条件的关系
-                $limit = $this->modelLimit->checkLimit($activity_id, $identity_id, $now, 'all');
+                $limit = $this->checkLimit($activity_id, $identity_id, $now, 'all');
                 if ($limit == false) {
                     throw new \Exception('到达抽奖限制的上限制', -3);
                 }
@@ -272,7 +272,7 @@ class Api
         $rules = $this->modelRule->getRules($activity_id, $now, $prize_ids, $exclude_prize_ids);
         if (!empty($rules)) {
             foreach ($rules as $rule) {
-                if (rand(0, 9999) < $rule['allow_probability'] && $rule['allow_number'] > 0) {
+                if (rand(0, 9999) < intval($rule['allow_probability']) && intval($rule['allow_number']) > 0) {
                     $allow = $this->checkLimit($activity_id, $identity_id, $now, $rule['prize_id']);
                     if ($allow)
                         return $rule;
