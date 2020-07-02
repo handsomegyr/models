@@ -97,6 +97,7 @@ class Rule extends \App\Common\Models\Lottery\Rule
         $query = array(
             '_id' => $rule['_id'],
             'prize_id' => $rule['prize_id'],
+            'win_number' => $rule['win_number'],
             'allow_number' => array(
                 '$gt' => 0
             )

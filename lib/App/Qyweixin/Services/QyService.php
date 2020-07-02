@@ -143,6 +143,21 @@ class QyService
         return $res;
     }
 
+    //获取应用的jsapi_ticket
+    public function getJsapiTicket4Agent()
+    {
+        $agentInfo = $this->getAccessToken4Agent();
+        return $agentInfo['jsapi_ticket'];
+    }
+
+    //获取应用的JS-SDK使用权限签名
+    public function getSignPackage($url)
+    {
+        $jsapi_ticket = $this->getJsapiTicket4Agent();
+        $objJssdk = new \Qyweixin\Jssdk();
+        return $objJssdk->getSignPackage($url, $jsapi_ticket);
+    }
+
     /**
      * 所有文件size必须大于5个字节
      * 图片（image）：2MB，支持JPG,PNG格式
@@ -457,7 +472,7 @@ class QyService
 
         return $res;
     }
-    
+
     // 添加群欢迎语素材
     public function addGroupWelcomeTemplate($groupWelcomeTemplateInfo)
     {
