@@ -640,6 +640,377 @@ class Menu
         );
         $tree[] = $item;
 
+        // 企业平台外部联系人管理
+        $item = array(
+            'menu_name' => '企业平台外部联系人管理',
+            'menu_model' => '',
+            'level' => '企业微信管理',
+            'icon' => '',
+            'model' => ''
+        );
+        $tree[] = $item;
+
+        // 企业服务人员管理
+        $item = array(
+            'menu_name' => '企业服务人员管理',
+            'menu_model' => '',
+            'level' => '企业平台外部联系人管理',
+            'icon' => '',
+            'model' => ''
+        );
+        $tree[] = $item;
+
+        // 服务人员
+        $item = array(
+            'menu_name' => '服务人员',
+            'menu_model' => 'qyweixin-ecfollowuser',
+            'level' => '企业服务人员管理',
+            'icon' => '',
+            'model' => '\App\Backend\Submodules\Qyweixin\Models\ExternalContact\FollowUser'
+        );
+        $tree[] = $item;
+
+        // 客户联系「联系我」管理
+        $item = array(
+            'menu_name' => '客户联系「联系我」管理',
+            'menu_model' => 'qyweixin-eccontactway',
+            'level' => '企业服务人员管理',
+            'icon' => '',
+            'model' => '\App\Backend\Submodules\Qyweixin\Models\ExternalContact\ContactWay'
+        );
+        $tree[] = $item;
+
+        // 企业客户管理
+        $item = array(
+            'menu_name' => '企业客户管理',
+            'menu_model' => '',
+            'level' => '企业平台外部联系人管理',
+            'icon' => '',
+            'model' => ''
+        );
+        $tree[] = $item;
+
+        // 客户
+        $item = array(
+            'menu_name' => '客户',
+            'menu_model' => 'qyweixin-ecexternaluser',
+            'level' => '企业客户管理',
+            'icon' => '',
+            'model' => '\App\Backend\Submodules\Qyweixin\Models\ExternalContact\ExternalUser'
+        );
+        $tree[] = $item;
+
+        // 添加外部联系人的企业成员
+        $item = array(
+            'menu_name' => '添加外部联系人的企业成员',
+            'menu_model' => 'qyweixin-ecexternaluserfollowuser',
+            'level' => '企业客户管理',
+            'icon' => '',
+            'model' => '\App\Backend\Submodules\Qyweixin\Models\ExternalContact\ExternalUserFollowUser'
+        );
+        $tree[] = $item;
+
+
+        // 修改客户备注信息
+        $item = array(
+            'menu_name' => '修改客户备注信息',
+            'menu_model' => 'qyweixin-ecexternaluserremark',
+            'level' => '企业客户管理',
+            'icon' => '',
+            'model' => '\App\Backend\Submodules\Qyweixin\Models\ExternalContact\ExternalUserRemark'
+        );
+        $tree[] = $item;
+
+        // 企业标签管理
+        $item = array(
+            'menu_name' => '企业标签管理',
+            'menu_model' => '',
+            'level' => '企业平台外部联系人管理',
+            'icon' => '',
+            'model' => ''
+        );
+        $tree[] = $item;
+
+        // 企业标签
+        $item = array(
+            'menu_name' => '企业标签',
+            'menu_model' => 'qyweixin-eccorptag',
+            'level' => '企业标签管理',
+            'icon' => '',
+            'model' => '\App\Backend\Submodules\Qyweixin\Models\ExternalContact\CorpTag'
+        );
+        $tree[] = $item;
+
+        // 编辑客户企业标签
+        $item = array(
+            'menu_name' => '编辑客户企业标签',
+            'menu_model' => 'qyweixin-eccorptagmark',
+            'level' => '企业标签管理',
+            'icon' => '',
+            'model' => '\App\Backend\Submodules\Qyweixin\Models\ExternalContact\CorpTagMark'
+        );
+        $tree[] = $item;
+
+        // 企业客户群管理
+        $item = array(
+            'menu_name' => '企业客户群管理',
+            'menu_model' => '',
+            'level' => '企业平台外部联系人管理',
+            'icon' => '',
+            'model' => ''
+        );
+        $tree[] = $item;
+
+        // 客户群
+        $item = array(
+            'menu_name' => '客户群',
+            'menu_model' => 'qyweixin-ecgroupchat',
+            'level' => '企业客户群管理',
+            'icon' => '',
+            'model' => '\App\Backend\Submodules\Qyweixin\Models\ExternalContact\GroupChat'
+        );
+        $tree[] = $item;
+
+        // 客户群成员
+        $item = array(
+            'menu_name' => '客户群成员',
+            'menu_model' => 'qyweixin-ecgroupchatmember',
+            'level' => '企业客户群管理',
+            'icon' => '',
+            'model' => '\App\Backend\Submodules\Qyweixin\Models\ExternalContact\GroupChatMember'
+        );
+        $tree[] = $item;
+
+        // 企业客户消息推送管理
+        $item = array(
+            'menu_name' => '企业客户消息推送管理',
+            'menu_model' => '',
+            'level' => '企业平台外部联系人管理',
+            'icon' => '',
+            'model' => ''
+        );
+        $tree[] = $item;
+
+        // 企业群发消息任务
+        $item = array(
+            'menu_name' => '企业群发消息任务',
+            'menu_model' => 'qyweixin-ecmsgtemplate',
+            'level' => '企业客户消息推送管理',
+            'icon' => '',
+            'model' => '\App\Backend\Submodules\Qyweixin\Models\ExternalContact\MsgTemplate'
+        );
+        $tree[] = $item;
+
+        // 企业群发消息发送结果
+        $item = array(
+            'menu_name' => '企业群发消息发送结果',
+            'menu_model' => 'qyweixin-ecgroupmsgresult',
+            'level' => '企业客户消息推送管理',
+            'icon' => '',
+            'model' => '\App\Backend\Submodules\Qyweixin\Models\ExternalContact\GroupMsgResult'
+        );
+        $tree[] = $item;
+
+        // 新客户欢迎语
+        $item = array(
+            'menu_name' => '新客户欢迎语',
+            'menu_model' => 'qyweixin-ecwelcomemsg',
+            'level' => '企业客户消息推送管理',
+            'icon' => '',
+            'model' => '\App\Backend\Submodules\Qyweixin\Models\ExternalContact\WelcomeMsg'
+        );
+        $tree[] = $item;
+
+        // 群欢迎语素材管理
+        $item = array(
+            'menu_name' => '群欢迎语素材管理',
+            'menu_model' => 'qyweixin-ecgroupwelcometemplate',
+            'level' => '企业客户消息推送管理',
+            'icon' => '',
+            'model' => '\App\Backend\Submodules\Qyweixin\Models\ExternalContact\GroupWelcomeTemplate'
+        );
+        $tree[] = $item;
+
+        // 企业服务人员离职管理
+        $item = array(
+            'menu_name' => '企业服务人员离职管理',
+            'menu_model' => '',
+            'level' => '企业平台外部联系人管理',
+            'icon' => '',
+            'model' => ''
+        );
+        $tree[] = $item;
+
+        // 离职成员的客户
+        $item = array(
+            'menu_name' => '离职成员的客户',
+            'menu_model' => 'qyweixin-ecunassigned',
+            'level' => '企业服务人员离职管理',
+            'icon' => '',
+            'model' => '\App\Backend\Submodules\Qyweixin\Models\ExternalContact\Unassigned'
+        );
+        $tree[] = $item;
+
+        // 离职成员的外部联系人再分配
+        $item = array(
+            'menu_name' => '离职成员的外部联系人再分配',
+            'menu_model' => 'qyweixin-ectransfer',
+            'level' => '企业服务人员离职管理',
+            'icon' => '',
+            'model' => '\App\Backend\Submodules\Qyweixin\Models\ExternalContact\Transfer'
+        );
+        $tree[] = $item;
+
+        // 离职成员的群再分配
+        $item = array(
+            'menu_name' => '离职成员的群再分配',
+            'menu_model' => 'qyweixin-ecgroupchattransfer',
+            'level' => '企业服务人员离职管理',
+            'icon' => '',
+            'model' => '\App\Backend\Submodules\Qyweixin\Models\ExternalContact\GroupChatTransfer'
+        );
+        $tree[] = $item;
+
+        // 企业客户统计管理
+        $item = array(
+            'menu_name' => '企业客户统计管理',
+            'menu_model' => '',
+            'level' => '企业平台外部联系人管理',
+            'icon' => '',
+            'model' => ''
+        );
+        $tree[] = $item;
+
+        // 联系客户按用户统计数据
+        $item = array(
+            'menu_name' => '联系客户按用户统计数据',
+            'menu_model' => 'qyweixin-ecuserbehaviordatabyuserid',
+            'level' => '企业客户统计管理',
+            'icon' => '',
+            'model' => '\App\Backend\Submodules\Qyweixin\Models\ExternalContact\UserBehaviorDataByUserid'
+        );
+        $tree[] = $item;
+
+        // 客户群按群主统计数据
+        $item = array(
+            'menu_name' => '客户群按群主统计数据',
+            'menu_model' => 'qyweixin-ecgroupchatstatisticbyuserid',
+            'level' => '企业客户统计管理',
+            'icon' => '',
+            'model' => '\App\Backend\Submodules\Qyweixin\Models\ExternalContact\GroupChatStatisticByUserid'
+        );
+        $tree[] = $item;
+
+        // 客户来源
+        $item = array(
+            'menu_name' => '客户来源',
+            'menu_model' => 'qyweixin-ecaddway',
+            'level' => '企业系统配置管理',
+            'icon' => '',
+            'model' => '\App\Backend\Submodules\Qyweixin\Models\ExternalContact\Addway'
+        );
+        $tree[] = $item;
+
+        // 企业平台通讯录管理
+        $item = array(
+            'menu_name' => '企业平台通讯录管理',
+            'menu_model' => '',
+            'level' => '企业平台用户管理',
+            'icon' => '',
+            'model' => ''
+        );
+        $tree[] = $item;
+
+        // 部门
+        $item = array(
+            'menu_name' => '部门',
+            'menu_model' => 'qyweixin-department',
+            'level' => '企业平台通讯录管理',
+            'icon' => '',
+            'model' => '\App\Backend\Submodules\Qyweixin\Models\Contact\Department'
+        );
+        $tree[] = $item;
+
+        // 部门成员
+        $item = array(
+            'menu_name' => '部门成员',
+            'menu_model' => 'qyweixin-departmentuser',
+            'level' => '企业平台通讯录管理',
+            'icon' => '',
+            'model' => '\App\Backend\Submodules\Qyweixin\Models\Contact\DepartmentUser'
+        );
+        $tree[] = $item;
+
+        // 标签
+        $item = array(
+            'menu_name' => '标签',
+            'menu_model' => 'qyweixin-tag',
+            'level' => '企业平台通讯录管理',
+            'icon' => '',
+            'model' => '\App\Backend\Submodules\Qyweixin\Models\Contact\Tag'
+        );
+        $tree[] = $item;
+
+        // 成员标签
+        $item = array(
+            'menu_name' => '成员标签',
+            'menu_model' => 'qyweixin-taguser',
+            'level' => '企业平台通讯录管理',
+            'icon' => '',
+            'model' => '\App\Backend\Submodules\Qyweixin\Models\Contact\TagUser'
+        );
+        $tree[] = $item;
+
+        // 部门标签
+        $item = array(
+            'menu_name' => '部门标签',
+            'menu_model' => 'qyweixin-tagparty',
+            'level' => '企业平台通讯录管理',
+            'icon' => '',
+            'model' => '\App\Backend\Submodules\Qyweixin\Models\Contact\TagParty'
+        );
+        $tree[] = $item;
+
+        // 批量邀请成员
+        $item = array(
+            'menu_name' => '批量邀请成员',
+            'menu_model' => 'qyweixin-batchinvite',
+            'level' => '企业平台通讯录管理',
+            'icon' => '',
+            'model' => '\App\Backend\Submodules\Qyweixin\Models\Contact\BatchInvite'
+        );
+        $tree[] = $item;
+
+        // 异步批量任务
+        $item = array(
+            'menu_name' => '异步批量任务',
+            'menu_model' => 'qyweixin-batchjob',
+            'level' => '企业平台通讯录管理',
+            'icon' => '',
+            'model' => '\App\Backend\Submodules\Qyweixin\Models\Contact\BatchJob'
+        );
+        $tree[] = $item;
+
+        // 加入企业二维码
+        $item = array(
+            'menu_name' => '加入企业二维码',
+            'menu_model' => 'qyweixin-corpjoinqrcode',
+            'level' => '企业平台通讯录管理',
+            'icon' => '',
+            'model' => '\App\Backend\Submodules\Qyweixin\Models\Contact\CorpJoinQrcode'
+        );
+        $tree[] = $item;
+
+        // 企业活跃成员数
+        $item = array(
+            'menu_name' => '企业活跃成员数',
+            'menu_model' => 'qyweixin-useractivestat',
+            'level' => '企业平台通讯录管理',
+            'icon' => '',
+            'model' => '\App\Backend\Submodules\Qyweixin\Models\Contact\UserActiveStat'
+        );
+        $tree[] = $item;
+
         return $tree;
     }
 }
