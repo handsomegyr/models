@@ -476,7 +476,7 @@ class QyService
     // 添加群欢迎语素材
     public function addGroupWelcomeTemplate($groupWelcomeTemplateInfo)
     {
-        $modelGroupWelcomeTemplate = new \App\Components\Qyweixin\Services\Models\ExternalContact\GroupWelcomeTemplateModel();
+        $modelGroupWelcomeTemplate = new \App\Qyweixin\Models\ExternalContact\GroupWelcomeTemplateModel();
 
         $groupWelcomeTemplate = new \Qyweixin\Model\ExternalContact\GroupWelcomeTemplate();
 
@@ -1005,6 +1005,89 @@ class QyService
         );
     }
 
+    //获取部门列表
+    public function getDepartmentList($dep_id)
+    {
+        $modelDepartment = new \App\Components\Qyweixin\Services\Models\Contact\DepartmentModel();
+        $res = $this->getQyWeixinObject()
+            ->getDepartmentManager()
+            ->list($dep_id);
+        if (!empty($res['errcode'])) {
+            throw new \Exception($res['errmsg'], $res['errcode']);
+        }
+        /**
+         * {
+         * "errcode": 0,
+         * "errmsg": "ok",
+         * "department": [
+         *  {
+         *      "id": 2,
+         *      "name": "广州研发中心",
+         *      "name_en": "RDGZ",
+         *      "parentid": 1,
+         *      "order": 10
+         *  },
+         *  {
+         *      "id": 3,
+         *      "name": "邮箱产品部",
+         *      "name_en": "mail",
+         *      "parentid": 2,
+         *      "order": 40
+         *  }
+         *]
+         * }
+         */
+        $modelDepartment->syncDepartmentList($this->authorizer_appid, $this->provider_appid, $res, time());
+        return $res;
+    }
+
+
+    //获取标签列表
+    public function getTagList()
+    {
+        $modelTag = new \App\Components\Qyweixin\Services\Models\Contact\TagModel();
+        $res = $this->getQyWeixinObject()
+            ->getTagManager()
+            ->list();
+        if (!empty($res['errcode'])) {
+            throw new \Exception($res['errmsg'], $res['errcode']);
+        }
+        /**
+         * {
+         * "errcode": 0,
+         * "errmsg": "ok",
+         * "taglist":[
+         *      {"tagid":1,"tagname":"a"},
+         *      {"tagid":2,"tagname":"b"}
+         *  ]
+         * }
+         */
+        $modelTag->syncTagList($this->authorizer_appid, $this->provider_appid, $res, time());
+        return $res;
+    }
+
+    //获取企业活跃成员数
+    public function getActiveStat($start_time)
+    {
+        $modelUserActiveStat = new \App\Components\Qyweixin\Services\Models\Contact\UserActiveStatModel();
+        $res = $this->getQyWeixinObject()
+            ->getUserManager()
+            ->getActiveStat($start_time);
+        if (!empty($res['errcode'])) {
+            throw new \Exception($res['errmsg'], $res['errcode']);
+        }
+
+        /**
+         * {
+         * "errcode": 0,
+         * "errmsg": "ok",
+         * "active_cnt":100
+         * }
+         */
+        $modelUserActiveStat->syncActiveStat($start_time, $this->authorizer_appid, $this->provider_appid, $res, time());
+        return $res;
+    }
+
     //获取配置了客户联系功能的成员列表
     public function getFollowUserList()
     {
@@ -1208,6 +1291,255 @@ class QyService
         $updateData['mark_tag_time'] = date('Y-m-d H:i:s', time());
         $modelCorpTagMark->updateById($corpTag4Mark['id'], $updateData);
 
+        return $res;
+    }
+
+    //获取客户群列表
+    public function getGroupChatList($status_filter = 0, $owner_filter = array(), $offset = 0, $limit = 1000)
+    {
+        $modelGroupChat = new \App\Qyweixin\Models\ExternalContact\GroupChat();
+        $res = $this->getQyWeixinObject()
+            ->getExternalContactManager()
+            ->getGroupChatManager()
+            ->list($status_filter, $owner_filter, $offset, $limit);
+        if (!empty($res['errcode'])) {
+            throw new \Exception($res['errmsg'], $res['errcode']);
+        }
+        /**
+         * {
+         * "errcode": 0,
+         * "errmsg": "ok",
+         * "group_chat_list": [{
+         *      "chat_id": "wrOgQhDgAAMYQiS5ol9G7gK9JVAAAA",
+         *      "status": 0
+         *   }, {
+         *      "chat_id": "wrOgQhDgAAcwMTB7YmDkbeBsAAAA",
+         *      "status": 0
+         *  }]
+         * }
+         */
+        $modelGroupChat->syncGroupChatList($this->authorizer_appid, $this->provider_appid, $res, time());
+        return $res;
+    }
+
+    //获取客户群详情
+    public function getGroupChatInfo($chatid)
+    {
+        $modelGroupChat = new \App\Qyweixin\Models\ExternalContact\GroupChat();
+        $groupChatInfo = $modelGroupChat->getInfoByChatId($chatid, $this->authorizer_appid);
+        if (empty($groupChatInfo)) {
+            throw new \Exception("客户群ID:{$chatid}所对应的记录不存在");
+        }
+
+        $res = $this->getQyWeixinObject()
+            ->getExternalContactManager()
+            ->getGroupChatManager()
+            ->get($chatid);
+        if (!empty($res['errcode'])) {
+            throw new \Exception($res['errmsg'], $res['errcode']);
+        }
+        /**
+         * {
+         * "errcode": 0,
+         * "errmsg": "ok",
+         * "group_chat": {
+         *      "chat_id": "wrOgQhDgAAMYQiS5ol9G7gK9JVAAAA",
+         *      "name": "销售客服群",
+         *      "owner": "ZhuShengBen",
+         *      "create_time": 1572505490,
+         *       "notice" : "文明沟通，拒绝脏话",
+         *      "member_list": [{
+         *          "userid": "abel",
+         *          "type": 1,
+         *          "join_time": 1572505491,
+         *          "join_scene": 1
+         *       }, {
+         *           "userid": "sam",
+         *          "type": 1,
+         *          "join_time": 1572505491,
+         *           "join_scene": 1
+         *      }, {
+         *           "userid": "wmOgQhDgAAuXFJGwbve4g4iXknfOAAAA",
+         *           "type": 2,
+         *          "join_time": 1572505491,
+         *          "join_scene": 1
+         *      }]
+         *  }
+         */
+        $modelGroupChat->updateGroupChatInfoByApi($groupChatInfo, $res, time());
+
+        // 同步member_list
+        if (!empty($res['group_chat']['member_list'])) {
+            $modelGroupChatMember = new \App\Qyweixin\Models\ExternalContact\GroupChatMember();
+            $modelGroupChatMember->syncMemberList($chatid, $this->authorizer_appid, $this->provider_appid, $res, time());
+        }
+
+        return $res;
+    }
+
+    //获取离职成员的客户列表
+    public function getUnassignedList($page_id = 0, $page_size = 1000)
+    {
+        $modelUnassigned = new \App\Qyweixin\Models\ExternalContact\Unassigned();
+        $res = $this->getQyWeixinObject()
+            ->getExternalContactManager()
+            ->getUnassignedList($page_id, $page_size);
+        if (!empty($res['errcode'])) {
+            throw new \Exception($res['errmsg'], $res['errcode']);
+        }
+        /**
+         * {
+         *   "errcode":0,
+         *   "errmsg":"ok",
+         *   "info":[
+         *   {
+         *        "handover_userid":"zhangsan",
+         *        "external_userid":"woAJ2GCAAAd4uL12hdfsdasassdDmAAAAA",
+         *        "dimission_time":1550838571
+         *   },
+         *   {
+         *        "handover_userid":"lisi",
+         *        "external_userid":"wmAJ2GCAAAzLTI123ghsdfoGZNqqAAAA",
+         *        "dimission_time":1550661468
+         *    }
+         * ],
+         * "is_last":false
+         *}
+         */
+        $modelUnassigned->syncUnassignedList($this->authorizer_appid, $this->provider_appid, $res, time());
+        return $res;
+    }
+
+    //离职成员的外部联系人再分配
+    public function transfer($external_userid, $handover_userid, $takeover_userid)
+    {
+        $modelTransfer = new \App\Qyweixin\Models\ExternalContact\Transfer();
+        $transferInfo = $modelTransfer->getInfoByUserId($external_userid, $handover_userid, $takeover_userid, $this->authorizer_appid);
+        if (empty($transferInfo)) {
+            throw new \Exception("外部联系人的userid:{$external_userid},离职成员的userid:{$handover_userid},接替成员的userid:{$takeover_userid}所对应的记录不存在");
+        }
+        $res = $this->getQyWeixinObject()
+            ->getExternalContactManager()
+            ->transfer($external_userid, $handover_userid, $takeover_userid);
+        if (!empty($res['errcode'])) {
+            throw new \Exception($res['errmsg'], $res['errcode']);
+        }
+        /**
+         * {
+         * "errcode": 0,
+         * "errmsg": "ok"
+         */
+        $modelTransfer->recordTransferResult($transferInfo['id'], $res, $res, time());
+        return $res;
+    }
+
+    //离职成员的群再分配
+    public function groupChatTransfer($chat_id, $new_owner)
+    {
+        $modelGroupChatTransfer = new \App\Qyweixin\Models\ExternalContact\GroupChatTransfer();
+        $transferInfo = $modelGroupChatTransfer->getInfoByChatId($chat_id, $new_owner, $this->authorizer_appid);
+        if (empty($transferInfo)) {
+            throw new \Exception("客户群ID:{$chat_id},新群主ID:{$new_owner}所对应的记录不存在");
+        }
+        $chat_id_list = array($chat_id);
+        $res = $this->getQyWeixinObject()
+            ->getExternalContactManager()
+            ->getGroupChatManager()
+            ->transfer($chat_id_list, $new_owner);
+        if (!empty($res['errcode'])) {
+            throw new \Exception($res['errmsg'], $res['errcode']);
+        }
+        /**
+         * {
+         * "errcode": 0,
+         * "errmsg": "ok"
+         * "failed_chat_list": [
+         * {
+         *     "chat_id": "wrOgQhDgAAcwMTB7YmDkbeBsgT_KAAAA",
+         *    "errcode": 90500,
+         *    "errmsg": "the owner of this chat is not resigned"
+         * }
+         * ]
+         */
+        $modelGroupChatTransfer->recordTransferResult($transferInfo['id'], $res, $res, time());
+        return $res;
+    }
+
+    //获取联系客户统计数据
+    public function getUserBehaviorDataByUserId($userid, $start_time, $end_time)
+    {
+        $modelUserBehaviorDataByUserid = new \App\Qyweixin\Models\ExternalContact\UserBehaviorDataByUserid();
+        $res = $this->getQyWeixinObject()
+            ->getExternalContactManager()
+            ->getUserBehaviorData(array($userid), array(), $start_time, $end_time);
+        if (!empty($res['errcode'])) {
+            throw new \Exception($res['errmsg'], $res['errcode']);
+        }
+
+        /**
+         * {
+         * "errcode": 0,
+         * "errmsg": "ok",
+         *     "behavior_data":
+         *      [
+         *          {
+         *          "stat_time":1536508800,
+         *          "chat_cnt":100,
+         *          "message_cnt":80,
+         *          "reply_percentage":60.25,
+         *          "avg_reply_time":1,
+         *          "negative_feedback_cnt":0,
+         *          "new_apply_cnt":6,
+         *          "new_contact_cnt":5
+         *          },
+         *          {
+         *          "stat_time":1536940800,
+         *          "chat_cnt":20,
+         *          "message_cnt":40,
+         *          "reply_percentage":100,
+         *          "avg_reply_time":1,
+         *          "negative_feedback_cnt":0,
+         *          "new_apply_cnt":6,
+         *          "new_contact_cnt":5
+         *          }
+         *      ]
+         */
+        $modelUserBehaviorDataByUserid->syncBehaviorDataList($userid, $this->authorizer_appid, $this->provider_appid, $res, time());
+        return $res;
+    }
+
+    //获取客户群统计数据
+    public function getGroupChatStatistic($day_begin_time, array $owner_filter, $order_by = 1, $order_asc = 0, $offset = 0, $limit = 1000)
+    {
+        $modelGroupChatStatisticByUserid = new \App\Qyweixin\Models\ExternalContact\GroupChatStatisticByUserid();
+        $res = $this->getQyWeixinObject()
+            ->getExternalContactManager()
+            ->getGroupChatManager()
+            ->statistic($day_begin_time, $owner_filter, $order_by, $order_asc, $offset, $limit);
+        if (!empty($res['errcode'])) {
+            throw new \Exception($res['errmsg'], $res['errcode']);
+        }
+
+        /**
+         * {
+         * "errcode": 0,
+         * "errmsg": "ok",
+         * "total": 1,
+         * "next_offset": 1,
+         * "items": [{
+         *        "owner": "zhangsan",
+         *        "data": {
+         *            "new_chat_cnt": 2,
+         *            "chat_total": 2,
+         *            "chat_has_msg": 0,
+         *            "new_member_cnt": 0,
+         *            "member_total": 6,
+         *            "member_has_msg": 0,
+         *            "msg_total": 0
+         *        }
+         *    }]
+         */
+        $modelGroupChatStatisticByUserid->syncGroupchatStatisticList($day_begin_time, $this->authorizer_appid, $this->provider_appid, $res, time());
         return $res;
     }
 
