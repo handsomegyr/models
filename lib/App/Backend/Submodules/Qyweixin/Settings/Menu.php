@@ -663,7 +663,7 @@ class Menu
         // 服务人员
         $item = array(
             'menu_name' => '服务人员',
-            'menu_model' => 'qyweixin-ecfollowuser',
+            'menu_model' => 'qyweixin-followuser',
             'level' => '企业服务人员管理',
             'icon' => '',
             'model' => '\App\Backend\Submodules\Qyweixin\Models\ExternalContact\FollowUser'
@@ -673,7 +673,7 @@ class Menu
         // 客户联系「联系我」管理
         $item = array(
             'menu_name' => '客户联系「联系我」管理',
-            'menu_model' => 'qyweixin-eccontactway',
+            'menu_model' => 'qyweixin-contactway',
             'level' => '企业服务人员管理',
             'icon' => '',
             'model' => '\App\Backend\Submodules\Qyweixin\Models\ExternalContact\ContactWay'
@@ -693,7 +693,7 @@ class Menu
         // 客户
         $item = array(
             'menu_name' => '客户',
-            'menu_model' => 'qyweixin-ecexternaluser',
+            'menu_model' => 'qyweixin-externaluser',
             'level' => '企业客户管理',
             'icon' => '',
             'model' => '\App\Backend\Submodules\Qyweixin\Models\ExternalContact\ExternalUser'
@@ -703,7 +703,7 @@ class Menu
         // 添加外部联系人的企业成员
         $item = array(
             'menu_name' => '添加外部联系人的企业成员',
-            'menu_model' => 'qyweixin-ecexternaluserfollowuser',
+            'menu_model' => 'qyweixin-externaluserfollowuser',
             'level' => '企业客户管理',
             'icon' => '',
             'model' => '\App\Backend\Submodules\Qyweixin\Models\ExternalContact\ExternalUserFollowUser'
@@ -714,7 +714,7 @@ class Menu
         // 修改客户备注信息
         $item = array(
             'menu_name' => '修改客户备注信息',
-            'menu_model' => 'qyweixin-ecexternaluserremark',
+            'menu_model' => 'qyweixin-externaluserremark',
             'level' => '企业客户管理',
             'icon' => '',
             'model' => '\App\Backend\Submodules\Qyweixin\Models\ExternalContact\ExternalUserRemark'
@@ -734,7 +734,7 @@ class Menu
         // 企业标签
         $item = array(
             'menu_name' => '企业标签',
-            'menu_model' => 'qyweixin-eccorptag',
+            'menu_model' => 'qyweixin-corptag',
             'level' => '企业标签管理',
             'icon' => '',
             'model' => '\App\Backend\Submodules\Qyweixin\Models\ExternalContact\CorpTag'
@@ -744,7 +744,7 @@ class Menu
         // 编辑客户企业标签
         $item = array(
             'menu_name' => '编辑客户企业标签',
-            'menu_model' => 'qyweixin-eccorptagmark',
+            'menu_model' => 'qyweixin-corptagmark',
             'level' => '企业标签管理',
             'icon' => '',
             'model' => '\App\Backend\Submodules\Qyweixin\Models\ExternalContact\CorpTagMark'
@@ -764,7 +764,7 @@ class Menu
         // 客户群
         $item = array(
             'menu_name' => '客户群',
-            'menu_model' => 'qyweixin-ecgroupchat',
+            'menu_model' => 'qyweixin-groupchat',
             'level' => '企业客户群管理',
             'icon' => '',
             'model' => '\App\Backend\Submodules\Qyweixin\Models\ExternalContact\GroupChat'
@@ -774,7 +774,7 @@ class Menu
         // 客户群成员
         $item = array(
             'menu_name' => '客户群成员',
-            'menu_model' => 'qyweixin-ecgroupchatmember',
+            'menu_model' => 'qyweixin-groupchatmember',
             'level' => '企业客户群管理',
             'icon' => '',
             'model' => '\App\Backend\Submodules\Qyweixin\Models\ExternalContact\GroupChatMember'
@@ -794,7 +794,7 @@ class Menu
         // 企业群发消息任务
         $item = array(
             'menu_name' => '企业群发消息任务',
-            'menu_model' => 'qyweixin-ecmsgtemplate',
+            'menu_model' => 'qyweixin-msgtemplate',
             'level' => '企业客户消息推送管理',
             'icon' => '',
             'model' => '\App\Backend\Submodules\Qyweixin\Models\ExternalContact\MsgTemplate'
@@ -804,7 +804,7 @@ class Menu
         // 企业群发消息发送结果
         $item = array(
             'menu_name' => '企业群发消息发送结果',
-            'menu_model' => 'qyweixin-ecgroupmsgresult',
+            'menu_model' => 'qyweixin-groupmsgresult',
             'level' => '企业客户消息推送管理',
             'icon' => '',
             'model' => '\App\Backend\Submodules\Qyweixin\Models\ExternalContact\GroupMsgResult'
@@ -814,7 +814,7 @@ class Menu
         // 新客户欢迎语
         $item = array(
             'menu_name' => '新客户欢迎语',
-            'menu_model' => 'qyweixin-ecwelcomemsg',
+            'menu_model' => 'qyweixin-welcomemsg',
             'level' => '企业客户消息推送管理',
             'icon' => '',
             'model' => '\App\Backend\Submodules\Qyweixin\Models\ExternalContact\WelcomeMsg'
@@ -824,7 +824,7 @@ class Menu
         // 群欢迎语素材管理
         $item = array(
             'menu_name' => '群欢迎语素材管理',
-            'menu_model' => 'qyweixin-ecgroupwelcometemplate',
+            'menu_model' => 'qyweixin-groupwelcometemplate',
             'level' => '企业客户消息推送管理',
             'icon' => '',
             'model' => '\App\Backend\Submodules\Qyweixin\Models\ExternalContact\GroupWelcomeTemplate'
@@ -844,7 +844,7 @@ class Menu
         // 离职成员的客户
         $item = array(
             'menu_name' => '离职成员的客户',
-            'menu_model' => 'qyweixin-ecunassigned',
+            'menu_model' => 'qyweixin-unassigned',
             'level' => '企业服务人员离职管理',
             'icon' => '',
             'model' => '\App\Backend\Submodules\Qyweixin\Models\ExternalContact\Unassigned'
@@ -854,7 +854,7 @@ class Menu
         // 离职成员的外部联系人再分配
         $item = array(
             'menu_name' => '离职成员的外部联系人再分配',
-            'menu_model' => 'qyweixin-ectransfer',
+            'menu_model' => 'qyweixin-transfer',
             'level' => '企业服务人员离职管理',
             'icon' => '',
             'model' => '\App\Backend\Submodules\Qyweixin\Models\ExternalContact\Transfer'
@@ -864,7 +864,7 @@ class Menu
         // 离职成员的群再分配
         $item = array(
             'menu_name' => '离职成员的群再分配',
-            'menu_model' => 'qyweixin-ecgroupchattransfer',
+            'menu_model' => 'qyweixin-groupchattransfer',
             'level' => '企业服务人员离职管理',
             'icon' => '',
             'model' => '\App\Backend\Submodules\Qyweixin\Models\ExternalContact\GroupChatTransfer'
@@ -884,7 +884,7 @@ class Menu
         // 联系客户按用户统计数据
         $item = array(
             'menu_name' => '联系客户按用户统计数据',
-            'menu_model' => 'qyweixin-ecuserbehaviordatabyuserid',
+            'menu_model' => 'qyweixin-userbehaviordatabyuserid',
             'level' => '企业客户统计管理',
             'icon' => '',
             'model' => '\App\Backend\Submodules\Qyweixin\Models\ExternalContact\UserBehaviorDataByUserid'
@@ -894,7 +894,7 @@ class Menu
         // 客户群按群主统计数据
         $item = array(
             'menu_name' => '客户群按群主统计数据',
-            'menu_model' => 'qyweixin-ecgroupchatstatisticbyuserid',
+            'menu_model' => 'qyweixin-groupchatstatisticbyuserid',
             'level' => '企业客户统计管理',
             'icon' => '',
             'model' => '\App\Backend\Submodules\Qyweixin\Models\ExternalContact\GroupChatStatisticByUserid'
@@ -904,7 +904,7 @@ class Menu
         // 客户来源
         $item = array(
             'menu_name' => '客户来源',
-            'menu_model' => 'qyweixin-ecaddway',
+            'menu_model' => 'qyweixin-addway',
             'level' => '企业系统配置管理',
             'icon' => '',
             'model' => '\App\Backend\Submodules\Qyweixin\Models\ExternalContact\Addway'
