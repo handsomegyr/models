@@ -139,7 +139,7 @@ class QyService
             throw new \Exception("对应的授权方不存在");
         }
         $res = $this->getQyweixinProvider()->apiGetAuthorizerInfo($this->authorizer_appid);
-        $modelAuthorizer->updateAuthorizerInfo($authorizerInfo['id'], $res, $authorizerInfo['memo']);
+        $modelAuthorizer->updateAuthorizerInfo($authorizerInfo['_id'], $res, $authorizerInfo['memo']);
         return $res;
     }
 
@@ -270,7 +270,7 @@ class QyService
                 $res = $this->uploadMediaByApi($msgTemplateInfo['image_media'], "image", $msgTemplateInfo['image_media_id'], $msgTemplateInfo['image_media_created_at']);
                 // 发生了改变就更新
                 if ($res['media_id'] != $msgTemplateInfo['image_media_id']) {
-                    $modelMsgTemplate->recordMediaId($msgTemplateInfo['id'], $res, time());
+                    $modelMsgTemplate->recordMediaId($msgTemplateInfo['_id'], $res, time());
                 }
                 $image = new \Qyweixin\Model\ExternalContact\Conclusion\Image($res['media_id'], "");
             }
@@ -288,7 +288,7 @@ class QyService
                 $res2 = $this->uploadMediaByApi($msgTemplateInfo['miniprogram_pic_media'], "image", $msgTemplateInfo['miniprogram_pic_media_id'], $msgTemplateInfo['miniprogram_pic_media_created_at']);
                 // 发生了改变就更新
                 if ($res2['media_id'] != $msgTemplateInfo['miniprogram_pic_media_id']) {
-                    $modelMsgTemplate->recordMediaId4Miniprogram($msgTemplateInfo['id'], $res2, time());
+                    $modelMsgTemplate->recordMediaId4Miniprogram($msgTemplateInfo['_id'], $res2, time());
                 }
             }
             $miniprogram = new \Qyweixin\Model\ExternalContact\Conclusion\Miniprogram($msgTemplateInfo['miniprogram_title'], $res2['media_id'], $msgTemplateInfo['miniprogram_appid'], $msgTemplateInfo['miniprogram_page']);
@@ -304,7 +304,7 @@ class QyService
 
         // "fail_list":["wmqfasd1e1927831123109rBAAAA"],
         // "msgid":"msgGCAAAXtWyujaWJHDDGi0mAAAA"
-        $modelMsgTemplate->recordMsgId($msgTemplateInfo['id'], $res, time());
+        $modelMsgTemplate->recordMsgId($msgTemplateInfo['_id'], $res, time());
         return $res;
     }
 
@@ -330,7 +330,7 @@ class QyService
         //         "send_time": 1552536375
         //     }
         // ]
-        $modelMsgTemplate->recordGroupMsgResult($msgTemplateInfo['id'], $res, time());
+        $modelMsgTemplate->recordGroupMsgResult($msgTemplateInfo['_id'], $res, time());
 
         // 同步数据到结果表
         // 同步detail_list
@@ -381,7 +381,7 @@ class QyService
                     $res = $this->uploadMediaByApi($contactWayInfo['conclusions_image_media'], "image", $contactWayInfo['conclusions_image_media_id'], $contactWayInfo['conclusions_image_media_created_at']);
                     // 发生了改变就更新
                     if ($res['media_id'] != $contactWayInfo['conclusions_image_media_id']) {
-                        $modelContactWay->recordMediaId($contactWayInfo['id'], $res, time());
+                        $modelContactWay->recordMediaId($contactWayInfo['_id'], $res, time());
                     }
                     $image = new \Qyweixin\Model\ExternalContact\Conclusion\Image($res['media_id'], "");
                 }
@@ -398,7 +398,7 @@ class QyService
                     $res2 = $this->uploadMediaByApi($contactWayInfo['conclusions_miniprogram_pic_media'], "image", $contactWayInfo['conclusions_miniprogram_pic_media_id'], $contactWayInfo['conclusions_miniprogram_pic_media_created_at']);
                     // 发生了改变就更新
                     if ($res2['media_id'] != $contactWayInfo['conclusions_miniprogram_pic_media_id']) {
-                        $modelContactWay->recordMediaId4Miniprogram($contactWayInfo['id'], $res2, time());
+                        $modelContactWay->recordMediaId4Miniprogram($contactWayInfo['_id'], $res2, time());
                     }
                 }
                 $miniprogram = new \Qyweixin\Model\ExternalContact\Conclusion\Miniprogram($contactWayInfo['conclusions_miniprogram_title'], $res2['media_id'], $contactWayInfo['conclusions_miniprogram_appid'], $contactWayInfo['conclusions_miniprogram_page']);
@@ -415,7 +415,7 @@ class QyService
         }
 
         // "config_id":"42b34949e138eb6e027c123cba77fAAA"
-        $modelContactWay->recordConfigId($contactWayInfo['id'], $res, time());
+        $modelContactWay->recordConfigId($contactWayInfo['_id'], $res, time());
         return $res;
     }
 
@@ -435,7 +435,7 @@ class QyService
                 $res = $this->uploadMediaByApi($welcomeMsgInfo['image_media'], "image", $welcomeMsgInfo['image_media_id'], $welcomeMsgInfo['image_media_created_at']);
                 // 发生了改变就更新
                 if ($res['media_id'] != $welcomeMsgInfo['image_media_id']) {
-                    $modelWelcomeMsg->recordMediaId($welcomeMsgInfo['id'], $res, time());
+                    $modelWelcomeMsg->recordMediaId($welcomeMsgInfo['_id'], $res, time());
                 }
                 $image = new \Qyweixin\Model\ExternalContact\Conclusion\Image($res['media_id'], "");
             }
@@ -452,7 +452,7 @@ class QyService
                 $res2 = $this->uploadMediaByApi($welcomeMsgInfo['miniprogram_pic_media'], "image", $welcomeMsgInfo['miniprogram_pic_media_id'], $welcomeMsgInfo['miniprogram_pic_media_created_at']);
                 // 发生了改变就更新
                 if ($res2['media_id'] != $welcomeMsgInfo['miniprogram_pic_media_id']) {
-                    $modelWelcomeMsg->recordMediaId4Miniprogram($welcomeMsgInfo['id'], $res2, time());
+                    $modelWelcomeMsg->recordMediaId4Miniprogram($welcomeMsgInfo['_id'], $res2, time());
                 }
             }
             $miniprogram = new \Qyweixin\Model\ExternalContact\Conclusion\Miniprogram($welcomeMsgInfo['miniprogram_title'], $res2['media_id'], $welcomeMsgInfo['miniprogram_appid'], $welcomeMsgInfo['miniprogram_page']);
@@ -467,8 +467,8 @@ class QyService
         }
 
         $updateData = array();
-        $updateData['send_time'] = date('Y-m-d H:i:s', time());
-        $modelWelcomeMsg->updateById($welcomeMsgInfo['id'], $updateData);
+        $updateData['send_time'] = \App\Common\Utils\Helper::getCurrentTime(time());
+        $modelWelcomeMsg->update(array('_id' => $welcomeMsgInfo['_id']), array('$set' => $updateData));
 
         return $res;
     }
@@ -476,7 +476,7 @@ class QyService
     // 添加群欢迎语素材
     public function addGroupWelcomeTemplate($groupWelcomeTemplateInfo)
     {
-        $modelGroupWelcomeTemplate = new \App\Qyweixin\Models\ExternalContact\GroupWelcomeTemplateModel();
+        $modelGroupWelcomeTemplate = new \App\Qyweixin\Models\ExternalContact\GroupWelcomeTemplate();
 
         $groupWelcomeTemplate = new \Qyweixin\Model\ExternalContact\GroupWelcomeTemplate();
 
@@ -490,7 +490,7 @@ class QyService
                 $res = $this->uploadMediaByApi($groupWelcomeTemplateInfo['image_media'], "image", $groupWelcomeTemplateInfo['image_media_id'], $groupWelcomeTemplateInfo['image_media_created_at']);
                 // 发生了改变就更新
                 if ($res['media_id'] != $groupWelcomeTemplateInfo['image_media_id']) {
-                    $modelGroupWelcomeTemplate->recordMediaId($groupWelcomeTemplateInfo['id'], $res, time());
+                    $modelGroupWelcomeTemplate->recordMediaId($groupWelcomeTemplateInfo['_id'], $res, time());
                 }
                 $image = new \Qyweixin\Model\ExternalContact\Conclusion\Image($res['media_id'], "");
             }
@@ -507,7 +507,7 @@ class QyService
                 $res2 = $this->uploadMediaByApi($groupWelcomeTemplateInfo['miniprogram_pic_media'], "image", $groupWelcomeTemplateInfo['miniprogram_pic_media_id'], $groupWelcomeTemplateInfo['miniprogram_pic_media_created_at']);
                 // 发生了改变就更新
                 if ($res2['media_id'] != $groupWelcomeTemplateInfo['miniprogram_pic_media_id']) {
-                    $modelGroupWelcomeTemplate->recordMediaId4Miniprogram($groupWelcomeTemplateInfo['id'], $res2, time());
+                    $modelGroupWelcomeTemplate->recordMediaId4Miniprogram($groupWelcomeTemplateInfo['_id'], $res2, time());
                 }
             }
             $miniprogram = new \Qyweixin\Model\ExternalContact\Conclusion\Miniprogram($groupWelcomeTemplateInfo['miniprogram_title'], $res2['media_id'], $groupWelcomeTemplateInfo['miniprogram_appid'], $groupWelcomeTemplateInfo['miniprogram_page']);
@@ -521,7 +521,7 @@ class QyService
             throw new \Exception($res['errmsg'], $res['errcode']);
         }
 
-        $modelGroupWelcomeTemplate->recordTemplateId($groupWelcomeTemplateInfo['id'], $res, time());
+        $modelGroupWelcomeTemplate->recordTemplateId($groupWelcomeTemplateInfo['_id'], $res, time());
         return $res;
     }
 
@@ -537,41 +537,173 @@ class QyService
         return $res;
     }
 
-    public function getUserInfo($user_id)
+
+    // 读取成员
+    public function getUserInfo($id)
     {
         $modelUser = new \App\Qyweixin\Models\User\User();
-        $userInfo = $modelUser->getInfoById($user_id);
+        $userInfo = $modelUser->getInfoById($id);
         if (empty($userInfo)) {
-            throw new \Exception("用户记录ID:{$user_id}所对应的用户不存在");
+            throw new \Exception("用户记录ID:{$id}所对应的用户不存在");
         }
         $res = $this->getQyWeixinObject()
             ->getUserManager()
-            ->getUserInfo($userInfo['openid']);
+            ->get($userInfo['userid']);
         /**
          * {
-         * "subscribe": 1,
-         * "openid": "o6_bmjrPTlm6_2sgVt7hMZOPfL2M",
-         * "nickname": "Band",
-         * "sex": 1,
-         * "language": "zh_CN",
-         * "city": "广州",
-         * "province": "广东",
-         * "country": "中国",
-         * "headimgurl":"http://thirdwx.qlogo.cn/mmopen/g3MonUZtNHkdmzicIlibx6iaFqAc56vxLSUfpb6n5WKSYVY0ChQKkiaJSgQ1dZuTOgvLLrhJbERQQ4eMsv84eavHiaiceqxibJxCfHe/0",
-         * "subscribe_time": 1382694957,
-         * "unionid": " o6_bmasdasdsad6_2sgVt7hMZOPfL"
-         * "remark": "",
-         * "groupid": 0,
-         * "tagid_list":[128,2],
-         * "subscribe_scene": "ADD_SCENE_QR_CODE",
-         * "qr_scene": 98765,
-         * "qr_scene_str": ""
+         * "errcode": 0,
+         * "errmsg": "ok",
+         * "userid": "zhangsan",
+         * "name": "李四",
+         * "department": [1, 2],
+         * "order": [1, 2],
+         * "position": "后台工程师",
+         * "mobile": "13800000000",
+         * "gender": "1",
+         * "email": "zhangsan@gzdev.com",
+         * "is_leader_in_dept": [1, 0],
+         * "avatar": "http://wx.qlogo.cn/mmopen/ajNVdqHZLLA3WJ6DSZUfiakYe37PKnQhBIeOQBO4czqrnZDS79FH5Wm5m4X69TBicnHFlhiafvDwklOpZeXYQQ2icg/0",
+         * "thumb_avatar": "http://wx.qlogo.cn/mmopen/ajNVdqHZLLA3WJ6DSZUfiakYe37PKnQhBIeOQBO4czqrnZDS79FH5Wm5m4X69TBicnHFlhiafvDwklOpZeXYQQ2icg/100",
+         * "telephone": "020-123456",
+         * "alias": "jackzhang",
+         * "address": "广州市海珠区新港中路",
+         * "open_userid": "xxxxxx",
+         * "main_department": 1,
+         * "extattr": {
+         * "attrs": [
+         * {
+         * "type": 0,
+         * "name": "文本名称",
+         * "text": {
+         * "value": "文本"
+         * }
+         * },
+         * {
+         * "type": 1,
+         * "name": "网页名称",
+         * "web": {
+         * "url": "http://www.test.com",
+         * "title": "标题"
+         * }
+         * }
+         * ]
+         * },
+         * "status": 1,
+         * "qr_code": "https://open.work.weixin.qq.com/wwopen/userQRCode?vcode=xxx",
+         * "external_position": "产品经理",
+         * "external_profile": {
+         * "external_corp_name": "企业简称",
+         * "external_attr": [{
+         * "type": 0,
+         * "name": "文本名称",
+         * "text": {
+         * "value": "文本"
+         * }
+         * },
+         * {
+         * "type": 1,
+         * "name": "网页名称",
+         * "web": {
+         * "url": "http://www.test.com",
+         * "title": "标题"
+         * }
+         * },
+         * {
+         * "type": 2,
+         * "name": "测试app",
+         * "miniprogram": {
+         * "appid": "wx8bd80126147dFAKE",
+         * "pagepath": "/index",
+         * "title": "my miniprogram"
+         * }
+         * }
+         * ]
+         * }
          * }
          */
         if (!empty($res['errcode'])) {
             throw new \Exception($res['errmsg'], $res['errcode']);
         }
         $modelUser->updateUserInfoById($userInfo, $res);
+        return $res;
+    }
+
+    // userid转openid
+    public function convertToOpenid($id)
+    {
+        $modelUser = new \App\Qyweixin\Models\User\User();
+        $userInfo = $modelUser->getInfoById($id);
+        if (empty($userInfo)) {
+            throw new \Exception("用户记录ID:{$id}所对应的用户不存在");
+        }
+        $res = $this->getQyWeixinObject()
+            ->getUserManager()
+            ->convertToOpenid($userInfo['userid']);
+        /**
+         * {
+         * "errcode": 0,
+         * "errmsg": "ok",
+         * "openid": "oDjGHs-1yCnGrRovBj2yHij5JAAA"
+         * }
+         */
+        if (!empty($res['errcode'])) {
+            throw new \Exception($res['errmsg'], $res['errcode']);
+        }
+        $data = array();
+        $data['openid'] = $res['openid'];
+        $modelUser->update(array('_id', $userInfo['_id']), array('$set' => $data));
+        return $res;
+    }
+
+    // openid转userid
+    public function convertToUserid($id)
+    {
+        $modelUser = new \App\Qyweixin\Models\User\User();
+        $userInfo = $modelUser->getInfoById($id);
+        if (empty($userInfo)) {
+            throw new \Exception("用户记录ID:{$id}所对应的用户不存在");
+        }
+        $res = $this->getQyWeixinObject()
+            ->getUserManager()
+            ->convertToUserid($userInfo['openid']);
+        /**
+         * {
+         * "errcode": 0,
+         * "errmsg": "ok",
+         * "userid": "zhangsan"
+         * }
+         */
+        if (!empty($res['errcode'])) {
+            throw new \Exception($res['errmsg'], $res['errcode']);
+        }
+        $data = array();
+        $data['userid'] = $res['userid'];
+        $modelUser->update(array('_id', $userInfo['_id']), array('$set' => $data));
+        return $res;
+    }
+
+    // 获取加入企业二维码
+    public function getJoinQrcode($id)
+    {
+        $modelCorpJoinQrcode = new \App\Qyweixin\Models\Contact\CorpJoinQrcode();
+        $qrcodeInfo = $modelCorpJoinQrcode->getInfoById($id);
+        if (empty($qrcodeInfo)) {
+            throw new \Exception("记录ID:{$id}所对应的用户不存在");
+        }
+        $res = $this->getQyWeixinObject()
+            ->getUserManager()
+            ->corpGetJoinQrcode($qrcodeInfo['size_type']);
+        /**
+         * {
+         * "errcode": 0,
+         * "errmsg": "ok",
+         * "join_qrcode": "https://work.weixin.qq.com/wework_admin/genqrcode?action=join&vcode=3db1fab03118ae2aa1544cb9abe84&r=hb_share_api_mjoin&qr_size=3"
+         * }
+         */
+        if (!empty($res['errcode'])) {
+            throw new \Exception($res['errmsg'], $res['errcode']);
+        }
+        $modelCorpJoinQrcode->recordJoinQrcode($qrcodeInfo['_id'], $res, time());
         return $res;
     }
 
@@ -593,7 +725,7 @@ class QyService
                 // 获取图文列表
                 $isFirst = empty($articles) ? true : false;
                 $modelReplyMsgNews = new \App\Qyweixin\Models\ReplyMsg\News();
-                $articles1 = $modelReplyMsgNews->getArticlesByReplyMsgId($replyMsgs[0]['id'], 'news', $isFirst);
+                $articles1 = $modelReplyMsgNews->getArticlesByReplyMsgId($replyMsgs[0]['_id'], 'news', $isFirst);
                 $articles = array_merge($articles, $articles1);
                 $replymsg = $objQyWeixin
                     ->getReplyManager()
@@ -626,7 +758,7 @@ class QyService
 
         // 记录日志
         $modelReplyMsgSendLog = new \App\Qyweixin\Models\ReplyMsg\SendLog();
-        $modelReplyMsgSendLog->record($replyMsgs[0]['provider_appid'], $replyMsgs[0]['authorizer_appid'], $replyMsgs[0]['agentid'], $replyMsgs[0]['id'], $replyMsgs[0]['name'], $replyMsgs[0]['msg_type'], $replyMsgs[0]['media'], $replyMsgs[0]['media_id'], $replyMsgs[0]['thumb_media'], $replyMsgs[0]['thumb_media_id'], $replyMsgs[0]['title'], $replyMsgs[0]['description'], $replyMsgs[0]['music'], $replyMsgs[0]['hqmusic'], $replyMsgs[0]['kf_account'], $match['id'], $match['keyword'], $match['reply_msg_type'], $ToUserName, $FromUserName, $replymsg, time());
+        $modelReplyMsgSendLog->record($replyMsgs[0]['provider_appid'], $replyMsgs[0]['authorizer_appid'], $replyMsgs[0]['agentid'], $replyMsgs[0]['_id'], $replyMsgs[0]['name'], $replyMsgs[0]['msg_type'], $replyMsgs[0]['media'], $replyMsgs[0]['media_id'], $replyMsgs[0]['thumb_media'], $replyMsgs[0]['thumb_media_id'], $replyMsgs[0]['title'], $replyMsgs[0]['description'], $replyMsgs[0]['music'], $replyMsgs[0]['hqmusic'], $replyMsgs[0]['kf_account'], $match['_id'], $match['keyword'], $match['reply_msg_type'], $ToUserName, $FromUserName, $replymsg, time());
 
         return $replymsg;
     }
@@ -681,7 +813,7 @@ class QyService
                     // 获取图文列表
                     $isFirst = empty($articles) ? true : false;
                     $modelAgentMsgNews = new \App\Qyweixin\Models\AgentMsg\News();
-                    $articles1 = $modelAgentMsgNews->getArticlesByAgentMsgId($agentMsgInfo['id'], 'news', $isFirst);
+                    $articles1 = $modelAgentMsgNews->getArticlesByAgentMsgId($agentMsgInfo['_id'], 'news', $isFirst);
                     $articles = array_merge($articles, $articles1);
                     $objMsg = new \Qyweixin\Model\Message\News($agentid, $articles, $FromUserName);
                     break;
@@ -689,7 +821,7 @@ class QyService
                     // 获取图文列表
                     $isFirst = false;
                     $modelAgentMsgNews = new \App\Qyweixin\Models\AgentMsg\News();
-                    $articles = $modelAgentMsgNews->getArticlesByAgentMsgId($agentMsgInfo['id'], 'mpnews', $isFirst);
+                    $articles = $modelAgentMsgNews->getArticlesByAgentMsgId($agentMsgInfo['_id'], 'mpnews', $isFirst);
                     if (empty($articles)) {
                         throw new \Exception("应用消息ID:{$agentMsgInfo['agent_msg_id']}所对应的图文不存在");
                     }
@@ -741,7 +873,7 @@ class QyService
             $agentMsgInfo['provider_appid'],
             $agentMsgInfo['authorizer_appid'],
             $agentMsgInfo['agentid'],
-            $agentMsgInfo['id'],
+            $agentMsgInfo['_id'],
             $agentMsgInfo['name'],
             $agentMsgInfo['msg_type'],
             $agentMsgInfo['media'],
@@ -760,7 +892,7 @@ class QyService
             $agentMsgInfo['enable_id_trans'],
             $agentMsgInfo['enable_duplicate_check'],
             $agentMsgInfo['duplicate_check_interval'],
-            $match['id'],
+            $match['_id'],
             $match['keyword'],
             $match['agent_msg_type'],
             $ToUserName,
@@ -813,7 +945,7 @@ class QyService
                     // 获取图文列表
                     $isFirst = empty($articles) ? true : false;
                     $modelAppchatMsgNews = new \App\Qyweixin\Models\AppchatMsg\News();
-                    $articles1 = $modelAppchatMsgNews->getArticlesByAppchatMsgId($appchatMsgInfo['id'], 'news', $isFirst);
+                    $articles1 = $modelAppchatMsgNews->getArticlesByAppchatMsgId($appchatMsgInfo['_id'], 'news', $isFirst);
                     $articles = array_merge($articles, $articles1);
                     $objMsg = new \Qyweixin\Model\AppchatMsg\News($chatid, $articles);
                     break;
@@ -821,7 +953,7 @@ class QyService
                     // 获取图文列表
                     $isFirst = false;
                     $modelAppchatMsgNews = new \App\Qyweixin\Models\AppchatMsg\News();
-                    $articles = $modelAppchatMsgNews->getArticlesByAppchatMsgId($appchatMsgInfo['id'], 'mpnews', $isFirst);
+                    $articles = $modelAppchatMsgNews->getArticlesByAppchatMsgId($appchatMsgInfo['_id'], 'mpnews', $isFirst);
                     if (empty($articles)) {
                         throw new \Exception("群聊会话消息ID:{$appchatMsgInfo['appchat_msg_id']}所对应的图文不存在");
                     }
@@ -859,7 +991,7 @@ class QyService
             $appchatMsgInfo['authorizer_appid'],
             $appchatMsgInfo['agentid'],
             $appchatMsgInfo['chatid'],
-            $appchatMsgInfo['id'],
+            $appchatMsgInfo['_id'],
             $appchatMsgInfo['name'],
             $appchatMsgInfo['msg_type'],
             $appchatMsgInfo['media'],
@@ -869,7 +1001,7 @@ class QyService
             $appchatMsgInfo['url'],
             $appchatMsgInfo['btntxt'],
             $appchatMsgInfo['safe'],
-            $match['id'],
+            $match['_id'],
             $match['keyword'],
             $match['appchat_msg_type'],
             $ToUserName,
@@ -921,7 +1053,7 @@ class QyService
                     // 获取图文列表
                     $isFirst = empty($articles) ? true : false;
                     $modelLinkedcorpMsgNews = new \App\Qyweixin\Models\LinkedcorpMsg\News();
-                    $articles1 = $modelLinkedcorpMsgNews->getArticlesByLinkedcorpMsgId($linkedcorpMsgInfo['id'], 'news', $isFirst);
+                    $articles1 = $modelLinkedcorpMsgNews->getArticlesByLinkedcorpMsgId($linkedcorpMsgInfo['_id'], 'news', $isFirst);
                     $articles = array_merge($articles, $articles1);
                     $objMsg = new \Qyweixin\Model\LinkedcorpMsg\News($agentid, $articles);
                     break;
@@ -929,7 +1061,7 @@ class QyService
                     // 获取图文列表
                     $isFirst = false;
                     $modelLinkedcorpMsgNews = new \App\Qyweixin\Models\LinkedcorpMsg\News();
-                    $articles = $modelLinkedcorpMsgNews->getArticlesByLinkedcorpMsgId($linkedcorpMsgInfo['id'], 'mpnews', $isFirst);
+                    $articles = $modelLinkedcorpMsgNews->getArticlesByLinkedcorpMsgId($linkedcorpMsgInfo['_id'], 'mpnews', $isFirst);
                     if (empty($articles)) {
                         throw new \Exception("互联企业消息ID:{$linkedcorpMsgInfo['linkedcorp_msg_id']}所对应的图文不存在");
                     }
@@ -975,7 +1107,7 @@ class QyService
             $linkedcorpMsgInfo['provider_appid'],
             $linkedcorpMsgInfo['authorizer_appid'],
             $linkedcorpMsgInfo['agentid'],
-            $linkedcorpMsgInfo['id'],
+            $linkedcorpMsgInfo['_id'],
             $linkedcorpMsgInfo['name'],
             $linkedcorpMsgInfo['msg_type'],
             $linkedcorpMsgInfo['media'],
@@ -990,7 +1122,7 @@ class QyService
             $linkedcorpMsgInfo['content_item'],
             $linkedcorpMsgInfo['toall'],
             $linkedcorpMsgInfo['safe'],
-            $match['id'],
+            $match['_id'],
             $match['keyword'],
             $match['linkedcorp_msg_type'],
             $ToUserName,
@@ -1008,7 +1140,7 @@ class QyService
     //获取部门列表
     public function getDepartmentList($dep_id)
     {
-        $modelDepartment = new \App\Components\Qyweixin\Services\Models\Contact\DepartmentModel();
+        $modelDepartment = new \App\Qyweixin\Models\Contact\Department();
         $res = $this->getQyWeixinObject()
             ->getDepartmentManager()
             ->list($dep_id);
@@ -1045,7 +1177,7 @@ class QyService
     //获取标签列表
     public function getTagList()
     {
-        $modelTag = new \App\Components\Qyweixin\Services\Models\Contact\TagModel();
+        $modelTag = new \App\Qyweixin\Models\Contact\Tag();
         $res = $this->getQyWeixinObject()
             ->getTagManager()
             ->list();
@@ -1069,7 +1201,7 @@ class QyService
     //获取企业活跃成员数
     public function getActiveStat($start_time)
     {
-        $modelUserActiveStat = new \App\Components\Qyweixin\Services\Models\Contact\UserActiveStatModel();
+        $modelUserActiveStat = new \App\Qyweixin\Models\Contact\UserActiveStat();
         $res = $this->getQyWeixinObject()
             ->getUserManager()
             ->getActiveStat($start_time);
@@ -1190,7 +1322,7 @@ class QyService
             $res = $this->uploadMediaByApi($userInfo4Remark['remark_pic_media'], "image", $userInfo4Remark['remark_pic_mediaid'], $userInfo4Remark['remark_pic_media_created_at']);
             // 发生了改变就更新
             if ($res['media_id'] != $userInfo4Remark['remark_pic_mediaid']) {
-                $modelExternalUserRemark->recordMediaId($userInfo4Remark['id'], $res, time());
+                $modelExternalUserRemark->recordMediaId($userInfo4Remark['_id'], $res, time());
             }
             $remark->remark_pic_mediaid = $res['media_id'];
         }
@@ -1207,9 +1339,8 @@ class QyService
          * "errmsg": "ok"
          */
         $updateData = array();
-        $updateData['update_remark_time'] = date('Y-m-d H:i:s', time());
-        $modelExternalUserRemark->updateById($userInfo4Remark['id'], $updateData);
-
+        $updateData['update_remark_time'] = \App\Common\Utils\Helper::getCurrentTime(time());
+        $modelExternalUserRemark->update(array('_id' => $userInfo4Remark['_id']), array('$set' => $updateData));
         return $res;
     }
 
@@ -1288,8 +1419,8 @@ class QyService
          * "errmsg": "ok"
          */
         $updateData = array();
-        $updateData['mark_tag_time'] = date('Y-m-d H:i:s', time());
-        $modelCorpTagMark->updateById($corpTag4Mark['id'], $updateData);
+        $updateData['mark_tag_time'] = \App\Common\Utils\Helper::getCurrentTime(time());
+        $modelCorpTagMark->update(array('_id' => $corpTag4Mark['_id']), array('$set' => $updateData));
 
         return $res;
     }
@@ -1429,7 +1560,7 @@ class QyService
          * "errcode": 0,
          * "errmsg": "ok"
          */
-        $modelTransfer->recordTransferResult($transferInfo['id'], $res, $res, time());
+        $modelTransfer->recordTransferResult($transferInfo['_id'], $res, $res, time());
         return $res;
     }
 
@@ -1461,7 +1592,7 @@ class QyService
          * }
          * ]
          */
-        $modelGroupChatTransfer->recordTransferResult($transferInfo['id'], $res, $res, time());
+        $modelGroupChatTransfer->recordTransferResult($transferInfo['_id'], $res, $res, time());
         return $res;
     }
 
