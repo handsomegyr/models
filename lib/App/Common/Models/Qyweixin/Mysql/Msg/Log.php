@@ -30,14 +30,23 @@ class Log extends Base
         $data['IsChatRoom'] = $this->changeToBoolean($data['IsChatRoom']);
         $data['is_aes'] = $this->changeToBoolean($data['is_aes']);
 
-        $data['ScanCodeInfo'] = $this->changeToBoolean($data['ScanCodeInfo']);
-        $data['SendPicsInfo'] = $this->changeToBoolean($data['SendPicsInfo']);
-        $data['SendLocationInfo'] = $this->changeToBoolean($data['SendLocationInfo']);
-        $data['CopyrightCheckResult'] = $this->changeToBoolean($data['CopyrightCheckResult']);
+        $data['ScanCodeInfo'] = $this->changeToArray($data['ScanCodeInfo']);
+        $data['SendPicsInfo'] = $this->changeToArray($data['SendPicsInfo']);
+        $data['SendLocationInfo'] = $this->changeToArray($data['SendLocationInfo']);
+        $data['CopyrightCheckResult'] = $this->changeToArray($data['CopyrightCheckResult']);
+        
+        $data['contact_Department'] = $this->changeToArray($data['contact_Department']);        
+        $data['contact_IsLeaderInDept'] = $this->changeToArray($data['contact_IsLeaderInDept']);
 
-        $data['contact_ExtAttr'] = $this->changeToArray($data['contact_ExtAttr']);
+        $data['contact_ExtAttr'] = $this->changeToArray($data['contact_ExtAttr']);        
+        $data['contact_AddUserItems'] = $this->changeToArray($data['contact_AddUserItems']);        
+        $data['contact_DelUserItems'] = $this->changeToArray($data['contact_DelUserItems']);        
+        $data['contact_AddPartyItems'] = $this->changeToArray($data['contact_AddPartyItems']);        
+        $data['contact_DelPartyItems'] = $this->changeToArray($data['contact_DelPartyItems']);
         $data['BatchJob'] = $this->changeToArray($data['BatchJob']);
         $data['ApprovalInfo'] = $this->changeToArray($data['ApprovalInfo']);
+
+        $data['Mode'] = $this->changeToBoolean($data['Mode']);
 
         return $data;
     }

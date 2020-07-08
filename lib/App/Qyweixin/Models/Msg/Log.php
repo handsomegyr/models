@@ -107,6 +107,8 @@ class Log extends \App\Common\Models\Qyweixin\Msg\Log
 
         //审批状态通知事件 和 审批申请状态变化回调通知
         $data['ApprovalInfo'] = isset($info['ApprovalInfo']) ? \json_encode($info['ApprovalInfo']) : ''; // ApprovalInfo 审批信息
+        
+        $data['Mode'] = isset($info['Mode']) ? $info['Mode'] :  0; //1表示开启工作台自定义模式，0表示关闭工作台自定义模式
 
         $data['request_params'] = isset($info['request_params']) ? \json_encode($info['request_params']) : '';
         $data['request_xml'] = isset($info['request_xml']) ? ($info['request_xml']) : '';
