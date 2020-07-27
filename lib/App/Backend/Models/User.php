@@ -85,7 +85,7 @@ class User extends \App\Common\Models\System\User
     {
         $userData = array();
         $userData['username'] = $username;
-        $userData['password'] = $password;
+        $userData['password'] = password_hash($password, PASSWORD_BCRYPT);
         $userData['headimgurl'] = '';
         $userData['lastip'] = getIp();
         $userData['lasttime'] = \App\Common\Utils\Helper::getCurrentTime();
@@ -127,10 +127,14 @@ class User extends \App\Common\Models\System\User
         /* 检查密码是否正确 */
         $query = array();
         $query['username'] = $username;
-        $query['password'] = ($password);
+        // $query['password'] = password_hash($password, PASSWORD_BCRYPT);
         $userInfo = $this->findOne($query);
         if (empty($userInfo)) {
             throw new \Exception("用户名或密码有误");
+        } else {
+            if (!password_verify($password, $userInfo['password'])) {
+                throw new \Exception("用户名或密码有误");
+            }
         }
         return $userInfo;
     }
