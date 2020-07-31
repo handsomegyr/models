@@ -21,7 +21,8 @@ class QyService
     private $objQyWeixin = null;
 
     /**
-     * @var \Weixin\Component
+     *
+     * @var \Qyweixin\Service
      */
     private $objQyWeixinProvider = null;
 
@@ -59,11 +60,7 @@ class QyService
     public function getQyweixinProvider()
     {
         $this->getToken4Provider();
-
         $this->objQyWeixinProvider = new \Qyweixin\Service();
-        if (!empty($this->providerConfig['access_token'])) {
-            $this->objQyWeixinProvider->setAccessToken($this->providerConfig['access_token']);
-        }
         return $this->objQyWeixinProvider;
     }
 
@@ -105,7 +102,7 @@ class QyService
     protected function getToken4Authorizer()
     {
         if (empty($this->authorizerConfig)) {
-            $this->authorizerConfig = $this->modelQyweixinAuthorizer->getInfoByAppid($this->provider_appid, $this->authorizer_appid);
+            $this->authorizerConfig = $this->modelQyweixinAuthorizer->getInfoByAppid($this->provider_appid, $this->authorizer_appid, true);
             if (empty($this->authorizerConfig)) {
                 throw new \Exception("provider_appid:{$this->provider_appid}和authorizer_appid:{$this->authorizer_appid}所对应的记录不存在");
             }
@@ -114,11 +111,52 @@ class QyService
 
     public function getAccessToken4Agent()
     {
-        $agentInfo = $this->modelQyweixinAgent->getTokenByAppid($this->provider_appid, $this->authorizer_appid, $this->agentid, true);
+        $agentInfo = $this->modelQyweixinAgent->getTokenByAppid($this->provider_appid, $this->authorizer_appid, $this->agentid);
         if (empty($agentInfo)) {
             throw new \Exception("对应的运用不存在");
         }
         return $agentInfo;
+    }
+
+    public function getAgentInfo()
+    {
+        $agentInfo = $this->getAccessToken4Agent();
+
+        $res = $this->getQyWeixinObject()
+            ->getAgentManager()
+            ->get($this->agentid);
+        /**
+         * {
+         * "errcode": 0,
+         * "errmsg": "ok",
+         * "agentid": 1000005,
+         * "name": "HR助手",
+         * "square_logo_url": "https://p.qlogo.cn/bizmail/FicwmI50icF8GH9ib7rUAYR5kicLTgP265naVFQKnleqSlRhiaBx7QA9u7Q/0",
+         * "description": "HR服务与员工自助平台",
+         * "allow_userinfos": {
+         * "user": [
+         * {"userid": "zhangshan"},
+         * {"userid": "lisi"}
+         * ]
+         * },
+         * "allow_partys": {
+         * "partyid": [1]
+         * },
+         * "allow_tags": {
+         * "tagid": [1,2,3]
+         * },
+         * "close": 0,
+         * "redirect_domain": "open.work.weixin.qq.com",
+         * "report_location_flag": 0,
+         * "isreportenter": 0,
+         * "home_url": "https://open.work.weixin.qq.com"
+         * }
+         */
+        if (!empty($res['errcode'])) {
+            throw new \Exception($res['errmsg'], $res['errcode']);
+        }
+        $this->modelQyweixinAgent->updateAgentInfo($agentInfo['_id'], $res, time(), $agentInfo['memo']);
+        return $res;
     }
 
     public function getAccessToken4Authorizer()
@@ -651,7 +689,7 @@ class QyService
         }
         $data = array();
         $data['openid'] = $res['openid'];
-        $modelUser->update(array('_id', $userInfo['_id']), array('$set' => $data));
+        $modelUser->update(array('_id' => $userInfo['_id']), array('$set' => $data));
         return $res;
     }
 
@@ -678,7 +716,7 @@ class QyService
         }
         $data = array();
         $data['userid'] = $res['userid'];
-        $modelUser->update(array('_id', $userInfo['_id']), array('$set' => $data));
+        $modelUser->update(array('_id' => $userInfo['_id']), array('$set' => $data));
         return $res;
     }
 
@@ -1173,6 +1211,124 @@ class QyService
         return $res;
     }
 
+        // 获取部门成员
+        public function getDepartmentUserSimplelist($dep_id, $fetch_child = 0)
+        {
+            $modelDepartmentUser = new \App\Qyweixin\Models\Contact\DepartmentUserModel();
+            $res = $this->getQyWeixinObject()
+                ->getUserManager()
+                ->simplelist($dep_id, $fetch_child);
+            if (!empty($res['errcode'])) {
+                throw new \Exception($res['errmsg'], $res['errcode']);
+            }
+            /**
+             * {
+             * "errcode": 0,
+             * "errmsg": "ok",
+             * "userlist": [
+             * {
+             * "userid": "zhangsan",
+             * "name": "李四",
+             * "department": [1, 2],
+             * "open_userid": "xxxxxx"
+             * }
+             * ]}
+             */
+            $modelDepartmentUser->syncDepartmentUserList($dep_id, $this->authorizer_appid, $this->provider_appid, $res, time());
+            return $res;
+        }
+
+
+    // 获取部门成员详情
+    public function getDepartmentUserDetaillist($dep_id, $fetch_child = 0)
+    {
+        $modelDepartmentUser = new \App\Qyweixin\Models\Contact\DepartmentUserModel();
+        $res = $this->getQyWeixinObject()
+            ->getUserManager()
+            ->userlist($dep_id, $fetch_child);
+        if (!empty($res['errcode'])) {
+            throw new \Exception($res['errmsg'], $res['errcode']);
+        }
+
+        /**
+         * {
+         * "errcode": 0,
+         * "errmsg": "ok",
+         * "userlist": [{
+         * "userid": "zhangsan",
+         * "name": "李四",
+         * "department": [1, 2],
+         * "order": [1, 2],
+         * "position": "后台工程师",
+         * "mobile": "13800000000",
+         * "gender": "1",
+         * "email": "zhangsan@gzdev.com",
+         * "is_leader_in_dept": [1, 0],
+         * "avatar": "http://wx.qlogo.cn/mmopen/ajNVdqHZLLA3WJ6DSZUfiakYe37PKnQhBIeOQBO4czqrnZDS79FH5Wm5m4X69TBicnHFlhiafvDwklOpZeXYQQ2icg/0",
+         * "thumb_avatar": "http://wx.qlogo.cn/mmopen/ajNVdqHZLLA3WJ6DSZUfiakYe37PKnQhBIeOQBO4czqrnZDS79FH5Wm5m4X69TBicnHFlhiafvDwklOpZeXYQQ2icg/100",
+         * "telephone": "020-123456",
+         * "alias": "jackzhang",
+         * "status": 1,
+         * "address": "广州市海珠区新港中路",
+         * "hide_mobile" : 0,
+         * "english_name" : "jacky",
+         * "open_userid": "xxxxxx",
+         * "main_department": 1,
+         * "extattr": {
+         * "attrs": [
+         * {
+         * "type": 0,
+         * "name": "文本名称",
+         * "text": {
+         * "value": "文本"
+         * }
+         * },
+         * {
+         * "type": 1,
+         * "name": "网页名称",
+         * "web": {
+         * "url": "http://www.test.com",
+         * "title": "标题"
+         * }
+         * }
+         * ]
+         * },
+         * "qr_code": "https://open.work.weixin.qq.com/wwopen/userQRCode?vcode=xxx",
+         * "external_position": "产品经理",
+         * "external_profile": {
+         * "external_corp_name": "企业简称",
+         * "external_attr": [{
+         * "type": 0,
+         * "name": "文本名称",
+         * "text": {
+         * "value": "文本"
+         * }
+         * },
+         * {
+         * "type": 1,
+         * "name": "网页名称",
+         * "web": {
+         * "url": "http://www.test.com",
+         * "title": "标题"
+         * }
+         * },
+         * {
+         * "type": 2,
+         * "name": "测试app",
+         * "miniprogram": {
+         * "appid": "wx8bd80126147dFAKE",
+         * "pagepath": "/index",
+         * "title": "miniprogram"
+         * }
+         * }
+         * ]
+         * }
+         * }]
+         * }
+         */
+        $modelDepartmentUser->syncDepartmentUserList($dep_id, $this->authorizer_appid, $this->provider_appid, $res, time());
+        return $res;
+    }
 
     //获取标签列表
     public function getTagList()

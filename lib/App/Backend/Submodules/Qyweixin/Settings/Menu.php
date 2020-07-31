@@ -1011,6 +1011,46 @@ class Menu
         );
         $tree[] = $item;
 
+        // 企业会话内容存档
+        $item = array(
+            'menu_name' => '企业会话内容存档',
+            'menu_model' => '',
+            'level' => '企业消息管理',
+            'icon' => '',
+            'model' => ''
+        );
+        $tree[] = $item;
+
+        // 企业会话内容存档密钥
+        $item = array(
+            'menu_name' => '企业会话内容存档密钥',
+            'menu_model' => 'qyweixin-msgauditsn',
+            'level' => '企业会话内容存档',
+            'icon' => '',
+            'model' => '\App\Backend\Submodules\Qyweixin\Models\MsgAudit\Sn'
+        );
+        $tree[] = $item;
+
+        // 企业会话内容存档最大SEQ
+        $item = array(
+            'menu_name' => '企业会话内容存档最大SEQ',
+            'menu_model' => 'qyweixin-msgauditmaxseq',
+            'level' => '企业会话内容存档',
+            'icon' => '',
+            'model' => '\App\Backend\Submodules\Qyweixin\Models\MsgAudit\Maxseq'
+        );
+        $tree[] = $item;
+
+        // 企业会话内容存档会话内容
+        $item = array(
+            'menu_name' => '企业会话内容存档会话内容',
+            'menu_model' => 'qyweixin-msgauditchatdata',
+            'level' => '企业会话内容存档',
+            'icon' => '',
+            'model' => '\App\Backend\Submodules\Qyweixin\Models\MsgAudit\Chatdata'
+        );
+        $tree[] = $item;
+
         return $tree;
     }
 }
