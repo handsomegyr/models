@@ -46,7 +46,7 @@ class User extends \App\Common\Models\Weixin2\User\User
         $data = $this->getPrepareData($userInfo, $authorizer_appid, $provider_appid, $checkInfo);
         if (!empty($checkInfo)) {
             $affectRows = $this->update(array('_id' => $checkInfo['_id']), array('$set' => $data));
-            return $affectRows;
+            return array_merge($checkInfo, $data);
         } else {
             return $this->insert($data);
         }

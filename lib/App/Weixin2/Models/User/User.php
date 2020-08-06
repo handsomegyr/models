@@ -43,7 +43,7 @@ class User extends \App\Common\Models\Weixin2\User\User
         $data = $this->getPrepareData($userInfo, $authorizer_appid, $component_appid, $checkInfo);
         if (!empty($checkInfo)) {
             $affectRows = $this->update(array('_id' => $checkInfo['_id']), array('$set' => $data));
-            return $affectRows;
+            return array_merge($checkInfo, $data);
         } else {
             return $this->insert($data);
         }
@@ -134,10 +134,7 @@ class User extends \App\Common\Models\Weixin2\User\User
             $data['oss_headimgurl'] = isset($userInfo['oss_headimgurl']) ? $userInfo['oss_headimgurl'] : '';
         } else {
             $data = array();
-            if (isset($userInfo['openid'])) {
-                $data['openid'] = $userInfo['openid'];
-            }
-            if (isset($userInfo['nickname'])) {
+            if (!empty($userInfo['nickname']) && ($checkInfo['nickname'] != $userInfo['nickname'])) {
                 $data['nickname'] = $userInfo['nickname'];
             }
             if (isset($userInfo['sex'])) {
@@ -155,7 +152,7 @@ class User extends \App\Common\Models\Weixin2\User\User
             if (isset($userInfo['country'])) {
                 $data['country'] = $userInfo['country'];
             }
-            if (isset($userInfo['headimgurl'])) {
+            if (!empty($userInfo['headimgurl']) && ($checkInfo['headimgurl'] != $userInfo['headimgurl'])) {
                 $data['headimgurl'] = $userInfo['headimgurl'];
             }
             if (isset($userInfo['remark'])) {
@@ -173,31 +170,31 @@ class User extends \App\Common\Models\Weixin2\User\User
             if (isset($userInfo['subscribe_time'])) {
                 $data['subscribe_time'] = \App\Common\Utils\Helper::getCurrentTime($userInfo['subscribe_time']);
             }
-            if (isset($userInfo['unionid'])) {
+            if (!empty($userInfo['unionid']) && ($checkInfo['unionid'] != $userInfo['unionid'])) {
                 $data['unionid'] = $userInfo['unionid'];
             }
             if (isset($userInfo['privilege'])) {
                 $data['privilege'] = \json_encode($userInfo['privilege']);
             }
-            if (isset($userInfo['access_token'])) {
+            if (!empty($userInfo['access_token'])) {
                 $data['access_token'] = \json_encode($userInfo['access_token']);
             }
-            if (isset($userInfo['subscribe_scene'])) {
+            if (!empty($userInfo['subscribe_scene'])) {
                 $data['subscribe_scene'] = $userInfo['subscribe_scene'];
             }
-            if (isset($userInfo['qr_scene'])) {
+            if (!empty($userInfo['qr_scene'])) {
                 $data['qr_scene'] = $userInfo['qr_scene'];
             }
-            if (isset($userInfo['qr_scene_str'])) {
+            if (!empty($userInfo['qr_scene_str'])) {
                 $data['qr_scene_str'] = $userInfo['qr_scene_str'];
             }
-            if (isset($userInfo['mobile'])) {
+            if (!empty($userInfo['mobile']) && ($checkInfo['mobile'] != $userInfo['mobile'])) {
                 $data['mobile'] = $userInfo['mobile'];
             }
-            if (isset($userInfo['session_key'])) {
+            if (!empty($userInfo['session_key']) && ($checkInfo['session_key'] != $userInfo['session_key'])) {
                 $data['session_key'] = $userInfo['session_key'];
             }
-            if (isset($userInfo['oss_headimgurl'])) {
+            if (!empty($userInfo['oss_headimgurl']) && ($checkInfo['oss_headimgurl'] != $userInfo['oss_headimgurl'])) {
                 $data['oss_headimgurl'] = $userInfo['oss_headimgurl'];
             }
         }
