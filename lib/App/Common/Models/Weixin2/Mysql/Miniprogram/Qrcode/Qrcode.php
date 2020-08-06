@@ -25,6 +25,8 @@ class Qrcode extends Base
         $data['auto_color'] = $this->changeToBoolean($data['auto_color']);
         $data['is_hyaline'] = $this->changeToBoolean($data['is_hyaline']);
         $data['is_created'] = $this->changeToBoolean($data['is_created']);
+        $data['is_auto'] = $this->changeToBoolean($data['is_auto']);
+
         return $data;
     }
 }

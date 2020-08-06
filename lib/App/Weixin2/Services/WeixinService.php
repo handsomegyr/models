@@ -47,6 +47,9 @@ class WeixinService
         return $this->componentConfig;
     }
 
+    /**
+     * @return \Weixin\Component
+     */
     public function getWeixinComponent()
     {
         $this->getToken4Component();
@@ -64,6 +67,9 @@ class WeixinService
         return $this->authorizerConfig;
     }
 
+    /**
+     * @return \Weixin\Client
+     */
     public function getWeixinObject()
     {
         $this->getToken4Authorizer();
@@ -85,7 +91,7 @@ class WeixinService
         }
     }
 
-    protected function getToken4Authorizer()
+    public function getToken4Authorizer()
     {
         if (empty($this->authorizerConfig)) {
             $this->authorizerConfig = $this->modelWeixinopenAuthorizer->getTokenByAppid($this->component_appid, $this->authorizer_appid);
@@ -2198,6 +2204,63 @@ class WeixinService
                 break;
             }
         }
+    }
+
+    // 创建小程序二维码
+    public function createMiniappQrcode($qrcode_id, $is_auto = 0, $channel = '', $name = '')
+    {
+        $modelQrcode = new \App\Weixin2\Models\Miniprogram\Qrcode\Qrcocde();
+        $qrcodeInfo = $modelQrcode->getInfoById($qrcode_id);
+        if (empty($qrcodeInfo)) {
+            throw new \Exception("小程序二维码记录ID:{$qrcode_id}所对应的二维码不存在");
+        }
+        $scene = $qrcodeInfo['scene'];
+        $page = $qrcodeInfo['pagepath'];
+        $path = $qrcodeInfo['path'];
+        $width = $qrcodeInfo['width'];
+        if (empty($width)) {
+            $width = 430;
+        }
+        $auto_color = $qrcodeInfo['auto_color'];
+        $line_color = \json_decode($qrcodeInfo['auto_color'], true);
+        if (empty($line_color)) {
+            $line_color = array("r" => "0", "g" => "0", "b" => "0");
+        }
+        $is_hyaline = $qrcodeInfo['is_hyaline'];
+
+        $qrCodeManager = $this->getWeixinObject()->getWxClient()->getQrcodeManager();
+        switch ($qrcodeInfo['type']) {
+            case "getwxacode": //接口A
+                $res = $qrCodeManager->getwxacode2($path, $width, $auto_color, $line_color, $is_hyaline);
+                if (!empty($res['errcode'])) {
+                    throw new \Exception($res['errmsg'], $res['errcode']);
+                }
+                $content = $res['wxacode'];
+                break;
+            case "getwxacodeunlimit": //接口B
+                $res = $qrCodeManager->getwxacodeunlimit2($scene, $page, $width, $auto_color, $line_color, $is_hyaline);
+                if (!empty($res['errcode'])) {
+                    throw new \Exception($res['errmsg'], $res['errcode']);
+                }
+                $content = $res['wxacode'];
+                break;
+            case "createwxaqrcode": //接口C
+                $res = $qrCodeManager->createwxaqrcode($path, $width);
+                if (empty($res)) {
+                    throw new \Exception('生成二维码失败');
+                }
+                $content = $res;
+                break;
+        }
+        $fileName = md5(time() . uniqid() . '_' . $qrcodeInfo['type']) . '.jpg';
+        $path = 'upload/miniappqr/' . $fileName;
+        $r = file_put_contents(APP_PATH . '/public/' . $path, $content); // 返回的是字节数
+        if (!$r) {
+            throw new \Exception('保存文件失败');
+        }
+        $modelQrcode->recordQrcode($qrcode_id, $path, time(), $is_auto, $channel, $name);
+
+        return $path;
     }
 
     private function getMediaId4ReplyMsg($type, $reply)
