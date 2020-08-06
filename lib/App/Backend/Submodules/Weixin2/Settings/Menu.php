@@ -529,6 +529,16 @@ class Menu
         );
         $tree[] = $item;
 
+        // 小程序二维码扫描日志
+        $item = array(
+            'menu_name' => '小程序二维码扫描日志',
+            'menu_model' => 'weixin2-miniprogramqrcodelog',
+            'level' => '小程序二维码管理',
+            'icon' => '',
+            'model' => '\App\Backend\Submodules\Weixin2\Models\Miniprogram\Qrcode\Log'
+        );
+        $tree[] = $item;
+
         // 素材管理
         $item = array(
             'menu_name' => '素材管理',
