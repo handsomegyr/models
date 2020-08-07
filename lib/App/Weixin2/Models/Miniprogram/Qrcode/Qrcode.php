@@ -2,7 +2,7 @@
 
 namespace App\Weixin2\Models\Miniprogram\Qrcode;
 
-class Qrcocde extends \App\Common\Models\Weixin2\Miniprogram\Qrcode\Qrcode
+class Qrcode extends \App\Common\Models\Weixin2\Miniprogram\Qrcode\Qrcode
 {
     public function recordQrcode($id, $url, $now, $is_auto, $channel, $name)
     {

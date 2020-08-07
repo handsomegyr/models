@@ -91,7 +91,7 @@ class WeixinService
         }
     }
 
-    public function getToken4Authorizer()
+    protected function getToken4Authorizer()
     {
         if (empty($this->authorizerConfig)) {
             $this->authorizerConfig = $this->modelWeixinopenAuthorizer->getTokenByAppid($this->component_appid, $this->authorizer_appid);
@@ -2149,7 +2149,7 @@ class WeixinService
         return $res;
     }
 
-    public function syncSubscribeUserList($authorizer_appid, $component_appid, $now, $openid4Test)
+    public function syncSubscribeUserList($now, $openid4Test)
     {
         $modelSubscribeUser = new \App\Weixin2\Models\User\SubscribeUser();
         $userManager = $this->getWeixinObject()->getUserManager();
@@ -2163,8 +2163,8 @@ class WeixinService
 
         // 清空数据
         $query = array(
-            'authorizer_appid' => $authorizer_appid,
-            'component_appid' => $component_appid
+            'authorizer_appid' => $this->authorizer_appid,
+            'component_appid' => $this->component_appid
         );
         $this->modelSubscribeUser->physicalRemove($query);
 
@@ -2187,7 +2187,7 @@ class WeixinService
 
             if (!empty($data)) {
                 foreach ($data as  $openid) {
-                    $modelSubscribeUser->log($authorizer_appid, $component_appid, $openid, $now);
+                    $modelSubscribeUser->log($this->authorizer_appid, $this->component_appid, $openid, $now);
                 }
             }
 
@@ -2209,7 +2209,7 @@ class WeixinService
     // 创建小程序二维码
     public function createMiniappQrcode($qrcode_id, $is_auto = 0, $channel = '', $name = '')
     {
-        $modelQrcode = new \App\Weixin2\Models\Miniprogram\Qrcode\Qrcocde();
+        $modelQrcode = new \App\Weixin2\Models\Miniprogram\Qrcode\Qrcode();
         $qrcodeInfo = $modelQrcode->getInfoById($qrcode_id);
         if (empty($qrcodeInfo)) {
             throw new \Exception("小程序二维码记录ID:{$qrcode_id}所对应的二维码不存在");
@@ -2221,12 +2221,12 @@ class WeixinService
         if (empty($width)) {
             $width = 430;
         }
-        $auto_color = $qrcodeInfo['auto_color'];
-        $line_color = \json_decode($qrcodeInfo['auto_color'], true);
+        $auto_color = (intval($qrcodeInfo['auto_color']) === 0) ? false : true;
+        $line_color = $qrcodeInfo['line_color'];
         if (empty($line_color)) {
             $line_color = array("r" => "0", "g" => "0", "b" => "0");
         }
-        $is_hyaline = $qrcodeInfo['is_hyaline'];
+        $is_hyaline = (intval($qrcodeInfo['is_hyaline']) === 0) ? false : true;
 
         $qrCodeManager = $this->getWeixinObject()->getWxClient()->getQrcodeManager();
         switch ($qrcodeInfo['type']) {

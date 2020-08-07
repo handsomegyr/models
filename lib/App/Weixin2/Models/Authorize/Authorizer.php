@@ -177,7 +177,7 @@ class Authorizer extends \App\Common\Models\Weixin2\Authorize\Authorizer
     private function refreshInfo($token)
     {
         if (empty($token['access_token_expire']) || strtotime($token['access_token_expire']) <= time()) {
-            if (!empty($token['refresh_token']) && !empty($token['appid'])) {
+            if (((!empty($token['refresh_token']) && !empty($token['component_appid'])) || empty($token['component_appid'])) && !empty($token['appid'])) {
                 $lockKey = cacheKey(__FILE__, __CLASS__, __METHOD__, __LINE__, $token['component_appid'], $token['appid']);
                 $objLock = new \iLock($lockKey);
                 if (!$objLock->lock()) {
@@ -197,6 +197,9 @@ class Authorizer extends \App\Common\Models\Weixin2\Authorize\Authorizer
                         $arrToken = $objToken->getAccessToken();
                         if (!isset($arrToken['access_token'])) {
                             throw new \Exception(json_encode($arrToken));
+                        }
+                        if (!isset($arrToken['refresh_token'])) {
+                            $arrToken['refresh_token'] = $arrToken['access_token'];
                         }
                         $token = $this->updateAccessToken($token['_id'], $arrToken['access_token'], $arrToken['refresh_token'], $arrToken['expires_in'], null);
                     }
