@@ -6,7 +6,7 @@ class SubscribeUser extends \App\Common\Models\Weixin2\User\SubscribeUser
 {
 
     /**
-     * 根据标签名获取信息
+     * 根据openid获取信息
      *
      * @param string $openid            
      * @param string $authorizer_appid            
@@ -29,6 +29,6 @@ class SubscribeUser extends \App\Common\Models\Weixin2\User\SubscribeUser
         $data['component_appid'] = $component_appid;
         $data['openid'] = $openid;
         $data['get_time'] = \App\Common\Utils\Helper::getCurrentTime($now);
-        $this->insert($data);
+        return $this->insert($data);
     }
 }
