@@ -2263,6 +2263,35 @@ class WeixinService
         return $path;
     }
 
+    //通过获取模板配置后发送小程序订阅消息
+    public function doSendMicroappSubscribeMsg($openid, $callback4GetTemplateMsgParams, $templateMsgInfo, $now)
+    {
+        // 调用小程序订阅消息推送
+        // 设置订阅消息参数
+        $templateMsgParams = call_user_func_array($callback4GetTemplateMsgParams, array(
+            $templateMsgInfo
+        ));
+
+        // 发送小程序发送订阅消息     
+        $res = $this->subscribeMsgSend($openid, $templateMsgParams['template_id'], $templateMsgParams['data'], $templateMsgParams['page']);
+        if (!empty($res['errcode'])) {
+            $templateMsgParams2 = \json_encode($templateMsgParams);
+            throw new \Exception("openid为{$openid}的订阅消息发送失败，错误：{$res['errmsg']}，参数：{$templateMsgParams2}", $res['errcode']);
+        }
+        return $res;
+    }
+
+    //发送小程序订阅消息
+    public function subscribeMsgSend($touser, $template_id, array $data, $page = '')
+    {
+        $weixin = $this->getWeixinObject();
+        $res = $weixin->getWxClient()
+            ->getMsgManager()
+            ->getSubscribeMessageSender()
+            ->send($touser, $template_id, $data, $page);
+        return $res;
+    }
+
     private function getMediaId4ReplyMsg($type, $reply)
     {
         if ($type == 'thumb') {
