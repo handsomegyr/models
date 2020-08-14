@@ -1,5 +1,6 @@
 <?php
-namespace App\Common\Models\System\Mysql;
+
+namespace App\Common\Models\Backend\Mysql;
 
 use App\Common\Models\Base\Mysql\Base;
 
@@ -7,11 +8,11 @@ class Role extends Base
 {
 
     /**
-     * This model is mapped to the table role
+     * This model is mapped to the table ibackend_role
      */
     public function getSource()
     {
-        return 'role';
+        return 'ibackend_role';
     }
 
     public function reorganize(array $data)

@@ -4,7 +4,7 @@ namespace App\Backend\Models;
 
 use App\Common\Models\System\Role;
 
-class User extends \App\Common\Models\System\User
+class User extends \App\Common\Models\Backend\User
 {
 
     /**

@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Common\Models\System\Mysql;
 
 use App\Common\Models\Base\Mysql\Base;
@@ -17,10 +18,10 @@ class Activity extends Base
 
     public function reorganize(array $data)
     {
-        $data = parent::reorganize($data);        
+        $data = parent::reorganize($data);
         $data['start_time'] = $this->changeToMongoDate($data['start_time']);
         $data['end_time'] = $this->changeToMongoDate($data['end_time']);
-        $data['is_actived'] = $this->changeToBoolean($data['is_actived']);        
+        $data['is_actived'] = $this->changeToBoolean($data['is_actived']);
         return $data;
     }
 }

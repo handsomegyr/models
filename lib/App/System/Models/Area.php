@@ -1,4 +1,5 @@
 <?php
+
 namespace App\System\Models;
 
 class Area extends \App\Common\Models\System\Area
@@ -40,12 +41,12 @@ class Area extends \App\Common\Models\System\Area
             $sort = $this->getDefaultSort();
             $list = $this->findAll($query, $sort);
             $provinceList = array();
-            if (! empty($list)) {
+            if (!empty($list)) {
                 foreach ($list as $item) {
                     $provinceList[$item['code']] = $item['name'];
                 }
             }
-            if (! empty($provinceList)) {
+            if (!empty($provinceList)) {
                 $cache->save($key, $provinceList, 60 * 60 * 24); // 24小时
             }
         }
@@ -69,12 +70,12 @@ class Area extends \App\Common\Models\System\Area
             $sort = $this->getDefaultSort();
             $list = $this->findAll($query, $sort);
             $provinceList = array();
-            if (! empty($list)) {
+            if (!empty($list)) {
                 foreach ($list as $item) {
                     $provinceList[$item['code']] = $item['name'];
                 }
             }
-            if (! empty($provinceList)) {
+            if (!empty($provinceList)) {
                 $cache->save($key, $provinceList, 60 * 60 * 24); // 24小时
             }
         }
@@ -92,19 +93,19 @@ class Area extends \App\Common\Models\System\Area
         $cache = $this->getDI()->get("cache");
         $provinceList = $cache->get($key);
         if (empty($provinceList)) {
-            
+
             $query = $this->getQuery();
             $query['parent_code'] = $city;
             $query['level'] = 3;
             $sort = $this->getDefaultSort();
             $list = $this->findAll($query, $sort);
             $provinceList = array();
-            if (! empty($list)) {
+            if (!empty($list)) {
                 foreach ($list as $item) {
                     $provinceList[$item['code']] = $item['name'];
                 }
             }
-            if (! empty($provinceList)) {
+            if (!empty($provinceList)) {
                 $cache->save($key, $provinceList, 60 * 60 * 24); // 24小时
             }
         }
@@ -121,7 +122,7 @@ class Area extends \App\Common\Models\System\Area
         if ($cityName == '市辖区' || $cityName == '县') {
             $cityName = "";
         }
-        if (! empty($district)) {
+        if (!empty($district)) {
             $districtName = $districtList[$district];
         } else {
             $districtName = "";

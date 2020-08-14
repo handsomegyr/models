@@ -1,4 +1,5 @@
 <?php
+
 namespace App\System\Views\Helpers;
 
 use App\System\Models\Area;
@@ -16,7 +17,7 @@ class AreaHelper extends \Phalcon\Tag
         $modelArea = new Area();
         return $modelArea->getProvinces();
     }
-    
+
     /**
      * 获取省份列表
      *

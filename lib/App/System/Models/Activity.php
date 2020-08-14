@@ -1,4 +1,5 @@
 <?php
+
 namespace App\System\Models;
 
 class Activity extends \App\Common\Models\System\Activity
@@ -46,9 +47,9 @@ class Activity extends \App\Common\Models\System\Activity
     public function checkActivityActive($activity_id)
     {
         $activityInfo = $this->getActivityInfo($activity_id);
-        if (! empty($activityInfo['is_actived'])) {
+        if (!empty($activityInfo['is_actived'])) {
             $now = time();
-            if (! empty($activityInfo['start_time']) && ! empty($activityInfo['end_time'])) {
+            if (!empty($activityInfo['start_time']) && !empty($activityInfo['end_time'])) {
                 if ($activityInfo['start_time']->sec <= $now && $now <= $activityInfo['end_time']->sec) {
                     return true;
                 } else {

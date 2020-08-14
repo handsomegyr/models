@@ -1,4 +1,5 @@
 <?php
+
 namespace App\System\Models;
 
 class Source extends \App\Common\Models\System\Source
@@ -10,8 +11,7 @@ class Source extends \App\Common\Models\System\Source
     public function getSource()
     {
         $rst = $this->findAll(array());
-        return array_map(function ($row)
-        {
+        return array_map(function ($row) {
             return $row['value'];
         }, $rst);
     }

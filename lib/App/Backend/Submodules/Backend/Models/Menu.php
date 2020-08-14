@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Backend\Submodules\System\Models;
+namespace App\Backend\Submodules\Backend\Models;
 
 use App\Backend\Models\Input;
 
-class Menu extends \App\Common\Models\System\Menu
+class Menu extends \App\Common\Models\Backend\Menu
 {
     use \App\Backend\Models\Base;
 
@@ -256,7 +256,7 @@ class Menu extends \App\Common\Models\System\Menu
     private function buildTree(&$menus, $parent)
     {
         $tree = array();
-        foreach ($parent as $l) {            
+        foreach ($parent as $l) {
             $is_active = empty($l['is_active']) ? 0 : $l['is_active'];
             $cando = empty($l['cando']) ? 0 : $l['cando'];
             $priv_list = empty($l['priv_list']) ? '' : $l['priv_list'];

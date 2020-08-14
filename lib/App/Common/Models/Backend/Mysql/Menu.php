@@ -1,5 +1,6 @@
 <?php
-namespace App\Common\Models\System\Mysql;
+
+namespace App\Common\Models\Backend\Mysql;
 
 use App\Common\Models\Base\Mysql\Base;
 
@@ -7,11 +8,11 @@ class Menu extends Base
 {
 
     /**
-     * This model is mapped to the table menu
+     * This model is mapped to the table ibackend_menu
      */
     public function getSource()
     {
-        return 'menu';
+        return 'ibackend_menu';
     }
 
     public function reorganize(array $data)

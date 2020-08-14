@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Backend\Submodules\System\Models;
+namespace App\Backend\Submodules\Backend\Models;
 
 use App\Backend\Models\Input;
 
-class Resource extends \App\Common\Models\System\Resource
+class Resource extends \App\Common\Models\Backend\Resource
 {
     use \App\Backend\Models\Base;
 

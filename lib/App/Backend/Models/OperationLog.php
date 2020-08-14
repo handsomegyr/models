@@ -1,8 +1,8 @@
 <?php
 
-namespace App\System\Models;
+namespace App\Backend\Models;
 
-class OperationLog extends \App\Common\Models\System\OperationLog
+class OperationLog extends \App\Common\Models\Backend\OperationLog
 {
 
     /**

@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Backend\Submodules\System\Models;
+namespace App\Backend\Submodules\Backend\Models;
 
-class User extends \App\Common\Models\System\User
+class User extends \App\Common\Models\Backend\User
 {
     use \App\Backend\Models\Base;
     /**

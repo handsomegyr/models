@@ -1,24 +1,23 @@
 <?php
 
-namespace App\Common\Models\System\Mysql;
+namespace App\Common\Models\Backend\Mysql;
 
 use App\Common\Models\Base\Mysql\Base;
 
-class User extends Base
+class Resource extends Base
 {
 
     /**
-     * This model is mapped to the table user
+     * This model is mapped to the table ibackend_resource
      */
     public function getSource()
     {
-        return 'user';
+        return 'ibackend_resource';
     }
 
     public function reorganize(array $data)
     {
         $data = parent::reorganize($data);
-        $data['lasttime'] = $this->changeToMongoDate($data['lasttime']);
         return $data;
     }
 }

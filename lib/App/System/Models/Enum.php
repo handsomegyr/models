@@ -1,4 +1,5 @@
 <?php
+
 namespace App\System\Models;
 
 class Enum extends \App\Common\Models\System\Enum
@@ -42,19 +43,19 @@ class Enum extends \App\Common\Models\System\Enum
                 'pid' => ''
             );
             $info = $this->findOne($query);
-            
+
             // 获取该分类下的所有信息
             $query = $this->getQuery();
             $query['pid'] = $info['_id'];
             $sort = $this->getDefaultSort();
             $datas = $this->findAll($query, $sort);
             $list = array();
-            if (! empty($datas)) {
+            if (!empty($datas)) {
                 foreach ($datas as $item) {
                     $list[$item['code']] = $item['name'];
                 }
             }
-            if (! empty($list)) {
+            if (!empty($list)) {
                 $cache->save($key, $list, 60 * 60 * 24); // 24小时
             }
         }
@@ -83,12 +84,12 @@ class Enum extends \App\Common\Models\System\Enum
             $sort = $this->getDefaultSort();
             $datas = $this->findAll($query, $sort);
             $list = array();
-            if (! empty($datas)) {
+            if (!empty($datas)) {
                 foreach ($datas as $item) {
                     $list[$item['code']] = $item['name'];
                 }
             }
-            if (! empty($list)) {
+            if (!empty($list)) {
                 $cache->save($key, $list, 60 * 60 * 24); // 24小时
             }
         }
@@ -111,19 +112,19 @@ class Enum extends \App\Common\Models\System\Enum
                 'pid' => ''
             );
             $info = $this->findOne($query);
-            
+
             // 获取该分类下的所有信息
             $query = $this->getQuery();
             $query['pid'] = $info['_id'];
             $sort = $this->getDefaultSort();
             $datas = $this->findAll($query, $sort);
             $list = array();
-            if (! empty($datas)) {
+            if (!empty($datas)) {
                 foreach ($datas as $item) {
                     $list[$item['code']] = $item['name'];
                 }
             }
-            if (! empty($list)) {
+            if (!empty($list)) {
                 $cache->save($key, $list, 60 * 60 * 24); // 24小时
             }
         }

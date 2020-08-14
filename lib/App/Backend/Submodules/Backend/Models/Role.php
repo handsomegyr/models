@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Backend\Submodules\System\Models;
+namespace App\Backend\Submodules\Backend\Models;
 
-class Role extends \App\Common\Models\System\Role
+class Role extends \App\Common\Models\Backend\Role
 {
     use \App\Backend\Models\Base;
 

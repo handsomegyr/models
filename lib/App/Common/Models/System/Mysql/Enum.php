@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Common\Models\System\Mysql;
 
 use App\Common\Models\Base\Mysql\Base;
@@ -13,7 +14,7 @@ class Enum extends Base
     {
         return 'enum';
     }
-    
+
     public function reorganize(array $data)
     {
         $data = parent::reorganize($data);
