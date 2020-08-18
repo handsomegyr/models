@@ -373,7 +373,7 @@ trait BaseTrait
         if (empty($field)) {
             return false;
         }
-        return ($field);
+        return boolval($field);
     }
 
     protected function changeToArray($field)
