@@ -28,9 +28,29 @@ class Index extends \App\Common\Models\Database\Project\Collection\Index
 
         return true;
     }
+    /**
+     * 根据索引名称获取索引信息
+     *
+     * @param string $name
+     * @param string $company_project_id
+     * @param string $project_id
+     * @param string $collection_id
+     * @return int
+     */
+
+    public function getInfoByName($name, $company_project_id, $project_id, $collection_id)
+    {
+        $info = $this->findOne(array(
+            'company_project_id' => $company_project_id,
+            'project_id' => $project_id,
+            'collection_id' => $collection_id,
+            'name' => $name
+        ));
+        return $info;
+    }
 
     /**
-     * 根据集合名称获取集合的索引数量
+     * 获取集合的索引数量
      *
      * @param string $company_project_id
      * @param string $project_id

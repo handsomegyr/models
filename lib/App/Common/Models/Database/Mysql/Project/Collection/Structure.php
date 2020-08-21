@@ -34,7 +34,6 @@ class Structure extends Base
         $data['isLinkageMenu'] = $this->changeToBoolean($data['isLinkageMenu']);
         $data['isQuick'] = $this->changeToBoolean($data['isQuick']);
         $data['isHive'] = $this->changeToBoolean($data['isHive']);
-
         return $data;
     }
 }
