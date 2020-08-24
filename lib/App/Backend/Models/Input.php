@@ -109,41 +109,56 @@ class Input extends \stdClass
                             $where[$key] = new \MongoRegex('/' . urldecode($filter[$key]) . '/i');
                         } elseif ($field['data']['type'] == "datetime") {
                             $datetime = urldecode($filter[$key]);
-                            $datatimeArr = explode('|', $datetime);
-                            if (!empty($datatimeArr[0])) {
-                                $where[$key]['$gte'] = \App\Common\Utils\Helper::getCurrentTime(strtotime($datatimeArr[0]));
-                            }
-                            if (!empty($datatimeArr[1])) {
-                                $where[$key]['$lte'] = \App\Common\Utils\Helper::getCurrentTime(strtotime($datatimeArr[1]));
+                            $isExist = $this->isCheckPeriodFlagExist($datetime);
+                            if ($isExist) {
+                                $datatimeArr = explode('|', $datetime);
+                                if (!empty($datatimeArr[0])) {
+                                    $where[$key]['$gte'] = \App\Common\Utils\Helper::getCurrentTime(strtotime($datatimeArr[0]));
+                                }
+                                if (!empty($datatimeArr[1])) {
+                                    $where[$key]['$lte'] = \App\Common\Utils\Helper::getCurrentTime(strtotime($datatimeArr[1]));
+                                }
+                            } else {
+                                $where[$key] = \App\Common\Utils\Helper::getCurrentTime(strtotime($datetime));
                             }
                         } elseif ($field['data']['type'] == "integer") {
                             $num = urldecode($filter[$key]);
-                            $numArr4Explode = explode('|', $num);
-                            $numArr = array();
-                            // 对应0|0的情况
-                            if (isset($numArr4Explode[0]) && strlen($numArr4Explode[0]) > 0) {
-                                $numArr[0] = ($numArr4Explode[0]);
-                            }
-                            if (isset($numArr4Explode[1]) && strlen($numArr4Explode[1]) > 0) {
-                                $numArr[1] = ($numArr4Explode[1]);
-                            }
-                            if (isset($numArr[0])) {
-                                $where[$key]['$gte'] = $numArr[0];
-                            }
-                            if (isset($numArr[1])) {
-                                $where[$key]['$lte'] = $numArr[1];
+                            $isExist = $this->isCheckPeriodFlagExist($num);
+                            if ($isExist) {
+                                $numArr4Explode = explode('|', $num);
+                                $numArr = array();
+                                // 对应0|0的情况
+                                if (isset($numArr4Explode[0]) && strlen($numArr4Explode[0]) > 0) {
+                                    $numArr[0] = ($numArr4Explode[0]);
+                                }
+                                if (isset($numArr4Explode[1]) && strlen($numArr4Explode[1]) > 0) {
+                                    $numArr[1] = ($numArr4Explode[1]);
+                                }
+                                if (isset($numArr[0])) {
+                                    $where[$key]['$gte'] = $numArr[0];
+                                }
+                                if (isset($numArr[1])) {
+                                    $where[$key]['$lte'] = $numArr[1];
+                                }
+                            } else {
+                                $where[$key] = $num;
                             }
                         } elseif ($field['data']['type'] == "boolean") {
                             $where[$key] = intval(urldecode($filter[$key]));
                         } else {
                             // $where[$key] = urldecode($filter[$key]);
                             $str1 = urldecode($filter[$key]);
-                            $strArr = explode('|', $str1);
-                            if (!empty($strArr[0])) {
-                                $where[$key]['$gte'] = $strArr[0];
-                            }
-                            if (!empty($strArr[1])) {
-                                $where[$key]['$lte'] = $strArr[1];
+                            $isExist = $this->isCheckPeriodFlagExist($str1);
+                            if ($isExist) {
+                                $strArr = explode('|', $str1);
+                                if (!empty($strArr[0])) {
+                                    $where[$key]['$gte'] = $strArr[0];
+                                }
+                                if (!empty($strArr[1])) {
+                                    $where[$key]['$lte'] = $strArr[1];
+                                }
+                            } else {
+                                $where[$key] = $str1;
                             }
                         }
                     }
@@ -266,5 +281,19 @@ class Input extends \stdClass
             $data['_id'] = "";
         }
         return $data;
+    }
+
+    protected function isCheckPeriodFlagExist($mystring)
+    {
+        $findme   = '|';
+        $pos = strpos($mystring, $findme);
+
+        // 使用 !== 操作符。使用 != 不能像我们期待的那样工作，
+        // 因为 'a' 的位置是 0。语句 (0 != false) 的结果是 false。
+        if ($pos !== false) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }
