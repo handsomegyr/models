@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Goods\Models;
 
 class Category extends \App\Common\Models\Goods\Category
@@ -17,7 +18,7 @@ class Category extends \App\Common\Models\Goods\Category
             'sort' => $dir,
             '_id' => $dir
         );
-        
+
         return $sort;
     }
 
@@ -73,7 +74,7 @@ class Category extends \App\Common\Models\Goods\Category
         $list = false; // $cache->get($key);
         if (empty($list)) {
             $list = $this->getList($query, $sort, $fields);
-            if (! empty($list)) {
+            if (!empty($list)) {
                 $parents = array();
                 $childrens = array();
                 // 获取父分类列表和子分类列表
@@ -85,7 +86,7 @@ class Category extends \App\Common\Models\Goods\Category
                     $pid = empty($v['parent_id']) ? '--' : $v['parent_id'];
                     $childrens[$pid][] = $id;
                 }
-                
+
                 // 构造gc_id,gc_name,level,pid,ppid,cids,ccids等字段信息
                 foreach ($list as &$v) {
                     $v['gc_id'] = $v['_id']; // 商品分类ID
@@ -97,8 +98,8 @@ class Category extends \App\Common\Models\Goods\Category
                     } else {
                         $v['ppid'] = $parents[$v['pid']]; // 祖父分类
                     }
-                    if (! empty($v['ppid'])) {
-                        $v['level'] ++;
+                    if (!empty($v['ppid'])) {
+                        $v['level']++;
                     }
                     $v['cids'] = empty($childrens[$v['gc_id']]) ? array() : array_unique($childrens[$v['gc_id']]); // 子分类列表
                     $v['ccids'] = array(); // 子子分类列表
@@ -107,7 +108,7 @@ class Category extends \App\Common\Models\Goods\Category
                         $v['ccids'] = array_merge($v['ccids'], $ccids);
                     }
                 }
-                
+
                 $cache->save($key, $list, 60 * 60 * 24); // 24小时
             }
         }
@@ -123,7 +124,7 @@ class Category extends \App\Common\Models\Goods\Category
     {
         $categoryList = $this->getExtendList();
         $list = array();
-        if (! empty($categoryList)) {
+        if (!empty($categoryList)) {
             foreach ($categoryList as $category) {
                 if ($category['level'] == 1) {
                     $list[$category['gc_id']] = $category;
@@ -148,7 +149,7 @@ class Category extends \App\Common\Models\Goods\Category
         if (empty($tree)) {
             $categoryList = $this->getExtendList($query, $sort, $fields);
             $tree = array();
-            if (! empty($categoryList)) {
+            if (!empty($categoryList)) {
                 foreach ($categoryList as $category) {
                     if ($category['level'] == 1) {
                         $tree[$category['gc_id']] = $category;
@@ -177,11 +178,11 @@ class Category extends \App\Common\Models\Goods\Category
     public function getTreeByIds(array $ids = array())
     {
         $tree = array();
-        if (! empty($ids)) {
+        if (!empty($ids)) {
             // 获取所有的分类列表
             $categoryList = $this->getExtendList();
             $ppids = array();
-            if (! empty($categoryList)) {
+            if (!empty($categoryList)) {
                 foreach ($ids as $id) {
                     if (isset($categoryList[$id])) {
                         $ppids[] = $categoryList[$id]['ppid'];
@@ -189,10 +190,10 @@ class Category extends \App\Common\Models\Goods\Category
                 }
             }
         }
-        if (! empty($ppids)) {
+        if (!empty($ppids)) {
             // 获取分类树
             $categoryTree = $this->getTree();
-            if (! empty($categoryTree)) {
+            if (!empty($categoryTree)) {
                 foreach ($ppids as $id) {
                     if (isset($categoryTree[$id])) {
                         $tree[] = $categoryTree[$id];
@@ -200,6 +201,6 @@ class Category extends \App\Common\Models\Goods\Category
                 }
             }
         }
-        return tree;
+        return $tree;
     }
 }
