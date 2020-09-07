@@ -85,7 +85,7 @@ class Menu extends \App\Common\Models\Backend\Menu
             foreach ($menuList[$pkey] as $key => $item) {
                 $item['level'] = $level;
                 $item['menu_id'] = $item['_id'];
-                $item['has_children'] = empty($menuList["p:" . $item['menu_id']]);
+                $item['has_children'] = (empty($menuList["p:" . $item['menu_id']])) ? 0 : 1;
 
                 $list[] = $item;
                 $list2 = $this->recursiveGet($menuList, $key, $level + 1);
