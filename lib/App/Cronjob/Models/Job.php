@@ -48,13 +48,18 @@ class Job extends \App\Common\Models\Cronjob\Job
      *
      * @param string $_id            
      */
-    public function startJob($_id)
+    public function startJob($_id, $nowTime = 0)
     {
+        if (empty($nowTime)) {
+            $last_execute_time = \App\Common\Utils\Helper::getCurrentTime(floor(time() / 60) * 60);
+        } else {
+            $last_execute_time = \App\Common\Utils\Helper::getCurrentTime($nowTime);
+        }
         return $this->update(array(
             '_id' => $_id
         ), array(
             '$set' => array(
-                'last_execute_time' => \App\Common\Utils\Helper::getCurrentTime(floor(time() / 60) * 60)
+                'last_execute_time' => $last_execute_time
             )
         ));
     }
