@@ -53,6 +53,20 @@ class TaskProcess extends \App\Common\Models\Weixin2\Notification\TaskProcess
     }
 
     /**
+     * 根据推送状态获取并锁住一条任务
+     *
+     * @param number $notification_task_id            
+     */
+    public function getAndLockOneTask4ByTaskid($notification_task_id, $now)
+    {
+        $task = $this->findOne(array(
+            'notification_task_id' => $notification_task_id,
+            '__FOR_UPDATE__' => true
+        ));
+        return $task;
+    }
+
+    /**
      * 登录
      *
      * @param string $name            
@@ -74,11 +88,14 @@ class TaskProcess extends \App\Common\Models\Weixin2\Notification\TaskProcess
         return $this->insert($data);
     }
 
-    public function updatePushState($id, $status, $now)
+    public function updatePushState($id, $status, $now, $task_process_total = 0)
     {
         $updateData = array();
         $updateData['push_status'] = $status;
         $updateData['push_time'] = \App\Common\Utils\Helper::getCurrentTime($now);
+        if (!empty($task_process_total)) {
+            $updateData['task_process_total'] = $task_process_total;
+        }
         return $this->update(array('_id' => $id), array('$set' => $updateData));
     }
 

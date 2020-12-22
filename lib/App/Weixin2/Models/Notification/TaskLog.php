@@ -18,7 +18,7 @@ class TaskLog extends \App\Common\Models\Weixin2\Notification\TaskLog
     // 推送失败
     const PUSH_FAIL = 3;
 
-    public function log($component_appid, $authorizer_appid, $notification_task_process_id, $notification_task_id, $notification_task_name, $notification_method, $mass_msg_send_method_id, $template_msg_id, $mass_msg_id, $custom_msg_id, $notification_task_content_id, $notification_task_content_name, $openids, $openid, $tag_id, $push_status, $log_time)
+    public function log($component_appid, $authorizer_appid, $notification_task_process_id, $notification_task_id, $notification_task_name, $notification_method, $mass_msg_send_method_id, $subscribe_msg_id, $template_msg_id, $mass_msg_id, $custom_msg_id, $notification_task_content_id, $notification_task_content_name, $openids, $openid, $tag_id, $push_status, $log_time)
     {
         $data = array();
         $data['component_appid'] = $component_appid;
@@ -28,6 +28,7 @@ class TaskLog extends \App\Common\Models\Weixin2\Notification\TaskLog
         $data['notification_task_name'] = $notification_task_name;
         $data['notification_method'] = $notification_method;
         $data['mass_msg_send_method_id'] = $mass_msg_send_method_id;
+        $data['subscribe_msg_id'] = $subscribe_msg_id;
         $data['template_msg_id'] = $template_msg_id;
         $data['mass_msg_id'] = $mass_msg_id;
         $data['custom_msg_id'] = $custom_msg_id;
@@ -40,7 +41,7 @@ class TaskLog extends \App\Common\Models\Weixin2\Notification\TaskLog
         $data['push_time'] = $log_time;
         $data['log_time'] = $log_time;
         $data['is_ok'] = 0;
-        $data['error'] = '';
+        $data['errors'] = '';
         $data['process_num'] = 0;
         return $this->insert($data);
     }
@@ -101,9 +102,9 @@ class TaskLog extends \App\Common\Models\Weixin2\Notification\TaskLog
         $updateData['push_time'] = \App\Common\Utils\Helper::getCurrentTime($now);
         $updateData['is_ok'] = empty($is_ok) ? 0 : 1;
         if (empty($error)) {
-            $updateData['error'] = "";
+            $updateData['errors'] = "";
         } else {
-            $updateData['error'] = \json_encode($error);
+            $updateData['errors'] = \json_encode($error);
         }
 
         $incData = array();

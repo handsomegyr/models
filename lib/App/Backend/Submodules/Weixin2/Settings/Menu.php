@@ -1139,6 +1139,46 @@ class Menu
         );
         $tree[] = $item;
 
+        // 小程序消息管理
+        $item = array(
+            'menu_name' => '小程序消息管理',
+            'menu_model' => '',
+            'level' => '微信开放平台管理',
+            'icon' => '',
+            'model' => ''
+        );
+        $tree[] = $item;
+
+        // 小程序订阅消息模板
+        $item = array(
+            'menu_name' => '小程序订阅消息模板',
+            'menu_model' => 'weixin2-miniprogramsubscribemsgtemplate',
+            'level' => '小程序消息管理',
+            'icon' => '',
+            'model' => '\App\Backend\Submodules\Weixin2\Models\Miniprogram\SubscribeMsg\Template\Template'
+        );
+        $tree[] = $item;
+
+        // 小程序订阅消息
+        $item = array(
+            'menu_name' => '小程序订阅消息',
+            'menu_model' => 'weixin2-miniprogramsubscribemsg',
+            'level' => '小程序消息管理',
+            'icon' => '',
+            'model' => '\App\Backend\Submodules\Weixin2\Models\Miniprogram\SubscribeMsg\Msg'
+        );
+        $tree[] = $item;
+
+        // 小程序订阅消息发送日志
+        $item = array(
+            'menu_name' => '小程序订阅消息发送日志',
+            'menu_model' => 'weixin2-miniprogramsubscribemsgsendlog',
+            'level' => '小程序消息管理',
+            'icon' => '',
+            'model' => '\App\Backend\Submodules\Weixin2\Models\Miniprogram\SubscribeMsg\SendLog'
+        );
+        $tree[] = $item;
+
         return $tree;
     }
 }

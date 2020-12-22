@@ -596,7 +596,7 @@ class WeixinService
 
         // 预览用户
         $previewUser = "o2N5jt56GlMdqv46BWxvK0ND-eIw";
-
+        $is_ok = false;
         $massmsg = array();
 
         try {
@@ -780,6 +780,7 @@ class WeixinService
             if (!empty($res['errcode'])) {
                 throw new \Exception($res['errmsg'], $res['errcode']);
             }
+            $is_ok = true;
             $msg_id = empty($res['msg_id']) ? "" : $res['msg_id'];
             $msg_data_id = empty($res['msg_data_id']) ? "" : $res['msg_data_id'];
             $massmsg = $res;
@@ -789,17 +790,15 @@ class WeixinService
         }
 
         if (empty($massmsg)) {
-            $massmsg = "";
-        } else {
-            $massmsg = \json_encode($massmsg);
+            $massmsg = array();
         }
 
         // 记录日志
         $modelMassMsgSendLog = new \App\Weixin2\Models\MassMsg\SendLog();
-        $modelMassMsgSendLog->record($massMsgInfo['component_appid'], $massMsgInfo['authorizer_appid'], $massMsgInfo['_id'], $massMsgInfo['name'], $massMsgInfo['msg_type'], $massMsgInfo['media'], $massMsgInfo['media_id'], $massMsgInfo['thumb_media'], $massMsgInfo['thumb_media_id'], $massMsgInfo['title'], $massMsgInfo['description'], $massMsgInfo['card_id'], $massMsgInfo['card_ext'], $massMsgInfo['upload_media_id'], $massMsgInfo['upload_media_created_at'], $massMsgInfo['upload_media_type'], $is_to_all, $tag_id, \json_encode($toUsers), $send_ignore_reprint, $clientmsgid, $match['_id'], $match['keyword'], $match['mass_msg_type'], "", "", $massmsg, $msg_id, $msg_data_id, time());
+        $modelMassMsgSendLog->record($massMsgInfo['component_appid'], $massMsgInfo['authorizer_appid'], $massMsgInfo['_id'], $massMsgInfo['name'], $massMsgInfo['msg_type'], $massMsgInfo['media'], $massMsgInfo['media_id'], $massMsgInfo['thumb_media'], $massMsgInfo['thumb_media_id'], $massMsgInfo['title'], $massMsgInfo['description'], $massMsgInfo['card_id'], $massMsgInfo['card_ext'], $massMsgInfo['upload_media_id'], $massMsgInfo['upload_media_created_at'], $massMsgInfo['upload_media_type'], $is_to_all, $tag_id, \json_encode($toUsers), $send_ignore_reprint, $clientmsgid, $match['_id'], $match['keyword'], $match['mass_msg_type'], "", "", \json_encode($massmsg), $msg_id, $msg_data_id, time());
 
         return array(
-            'is_ok' => true,
+            'is_ok' => $is_ok,
             'api_ret' => $massmsg
         );
     }
@@ -934,7 +933,7 @@ class WeixinService
     {
         $objWeixin = $this->getWeixinObject();
         $custommsg = array();
-
+        $is_ok = false;
         try {
             switch ($match['custom_msg_type']) {
                 case 'news':
@@ -1029,22 +1028,21 @@ class WeixinService
             if (!empty($custommsg['errcode'])) {
                 throw new \Exception($custommsg['errmsg'], $custommsg['errcode']);
             }
+            $is_ok = true;
         } catch (\Exception $e) {
             $custommsg['errorcode'] = $e->getCode();
             $custommsg['errormsg'] = $e->getMessage();
         }
 
         if (empty($custommsg)) {
-            $custommsg = "";
-        } else {
-            $custommsg = \json_encode($custommsg);
+            $custommsg = array();
         }
         // 记录日志
         $modelCustomMsgSendLog = new \App\Weixin2\Models\CustomMsg\SendLog();
-        $modelCustomMsgSendLog->record($customMsgInfo['component_appid'], $customMsgInfo['authorizer_appid'], $customMsgInfo['_id'], $customMsgInfo['name'], $customMsgInfo['msg_type'], $customMsgInfo['media'], $customMsgInfo['media_id'], $customMsgInfo['thumb_media'], $customMsgInfo['thumb_media_id'], $customMsgInfo['title'], $customMsgInfo['description'], $customMsgInfo['music'], $customMsgInfo['hqmusic'], $customMsgInfo['appid'], $customMsgInfo['pagepath'], $customMsgInfo['card_id'], $customMsgInfo['card_ext'], $customMsgInfo['kf_account'], $match['_id'], $match['keyword'], $match['custom_msg_type'], $ToUserName, $FromUserName, $custommsg, time());
+        $modelCustomMsgSendLog->record($customMsgInfo['component_appid'], $customMsgInfo['authorizer_appid'], $customMsgInfo['_id'], $customMsgInfo['name'], $customMsgInfo['msg_type'], $customMsgInfo['media'], $customMsgInfo['media_id'], $customMsgInfo['thumb_media'], $customMsgInfo['thumb_media_id'], $customMsgInfo['title'], $customMsgInfo['description'], $customMsgInfo['music'], $customMsgInfo['hqmusic'], $customMsgInfo['appid'], $customMsgInfo['pagepath'], $customMsgInfo['card_id'], $customMsgInfo['card_ext'], $customMsgInfo['kf_account'], $match['_id'], $match['keyword'], $match['custom_msg_type'], $ToUserName, $FromUserName, \json_encode($custommsg), time());
 
         return array(
-            'is_ok' => true,
+            'is_ok' => $is_ok,
             'api_ret' => $custommsg
         );
     }
@@ -1243,7 +1241,7 @@ class WeixinService
     {
         $objWeixin = $this->getWeixinObject();
         $templatemsg = array();
-
+        $is_ok = false;
         try {
             $data = empty($templateMsgInfo['data']) ? array() : \json_decode($templateMsgInfo['data'], true);
             $appid = empty($templateMsgInfo['appid']) ? "" : $templateMsgInfo['appid'];
@@ -1262,23 +1260,22 @@ class WeixinService
             if (!empty($templatemsg['errcode'])) {
                 throw new \Exception($templatemsg['errmsg'], $templatemsg['errcode']);
             }
+            $is_ok = true;
         } catch (\Exception $e) {
             $templatemsg['errorcode'] = $e->getCode();
             $templatemsg['errormsg'] = $e->getMessage();
         }
 
         if (empty($templatemsg)) {
-            $templatemsg = "";
-        } else {
-            $templatemsg = \json_encode($templatemsg);
+            $templatemsg = array();
         }
 
         // 记录日志
         $modelTemplateMsgSendLog = new \App\Weixin2\Models\TemplateMsg\SendLog();
-        $modelTemplateMsgSendLog->record($templateMsgInfo['component_appid'], $templateMsgInfo['authorizer_appid'], $templateMsgInfo['_id'], $templateMsgInfo['name'], $templateMsgInfo['template_id'], $templateMsgInfo['url'], $templateMsgInfo['data'], $templateMsgInfo['color'], $templateMsgInfo['appid'], $templateMsgInfo['pagepath'], $match['_id'], $match['keyword'], $ToUserName, $FromUserName, $templatemsg, time());
+        $modelTemplateMsgSendLog->record($templateMsgInfo['component_appid'], $templateMsgInfo['authorizer_appid'], $templateMsgInfo['_id'], $templateMsgInfo['name'], $templateMsgInfo['template_id'], $templateMsgInfo['url'], $templateMsgInfo['data'], $templateMsgInfo['color'], $templateMsgInfo['appid'], $templateMsgInfo['pagepath'], $match['_id'], $match['keyword'], $ToUserName, $FromUserName, \json_encode($templatemsg), time());
 
         return array(
-            'is_ok' => true,
+            'is_ok' => $is_ok,
             'api_ret' => $templatemsg
         );
     }
@@ -2282,13 +2279,85 @@ class WeixinService
     }
 
     //发送小程序订阅消息
-    public function subscribeMsgSend($touser, $template_id, array $data, $page = '')
+    public function subscribeMsgSend($touser, $template_id, array $data, $page = '', $miniprogram_state = '', $lang = "")
     {
         $weixin = $this->getWeixinObject();
         $res = $weixin->getWxClient()
             ->getMsgManager()
             ->getSubscribeMessageSender()
-            ->send($touser, $template_id, $data, $page);
+            ->send($touser, $template_id, $data, $page, $miniprogram_state, $lang);
+        return $res;
+    }
+
+    //发送小程序统一消息
+    public function uniformSend($touser, array $mp_template_msg, array $weapp_template_msg)
+    {
+        $weixin = $this->getWeixinObject();
+        $res = $weixin->getWxClient()
+            ->getMsgManager()
+            ->getTemplateSender()
+            ->uniformSend($touser, $mp_template_msg, $weapp_template_msg);
+        return $res;
+    }
+
+    public function sendMicroappSubscribeMsg($FromUserName, $ToUserName, $subscribeMsgInfo, $match)
+    {
+        $templatemsg = array();
+        $is_ok = false;
+        try {
+            $data = empty($subscribeMsgInfo['data']) ? array() : \json_decode($subscribeMsgInfo['data'], true);
+            $templatemsg = $this->subscribeMsgSend($FromUserName, $subscribeMsgInfo['template_id'], $data, $subscribeMsgInfo['pageurl'], $subscribeMsgInfo['miniprogram_state'], $subscribeMsgInfo['lang']);
+
+            if (!empty($templatemsg['errcode'])) {
+                throw new \Exception($templatemsg['errmsg'], $templatemsg['errcode']);
+            }
+            $is_ok = true;
+        } catch (\Exception $e) {
+            $templatemsg['errorcode'] = $e->getCode();
+            $templatemsg['errormsg'] = $e->getMessage();
+        }
+
+        if (empty($templatemsg)) {
+            $templatemsg = array();
+        }
+
+        // 记录日志
+        $modelSubscribeMsgSendLog = new \App\Weixin2\Models\Miniprogram\SubscribeMsg\SendLog();
+        $modelSubscribeMsgSendLog->record($subscribeMsgInfo['component_appid'], $subscribeMsgInfo['authorizer_appid'], $subscribeMsgInfo['id'], $subscribeMsgInfo['name'], $subscribeMsgInfo['template_id'], $subscribeMsgInfo['data'], $subscribeMsgInfo['pageurl'], $subscribeMsgInfo['miniprogram_state'], $subscribeMsgInfo['lang'], $match['id'], $match['keyword'], $ToUserName, $FromUserName, \json_encode($templatemsg), time());
+
+        return array(
+            'is_ok' => $is_ok,
+            'api_ret' => $templatemsg
+        );
+    }
+
+    public function syncMicroappSubscribeMsgTemplateList()
+    {
+        $modelTemplate = new \App\Weixin2\Models\Miniprogram\SubscribeMsg\Template\Template();
+        $weixin = $this->getWeixinObject();
+        $res = $weixin->getWxClient()
+            ->getMsgManager()
+            ->getSubscribeMessageSender()
+            ->getTemplateList();
+        if (!empty($res['errcode'])) {
+            throw new \Exception($res['errmsg'], $res['errcode']);
+        }
+        /**
+         * {
+         *   "errcode": 0,
+         *   "errmsg": "ok",
+         *   "data": [
+         *       {
+         *           "priTmplId": "9Aw5ZV1j9xdWTFEkqCpZ7mIBbSC34khK55OtzUPl0rU",
+         *           "title": "报名结果通知",
+         *           "content": "会议时间:{{date2.DATA}}\n会议地点:{{thing1.DATA}}\n",
+         *           "example": "会议时间:2016年8月8日\n会议地点:TIT会议室\n",
+         *           "type": 2
+         *       }
+         *   ]
+         *   }
+         */
+        $modelTemplate->syncTemplateList($this->authorizer_appid, $this->component_appid, $res, time());
         return $res;
     }
 
