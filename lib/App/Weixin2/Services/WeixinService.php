@@ -1272,7 +1272,7 @@ class WeixinService
 
         // 记录日志
         $modelTemplateMsgSendLog = new \App\Weixin2\Models\TemplateMsg\SendLog();
-        $modelTemplateMsgSendLog->record($templateMsgInfo['component_appid'], $templateMsgInfo['authorizer_appid'], $templateMsgInfo['_id'], $templateMsgInfo['name'], $templateMsgInfo['template_id'], $templateMsgInfo['url'], $templateMsgInfo['data'], $templateMsgInfo['color'], $templateMsgInfo['appid'], $templateMsgInfo['pagepath'], $match['_id'], $match['keyword'], $ToUserName, $FromUserName, \json_encode($templatemsg), time());
+        $modelTemplateMsgSendLog->record($templateMsgInfo['component_appid'], $templateMsgInfo['authorizer_appid'], $templateMsgInfo['_id'], $templateMsgInfo['name'], $templateMsgInfo['template_id'], $templateMsgInfo['url'], $templateMsgInfo['data'], $templateMsgInfo['color'], $templateMsgInfo['appid'], $templateMsgInfo['pagepath'], $match['_id'], $match['keyword'], $ToUserName, $FromUserName, \json_encode($templatemsg), time(), 0);
 
         return array(
             'is_ok' => $is_ok,
@@ -2300,12 +2300,13 @@ class WeixinService
         return $res;
     }
 
+    //发送小程序订阅消息(推送用)
     public function sendMicroappSubscribeMsg($FromUserName, $ToUserName, $subscribeMsgInfo, $match)
     {
         $templatemsg = array();
         $is_ok = false;
         try {
-            $data = empty($subscribeMsgInfo['data']) ? array() : \json_decode($subscribeMsgInfo['data'], true);
+            $data = empty($subscribeMsgInfo['data']) ? array() : (!is_array($subscribeMsgInfo['data']) ? \json_decode($subscribeMsgInfo['data'], true) : $subscribeMsgInfo['data']);
             $templatemsg = $this->subscribeMsgSend($FromUserName, $subscribeMsgInfo['template_id'], $data, $subscribeMsgInfo['pageurl'], $subscribeMsgInfo['miniprogram_state'], $subscribeMsgInfo['lang']);
 
             if (!empty($templatemsg['errcode'])) {
@@ -2331,6 +2332,92 @@ class WeixinService
         );
     }
 
+    //发送小程序统一消息(推送用)
+    public function sendMicroappUniformMsg($FromUserName, $ToUserName, $templateMsgInfo, $match)
+    {
+        $templatemsg = array();
+        $is_ok = false;
+
+        try {
+            $appid = empty($templateMsgInfo['authorizer_appid']) ? "" : $templateMsgInfo['authorizer_appid'];
+            $template_id = empty($templateMsgInfo['template_id']) ? "" : $templateMsgInfo['template_id'];
+            $data = empty($templateMsgInfo['data']) ? array() : \json_decode($templateMsgInfo['data'], true);
+            $url = empty($templateMsgInfo['url']) ? "" : $templateMsgInfo['url'];
+            $appid4miniapp = empty($templateMsgInfo['appid']) ? "" : $templateMsgInfo['appid'];
+            $pagepath4miniapp = empty($templateMsgInfo['pagepath']) ? "" : $templateMsgInfo['pagepath'];
+            $miniprogram = NULL;
+            if (!empty($appid4miniapp)) {
+                $miniprogram['appid'] = $appid4miniapp;
+            }
+            if (!empty($pagepath4miniapp)) {
+                $miniprogram['pagepath'] = $pagepath4miniapp;
+            }
+
+            /**
+             * "mp_template_msg":{
+             *      "appid":"APPID ",
+             *      "template_id":"TEMPLATE_ID",
+             *      "url":"http://weixin.qq.com/download",
+             *      "miniprogram":{
+             *          "appid":"xiaochengxuappid12345",
+             *          "pagepath":"index?foo=bar"
+             *      },
+             *      "data":{
+             *          "first":{
+             *             "value":"恭喜你购买成功！",
+             *             "color":"#173177"
+             *          },
+             *          "keyword1":{
+             *             "value":"巧克力",
+             *             "color":"#173177"
+             *          },
+             *          "keyword2":{
+             *             "value":"39.8元",
+             *             "color":"#173177"
+             *          },
+             *          "keyword3":{
+             *             "value":"2014年9月22日",
+             *             "color":"#173177"
+             *          },
+             *          "remark":{
+             *             "value":"欢迎再次购买！",
+             *             "color":"#173177"
+             *          }
+             *      }
+             *  }
+             */
+            $mp_template_msg = array();
+            $mp_template_msg['appid'] = $appid;
+            $mp_template_msg['template_id'] = $template_id;
+            $mp_template_msg['url'] = $url;
+            $mp_template_msg['miniprogram'] = $miniprogram;
+            $mp_template_msg['data'] = $data;
+
+            $templatemsg = $this->uniformSend($FromUserName, $mp_template_msg, array());
+            if (!empty($templatemsg['errcode'])) {
+                throw new \Exception($templatemsg['errmsg'], $templatemsg['errcode']);
+            }
+            $is_ok = true;
+        } catch (\Exception $e) {
+            $templatemsg['errorcode'] = $e->getCode();
+            $templatemsg['errormsg'] = $e->getMessage();
+        }
+
+        if (empty($templatemsg)) {
+            $templatemsg = array();
+        }
+
+        // 记录日志
+        $modelTemplateMsgSendLog = new \App\Weixin2\Models\TemplateMsg\SendLog();
+        $modelTemplateMsgSendLog->record($templateMsgInfo['component_appid'], $templateMsgInfo['authorizer_appid'], $templateMsgInfo['id'], $templateMsgInfo['name'], $templateMsgInfo['template_id'], $templateMsgInfo['url'], $templateMsgInfo['data'], $templateMsgInfo['color'], $templateMsgInfo['appid'], $templateMsgInfo['pagepath'], $match['id'], $match['keyword'], $ToUserName, $FromUserName, \json_encode($templatemsg), time(), 1);
+
+        return array(
+            'is_ok' => $is_ok,
+            'api_ret' => $templatemsg
+        );
+    }
+
+    // 同步小程序订阅模板列表
     public function syncMicroappSubscribeMsgTemplateList()
     {
         $modelTemplate = new \App\Weixin2\Models\Miniprogram\SubscribeMsg\Template\Template();

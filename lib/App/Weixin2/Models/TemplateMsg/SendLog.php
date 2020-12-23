@@ -8,7 +8,7 @@ class SendLog extends \App\Common\Models\Weixin2\TemplateMsg\SendLog
     /**
      * 记录
      */
-    public function record($component_appid, $authorizer_appid, $template_msg_id, $template_msg_name, $template_id, $url, $data, $color, $appid, $pagepath, $keyword_id, $keyword, $ToUserName, $FromUserName, $template_msg_content, $log_time)
+    public function record($component_appid, $authorizer_appid, $template_msg_id, $template_msg_name, $template_id, $url, $data, $color, $appid, $pagepath, $keyword_id, $keyword, $ToUserName, $FromUserName, $template_msg_content, $log_time, $send_method)
     {
         $datas = array(
             'component_appid' => $component_appid,
@@ -26,7 +26,8 @@ class SendLog extends \App\Common\Models\Weixin2\TemplateMsg\SendLog
             'ToUserName' => empty($ToUserName) ? "" : $ToUserName,
             'FromUserName' => empty($FromUserName) ? "" : $FromUserName,
             'template_msg_content' => empty($template_msg_content) ? "" : $template_msg_content,
-            'log_time' => \App\Common\Utils\Helper::getCurrentTime($log_time)
+            'log_time' => \App\Common\Utils\Helper::getCurrentTime($log_time),
+            'send_method' => intval($send_method)
         );
         return $this->insert($datas);
     }
