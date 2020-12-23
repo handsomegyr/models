@@ -860,6 +860,11 @@ class WeixinService
         // 设定来源和目标用户的openid
         $objWeixin->setFromAndTo($FromUserName, $ToUserName);
 
+        // 交换一下
+        $tmp1 = $ToUserName;
+        $ToUserName = $FromUserName;
+        $FromUserName = $tmp1;
+
         switch ($match['reply_msg_type']) {
             case 'news':
                 $articles = array();
@@ -925,7 +930,7 @@ class WeixinService
             return false;
         }
 
-        $sendRet = $this->sendCustomMsg($FromUserName, $ToUserName, $customMsgs[0], $match);
+        $sendRet = $this->sendCustomMsg($ToUserName, $FromUserName,  $customMsgs[0], $match);
         return $sendRet['is_ok'];
     }
 
@@ -947,7 +952,7 @@ class WeixinService
                     $custommsg = $objWeixin->getMsgManager()
                         ->getCustomSender()
                         ->setKfAccount($kf_account)
-                        ->sendGraphText($FromUserName, $articles);
+                        ->sendGraphText($ToUserName, $articles);
                     break;
                 case 'music':
                     $modelCustomMsg = new \App\Weixin2\Models\CustomMsg\CustomMsg();
@@ -957,14 +962,14 @@ class WeixinService
                     $custommsg = $objWeixin->getMsgManager()
                         ->getCustomSender()
                         ->setKfAccount($kf_account)
-                        ->sendMusic($FromUserName, $customMsgInfo['title'], $customMsgInfo['description'], $modelCustomMsg->getPhysicalFilePath($customMsgInfo['music']), $hqmusic, $thumb_media_id);
+                        ->sendMusic($ToUserName, $customMsgInfo['title'], $customMsgInfo['description'], $modelCustomMsg->getPhysicalFilePath($customMsgInfo['music']), $hqmusic, $thumb_media_id);
                     break;
                 case 'text':
                     $kf_account = empty($customMsgInfo['kf_account']) ? "" : $customMsgInfo['kf_account'];
                     $custommsg = $objWeixin->getMsgManager()
                         ->getCustomSender()
                         ->setKfAccount($kf_account)
-                        ->sendText($FromUserName, $customMsgInfo['description']);
+                        ->sendText($ToUserName, $customMsgInfo['description']);
                     break;
                 case 'voice':
                     $kf_account = empty($customMsgInfo['kf_account']) ? "" : $customMsgInfo['kf_account'];
@@ -972,7 +977,7 @@ class WeixinService
                     $custommsg = $objWeixin->getMsgManager()
                         ->getCustomSender()
                         ->setKfAccount($kf_account)
-                        ->sendVoice($FromUserName, $media_id);
+                        ->sendVoice($ToUserName, $media_id);
                     break;
                 case 'video':
                     $kf_account = empty($customMsgInfo['kf_account']) ? "" : $customMsgInfo['kf_account'];
@@ -981,7 +986,7 @@ class WeixinService
                     $custommsg = $objWeixin->getMsgManager()
                         ->getCustomSender()
                         ->setKfAccount($kf_account)
-                        ->sendVideo($FromUserName, $media_id, $thumb_media_id, $customMsgInfo['title'], $customMsgInfo['description']);
+                        ->sendVideo($ToUserName, $media_id, $thumb_media_id, $customMsgInfo['title'], $customMsgInfo['description']);
                     break;
                 case 'image':
                     $kf_account = empty($customMsgInfo['kf_account']) ? "" : $customMsgInfo['kf_account'];
@@ -989,7 +994,7 @@ class WeixinService
                     $custommsg = $objWeixin->getMsgManager()
                         ->getCustomSender()
                         ->setKfAccount($kf_account)
-                        ->sendImage($FromUserName, $media_id);
+                        ->sendImage($ToUserName, $media_id);
                     break;
                 case 'mpnews':
                     $kf_account = empty($customMsgInfo['kf_account']) ? "" : $customMsgInfo['kf_account'];
@@ -997,7 +1002,7 @@ class WeixinService
                     $custommsg = $objWeixin->getMsgManager()
                         ->getCustomSender()
                         ->setKfAccount($kf_account)
-                        ->sendMpNews($FromUserName, $media_id);
+                        ->sendMpNews($ToUserName, $media_id);
                     break;
                 case 'msgmenu':
                     $kf_account = empty($customMsgInfo['kf_account']) ? "" : $customMsgInfo['kf_account'];
@@ -1005,7 +1010,7 @@ class WeixinService
                     $custommsg = $objWeixin->getMsgManager()
                         ->getCustomSender()
                         ->setKfAccount($kf_account)
-                        ->sendMsgMenu($FromUserName, $msgmenu);
+                        ->sendMsgMenu($ToUserName, $msgmenu);
                     break;
                 case 'miniprogrampage':
                     $kf_account = empty($customMsgInfo['kf_account']) ? "" : $customMsgInfo['kf_account'];
@@ -1013,7 +1018,7 @@ class WeixinService
                     $custommsg = $objWeixin->getMsgManager()
                         ->getCustomSender()
                         ->setKfAccount($kf_account)
-                        ->sendMiniProgramPage($FromUserName, $customMsgInfo['title'], $customMsgInfo['appid'], $customMsgInfo['pagepath'], $thumb_media_id);
+                        ->sendMiniProgramPage($ToUserName, $customMsgInfo['title'], $customMsgInfo['appid'], $customMsgInfo['pagepath'], $thumb_media_id);
                     break;
                 case 'wxcard':
                     $kf_account = empty($customMsgInfo['kf_account']) ? "" : $customMsgInfo['kf_account'];
@@ -1021,7 +1026,7 @@ class WeixinService
                     $custommsg = $objWeixin->getMsgManager()
                         ->getCustomSender()
                         ->setKfAccount($kf_account)
-                        ->sendWxcard($FromUserName, $customMsgInfo['card_id'], $card_ext);
+                        ->sendWxcard($ToUserName, $customMsgInfo['card_id'], $card_ext);
                     break;
             }
 
@@ -1233,7 +1238,7 @@ class WeixinService
         if (empty($templates)) {
             return false;
         }
-        $sendRet = $this->sendTemplateMsg($FromUserName, $ToUserName, $templates[0], $match);
+        $sendRet = $this->sendTemplateMsg($ToUserName, $FromUserName,  $templates[0], $match);
         return $sendRet['is_ok'];
     }
 
@@ -1255,7 +1260,7 @@ class WeixinService
             }
             $templatemsg = $objWeixin->getMsgManager()
                 ->getTemplateSender()
-                ->send($FromUserName, $templateMsgInfo['template_id'], $templateMsgInfo['url'], $templateMsgInfo['color'], $data, $miniprogram);
+                ->send($ToUserName, $templateMsgInfo['template_id'], $templateMsgInfo['url'], $templateMsgInfo['color'], $data, $miniprogram);
 
             if (!empty($templatemsg['errcode'])) {
                 throw new \Exception($templatemsg['errmsg'], $templatemsg['errcode']);
@@ -2307,7 +2312,7 @@ class WeixinService
         $is_ok = false;
         try {
             $data = empty($subscribeMsgInfo['data']) ? array() : (!is_array($subscribeMsgInfo['data']) ? \json_decode($subscribeMsgInfo['data'], true) : $subscribeMsgInfo['data']);
-            $templatemsg = $this->subscribeMsgSend($FromUserName, $subscribeMsgInfo['template_id'], $data, $subscribeMsgInfo['pageurl'], $subscribeMsgInfo['miniprogram_state'], $subscribeMsgInfo['lang']);
+            $templatemsg = $this->subscribeMsgSend($ToUserName, $subscribeMsgInfo['template_id'], $data, $subscribeMsgInfo['pageurl'], $subscribeMsgInfo['miniprogram_state'], $subscribeMsgInfo['lang']);
 
             if (!empty($templatemsg['errcode'])) {
                 throw new \Exception($templatemsg['errmsg'], $templatemsg['errcode']);
@@ -2393,7 +2398,7 @@ class WeixinService
             $mp_template_msg['miniprogram'] = $miniprogram;
             $mp_template_msg['data'] = $data;
 
-            $templatemsg = $this->uniformSend($FromUserName, $mp_template_msg, array());
+            $templatemsg = $this->uniformSend($ToUserName, $mp_template_msg, array());
             if (!empty($templatemsg['errcode'])) {
                 throw new \Exception($templatemsg['errmsg'], $templatemsg['errcode']);
             }
