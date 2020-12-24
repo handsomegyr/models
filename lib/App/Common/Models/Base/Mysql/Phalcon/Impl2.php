@@ -381,13 +381,7 @@ class Impl2 extends Base
         }
         $result = $db->$method($phql, $data);
         if ($method == 'query') {
-            //https://docs.phalcon.io/4.0/en/upgrade
-            // 暂时用php版本来判断
-            if (version_compare(PHP_VERSION, '7.4.0') < 0) {
-                $result->setFetchMode(\Phalcon\Db::FETCH_ASSOC);
-            } else {
-                $result->setFetchMode(\Phalcon\Db\Enum::FETCH_ASSOC);
-            }
+            $result->setFetchMode(MYDB_FETCH_ASSOC);
             return $result;
         } else {
             return $db->affectedRows();
