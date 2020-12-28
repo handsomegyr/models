@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Site\Models;
 
 class Site extends \App\Common\Models\Site\Site
@@ -34,7 +35,7 @@ class Site extends \App\Common\Models\Site\Site
         $info = $cache->get($key);
         if (empty($info)) {
             $info = $this->getInfoById($id);
-            if (! empty($info)) {
+            if (!empty($info)) {
                 $cache->save($key, $info, 60 * 60); // 一个小时
             }
         }

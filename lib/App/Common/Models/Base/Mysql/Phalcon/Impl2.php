@@ -381,6 +381,7 @@ class Impl2 extends Base
         }
         $result = $db->$method($phql, $data);
         if ($method == 'query') {
+            // die('executeDBQuery:' . MYDB_FETCH_ASSOC);
             $result->setFetchMode(MYDB_FETCH_ASSOC);
             return $result;
         } else {

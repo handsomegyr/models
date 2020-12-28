@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Article\Models;
 
 class Article extends \App\Common\Models\Article\Article
@@ -58,7 +59,7 @@ class Article extends \App\Common\Models\Article\Article
         $list = $cache->get($key);
         if (empty($list)) {
             $list = $this->getPageList($page, $limit);
-            if (! empty($list['datas'])) {
+            if (!empty($list['datas'])) {
                 $cache->save($key, $list, 60 * 60); // 一个小时
             }
         }

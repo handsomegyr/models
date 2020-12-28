@@ -19,8 +19,8 @@ class Rule extends Base
     public function reorganize(array $data)
     {
         $data = parent::reorganize($data);
-        $data['start_time'] = $this->changeToMongoDate($data['start_time']);
-        $data['end_time'] = $this->changeToMongoDate($data['end_time']);
+        $data['allow_start_time'] = $this->changeToMongoDate($data['allow_start_time']);
+        $data['allow_end_time'] = $this->changeToMongoDate($data['allow_end_time']);
         return $data;
     }
 }
