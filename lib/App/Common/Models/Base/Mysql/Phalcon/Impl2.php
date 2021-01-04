@@ -134,17 +134,21 @@ class Impl2 extends Base
     public function find(array $query, array $sort = null, $skip = 0, $limit = 10, array $fields = array())
     {
         $total = $this->count($query);
-
-        $sqlAndConditions = $this->getSqlAndConditions4Find($query, $sort, $skip, $limit, $fields);
-        $phql = $sqlAndConditions['sql'];
-        $conditions = $sqlAndConditions['conditions'];
-        $result = $this->executeQuery($phql, $conditions['bind']);
-        $ret = $result->fetchAll();
-        $list = array();
-        if (!empty($ret)) {
-            foreach ($ret as $key => $item) {
-                $list[$key] = $this->reorganize($item);
+        // 如果没有数据的话不用在进行sql查询了
+        if ($total > 0) {
+            $sqlAndConditions = $this->getSqlAndConditions4Find($query, $sort, $skip, $limit, $fields);
+            $phql = $sqlAndConditions['sql'];
+            $conditions = $sqlAndConditions['conditions'];
+            $result = $this->executeQuery($phql, $conditions['bind']);
+            $ret = $result->fetchAll();
+            $list = array();
+            if (!empty($ret)) {
+                foreach ($ret as $key => $item) {
+                    $list[$key] = $this->reorganize($item);
+                }
             }
+        } else {
+            $list = array();
         }
 
         return array(
@@ -188,7 +192,7 @@ class Impl2 extends Base
         $ret = $result->fetchAll();
         $list = array();
         if (!empty($ret)) {
-            foreach ($ret as $key => $item) {
+            foreach ($ret as $item) {
                 $data = $this->reorganize($item);
                 $list[] = $data[$field];
             }
