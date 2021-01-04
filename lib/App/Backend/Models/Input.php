@@ -4,6 +4,12 @@ namespace App\Backend\Models;
 
 class Input extends \stdClass
 {
+    // 为字符串字段进行设置检索条件 like, eq, prelike, 默认是eq
+    private $sqlWhere4String = 'eq';
+    public function setSqlWhere4String($sqlwhere)
+    {
+        $this->sqlWhere4String = strtolower(trim($sqlwhere));
+    }
 
     protected $filter = NULL;
 
@@ -106,7 +112,25 @@ class Input extends \stdClass
                 if (isset($filter[$key])) {
                     if (strlen($filter[$key]) > 0) {
                         if ($field['data']['type'] == "string" && $key != '_id') {
-                            $where[$key] = new \MongoRegex('/' . urldecode($filter[$key]) . '/i');
+                            if ($this->sqlWhere4String == 'eq') {
+                                $where[$key] = urldecode($filter[$key]);
+                            } elseif ($this->sqlWhere4String == 'prelike') {
+                                $where[$key] = new \MongoRegex(urldecode($filter[$key]) . '/i');
+                            } elseif ($this->sqlWhere4String == 'like') {
+                                $where[$key] = new \MongoRegex('/' . urldecode($filter[$key]) . '/i');
+                            } else {
+                                if ((!empty($field['search']) && !empty($field['search']['sqlWhere']))) {
+                                    if (strtolower(trim($field['search']['sqlWhere'])) == 'eq') {
+                                        $where[$key] = urldecode($filter[$key]);
+                                    } elseif (strtolower(trim($field['search']['sqlWhere'])) == 'prelike') {
+                                        $where[$key] = new \MongoRegex(urldecode($filter[$key]) . '/i');
+                                    } else {
+                                        $where[$key] = new \MongoRegex('/' . urldecode($filter[$key]) . '/i');
+                                    }
+                                } else {
+                                    $where[$key] = new \MongoRegex('/' . urldecode($filter[$key]) . '/i');
+                                }
+                            }
                         } elseif ($field['data']['type'] == "datetime") {
                             $datetime = urldecode($filter[$key]);
                             $isExist = $this->isCheckPeriodFlagExist($datetime);
