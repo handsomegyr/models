@@ -112,21 +112,19 @@ class Input extends \stdClass
                 if (isset($filter[$key])) {
                     if (strlen($filter[$key]) > 0) {
                         if ($field['data']['type'] == "string" && $key != '_id') {
-                            if ($this->sqlWhere4String == 'eq') {
-                                $where[$key] = urldecode($filter[$key]);
-                            } elseif ($this->sqlWhere4String == 'prelike') {
-                                $where[$key] = new \MongoRegex(urldecode($filter[$key]) . '/i');
-                            } elseif ($this->sqlWhere4String == 'like') {
-                                $where[$key] = new \MongoRegex('/' . urldecode($filter[$key]) . '/i');
+                            if ((!empty($field['search']) && !empty($field['search']['sqlWhere']))) {
+                                if (strtolower(trim($field['search']['sqlWhere'])) == 'eq') {
+                                    $where[$key] = urldecode($filter[$key]);
+                                } elseif (strtolower(trim($field['search']['sqlWhere'])) == 'prelike') {
+                                    $where[$key] = new \MongoRegex(urldecode($filter[$key]) . '/i');
+                                } else {
+                                    $where[$key] = new \MongoRegex('/' . urldecode($filter[$key]) . '/i');
+                                }
                             } else {
-                                if ((!empty($field['search']) && !empty($field['search']['sqlWhere']))) {
-                                    if (strtolower(trim($field['search']['sqlWhere'])) == 'eq') {
-                                        $where[$key] = urldecode($filter[$key]);
-                                    } elseif (strtolower(trim($field['search']['sqlWhere'])) == 'prelike') {
-                                        $where[$key] = new \MongoRegex(urldecode($filter[$key]) . '/i');
-                                    } else {
-                                        $where[$key] = new \MongoRegex('/' . urldecode($filter[$key]) . '/i');
-                                    }
+                                if ($this->sqlWhere4String == 'eq') {
+                                    $where[$key] = urldecode($filter[$key]);
+                                } elseif ($this->sqlWhere4String == 'prelike') {
+                                    $where[$key] = new \MongoRegex(urldecode($filter[$key]) . '/i');
                                 } else {
                                     $where[$key] = new \MongoRegex('/' . urldecode($filter[$key]) . '/i');
                                 }
