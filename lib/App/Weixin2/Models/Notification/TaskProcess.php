@@ -19,6 +19,9 @@ class TaskProcess extends \App\Common\Models\Weixin2\Notification\TaskProcess
 
     // 推送失败
     const PUSH_FAIL = 4;
+    
+    // 推送关闭
+    const PUSH_CLOSE = 5;
 
     public function getInfoByTaskId($notification_task_id)
     {

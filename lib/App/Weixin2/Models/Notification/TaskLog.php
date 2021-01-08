@@ -4,20 +4,6 @@ namespace App\Weixin2\Models\Notification;
 
 class TaskLog extends \App\Common\Models\Weixin2\Notification\TaskLog
 {
-
-    // 1。推送状态
-    // 未推送
-    const UNPUSH = 0;
-
-    // 推送中
-    const PUSHING = 1;
-
-    // 推送成功
-    const PUSH_SUCCESS = 2;
-
-    // 推送失败
-    const PUSH_FAIL = 3;
-
     public function log($component_appid, $authorizer_appid, $notification_task_process_id, $notification_task_id, $notification_task_name, $notification_method, $mass_msg_send_method_id, $subscribe_msg_id, $template_msg_id, $mass_msg_id, $custom_msg_id, $notification_task_content_id, $notification_task_content_name, $openids, $openid, $tag_id, $push_status, $log_time)
     {
         $data = array();
