@@ -257,6 +257,11 @@ class Base implements IBase
         return $this->getModel()->physicalRemove($query);
     }
 
+    public function truncate()
+    {
+        return $this->getModel()->truncate();
+    }
+
     public function selectRaw($sql, array $data = array())
     {
         return $this->getModel()->selectRaw($sql, $data);

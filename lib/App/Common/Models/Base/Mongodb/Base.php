@@ -209,4 +209,9 @@ class Base implements \App\Common\Models\Base\IBase
     {
         return $this->impl->remove($query);
     }
+
+    public function truncate()
+    {
+        return $this->impl->truncate();
+    }
 }

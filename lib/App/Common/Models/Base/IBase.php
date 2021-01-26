@@ -132,6 +132,11 @@ interface IBase
     public function physicalRemove(array $query);
 
     /**
+     * 执行TRUNCATE操作            
+     */
+    public function truncate();
+
+    /**
      * 直接执行sql查询
      */
     public function selectRaw($sql, array $data = array());

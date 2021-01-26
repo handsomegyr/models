@@ -249,6 +249,14 @@ class Impl2 extends Base
         return $result;
     }
 
+    public function truncate()
+    {
+        $className = $this->getSource();
+        $phql = "TRUNCATE {$className}";
+        $result = $this->executeQuery($phql, array(), 'execute');
+        return $result;
+    }
+
     public function selectRaw($sql, array $data = array())
     {
         $result = $this->executeDBQuery($sql, $data, 'query');
