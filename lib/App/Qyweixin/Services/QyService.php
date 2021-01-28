@@ -745,6 +745,36 @@ class QyService
         return $res;
     }
 
+    // 批量邀请成员
+    public function batchInvite($id)
+    {
+        $modelBatchInvite = new \App\Qyweixin\Models\Contact\BatchInvite();
+        $batchInviteInfo = $modelBatchInvite->getInfoById($id);
+        if (empty($batchInviteInfo)) {
+            throw new \Exception("记录ID:{$id}所对应的记录不存在");
+        }
+        $user = empty($batchInviteInfo['user']) ? array() : (is_array($batchInviteInfo['user']) ? $batchInviteInfo['user'] : \json_decode($batchInviteInfo['user'], true));
+        $party = empty($batchInviteInfo['party']) ? array() : (is_array($batchInviteInfo['party']) ? $batchInviteInfo['party'] : \json_decode($batchInviteInfo['party'], true));
+        $tag = empty($batchInviteInfo['tag']) ? array() : (is_array($batchInviteInfo['tag']) ? $batchInviteInfo['tag'] : \json_decode($batchInviteInfo['tag'], true));
+        $res = $this->getQyWeixinObject()
+            ->getUserManager()
+            ->batchInvite($user, $party, $tag);
+        /**
+         * {
+         * "errcode" : 0,
+         * "errmsg" : "ok",
+         * "invaliduser" : ["UserID1", "UserID2"],
+         * "invalidparty" : [PartyID1, PartyID2],
+         * "invalidtag": [TagID1, TagID2]
+         * }
+         */
+        if (!empty($res['errcode'])) {
+            throw new \Exception($res['errmsg'], $res['errcode']);
+        }
+        $modelBatchInvite->recordResult($batchInviteInfo['_id'], $res, time());
+        return $res;
+    }
+
     public function answerReplyMsgs($FromUserName, $ToUserName, $match)
     {
         $modelReplyMsg = new \App\Qyweixin\Models\ReplyMsg\ReplyMsg();
@@ -1211,33 +1241,32 @@ class QyService
         return $res;
     }
 
-        // 获取部门成员
-        public function getDepartmentUserSimplelist($dep_id, $fetch_child = 0)
-        {
-            $modelDepartmentUser = new \App\Qyweixin\Models\Contact\DepartmentUserModel();
-            $res = $this->getQyWeixinObject()
-                ->getUserManager()
-                ->simplelist($dep_id, $fetch_child);
-            if (!empty($res['errcode'])) {
-                throw new \Exception($res['errmsg'], $res['errcode']);
-            }
-            /**
-             * {
-             * "errcode": 0,
-             * "errmsg": "ok",
-             * "userlist": [
-             * {
-             * "userid": "zhangsan",
-             * "name": "李四",
-             * "department": [1, 2],
-             * "open_userid": "xxxxxx"
-             * }
-             * ]}
-             */
-            $modelDepartmentUser->syncDepartmentUserList($dep_id, $this->authorizer_appid, $this->provider_appid, $res, time());
-            return $res;
+    // 获取部门成员
+    public function getDepartmentUserSimplelist($dep_id, $fetch_child = 0)
+    {
+        $modelDepartmentUser = new \App\Qyweixin\Models\Contact\DepartmentUserModel();
+        $res = $this->getQyWeixinObject()
+            ->getUserManager()
+            ->simplelist($dep_id, $fetch_child);
+        if (!empty($res['errcode'])) {
+            throw new \Exception($res['errmsg'], $res['errcode']);
         }
-
+        /**
+         * {
+         * "errcode": 0,
+         * "errmsg": "ok",
+         * "userlist": [
+         * {
+         * "userid": "zhangsan",
+         * "name": "李四",
+         * "department": [1, 2],
+         * "open_userid": "xxxxxx"
+         * }
+         * ]}
+         */
+        $modelDepartmentUser->syncDepartmentUserList($dep_id, $this->authorizer_appid, $this->provider_appid, $res, time());
+        return $res;
+    }
 
     // 获取部门成员详情
     public function getDepartmentUserDetaillist($dep_id, $fetch_child = 0)
