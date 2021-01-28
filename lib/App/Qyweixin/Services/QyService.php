@@ -1383,6 +1383,38 @@ class QyService
         return $res;
     }
 
+
+    // 获取标签成员
+    public function getTag($tagid)
+    {
+        $res = $this->getQyWeixinObject()
+            ->getTagManager()
+            ->get($tagid);
+        if (!empty($res['errcode'])) {
+            throw new \Exception($res['errmsg'], $res['errcode']);
+        }
+        /**
+         * {
+         * "errcode": 0,
+         * "errmsg": "ok",
+         * "tagname": "乒乓球协会",
+         * "userlist": [
+         * {
+         *  "userid": "zhangsan",
+         *  "name": "李四"
+         * }
+         * ],
+         * "partylist": [2]
+         * }
+         */
+
+        $modelTagParty = new \App\Qyweixin\Models\Contact\TagParty();
+        $modelTagUser = new \App\Qyweixin\Models\Contact\TagUser();
+        $modelTagParty->syncTagDepartmentList($tagid, $this->authorizer_appid, $this->provider_appid, $res, time());
+        $modelTagUser->syncTagUserList($tagid, $this->authorizer_appid, $this->provider_appid, $res, time());
+        return $res;
+    }
+
     //获取企业活跃成员数
     public function getActiveStat($start_time)
     {
