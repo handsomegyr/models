@@ -159,6 +159,17 @@ class QyService
         return $res;
     }
 
+    public function getAgentList()
+    {
+        $res = $this->getQyWeixinObject()
+            ->getAgentManager()
+            ->list();
+        if (!empty($res['errcode'])) {
+            throw new \Exception($res['errmsg'], $res['errcode']);
+        }
+        return $res;
+    }
+
     public function getAccessToken4Authorizer()
     {
         $modelAuthorizer = new \App\Qyweixin\Models\Authorize\Authorizer();
