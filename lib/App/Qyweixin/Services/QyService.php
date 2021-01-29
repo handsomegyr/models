@@ -787,6 +787,11 @@ class QyService
         // 设定来源和目标用户的openid
         $objQyWeixin->setFromAndTo($FromUserName, $ToUserName);
 
+        // 交换一下
+        $tmp1 = $ToUserName;
+        $ToUserName = $FromUserName;
+        $FromUserName = $tmp1;
+
         switch ($match['reply_msg_type']) {
             case 'news':
                 $articles = array();
@@ -839,41 +844,41 @@ class QyService
             return false;
         }
 
-        $sendRet = $this->sendAgentMsg($FromUserName, $ToUserName, $agentMsgs[0], $match);
+        $sendRet = $this->sendAgentMsg($ToUserName, $FromUserName,  $agentMsgs[0], $match);
         return $sendRet['is_ok'];
     }
 
     public function sendAgentMsg($FromUserName, $ToUserName, $agentMsgInfo, $match)
     {
+        $is_ok = false;
         $objQyWeixin = $this->getQyWeixinObject();
         $agentmsg = array();
         $agentid = $agentMsgInfo['agentid'];
         try {
             switch ($match['agent_msg_type']) {
-
                 case 'text':
-                    $objMsg = new \Qyweixin\Model\Message\Text($agentid, $agentMsgInfo['description'], $FromUserName);
+                    $objMsg = new \Qyweixin\Model\Message\Text($agentid, $agentMsgInfo['description'], $ToUserName);
                     break;
                 case 'voice':
                     $media_id = $this->getMediaId4AgentMsg('voice', $agentMsgInfo);
-                    $objMsg = new \Qyweixin\Model\Message\Voice($agentid, $media_id, $FromUserName);
+                    $objMsg = new \Qyweixin\Model\Message\Voice($agentid, $media_id, $ToUserName);
                     break;
                 case 'video':
                     $media_id = $this->getMediaId4AgentMsg('video', $agentMsgInfo);
-                    $objMsg = new \Qyweixin\Model\Message\Video($agentid, $media_id, $FromUserName);
+                    $objMsg = new \Qyweixin\Model\Message\Video($agentid, $media_id, $ToUserName);
                     $objMsg->title = $agentMsgInfo['title'];
                     $objMsg->description = $agentMsgInfo['description'];
                     break;
                 case 'file':
                     $media_id = $this->getMediaId4AgentMsg('file', $agentMsgInfo);
-                    $objMsg = new \Qyweixin\Model\Message\File($agentid, $media_id, $FromUserName);
+                    $objMsg = new \Qyweixin\Model\Message\File($agentid, $media_id, $ToUserName);
                     break;
                 case 'image':
                     $media_id = $this->getMediaId4AgentMsg('image', $agentMsgInfo);
-                    $objMsg = new \Qyweixin\Model\Message\Image($agentid, $media_id, $FromUserName);
+                    $objMsg = new \Qyweixin\Model\Message\Image($agentid, $media_id, $ToUserName);
                     break;
                 case 'textcard':
-                    $objMsg = new \Qyweixin\Model\Message\TextCard($agentid, $agentMsgInfo['title'], $agentMsgInfo['description'], $agentMsgInfo['url'], $FromUserName);
+                    $objMsg = new \Qyweixin\Model\Message\TextCard($agentid, $agentMsgInfo['title'], $agentMsgInfo['description'], $agentMsgInfo['url'], $ToUserName);
                     $objMsg->btntxt = $agentMsgInfo['btntxt'];
                     break;
                 case 'news':
@@ -883,7 +888,7 @@ class QyService
                     $modelAgentMsgNews = new \App\Qyweixin\Models\AgentMsg\News();
                     $articles1 = $modelAgentMsgNews->getArticlesByAgentMsgId($agentMsgInfo['_id'], 'news', $isFirst);
                     $articles = array_merge($articles, $articles1);
-                    $objMsg = new \Qyweixin\Model\Message\News($agentid, $articles, $FromUserName);
+                    $objMsg = new \Qyweixin\Model\Message\News($agentid, $articles, $ToUserName);
                     break;
                 case 'mpnews':
                     // 获取图文列表
@@ -898,24 +903,27 @@ class QyService
                         $article['thumb_media_id'] = $res4ThumbMedia['media_id'];
                         unset($article['thumb_media']);
                     }
-                    $objMsg = new \Qyweixin\Model\Message\Mpnews($agentid, $articles, $FromUserName);
+                    $objMsg = new \Qyweixin\Model\Message\Mpnews($agentid, $articles, $ToUserName);
                     break;
                 case 'markdown':
-                    $objMsg = new \Qyweixin\Model\Message\Markdown($agentid, $agentMsgInfo['description'], $FromUserName);
+                    $objMsg = new \Qyweixin\Model\Message\Markdown($agentid, $agentMsgInfo['description'], $ToUserName);
                     break;
                 case 'miniprogram_notice':
-                    $objMsg = new \Qyweixin\Model\Message\MiniprogramNotice($agentMsgInfo['appid'], $agentMsgInfo['title'], $FromUserName);
+                    $objMsg = new \Qyweixin\Model\Message\MiniprogramNotice($agentMsgInfo['appid'], $agentMsgInfo['title'], $ToUserName);
                     $objMsg->page = $agentMsgInfo['pagepath'];
                     $objMsg->description = $agentMsgInfo['description'];
                     $objMsg->emphasis_first_item = $agentMsgInfo['emphasis_first_item'];
                     $objMsg->content_item = $agentMsgInfo['content_item'];
                     break;
                 case 'taskcard':
-                    $objMsg = new \Qyweixin\Model\Message\TaskCard($agentid, $agentMsgInfo['title'], $agentMsgInfo['description'], $agentMsgInfo['task_id'], $agentMsgInfo['btn'], $FromUserName);
+                    $objMsg = new \Qyweixin\Model\Message\TaskCard($agentid, $agentMsgInfo['title'], $agentMsgInfo['description'], $agentMsgInfo['task_id'], $agentMsgInfo['btn'], $ToUserName);
                     $objMsg->url = $agentMsgInfo['url'];
                     break;
+                default:
+                    throw new \Exception('msg_type:' . $match['agent_msg_type'] . '的消息的发送功能未实现');
+                    break;
             }
-            $objMsg->touser = $FromUserName;
+            $objMsg->touser = $ToUserName;
             $objMsg->safe = intval($agentMsgInfo['safe']);
             $objMsg->enable_id_trans = intval($agentMsgInfo['enable_id_trans']);
             $objMsg->enable_duplicate_check = intval($agentMsgInfo['enable_duplicate_check']);
@@ -925,6 +933,7 @@ class QyService
             if (!empty($agentmsg['errcode'])) {
                 throw new \Exception($agentmsg['errmsg'], $agentmsg['errcode']);
             }
+            $is_ok = true;
         } catch (\Exception $e) {
             $agentmsg['errorcode'] = $e->getCode();
             $agentmsg['errormsg'] = $e->getMessage();
@@ -970,13 +979,14 @@ class QyService
         );
 
         return array(
-            'is_ok' => true,
+            'is_ok' => $is_ok,
             'api_ret' => $agentmsg
         );
     }
 
     public function sendAppchatMsg($FromUserName, $ToUserName, $appchatMsgInfo, $match)
     {
+        $is_ok = false;
         $objQyWeixin = $this->getQyWeixinObject();
         $appchatmsg = array();
         $agentid = $appchatMsgInfo['agentid'];
@@ -1035,6 +1045,9 @@ class QyService
                 case 'markdown':
                     $objMsg = new \Qyweixin\Model\AppchatMsg\Markdown($chatid, $appchatMsgInfo['description']);
                     break;
+                default:
+                    throw new \Exception('msg_type:' . $match['appchat_msg_type'] . '的消息的发送功能未实现');
+                    break;
             }
 
             $objMsg->safe = intval($appchatMsgInfo['safe']);
@@ -1042,6 +1055,7 @@ class QyService
             if (!empty($appchatmsg['errcode'])) {
                 throw new \Exception($appchatmsg['errmsg'], $appchatmsg['errcode']);
             }
+            $is_ok = true;
         } catch (\Exception $e) {
             $appchatmsg['errorcode'] = $e->getCode();
             $appchatmsg['errormsg'] = $e->getMessage();
@@ -1079,13 +1093,14 @@ class QyService
         );
 
         return array(
-            'is_ok' => true,
+            'is_ok' => $is_ok,
             'api_ret' => $appchatmsg
         );
     }
 
     public function sendLinkedcorpMsg($FromUserName, $ToUserName, $linkedcorpMsgInfo, $match)
     {
+        $is_ok = false;
         $objQyWeixin = $this->getQyWeixinObject();
         $linkedcorpmsg = array();
         $agentid = $linkedcorpMsgInfo['agentid'];
@@ -1150,15 +1165,19 @@ class QyService
                     $objMsg->emphasis_first_item = $linkedcorpMsgInfo['emphasis_first_item'];
                     $objMsg->content_item = $linkedcorpMsgInfo['content_item'];
                     break;
+                default:
+                    throw new \Exception('msg_type:' . $match['linkedcorp_msg_type'] . '的消息的发送功能未实现');
+                    break;
             }
 
-            $objMsg->touser = array($FromUserName);
+            $objMsg->touser = array($ToUserName);
             $objMsg->toall = intval($linkedcorpMsgInfo['toall']);
             $objMsg->safe = intval($linkedcorpMsgInfo['safe']);
             $linkedcorpmsg = $objQyWeixin->getLinkedcorpMessageManager()->send($objMsg);
             if (!empty($linkedcorpmsg['errcode'])) {
                 throw new \Exception($linkedcorpmsg['errmsg'], $linkedcorpmsg['errcode']);
             }
+            $is_ok = true;
         } catch (\Exception $e) {
             $linkedcorpmsg['errorcode'] = $e->getCode();
             $linkedcorpmsg['errormsg'] = $e->getMessage();
@@ -1200,7 +1219,7 @@ class QyService
         );
 
         return array(
-            'is_ok' => true,
+            'is_ok' => $is_ok,
             'api_ret' => $linkedcorpmsg
         );
     }
