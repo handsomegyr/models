@@ -88,6 +88,55 @@ class Agent extends \App\Common\Models\Qyweixin\Agent\Agent
         return $newInfo;
     }
 
+    public function updateAgentInfo($id, $res, $now, $orginalMemo)
+    {
+        $updateData = array();
+        $memo = array();
+        $memo['get_agent_info_ret'] = $res;
+        $updateData['memo'] = array_merge($orginalMemo, $memo);
+        /**
+         * {
+         * "errcode": 0,
+         * "errmsg": "ok",
+         * "agentid": 1000005,
+         * "name": "HR助手",
+         * "square_logo_url": "https://p.qlogo.cn/bizmail/FicwmI50icF8GH9ib7rUAYR5kicLTgP265naVFQKnleqSlRhiaBx7QA9u7Q/0",
+         * "description": "HR服务与员工自助平台",
+         * "allow_userinfos": {
+         * "user": [
+         * {"userid": "zhangshan"},
+         * {"userid": "lisi"}
+         * ]
+         * },
+         * "allow_partys": {
+         * "partyid": [1]
+         * },
+         * "allow_tags": {
+         * "tagid": [1,2,3]
+         * },
+         * "close": 0,
+         * "redirect_domain": "open.work.weixin.qq.com",
+         * "report_location_flag": 0,
+         * "isreportenter": 0,
+         * "home_url": "https://open.work.weixin.qq.com"
+         * }
+         */
+        $updateData['name'] = $res['name'];
+        $updateData['square_logo_url'] = $res['square_logo_url'];
+        $updateData['description'] = $res['description'];
+        $updateData['allow_userinfos'] = !empty($res['allow_userinfos']) ? \json_encode($res['allow_userinfos']) : "{}";
+        $updateData['allow_partys'] =  !empty($res['allow_partys']) ? \json_encode($res['allow_partys']) : "{}";
+        $updateData['allow_tags'] =  !empty($res['allow_tags']) ? \json_encode($res['allow_tags']) : "{}";
+        $updateData['close'] = $res['close'];
+        $updateData['redirect_domain'] = $res['redirect_domain'];
+        $updateData['report_location_flag'] = $res['report_location_flag'];
+        $updateData['isreportenter'] = $res['isreportenter'];
+        $updateData['home_url'] = $res['home_url'];
+        $updateData['sync_time'] = \App\Common\Utils\Helper::getCurrentTime($now);
+        $affectRows = $this->update(array('_id' => $id), array('$set' => $updateData));
+        return $affectRows;
+    }
+
     public function getSignKey($openid, $secretKey, $timestamp = 0)
     {
         return sha1($openid . "|" . $secretKey . "|" . $timestamp);
