@@ -1755,6 +1755,20 @@ class QyService
         return $res;
     }
 
+    // 获取客户朋友圈全部的发表记录
+    public function getMomentList($start_time, $end_time, $creator = "", $filter_type = 2, $limit = 1000, $cursor = "")
+    {
+        $modelMoment = new \App\Qyweixin\Models\ExternalContact\Moment();
+        $res = $this->getQyWeixinObject()
+            ->getExternalContactManager()
+            ->getMomentManager()->getMomentList($start_time, $end_time, $creator, $filter_type, $limit, $cursor);
+        if (!empty($res['errcode'])) {
+            throw new \Exception($res['errmsg'], $res['errcode']);
+        }
+        $modelMoment->syncMomentList($this->authorizer_appid, $this->provider_appid, $res, time());
+        return $res;
+    }
+
     //获取离职成员的客户列表
     public function getUnassignedList($page_id = 0, $page_size = 1000)
     {
