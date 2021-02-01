@@ -781,6 +781,26 @@ class Menu
         );
         $tree[] = $item;
 
+        // 企业客户朋友圈管理
+        $item = array(
+            'menu_name' => '企业客户朋友圈管理',
+            'menu_model' => '',
+            'level' => '企业平台外部联系人管理',
+            'icon' => '',
+            'model' => ''
+        );
+        $tree[] = $item;
+
+        // 客户朋友圈
+        $item = array(
+            'menu_name' => '客户朋友圈',
+            'menu_model' => 'qyweixin-externalcontactmoment',
+            'level' => '企业客户朋友圈管理',
+            'icon' => '',
+            'model' => '\App\Backend\Submodules\Qyweixin\Models\ExternalContact\Moment'
+        );
+        $tree[] = $item;
+
         // 企业客户消息推送管理
         $item = array(
             'menu_name' => '企业客户消息推送管理',
