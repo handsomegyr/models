@@ -1756,7 +1756,7 @@ class QyService
     }
 
     // 获取客户朋友圈全部的发表记录
-    public function getMomentList($start_time, $end_time, $creator = "", $filter_type = 2, $limit = 1000, $cursor = "")
+    public function getMomentList($start_time, $end_time, $creator = "", $filter_type = 2, $limit = 100, $cursor = "")
     {
         $modelMoment = new \App\Qyweixin\Models\ExternalContact\Moment();
         $res = $this->getQyWeixinObject()
