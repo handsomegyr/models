@@ -4,7 +4,7 @@ namespace App\Weixin2\Models\Notification;
 
 class TaskLog extends \App\Common\Models\Weixin2\Notification\TaskLog
 {
-    public function log($component_appid, $authorizer_appid, $notification_task_process_id, $notification_task_id, $notification_task_name, $notification_method, $mass_msg_send_method_id, $subscribe_msg_id, $template_msg_id, $mass_msg_id, $custom_msg_id, $notification_task_content_id, $notification_task_content_name, $openids, $openid, $tag_id, $push_status, $log_time)
+    public function log($component_appid, $authorizer_appid, $notification_task_process_id, $notification_task_id, $notification_task_name, $notification_method, $mass_msg_send_method_id, $subscribe_msg_id, $template_msg_id, $mass_msg_id, $custom_msg_id, $changemsginfo_callback, $notification_task_content_id, $notification_task_content_name, $openids, $openid, $tag_id, $push_status, $log_time)
     {
         $data = array();
         $data['component_appid'] = $component_appid;
@@ -18,6 +18,7 @@ class TaskLog extends \App\Common\Models\Weixin2\Notification\TaskLog
         $data['template_msg_id'] = $template_msg_id;
         $data['mass_msg_id'] = $mass_msg_id;
         $data['custom_msg_id'] = $custom_msg_id;
+        $data['changemsginfo_callback'] = $changemsginfo_callback;
         $data['notification_task_content_id'] = $notification_task_content_id;
         $data['notification_task_content_name'] = $notification_task_content_name;
         $data['openids'] = \json_encode($openids);
