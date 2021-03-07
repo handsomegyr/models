@@ -1,29 +1,28 @@
 <?php
 
-namespace App\Weixin2\Models\Notification;
+namespace App\Qyweixin\Models\Notification;
 
-class TaskLog extends \App\Common\Models\Weixin2\Notification\TaskLog
+class TaskLog extends \App\Common\Models\Qyweixin\Notification\TaskLog
 {
-    public function log($component_appid, $authorizer_appid, $notification_task_process_id, $notification_task_id, $notification_task_name, $notification_method, $mass_msg_send_method_id, $subscribe_msg_id, $template_msg_id, $mass_msg_id, $custom_msg_id, $changemsginfo_callback, $notification_task_content_id, $notification_task_content_name, $openids, $openid, $tag_id, $push_status, $log_time)
+    public function log($provider_appid, $authorizer_appid, $notification_task_process_id, $notification_task_id, $notification_task_name, $notification_method, $externalcontact_msg_template_chat_type, $agent_msg_id, $appchat_msg_id, $externalcontact_msg_template_id, $linkedcorp_msg_id, $changemsginfo_callback, $notification_task_content_id, $notification_task_content_name, $userids, $userid, $push_status, $log_time)
     {
         $data = array();
-        $data['component_appid'] = $component_appid;
+        $data['provider_appid'] = $provider_appid;
         $data['authorizer_appid'] = $authorizer_appid;
         $data['notification_task_process_id'] = $notification_task_process_id;
         $data['notification_task_id'] = $notification_task_id;
         $data['notification_task_name'] = $notification_task_name;
         $data['notification_method'] = $notification_method;
-        $data['mass_msg_send_method_id'] = $mass_msg_send_method_id;
-        $data['subscribe_msg_id'] = $subscribe_msg_id;
-        $data['template_msg_id'] = $template_msg_id;
-        $data['mass_msg_id'] = $mass_msg_id;
-        $data['custom_msg_id'] = $custom_msg_id;
+        $data['externalcontact_msg_template_chat_type'] = $externalcontact_msg_template_chat_type;
+        $data['agent_msg_id'] = $agent_msg_id;
+        $data['appchat_msg_id'] = $appchat_msg_id;
+        $data['externalcontact_msg_template_id'] = $externalcontact_msg_template_id;
+        $data['linkedcorp_msg_id'] = $linkedcorp_msg_id;
         $data['changemsginfo_callback'] = $changemsginfo_callback;
         $data['notification_task_content_id'] = $notification_task_content_id;
         $data['notification_task_content_name'] = $notification_task_content_name;
-        $data['openids'] = \json_encode($openids);
-        $data['openid'] = $openid;
-        $data['tag_id'] = $tag_id;
+        $data['userids'] = $userids;
+        $data['userid'] = $userid;
         $data['push_status'] = $push_status;
         $data['push_time'] = \App\Common\Utils\Helper::getCurrentTime($log_time);
         $data['log_time'] = \App\Common\Utils\Helper::getCurrentTime($log_time);

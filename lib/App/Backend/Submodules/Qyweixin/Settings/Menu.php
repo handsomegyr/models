@@ -1071,6 +1071,36 @@ class Menu
         );
         $tree[] = $item;
 
+        // 企业推送任务
+        $item = array(
+            'menu_name' => '企业推送任务',
+            'menu_model' => 'qyweixin-notificationtask',
+            'level' => '企业消息推送管理',
+            'icon' => '',
+            'model' => '\App\Backend\Submodules\Qyweixin\Models\Notification\Task'
+        );
+        $tree[] = $item;
+
+        // 企业推送任务日志
+        $item = array(
+            'menu_name' => '企业推送任务日志',
+            'menu_model' => 'qyweixin-notificationtasklog',
+            'level' => '企业消息推送管理',
+            'icon' => '',
+            'model' => '\App\Backend\Submodules\Qyweixin\Models\Notification\TaskLog'
+        );
+        $tree[] = $item;
+
+        // 企业推送任务处理
+        $item = array(
+            'menu_name' => '企业推送任务处理',
+            'menu_model' => 'qyweixin-notificationtaskprocess',
+            'level' => '企业消息推送管理',
+            'icon' => '',
+            'model' => '\App\Backend\Submodules\Qyweixin\Models\Notification\TaskProcess'
+        );
+        $tree[] = $item;
+
         return $tree;
     }
 }
