@@ -19,7 +19,7 @@ class TaskProcess extends \App\Common\Models\Weixin2\Notification\TaskProcess
 
     // 推送失败
     const PUSH_FAIL = 4;
-    
+
     // 推送关闭
     const PUSH_CLOSE = 5;
 
@@ -39,7 +39,10 @@ class TaskProcess extends \App\Common\Models\Weixin2\Notification\TaskProcess
     public function getAndLockOneTask4ByPushStatus($push_status, $now)
     {
         $query = array(
-            'push_time' => array('$lte' => \App\Common\Utils\Helper::getCurrentTime($now)),
+            'push_time' => array(
+                '$lte' => \App\Common\Utils\Helper::getCurrentTime($now),
+                '$gte' => \App\Common\Utils\Helper::getCurrentTime(strtotime(date("Y-m-d", $now) . " 00:00:00"))
+            ),
             'push_status' => $push_status,
         );
         $sort  = array('push_time' => 1, '_id' => 1);

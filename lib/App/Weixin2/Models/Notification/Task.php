@@ -24,7 +24,10 @@ class Task extends \App\Common\Models\Weixin2\Notification\Task
     public function getAndLockOneTask4ByPushStatus($push_status, $now)
     {
         $query = array(
-            'scheduled_push_time' => array('$lte' => \App\Common\Utils\Helper::getCurrentTime($now)),
+            'scheduled_push_time' => array(
+                '$lte' => \App\Common\Utils\Helper::getCurrentTime($now),
+                '$gte' => \App\Common\Utils\Helper::getCurrentTime(strtotime(date("Y-m-d", $now) . " 00:00:00"))
+            ),
             'push_status' => $push_status,
         );
         $sort  = array('_id' => 1);
