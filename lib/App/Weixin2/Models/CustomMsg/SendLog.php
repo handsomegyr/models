@@ -13,7 +13,7 @@ class SendLog extends \App\Common\Models\Weixin2\CustomMsg\SendLog
         $datas = array(
             'component_appid' => $component_appid,
             'authorizer_appid' => $authorizer_appid,
-            'custom_msg_id' => empty($custom_msg_id) ? 0 : $custom_msg_id,
+            'custom_msg_id' => empty($custom_msg_id) ? "" : $custom_msg_id,
             'custom_msg_name' => empty($custom_msg_name) ? "" : $custom_msg_name,
             'msg_type' => empty($msg_type) ? "" : $msg_type,
             'media' => empty($media) ? 0 : $media,
@@ -29,7 +29,7 @@ class SendLog extends \App\Common\Models\Weixin2\CustomMsg\SendLog
             'card_id' => empty($card_id) ? "" : $card_id,
             'card_ext' => empty($card_ext) ? "" : $card_ext,
             'kf_account' => empty($kf_account) ? "" : $kf_account,
-            'keyword_id' => empty($keyword_id) ? 0 : $keyword_id,
+            'keyword_id' => empty($keyword_id) ? "" : $keyword_id,
             'keyword' => empty($keyword) ? "" : $keyword,
             'keyword_custom_msg_type' => empty($keyword_custom_msg_type) ? "" : $keyword_custom_msg_type,
             'ToUserName' => empty($ToUserName) ? "" : $ToUserName,

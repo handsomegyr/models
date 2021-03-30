@@ -54,7 +54,7 @@ class SendLog extends \App\Common\Models\Qyweixin\LinkedcorpMsg\SendLog
             'content_item' => empty($content_item) ? "" : $content_item,
             'enable_id_trans' => empty($toall) ? "0" : $toall,
             'safe' => empty($safe) ? "0" : $safe,
-            'keyword_id' => empty($keyword_id) ? 0 : $keyword_id,
+            'keyword_id' => empty($keyword_id) ? "" : $keyword_id,
             'keyword' => empty($keyword) ? "" : $keyword,
             'keyword_linkedcorp_msg_type' => empty($keyword_linkedcorp_msg_type) ? "" : $keyword_linkedcorp_msg_type,
             'ToUserName' => empty($ToUserName) ? "" : $ToUserName,

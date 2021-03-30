@@ -43,7 +43,7 @@ class SendLog extends \App\Common\Models\Qyweixin\AgentMsg\SendLog
             'provider_appid' => $provider_appid,
             'authorizer_appid' => $authorizer_appid,
             'agentid' => $agentid,
-            'agent_msg_id' => empty($agent_msg_id) ? 0 : $agent_msg_id,
+            'agent_msg_id' => empty($agent_msg_id) ? "" : $agent_msg_id,
             'agent_msg_name' => empty($agent_msg_name) ? "" : $agent_msg_name,
             'msg_type' => empty($msg_type) ? "" : $msg_type,
             'media' => empty($media) ? 0 : $media,
@@ -63,7 +63,7 @@ class SendLog extends \App\Common\Models\Qyweixin\AgentMsg\SendLog
             'enable_duplicate_check' => empty($enable_duplicate_check) ? "0" : $enable_duplicate_check,
             'duplicate_check_interval' => empty($duplicate_check_interval) ? "0" : $duplicate_check_interval,
 
-            'keyword_id' => empty($keyword_id) ? 0 : $keyword_id,
+            'keyword_id' => empty($keyword_id) ? "" : $keyword_id,
             'keyword' => empty($keyword) ? "" : $keyword,
             'keyword_agent_msg_type' => empty($keyword_agent_msg_type) ? "" : $keyword_agent_msg_type,
             'ToUserName' => empty($ToUserName) ? "" : $ToUserName,

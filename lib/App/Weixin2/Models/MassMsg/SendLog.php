@@ -13,7 +13,7 @@ class SendLog extends \App\Common\Models\Weixin2\MassMsg\SendLog
         $datas = array(
             'component_appid' => $component_appid,
             'authorizer_appid' => $authorizer_appid,
-            'mass_msg_id' => empty($mass_msg_id) ? 0 : $mass_msg_id,
+            'mass_msg_id' => empty($mass_msg_id) ? "" : $mass_msg_id,
             'mass_msg_name' => empty($mass_msg_name) ? "" : $mass_msg_name,
             'msg_type' => empty($msg_type) ? "" : $msg_type,
             'media' => empty($media) ? 0 : $media,
@@ -32,7 +32,7 @@ class SendLog extends \App\Common\Models\Weixin2\MassMsg\SendLog
             'touser' => empty($touser) ? "" : $touser,
             'send_ignore_reprint' => empty($send_ignore_reprint) ? 0 : 1,
             'clientmsgid' => empty($clientmsgid) ? "" : $clientmsgid,
-            'keyword_id' => empty($keyword_id) ? 0 : $keyword_id,
+            'keyword_id' => empty($keyword_id) ? "" : $keyword_id,
             'keyword' => empty($keyword) ? "" : $keyword,
             'keyword_mass_msg_type' => empty($keyword_mass_msg_type) ? "" : $keyword_mass_msg_type,
             'ToUserName' => empty($ToUserName) ? "" : $ToUserName,
