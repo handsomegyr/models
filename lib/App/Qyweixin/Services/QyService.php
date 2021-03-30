@@ -1001,7 +1001,7 @@ class QyService
         $objQyWeixin = $this->getQyWeixinObject();
         $appchatmsg = array();
         $agentid = $appchatMsgInfo['agentid'];
-        $chatid = $appchatMsgInfo['chatid'];
+        $chatid = $ToUserName; //$appchatMsgInfo['chatid'];
         try {
             switch ($match['appchat_msg_type']) {
                 case 'text':
