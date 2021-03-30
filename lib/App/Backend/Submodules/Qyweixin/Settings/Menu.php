@@ -823,7 +823,7 @@ class Menu
 
         // 企业群发消息发送日志
         $item = array(
-            'menu_name' => '企业群发消息任务',
+            'menu_name' => '企业群发消息发送日志',
             'menu_model' => 'qyweixin-externalcontactmsgtemplatesendlog',
             'level' => '企业客户消息推送管理',
             'icon' => '',
