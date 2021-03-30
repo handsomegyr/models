@@ -77,8 +77,7 @@ class MsgTemplateSendLog extends \App\Common\Models\Qyweixin\ExternalContact\Msg
             'fail_list' =>  "[]",
             'check_status' =>  0,
             'detail_list' =>  "[]",
-            'get_result_time' =>  "0001-01-01 00:00:00",
-            'memo' =>  "{}",
+            'get_result_time' =>  \App\Common\Utils\Helper::getCurrentTime(strtotime("0001-01-01 00:00:00")),
         );
 
         if (!empty($msg_template_content)) {
