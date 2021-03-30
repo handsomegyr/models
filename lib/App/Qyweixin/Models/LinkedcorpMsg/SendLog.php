@@ -39,7 +39,7 @@ class SendLog extends \App\Common\Models\Qyweixin\LinkedcorpMsg\SendLog
             'provider_appid' => $provider_appid,
             'authorizer_appid' => $authorizer_appid,
             'agentid' => $agentid,
-            'linkedcorp_msg_id' => empty($linkedcorp_msg_id) ? 0 : $linkedcorp_msg_id,
+            'linkedcorp_msg_id' => empty($linkedcorp_msg_id) ? "" : $linkedcorp_msg_id,
             'linkedcorp_msg_name' => empty($linkedcorp_msg_name) ? "" : $linkedcorp_msg_name,
             'msg_type' => empty($msg_type) ? "" : $msg_type,
             'media' => empty($media) ? 0 : $media,

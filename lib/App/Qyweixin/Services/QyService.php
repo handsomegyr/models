@@ -295,66 +295,130 @@ class QyService
     }
 
     // 添加企业群发消息任务
-    public function addMsgTemplate($msgTemplateInfo)
+    public function addMsgTemplate($FromUserName, $ToUserName, $chat_type, $msgTemplateInfo, $match)
     {
+        $is_ok = false;
+        $msg_template_content = array();
         $modelMsgTemplate = new \App\Qyweixin\Models\ExternalContact\MsgTemplate();
-        $msgTemplate = new \Qyweixin\Model\ExternalContact\MsgTemplate();
-        $msgTemplate->chat_type = $msgTemplateInfo['chat_type'];
-        if (!empty($msgTemplateInfo['external_userid'])) {
-            if (is_string($msgTemplateInfo['external_userid'])) {
-                $msgTemplate->external_userid = \json_decode($msgTemplateInfo['external_userid'], true);
-            } else {
-                $msgTemplate->external_userid = $msgTemplateInfo['external_userid'];
+        try {
+            $msgTemplateInfo['chat_type'] = $chat_type;
+
+            //默认为single，表示发送给客户，group表示发送给客户群'
+            if ($chat_type == 'single') {
+                $msgTemplateInfo['external_userid'] = array($ToUserName);
+                $msgTemplateInfo['sender'] = "";
+            } elseif ($chat_type == 'group') {
+                $msgTemplateInfo['external_userid'] = '';
+                $msgTemplateInfo['sender'] = $ToUserName;
             }
-        }
-        $msgTemplate->sender = $msgTemplateInfo['sender'];
 
-        $text = new \Qyweixin\Model\ExternalContact\Conclusion\Text($msgTemplateInfo['text_content']);
-        $msgTemplate->text = $text;
-
-        if (!empty($msgTemplateInfo['image_media'])) {
-            if (!empty($msgTemplateInfo['image_pic_url'])) {
-                $image = new \Qyweixin\Model\ExternalContact\Conclusion\Image("", $msgTemplateInfo['image_pic_url']);
-            } else {
-                $res = $this->uploadMediaByApi($msgTemplateInfo['image_media'], "image", $msgTemplateInfo['image_media_id'], $msgTemplateInfo['image_media_created_at']);
-                // 发生了改变就更新
-                if ($res['media_id'] != $msgTemplateInfo['image_media_id']) {
-                    $modelMsgTemplate->recordMediaId($msgTemplateInfo['_id'], $res, time());
-                }
-                $image = new \Qyweixin\Model\ExternalContact\Conclusion\Image($res['media_id'], "");
-            }
-            $msgTemplate->image = $image;
-        }
-
-        if (!empty($msgTemplateInfo['link_url'])) {
-            $link = new \Qyweixin\Model\ExternalContact\Conclusion\Link($msgTemplateInfo['link_title'], $msgTemplateInfo['link_picurl'], $msgTemplateInfo['link_desc'], $msgTemplateInfo['link_url']);
-            $msgTemplate->link = $link;
-        }
-
-        if (!empty($msgTemplateInfo['miniprogram_appid'])) {
-
-            if (!empty($msgTemplateInfo['miniprogram_pic_media'])) {
-                $res2 = $this->uploadMediaByApi($msgTemplateInfo['miniprogram_pic_media'], "image", $msgTemplateInfo['miniprogram_pic_media_id'], $msgTemplateInfo['miniprogram_pic_media_created_at']);
-                // 发生了改变就更新
-                if ($res2['media_id'] != $msgTemplateInfo['miniprogram_pic_media_id']) {
-                    $modelMsgTemplate->recordMediaId4Miniprogram($msgTemplateInfo['_id'], $res2, time());
+            $msgTemplate = new \Qyweixin\Model\ExternalContact\MsgTemplate();
+            $msgTemplate->chat_type = $msgTemplateInfo['chat_type'];
+            if (!empty($msgTemplateInfo['external_userid'])) {
+                if (is_string($msgTemplateInfo['external_userid'])) {
+                    $msgTemplate->external_userid = \json_decode($msgTemplateInfo['external_userid'], true);
+                } else {
+                    $msgTemplate->external_userid = $msgTemplateInfo['external_userid'];
                 }
             }
-            $miniprogram = new \Qyweixin\Model\ExternalContact\Conclusion\Miniprogram($msgTemplateInfo['miniprogram_title'], $res2['media_id'], $msgTemplateInfo['miniprogram_appid'], $msgTemplateInfo['miniprogram_page']);
-            $msgTemplate->miniprogram = $miniprogram;
+            $msgTemplate->sender = $msgTemplateInfo['sender'];
+
+            $text = new \Qyweixin\Model\ExternalContact\Conclusion\Text($msgTemplateInfo['text_content']);
+            $msgTemplate->text = $text;
+
+            if (!empty($msgTemplateInfo['image_media'])) {
+                if (!empty($msgTemplateInfo['image_pic_url'])) {
+                    $image = new \Qyweixin\Model\ExternalContact\Conclusion\Image("", $msgTemplateInfo['image_pic_url']);
+                } else {
+                    $res = $this->uploadMediaByApi($msgTemplateInfo['image_media'], "image", $msgTemplateInfo['image_media_id'], $msgTemplateInfo['image_media_created_at']);
+                    // 发生了改变就更新
+                    if ($res['media_id'] != $msgTemplateInfo['image_media_id']) {
+                        $modelMsgTemplate->recordMediaId($msgTemplateInfo['_id'], $res, time());
+                        $msgTemplateInfo['image_media_created_at'] = \App\Common\Utils\Helper::getCurrentTime($res['created_at']);
+                    }
+                    $image = new \Qyweixin\Model\ExternalContact\Conclusion\Image($res['media_id'], "");
+                }
+                $msgTemplate->image = $image;
+            }
+
+            if (!empty($msgTemplateInfo['link_url'])) {
+                $link = new \Qyweixin\Model\ExternalContact\Conclusion\Link($msgTemplateInfo['link_title'], $msgTemplateInfo['link_picurl'], $msgTemplateInfo['link_desc'], $msgTemplateInfo['link_url']);
+                $msgTemplate->link = $link;
+            }
+
+            if (!empty($msgTemplateInfo['miniprogram_appid'])) {
+
+                if (!empty($msgTemplateInfo['miniprogram_pic_media'])) {
+                    $res2 = $this->uploadMediaByApi($msgTemplateInfo['miniprogram_pic_media'], "image", $msgTemplateInfo['miniprogram_pic_media_id'], $msgTemplateInfo['miniprogram_pic_media_created_at']);
+                    // 发生了改变就更新
+                    if ($res2['media_id'] != $msgTemplateInfo['miniprogram_pic_media_id']) {
+                        $modelMsgTemplate->recordMediaId4Miniprogram($msgTemplateInfo['_id'], $res2, time());
+                        $msgTemplateInfo['miniprogram_pic_media_created_at'] = \App\Common\Utils\Helper::getCurrentTime($res2['created_at']);
+                    }
+                }
+                $miniprogram = new \Qyweixin\Model\ExternalContact\Conclusion\Miniprogram($msgTemplateInfo['miniprogram_title'], $res2['media_id'], $msgTemplateInfo['miniprogram_appid'], $msgTemplateInfo['miniprogram_page']);
+                $msgTemplate->miniprogram = $miniprogram;
+            }
+
+            $msg_template_content = $this->getQyWeixinObject()
+                ->getExternalContactManager()
+                ->addMsgTemplate($msgTemplate);
+            if (!empty($msg_template_content['errcode'])) {
+                throw new \Exception($msg_template_content['errmsg'], $msg_template_content['errcode']);
+            }
+            $is_ok = true;
+
+            // "fail_list":["wmqfasd1e1927831123109rBAAAA"],
+            // "msgid":"msgGCAAAXtWyujaWJHDDGi0mAAAA"
+            // $modelMsgTemplate->recordMsgId($msgTemplateInfo['_id'], $res, time());
+        } catch (\Exception $e) {
+            $msg_template_content['errorcode'] = $e->getCode();
+            $msg_template_content['errormsg'] = $e->getMessage();
         }
 
-        $res = $this->getQyWeixinObject()
-            ->getExternalContactManager()
-            ->addMsgTemplate($msgTemplate);
-        if (!empty($res['errcode'])) {
-            throw new \Exception($res['errmsg'], $res['errcode']);
+        if (empty($msg_template_content)) {
+            $msg_template_content = "";
+        } else {
+            $msg_template_content = \json_encode($msg_template_content);
         }
+        // 记录日志
+        $modelMsgTemplateSendLog = new \App\Qyweixin\Models\ExternalContact\MsgTemplateSendLog();
+        $modelMsgTemplateSendLog->record(
+            $msgTemplateInfo['provider_appid'],
+            $msgTemplateInfo['authorizer_appid'],
+            $msgTemplateInfo['id'],
+            $msgTemplateInfo['name'],
+            $msgTemplateInfo['chat_type'],
+            $msgTemplateInfo['external_userid'],
+            $msgTemplateInfo['sender'],
+            $msgTemplateInfo['text_content'],
+            $msgTemplateInfo['image_media'],
+            $msgTemplateInfo['image_media_id'],
+            $msgTemplateInfo['image_pic_url'],
+            $msgTemplateInfo['image_media_created_at'],
+            $msgTemplateInfo['link_title'],
+            $msgTemplateInfo['link_picurl'],
+            $msgTemplateInfo['link_desc'],
+            $msgTemplateInfo['link_url'],
+            $msgTemplateInfo['miniprogram_title'],
+            $msgTemplateInfo['miniprogram_pic_media'],
+            $msgTemplateInfo['miniprogram_pic_media_id'],
+            $msgTemplateInfo['miniprogram_pic_media_created_at'],
+            $msgTemplateInfo['miniprogram_appid'],
+            $msgTemplateInfo['miniprogram_page'],
+            $match['id'],
+            $match['keyword'],
+            $match['msg_template_type'],
+            $ToUserName,
+            $FromUserName,
+            $msg_template_content,
+            time()
+        );
 
-        // "fail_list":["wmqfasd1e1927831123109rBAAAA"],
-        // "msgid":"msgGCAAAXtWyujaWJHDDGi0mAAAA"
-        $modelMsgTemplate->recordMsgId($msgTemplateInfo['_id'], $res, time());
-        return $res;
+        return array(
+            'is_ok' => $is_ok,
+            'api_ret' => $msg_template_content
+        );
     }
 
     // 获取群发消息发送结果
