@@ -811,13 +811,23 @@ class Menu
         );
         $tree[] = $item;
 
-        // 企业群发消息任务
+        // 企业群发消息
         $item = array(
-            'menu_name' => '企业群发消息任务',
+            'menu_name' => '企业群发消息',
             'menu_model' => 'qyweixin-externalcontactmsgtemplate',
             'level' => '企业客户消息推送管理',
             'icon' => '',
             'model' => '\App\Backend\Submodules\Qyweixin\Models\ExternalContact\MsgTemplate'
+        );
+        $tree[] = $item;
+
+        // 企业群发消息发送日志
+        $item = array(
+            'menu_name' => '企业群发消息任务',
+            'menu_model' => 'qyweixin-externalcontactmsgtemplatesendlog',
+            'level' => '企业客户消息推送管理',
+            'icon' => '',
+            'model' => '\App\Backend\Submodules\Qyweixin\Models\ExternalContact\MsgTemplateSendLog'
         );
         $tree[] = $item;
 
