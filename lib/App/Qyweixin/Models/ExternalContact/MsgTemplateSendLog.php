@@ -10,6 +10,7 @@ class MsgTemplateSendLog extends \App\Common\Models\Qyweixin\ExternalContact\Msg
     public function record(
         $provider_appid,
         $authorizer_appid,
+        $agentid,
         $msg_template_id,
         $msg_template_name,
         $chat_type,
@@ -41,6 +42,7 @@ class MsgTemplateSendLog extends \App\Common\Models\Qyweixin\ExternalContact\Msg
         $datas = array(
             'provider_appid' => $provider_appid,
             'authorizer_appid' => $authorizer_appid,
+            'agentid' => $agentid,
             'msg_template_id' => empty($msg_template_id) ? "" : $msg_template_id,
             'msg_template_name' => empty($msg_template_name) ? "" : $msg_template_name,
             'chat_type' => empty($chat_type) ? "" : $chat_type,

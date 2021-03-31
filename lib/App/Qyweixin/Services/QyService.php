@@ -386,6 +386,7 @@ class QyService
         $modelMsgTemplateSendLog->record(
             $msgTemplateInfo['provider_appid'],
             $msgTemplateInfo['authorizer_appid'],
+            $msgTemplateInfo['agentid'],
             $msgTemplateInfo['id'],
             $msgTemplateInfo['name'],
             $msgTemplateInfo['chat_type'],
