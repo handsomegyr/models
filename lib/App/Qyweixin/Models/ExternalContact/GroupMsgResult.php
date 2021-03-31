@@ -11,21 +11,23 @@ class GroupMsgResult extends \App\Common\Models\Qyweixin\ExternalContact\GroupMs
      * @param string $msgid 
      * @param string $external_userid 
      * @param string $userid              
-     * @param string $authorizer_appid          
+     * @param string $authorizer_appid               
+     * @param string $agentid         
      */
-    public function getInfoByMsgIdAndUser($msgid, $external_userid, $userid, $authorizer_appid)
+    public function getInfoByMsgIdAndUser($msgid, $external_userid, $userid, $authorizer_appid, $agentid)
     {
         $query = array();
         $query['msgid'] = $msgid;
         $query['external_userid'] = $external_userid;
         $query['userid'] = $userid;
         $query['authorizer_appid'] = $authorizer_appid;
+        $query['agentid'] = $agentid;
         $info = $this->findOne($query);
 
         return $info;
     }
 
-    public function syncDetailList($msgid, $authorizer_appid, $provider_appid, $res, $now)
+    public function syncDetailList($msgid, $authorizer_appid, $provider_appid, $agentid, $res, $now)
     {
         /**
          *{
@@ -56,12 +58,13 @@ class GroupMsgResult extends \App\Common\Models\Qyweixin\ExternalContact\GroupMs
                 if (isset($useridInfo['send_time'])) {
                     $data['send_time'] = \App\Common\Utils\Helper::getCurrentTime($useridInfo['send_time']);
                 }
-                $info = $this->getInfoByMsgIdAndUser($msgid, $external_userid, $userid, $authorizer_appid);
+                $info = $this->getInfoByMsgIdAndUser($msgid, $external_userid, $userid, $authorizer_appid, $agentid);
 
                 if (!empty($info)) {
                     $this->update(array('_id' => $info['_id']), array('$set' => $data));
                 } else {
                     $data['authorizer_appid'] = $authorizer_appid;
+                    $data['agentid'] = $agentid;
                     $data['msgid'] = $msgid;
                     $data['external_userid'] = $external_userid;
                     $data['userid'] = $userid;

@@ -450,7 +450,7 @@ class QyService
         // 同步detail_list
         if (!empty($res['detail_list'])) {
             $modelGroupMsgResult = new \App\Qyweixin\Models\ExternalContact\GroupMsgResult();
-            $modelGroupMsgResult->syncDetailList($msgTemplateInfo['msgid'], $this->authorizer_appid, $this->provider_appid, $res, time());
+            $modelGroupMsgResult->syncDetailList($msgTemplateInfo['msgid'], $this->authorizer_appid, $this->provider_appid, $this->agentid, $res, time());
         }
         return $res;
     }
