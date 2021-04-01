@@ -283,13 +283,21 @@ class Input extends \stdClass
                     }
                 } elseif ($field['data']['type'] == "file") {
                     unset($data[$key]);
-                    if (isset($this->$key)) {
-                        $data[$key] = trim($this->$key);
+                    if (!$is_update) {
+                        $data[$key] = '';
+                    } else {
+                        if (isset($this->$key)) {
+                            $data[$key] = trim($this->$key);
+                        }
                     }
                 } elseif ($field['data']['type'] == "multifile") {
                     unset($data[$key]);
-                    if (isset($this->$key)) {
-                        $data[$key] = ($this->$key);
+                    if (!$is_update) {
+                        $data[$key] = '';
+                    } else {
+                        if (isset($this->$key)) {
+                            $data[$key] = ($this->$key);
+                        }
                     }
                 } else {
                     $data[$key] = "";
