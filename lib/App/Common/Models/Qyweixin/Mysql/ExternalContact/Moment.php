@@ -14,4 +14,11 @@ class Moment extends Base
     {
         return 'iqyweixin_externalcontact_moment';
     }
+
+    public function reorganize(array $data)
+    {
+        $data = parent::reorganize($data);
+        $data['create_time'] = $this->changeToMongoDate($data['create_time']);
+        return $data;
+    }
 }

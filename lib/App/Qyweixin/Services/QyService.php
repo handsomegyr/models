@@ -2000,6 +2000,33 @@ class QyService
         return $res;
     }
 
+    // 获取应用的可见范围
+    public function getLinkedcorpAgentPermList()
+    {
+        $res = $this->getQyWeixinObject()
+            ->getLinkedcorpManager()
+            ->getAgentManager()->getPermList();
+        return $res;
+        if (!empty($res['errcode'])) {
+            throw new \Exception($res['errmsg'], $res['errcode']);
+        }
+        return $res;
+    }
+
+    // 获取企业的全部群发记录
+    public function getGroupmsgList($chat_type, $start_time, $end_time, $creator = "", $filter_type = 2, $limit = 100, $cursor = "")
+    {
+        $modelMsgTemplate = new \App\Qyweixin\Models\ExternalContact\MsgTemplate();
+        $res = $this->getQyWeixinObject()
+            ->getExternalContactManager()
+            ->getGroupMsgManager()->getGroupmsgList($chat_type, $start_time, $end_time, $creator, $filter_type, $limit, $cursor);
+        if (!empty($res['errcode'])) {
+            throw new \Exception($res['errmsg'], $res['errcode']);
+        }
+        $modelMsgTemplate->syncGroupmsgList($this->authorizer_appid, $this->provider_appid, $this->agentid, $chat_type, $res, time());
+        return $res;
+    }
+
     private function getMediaId4ReplyMsg($type, $reply)
     {
         if (!empty($reply['media'])) {

@@ -67,15 +67,15 @@ class Moment extends \App\Common\Models\Qyweixin\ExternalContact\Moment
                 $data['creator'] = $momentInfo['creator'];
                 $data['create_type'] = $momentInfo['create_type'];
                 $data['visible_type'] = $momentInfo['visible_type'];
-                $data['text_content'] = $momentInfo['text']['content'];
-                $data['image_media_id'] = $momentInfo['image']['media_id'];
-                $data['video_media_id'] = $momentInfo['video']['media_id'];
-                $data['video_thumb_media_id'] = $momentInfo['video']['thumb_media_id'];
-                $data['link_title'] = $momentInfo['link']['title'];
-                $data['link_url'] = $momentInfo['link']['url'];
-                $data['location_latitude'] = $momentInfo['location']['latitude'];
-                $data['location_longitude'] = $momentInfo['location']['longitude'];
-                $data['location_name'] = $momentInfo['location']['name'];
+                $data['text_content'] = !isset($momentInfo['text']['content']) ? "" : $momentInfo['text']['content'];
+                $data['image_media_id'] = !isset($momentInfo['image']['media_id']) ? "" : $momentInfo['image']['media_id'];
+                $data['video_media_id'] = !isset($momentInfo['video']['media_id']) ? "" : $momentInfo['video']['media_id'];
+                $data['video_thumb_media_id'] = !isset($momentInfo['video']['thumb_media_id']) ? "" : $momentInfo['video']['thumb_media_id'];;
+                $data['link_title'] = !isset($momentInfo['link']['title']) ? "" : $momentInfo['link']['title'];
+                $data['link_url'] = !isset($momentInfo['link']['url']) ? "" : $momentInfo['link']['url'];
+                $data['location_latitude'] = !isset($momentInfo['location']['latitude']) ? "0.000000" : $momentInfo['location']['latitude'];
+                $data['location_longitude'] = !isset($momentInfo['location']['longitude']) ? "0.000000" : $momentInfo['location']['longitude'];
+                $data['location_name'] = !isset($momentInfo['location']['name']) ? "" : $momentInfo['location']['name'];
                 $data['create_time'] = \App\Common\Utils\Helper::getCurrentTime($create_time);
                 if (!empty($info)) {
                     $this->update(array('_id' => $info['_id']), array('$set' => $data));
