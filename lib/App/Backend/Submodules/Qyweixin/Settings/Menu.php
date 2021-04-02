@@ -831,13 +831,23 @@ class Menu
         );
         $tree[] = $item;
 
-        // 企业群发消息发送结果
+        // 企业群发成员发送任务
         $item = array(
-            'menu_name' => '企业群发消息发送结果',
-            'menu_model' => 'qyweixin-externalcontactgroupmsgresult',
+            'menu_name' => '企业群发成员发送任务',
+            'menu_model' => 'qyweixin-externalcontactgroupmsgtask',
             'level' => '企业客户消息推送管理',
             'icon' => '',
-            'model' => '\App\Backend\Submodules\Qyweixin\Models\ExternalContact\GroupMsgResult'
+            'model' => '\App\Backend\Submodules\Qyweixin\Models\ExternalContact\GroupMsgTask'
+        );
+        $tree[] = $item;
+
+        // 企业群发成员执行结果
+        $item = array(
+            'menu_name' => '企业群发成员执行结果',
+            'menu_model' => 'qyweixin-externalcontactgroupmsgsendresult',
+            'level' => '企业客户消息推送管理',
+            'icon' => '',
+            'model' => '\App\Backend\Submodules\Qyweixin\Models\ExternalContact\GroupMsgSendResult'
         );
         $tree[] = $item;
 

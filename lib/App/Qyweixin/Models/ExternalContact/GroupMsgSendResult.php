@@ -2,7 +2,7 @@
 
 namespace App\Qyweixin\Models\ExternalContact;
 
-class GroupMsgResult extends \App\Common\Models\Qyweixin\ExternalContact\GroupMsgResult
+class GroupMsgSendResult extends \App\Common\Models\Qyweixin\ExternalContact\GroupMsgSendResult
 {
 
     /**
@@ -27,14 +27,14 @@ class GroupMsgResult extends \App\Common\Models\Qyweixin\ExternalContact\GroupMs
         return $info;
     }
 
-    public function syncDetailList($msgid, $authorizer_appid, $provider_appid, $agentid, $res, $now)
+    public function syncDetailList($msgid, $userid, $authorizer_appid, $provider_appid, $agentid, $res, $now)
     {
         /**
          *{
          *"errcode": 0,
          *"errmsg": "ok",
-         *"check_status": 1,
-         *"detail_list": [
+         *"next_cursor":"CURSOR",
+         *"send_list": [
          *    {
          *        "external_userid": "wmqfasd1e19278asdasAAAA",
          *        "chat_id":"wrOgQhDgAAMYQiS5ol9G7gK9JVAAAA",
@@ -45,11 +45,11 @@ class GroupMsgResult extends \App\Common\Models\Qyweixin\ExternalContact\GroupMs
          *]
          *}
          */
-        if (!empty($res['detail_list'])) {
-            foreach ($res['detail_list'] as $useridInfo) {
+        if (!empty($res['send_list'])) {
+            foreach ($res['send_list'] as $useridInfo) {
 
                 $external_userid = isset($useridInfo['external_userid']) ? $useridInfo['external_userid'] : '';
-                $userid = isset($useridInfo['userid']) ? $useridInfo['userid'] : '';
+                $userid = $useridInfo['userid'];
 
                 $data = array();
                 $data['provider_appid'] = $provider_appid;

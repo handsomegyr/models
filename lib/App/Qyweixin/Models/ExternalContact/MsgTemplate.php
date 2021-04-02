@@ -104,7 +104,7 @@ class MsgTemplate extends \App\Common\Models\Qyweixin\ExternalContact\MsgTemplat
         return $this->update(array('_id' => $id), array('$set' => $updateData));
     }
 
-    public function recordGroupMsgResult($id, $res, $now)
+    public function recordGroupMsgSendResult($id, $res, $now)
     {
         $updateData = array();
         $updateData['check_status'] = $res['check_status'];

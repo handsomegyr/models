@@ -2,7 +2,7 @@
 
 namespace App\Backend\Submodules\Qyweixin\Models\ExternalContact;
 
-class GroupMsgResult extends \App\Common\Models\Qyweixin\ExternalContact\GroupMsgResult
+class GroupMsgSendResult extends \App\Common\Models\Qyweixin\ExternalContact\GroupMsgSendResult
 {
 
     use \App\Backend\Models\Base;

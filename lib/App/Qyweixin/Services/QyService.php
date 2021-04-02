@@ -422,39 +422,6 @@ class QyService
         );
     }
 
-    // 获取群发消息发送结果
-    public function getGroupMsgResult($msgTemplateInfo)
-    {
-        $modelMsgTemplate = new \App\Qyweixin\Models\ExternalContact\MsgTemplate();
-
-        $res = $this->getQyWeixinObject()
-            ->getExternalContactManager()
-            ->getGroupMsgResult($msgTemplateInfo['msgid']);
-        if (!empty($res['errcode'])) {
-            throw new \Exception($res['errmsg'], $res['errcode']);
-        }
-
-        // "check_status": 1,
-        // "detail_list": [
-        //     {
-        //         "external_userid": "wmqfasd1e19278asdasAAAA",
-        //         "chat_id":"wrOgQhDgAAMYQiS5ol9G7gK9JVAAAA",
-        //         "userid": "zhangsan",
-        //         "status": 1,
-        //         "send_time": 1552536375
-        //     }
-        // ]
-        $modelMsgTemplate->recordGroupMsgResult($msgTemplateInfo['_id'], $res, time());
-
-        // 同步数据到结果表
-        // 同步detail_list
-        if (!empty($res['detail_list'])) {
-            $modelGroupMsgResult = new \App\Qyweixin\Models\ExternalContact\GroupMsgResult();
-            $modelGroupMsgResult->syncDetailList($msgTemplateInfo['msgid'], $this->authorizer_appid, $this->provider_appid, $this->agentid, $res, time());
-        }
-        return $res;
-    }
-
     // 配置客户联系「联系我」方式
     public function addContactWay($contactWayInfo)
     {
@@ -650,7 +617,6 @@ class QyService
 
         return $res;
     }
-
 
     // 读取成员
     public function getUserInfo($id)
@@ -1478,7 +1444,6 @@ class QyService
         return $res;
     }
 
-
     // 获取标签成员
     public function getTag($tagid)
     {
@@ -2024,6 +1989,50 @@ class QyService
             throw new \Exception($res['errmsg'], $res['errcode']);
         }
         $modelMsgTemplate->syncGroupmsgList($this->authorizer_appid, $this->provider_appid, $this->agentid, $chat_type, $res, time());
+        return $res;
+    }
+
+    // 获取群发成员发送任务列表
+    public function getGroupmsgTask($msgid, $limit = 1000, $cursor = "")
+    {
+        $modelGroupMsgTask = new \App\Qyweixin\Models\ExternalContact\GroupMsgTask();
+        $res = $this->getQyWeixinObject()
+            ->getExternalContactManager()
+            ->getGroupMsgManager()->getGroupmsgTask($msgid, $limit, $cursor);
+        if (!empty($res['errcode'])) {
+            throw new \Exception($res['errmsg'], $res['errcode']);
+        }
+        $modelGroupMsgTask->syncTaskList($msgid, $this->authorizer_appid, $this->provider_appid, $this->agentid, $res, time());
+        return $res;
+    }
+
+    // 获取企业群发成员执行结果
+    public function getGroupMsgSendResult($msgid, $userid, $limit = 1000, $cursor = "")
+    {
+        $res = $this->getQyWeixinObject()
+            ->getExternalContactManager()
+            ->getGroupMsgManager()->getGroupMsgSendResult($msgid, $userid, $limit, $cursor);
+        if (!empty($res['errcode'])) {
+            throw new \Exception($res['errmsg'], $res['errcode']);
+        }
+
+        //  "next_cursor":"CURSOR",
+        // "send_list": [
+        // {
+        // "external_userid": "wmqfasd1e19278asdasAAAA",
+        // "chat_id":"wrOgQhDgAAMYQiS5ol9G7gK9JVAAAA",
+        // "userid": "zhangsan",
+        // "status": 1,
+        // "send_time": 1552536375
+        // }
+        // ]
+
+        // 同步数据到结果表
+        // 同步detail_list
+        if (!empty($res['send_list'])) {
+            $modelGroupMsgSendResult = new \App\Qyweixin\Models\ExternalContact\GroupMsgSendResult();
+            $modelGroupMsgSendResult->syncDetailList($msgid, $userid, $this->authorizer_appid, $this->provider_appid, $this->agentid, $res, time());
+        }
         return $res;
     }
 
