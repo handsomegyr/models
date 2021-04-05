@@ -128,4 +128,12 @@ class MsgTemplate extends \App\Common\Models\Qyweixin\ExternalContact\MsgTemplat
         $updateData['miniprogram_pic_media_created_at'] = \App\Common\Utils\Helper::getCurrentTime($res['created_at']);
         $this->update(array('_id' => $id), array('$set' => $updateData));
     }
+
+    public function recordMediaId4Video($id, $res, $now)
+    {
+        $updateData = array();
+        $updateData['video_media_id'] = $res['media_id'];
+        $updateData['video_media_created_at'] = \App\Common\Utils\Helper::getCurrentTime($res['created_at']);
+        $this->update(array('_id' => $id), array('$set' => $updateData));
+    }
 }

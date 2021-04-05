@@ -31,6 +31,9 @@ class MsgTemplateSendLog extends \App\Common\Models\Qyweixin\ExternalContact\Msg
         $miniprogram_pic_media_created_at,
         $miniprogram_appid,
         $miniprogram_page,
+        $video_media,
+        $video_media_id,
+        $video_media_created_at,
         $keyword_id,
         $keyword,
         $keyword_msg_template_chat_type,
@@ -52,7 +55,7 @@ class MsgTemplateSendLog extends \App\Common\Models\Qyweixin\ExternalContact\Msg
             'text_content' => empty($text_content) ? "" : $text_content,
 
             'image_media' => empty($image_media) ? "" : $image_media,
-            'image_media_id' => empty($url) ? '' : $image_media_id,
+            'image_media_id' => empty($image_media_id) ? '' : $image_media_id,
             'image_pic_url' => empty($image_pic_url) ? "" : $image_pic_url,
             'image_media_created_at' => empty($image_media_created_at) ? \App\Common\Utils\Helper::getCurrentTime(strtotime("0001-01-01 00:00:00")) : $image_media_created_at,
 
@@ -67,6 +70,10 @@ class MsgTemplateSendLog extends \App\Common\Models\Qyweixin\ExternalContact\Msg
             'miniprogram_pic_media_created_at' => empty($miniprogram_pic_media_created_at) ? \App\Common\Utils\Helper::getCurrentTime(strtotime("0001-01-01 00:00:00")) : $miniprogram_pic_media_created_at,
             'miniprogram_appid' => empty($miniprogram_appid) ? "" : $miniprogram_appid,
             'miniprogram_page' => empty($miniprogram_page) ? "" : $miniprogram_page,
+
+            'video_media' => empty($video_media) ? "" : $video_media,
+            'video_media_id' => empty($video_media_id) ? '' : $video_media_id,
+            'video_media_created_at' => empty($video_media_created_at) ? \App\Common\Utils\Helper::getCurrentTime(strtotime("0001-01-01 00:00:00")) : $video_media_created_at,
 
             'keyword_id' => empty($keyword_id) ? "" : $keyword_id,
             'keyword' => empty($keyword) ? "" : $keyword,
