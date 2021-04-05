@@ -21,6 +21,7 @@ class GroupWelcomeTemplate extends Base
         $data['image_media_created_at'] = $this->changeToMongoDate($data['image_media_created_at']);
         $data['miniprogram_pic_media_created_at'] = $this->changeToMongoDate($data['miniprogram_pic_media_created_at']);
         $data['sync_time'] = $this->changeToMongoDate($data['sync_time']);
+        $data['is_notify'] = $this->changeToBoolean($data['is_notify']);
         return $data;
     }
 }
