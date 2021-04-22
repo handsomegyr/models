@@ -112,6 +112,35 @@ class Area extends \App\Common\Models\System\Area
         return $provinceList;
     }
 
+    /**
+     * 根据level获取列表
+     *
+     * @return array
+     */
+    public function getListByLevel($level)
+    {
+        $key = cacheKey(__FILE__, __CLASS__, __METHOD__, $level);
+        $cache = $this->getDI()->get("cache");
+        $provinceList = $cache->get($key);
+        if (empty($provinceList)) {
+
+            $query = $this->getQuery();
+            $query['level'] = $level;
+            $sort = $this->getDefaultSort();
+            $list = $this->findAll($query, $sort);
+            $provinceList = array();
+            if (!empty($list)) {
+                foreach ($list as $item) {
+                    $provinceList[$item['code']] = $item['name'];
+                }
+            }
+            if (!empty($provinceList)) {
+                $cache->save($key, $provinceList, 60 * 60 * 24); // 24小时
+            }
+        }
+        return $provinceList;
+    }
+
     public function getAddress($province, $city, $district, $address, $separator = " ")
     {
         $provinceList = $this->getProvinces();
