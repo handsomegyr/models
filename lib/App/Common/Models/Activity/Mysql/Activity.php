@@ -24,6 +24,7 @@ class Activity extends Base
         $data['is_actived'] = $this->changeToBoolean($data['is_actived']);
         $data['is_paused'] = $this->changeToBoolean($data['is_paused']);
         $data['config'] = $this->changeToArray($data['config']);
+        $data['imgs'] = $this->changeToArray($data['imgs']);
         return $data;
     }
 }
