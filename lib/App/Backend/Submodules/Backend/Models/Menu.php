@@ -40,7 +40,8 @@ class Menu extends \App\Common\Models\Backend\Menu
     public function getList(Input $input)
     {
         // 分页查询
-        $list = $this->findAll($input->getQuery(), $input->getSort());
+        $sort = $this->getDefaultSort();
+        $list = $this->findAll($input->getQuery(), $sort);
 
         $menuList = array();
         if (!empty($list)) {
@@ -210,10 +211,14 @@ class Menu extends \App\Common\Models\Backend\Menu
         $menu_list = empty($menu_list) ? array() : $menu_list;
 
         $sort = $this->getDefaultSort();
+
         /* 获取权限的分组数据 */
         $query = array();
         // $query['pid'] = "";
         $menus = $this->findAll($query, $sort);
+
+        // print_r($menus);
+        // die('buildPrivilegeTree');
 
         $parent = array();
         $new = array();
@@ -303,7 +308,7 @@ class Menu extends \App\Common\Models\Backend\Menu
             $input->id = $menu_id;
         }
         $input->sort_by = "show_order";
-        $input->sort_order = "DESC";
+        $input->sort_order = "asc";
         $input->page_size = 1000;
 
         $ret = $this->getList($input);
