@@ -249,7 +249,11 @@ class Input extends \stdClass
                     }
                 } elseif ($field['data']['type'] == "datetime") {
                     if (isset($this->$key) && $is_update) {
-                        $data[$key] = \App\Common\Utils\Helper::getCurrentTime(strtotime($this->$key));
+                        if ($this->$key instanceof \MongoDate) {
+                            $data[$key] = $this->$key;
+                        } else {
+                            $data[$key] = \App\Common\Utils\Helper::getCurrentTime(strtotime($this->$key));
+                        }
                     } else {
                         $data[$key] = isset($field['data']['defaultValue']) ? $field['data']['defaultValue'] : \App\Common\Utils\Helper::getCurrentTime();
                     }
