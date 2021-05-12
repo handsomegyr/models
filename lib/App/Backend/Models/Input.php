@@ -111,25 +111,7 @@ class Input extends \stdClass
             foreach ($schemas as $key => $field) {
                 if (isset($filter[$key])) {
                     if (strlen($filter[$key]) > 0) {
-                        if ($field['data']['type'] == "string" && $key != '_id') {
-                            if ((!empty($field['search']) && !empty($field['search']['sqlWhere']))) {
-                                if (strtolower(trim($field['search']['sqlWhere'])) == 'eq') {
-                                    $where[$key] = urldecode($filter[$key]);
-                                } elseif (strtolower(trim($field['search']['sqlWhere'])) == 'prelike') {
-                                    $where[$key] = new \MongoRegex(urldecode($filter[$key]) . '/i');
-                                } else {
-                                    $where[$key] = new \MongoRegex('/' . urldecode($filter[$key]) . '/i');
-                                }
-                            } else {
-                                if ($this->sqlWhere4String == 'eq') {
-                                    $where[$key] = urldecode($filter[$key]);
-                                } elseif ($this->sqlWhere4String == 'prelike') {
-                                    $where[$key] = new \MongoRegex(urldecode($filter[$key]) . '/i');
-                                } else {
-                                    $where[$key] = new \MongoRegex('/' . urldecode($filter[$key]) . '/i');
-                                }
-                            }
-                        } elseif ($field['data']['type'] == "datetime") {
+                        if ($field['data']['type'] == "datetime") {
                             $datetime = urldecode($filter[$key]);
                             $isExist = $this->isCheckPeriodFlagExist($datetime);
                             if ($isExist) {
@@ -168,7 +150,6 @@ class Input extends \stdClass
                         } elseif ($field['data']['type'] == "boolean") {
                             $where[$key] = intval(urldecode($filter[$key]));
                         } else {
-                            // $where[$key] = urldecode($filter[$key]);
                             $str1 = urldecode($filter[$key]);
                             $isExist = $this->isCheckPeriodFlagExist($str1);
                             if ($isExist) {
@@ -180,7 +161,23 @@ class Input extends \stdClass
                                     $where[$key]['$lte'] = $strArr[1];
                                 }
                             } else {
-                                $where[$key] = $str1;
+                                if ((!empty($field['search']) && !empty($field['search']['sqlWhere']))) {
+                                    if (strtolower(trim($field['search']['sqlWhere'])) == 'eq') {
+                                        $where[$key] = $str1;
+                                    } elseif (strtolower(trim($field['search']['sqlWhere'])) == 'prelike') {
+                                        $where[$key] = new \MongoRegex($str1 . '/i');
+                                    } else {
+                                        $where[$key] = new \MongoRegex('/' . $str1 . '/i');
+                                    }
+                                } else {
+                                    if ($this->sqlWhere4String == 'eq') {
+                                        $where[$key] = $str1;
+                                    } elseif ($this->sqlWhere4String == 'prelike') {
+                                        $where[$key] = new \MongoRegex($str1 . '/i');
+                                    } else {
+                                        $where[$key] = new \MongoRegex('/' . $str1 . '/i');
+                                    }
+                                }
                             }
                         }
                     }
