@@ -48,6 +48,11 @@ class Input extends \stdClass
         return $this->filter;
     }
 
+    public function clearFilter()
+    {
+        $this->filter = NULL;
+    }
+
     public function setRecordCount($record_count)
     {
         /* page 总数 */
@@ -71,16 +76,19 @@ class Input extends \stdClass
         if (empty($schemas)) {
             throw new \Exception('schemas is empty');
         }
+        $this->clearFilter();
         return $this->schemas = $schemas;
     }
 
     public function addSchema($key, array $field)
     {
         $this->schemas[$key] = $field;
+        $this->clearFilter();
     }
 
     function __call($method, $args)
     {
+        $this->clearFilter();
         if (isset($this->$method) && is_callable($this->$method))
             return call_user_func_array($this->$method, $args);
         else
@@ -94,6 +102,7 @@ class Input extends \stdClass
             $defaultQuery = array();
         }
         $this->defaultQuery = $defaultQuery;
+        $this->clearFilter();
     }
 
     /**
