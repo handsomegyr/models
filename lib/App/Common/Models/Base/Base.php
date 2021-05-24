@@ -197,6 +197,11 @@ class Base implements IBase
         return $this->getModel()->findAll($query, $sort, $fields);
     }
 
+    public function findAllByCursor(array $query, array $sort = array(), array $fields = array(), \callable $callback = null)
+    {
+        return $this->getModel()->findAllByCursor($query, $sort, $fields, $callback);
+    }
+
     public function distinct($field, array $query)
     {
         return $this->getModel()->distinct($field, $query);
@@ -265,6 +270,11 @@ class Base implements IBase
     public function selectRaw($sql, array $data = array())
     {
         return $this->getModel()->selectRaw($sql, $data);
+    }
+
+    public function selectRawByCursor($sql, array $data = array(), \callable $callback = null)
+    {
+        return $this->getModel()->selectRawByCursor($sql, $data, $callback);
     }
 
     public function getUploadPath()

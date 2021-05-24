@@ -77,6 +77,7 @@ interface IBase
     public function find(array $query, array $sort = null, $skip = 0, $limit = 10, array $fields = array());
 
     public function findAll(array $query, array $sort = array(), array $fields = array());
+    public function findAllByCursor(array $query, array $sort = array(), array $fields = array(), \callable $callback = null);
 
     public function distinct($field, array $query);
 
@@ -140,4 +141,5 @@ interface IBase
      * 直接执行sql查询
      */
     public function selectRaw($sql, array $data = array());
+    public function selectRawByCursor($sql, array $data = array(), \callable $callback = null);
 }

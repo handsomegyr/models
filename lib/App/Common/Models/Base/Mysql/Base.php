@@ -160,6 +160,11 @@ class Base implements \App\Common\Models\Base\IBase
         return $this->impl->findAll($query, $sort, $fields);
     }
 
+    public function findAllByCursor(array $query, array $sort = array(), array $fields = array(), \callable $callback = null)
+    {
+        return $this->impl->findAllByCursor($query, $sort, $fields, $callback);
+    }
+
     public function sum(array $query, array $fields = array(), array $groups = array())
     {
         return $this->impl->sum($query, $fields, $groups);
@@ -226,5 +231,10 @@ class Base implements \App\Common\Models\Base\IBase
     public function selectRaw($sql, array $data = array())
     {
         return $this->impl->selectRaw($sql, $data);
+    }
+
+    public function selectRawByCursor($sql, array $data = array(), \callable $callback = null)
+    {
+        return $this->impl->selectRawByCursor($sql, $data, $callback);
     }
 }
