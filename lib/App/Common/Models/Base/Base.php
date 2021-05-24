@@ -197,7 +197,7 @@ class Base implements IBase
         return $this->getModel()->findAll($query, $sort, $fields);
     }
 
-    public function findAllByCursor(array $query, array $sort = array(), array $fields = array(), \callable $callback = null)
+    public function findAllByCursor(array $query, array $sort = array(), array $fields = array(), callable $callback = null)
     {
         return $this->getModel()->findAllByCursor($query, $sort, $fields, $callback);
     }
@@ -272,7 +272,7 @@ class Base implements IBase
         return $this->getModel()->selectRaw($sql, $data);
     }
 
-    public function selectRawByCursor($sql, array $data = array(), \callable $callback = null)
+    public function selectRawByCursor($sql, array $data = array(), callable $callback = null)
     {
         return $this->getModel()->selectRawByCursor($sql, $data, $callback);
     }

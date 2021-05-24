@@ -173,7 +173,7 @@ class Impl2 extends Base
         return $list;
     }
 
-    public function findAllByCursor(array $query, array $sort = null, array $fields = array(), \callable $callback = null)
+    public function findAllByCursor(array $query, array $sort = null, array $fields = array(), callable $callback = null)
     {
         $sqlAndConditions = $this->getSqlAndConditions4FindAll($query, $sort, $fields);
         $phql = $sqlAndConditions['sql'];
@@ -286,7 +286,7 @@ class Impl2 extends Base
         return $list;
     }
 
-    public function selectRawByCursor($sql, array $data = array(), \callable $callback = null)
+    public function selectRawByCursor($sql, array $data = array(), callable $callback = null)
     {
         $result = $this->executeDBQuery($sql, $data, 'query');
         $list = array();
