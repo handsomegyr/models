@@ -391,9 +391,7 @@ class QyService
         }
 
         if (empty($msg_template_content)) {
-            $msg_template_content = "";
-        } else {
-            $msg_template_content = \json_encode($msg_template_content);
+            $msg_template_content = array();
         }
         // 记录日志
         $modelMsgTemplateSendLog = new \App\Qyweixin\Models\ExternalContact\MsgTemplateSendLog();
@@ -429,7 +427,7 @@ class QyService
             $match['msg_template_chat_type'],
             $ToUserName,
             $FromUserName,
-            $msg_template_content,
+            \json_encode($msg_template_content),
             time()
         );
 
@@ -999,9 +997,7 @@ class QyService
         }
 
         if (empty($agentmsg)) {
-            $agentmsg = "";
-        } else {
-            $agentmsg = \json_encode($agentmsg);
+            $agentmsg = array();
         }
         // 记录日志
         $modelAgentMsgSendLog = new \App\Qyweixin\Models\AgentMsg\SendLog();
@@ -1033,7 +1029,7 @@ class QyService
             $match['agent_msg_type'],
             $ToUserName,
             $FromUserName,
-            $agentmsg,
+            \json_encode($agentmsg),
             time()
         );
 
@@ -1121,9 +1117,7 @@ class QyService
         }
 
         if (empty($appchatmsg)) {
-            $appchatmsg = "";
-        } else {
-            $appchatmsg = \json_encode($appchatmsg);
+            $appchatmsg = array();
         }
         // 记录日志
         $modelAppchatMsgSendLog = new \App\Qyweixin\Models\AppchatMsg\SendLog();
@@ -1147,7 +1141,7 @@ class QyService
             $match['appchat_msg_type'],
             $ToUserName,
             $FromUserName,
-            $appchatmsg,
+            \json_encode($appchatmsg),
             time()
         );
 
@@ -1243,9 +1237,7 @@ class QyService
         }
 
         if (empty($linkedcorpmsg)) {
-            $linkedcorpmsg = "";
-        } else {
-            $linkedcorpmsg = \json_encode($linkedcorpmsg);
+            $linkedcorpmsg = array();
         }
         // 记录日志
         $modelLinkedcorpMsgSendLog = new \App\Qyweixin\Models\LinkedcorpMsg\SendLog();
@@ -1273,7 +1265,7 @@ class QyService
             $match['linkedcorp_msg_type'],
             $ToUserName,
             $FromUserName,
-            $linkedcorpmsg,
+            \json_encode($linkedcorpmsg),
             time()
         );
 
