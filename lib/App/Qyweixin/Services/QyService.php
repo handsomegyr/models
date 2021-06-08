@@ -305,7 +305,7 @@ class QyService
         try {
             //默认为single，表示发送给客户，group表示发送给客户群'
             if ($chat_type == 'single') {
-                $msgTemplateInfo['external_userid'] = array($ToUserName);
+                $msgTemplateInfo['external_userid'] = $ToUserName;
                 $msgTemplateInfo['sender'] = "";
             } elseif ($chat_type == 'group') {
                 $msgTemplateInfo['external_userid'] = '';
