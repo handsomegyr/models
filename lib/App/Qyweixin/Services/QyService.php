@@ -163,7 +163,7 @@ class QyService
     {
         $res = $this->getQyWeixinObject()
             ->getAgentManager()
-            ->list();
+            ->getAgentList();
         if (!empty($res['errcode'])) {
             throw new \Exception($res['errmsg'], $res['errcode']);
         }
@@ -1281,7 +1281,7 @@ class QyService
         $modelDepartment = new \App\Qyweixin\Models\Contact\Department();
         $res = $this->getQyWeixinObject()
             ->getDepartmentManager()
-            ->list($dep_id);
+            ->getDepartmentList($dep_id);
         if (!empty($res['errcode'])) {
             throw new \Exception($res['errmsg'], $res['errcode']);
         }
@@ -1435,7 +1435,7 @@ class QyService
         $modelTag = new \App\Qyweixin\Models\Contact\Tag();
         $res = $this->getQyWeixinObject()
             ->getTagManager()
-            ->list();
+            ->getTagList();
         if (!empty($res['errcode'])) {
             throw new \Exception($res['errmsg'], $res['errcode']);
         }
@@ -1536,7 +1536,7 @@ class QyService
         $modelExternalUser = new \App\Qyweixin\Models\ExternalContact\ExternalUser();
         $res = $this->getQyWeixinObject()
             ->getExternalContactManager()
-            ->list($userid);
+            ->getExternalContactList($userid);
         if (!empty($res['errcode'])) {
             throw new \Exception($res['errmsg'], $res['errcode']);
         }
@@ -1718,7 +1718,7 @@ class QyService
         $res = $this->getQyWeixinObject()
             ->getExternalContactManager()
             ->getGroupChatManager()
-            ->list($status_filter, $owner_filter, $offset, $limit);
+            ->getGroupchatList($status_filter, $owner_filter, $offset, $limit);
         if (!empty($res['errcode'])) {
             throw new \Exception($res['errmsg'], $res['errcode']);
         }
