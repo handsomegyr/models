@@ -6,9 +6,7 @@ class Article extends \App\Common\Models\Article\Article
 {
 
     /**
-     * 默认排序方式
-     *
-     * @param number $dir            
+     * 默认排序方式            
      * @return array
      */
     public function getDefaultSort()

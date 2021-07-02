@@ -1,12 +1,13 @@
 <?php
+
 namespace App\Backend\Submodules\Article\Models;
 
 use App\Backend\Models\Input;
 
 class Category extends \App\Common\Models\Article\Category
 {
-    
-    use\App\Backend\Models\Base;
+
+    use \App\Backend\Models\Base;
 
     /**
      * 默认排序
@@ -39,14 +40,14 @@ class Category extends \App\Common\Models\Article\Category
         // 分页查询
         $list = $this->findAll($input->getQuery(), $input->getSort());
         $categoryList = array();
-        if (! empty($list)) {
+        if (!empty($list)) {
             foreach ($list as $item) {
                 $pkey = "p:" . (empty($item['parent_id']) ? "0" : $item['parent_id']);
                 $key = ($item['_id']);
                 $categoryList[$pkey][$key] = $item;
             }
         }
-        if (! empty($categoryList["p:0"])) {
+        if (!empty($categoryList["p:0"])) {
             $input->setRecordCount(count($categoryList["p:0"]));
             $filter = $input->getFilter();
             $categoryList["p:0"] = array_slice($categoryList["p:0"], $filter['start'], min($filter['record_count'], $filter['page_size']));
@@ -76,15 +77,15 @@ class Category extends \App\Common\Models\Article\Category
     {
         $list = array();
         $pkey = "p:" . $pkey;
-        if (! empty($categoryList[$pkey])) {
+        if (!empty($categoryList[$pkey])) {
             foreach ($categoryList[$pkey] as $key => $item) {
                 $item['level'] = $level;
                 $item['category_id'] = $item['_id'];
                 $item['has_children'] = empty($categoryList["p:" . $item['category_id']]);
-                
+
                 $list[] = $item;
                 $list2 = $this->recursiveGet($categoryList, $key, $level + 1);
-                if (! empty($list2)) {
+                if (!empty($list2)) {
                     $list = array_merge($list, $list2);
                 }
             }
@@ -95,16 +96,16 @@ class Category extends \App\Common\Models\Article\Category
     public function getList4Tree($category_id = "")
     {
         $input = new Input();
-        if (! empty($category_id)) {
+        if (!empty($category_id)) {
             $input->id = $category_id;
         }
         $input->sort_by = "sort";
         $input->sort_order = "DESC";
         $input->page_size = 2000;
-        
+
         $ret = $this->getList($input);
         $datas = array();
-        
+
         foreach ($ret["data"] as $var) {
             $text = "";
             if ($var['level'] > 0) {

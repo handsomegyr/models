@@ -52,7 +52,7 @@ class Sign extends \App\Common\Models\Sign\Sign
      * @param string $user_id            
      * @param string $nickname            
      * @param string $headimgurl            
-     * @param number $sign_time              
+     * @param int $sign_time              
      * @param string $ip          
      * @param string $valid_log_id            
      * @param number $judgeResult            

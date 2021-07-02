@@ -79,7 +79,7 @@ class Api
      * @param string $user_headimgurl            
      * @param string $bargain_id             
      * @param string $client_ip            
-     * @param number $now          
+     * @param int $now          
      * @param array $memo            
      * @param boolean $isSystemDo            
      */
@@ -179,7 +179,7 @@ class Api
      * @param string $user_headimgurl            
      * @param array $bargainInfo          
      * @param array $client_ip              
-     * @param number $now          
+     * @param int $now          
      * @param array $memo            
      * @param boolean $isSystemDo            
      */

@@ -388,8 +388,8 @@ class Goods extends \App\Common\Models\Order\Goods
      * @param number $page            
      * @param number $limit            
      * @param number $state            
-     * @param number $beginTime            
-     * @param number $endTime            
+     * @param int $beginTime            
+     * @param int $endTime            
      * @param array $otherConditions            
      * @return array
      */

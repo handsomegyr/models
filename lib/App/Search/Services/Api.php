@@ -19,7 +19,7 @@ class Api
      * 记录
      *
      * @param string $content       
-     * @param number $now             
+     * @param int $now             
      * @param number $member_id          
      * @param string $user_id           
      * @param string $channel           

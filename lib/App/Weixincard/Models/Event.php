@@ -10,7 +10,7 @@ class Event extends \App\Common\Models\Weixincard\Event
      *
      * @param string $ToUserName            
      * @param string $FromUserName            
-     * @param number $CreateTime            
+     * @param int $CreateTime            
      * @param string $MsgType            
      * @param string $Event            
      * @param string $CardId            

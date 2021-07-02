@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Goods\Models;
 
 class Brand extends \App\Common\Models\Goods\Brand
@@ -6,8 +7,7 @@ class Brand extends \App\Common\Models\Goods\Brand
 
     /**
      * 默认排序方式
-     *
-     * @param number $dir            
+     *           
      * @return array
      */
     public function getDefaultSort($dir = 1)
@@ -39,7 +39,7 @@ class Brand extends \App\Common\Models\Goods\Brand
     public function getList(array $query = array(), array $sort = array(), array $fields = array())
     {
         if (empty($sort)) {
-            $sort = $this->getDefaultSort(- 1);
+            $sort = $this->getDefaultSort(-1);
         }
         $defaultQuery = $this->getDefaultQuery();
         $query = array_merge($query, $defaultQuery);
@@ -48,7 +48,7 @@ class Brand extends \App\Common\Models\Goods\Brand
         $list = false; // $cache->get($key);
         if (empty($list)) {
             $list = $this->findAll($query, $sort, $fields);
-            if (! empty($list)) {
+            if (!empty($list)) {
                 $cache->save($key, $list, 60 * 60); // 一个小时
             }
         }

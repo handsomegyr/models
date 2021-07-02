@@ -30,7 +30,7 @@ class Item extends \App\Common\Models\Banner\Item
      * 根据banner_id获取当前显示的banner列表
      *
      * @param string $banner_id            
-     * @param number $now            
+     * @param int $now            
      * @return array
      */
     public function getListByBannerId($banner_id, $now)

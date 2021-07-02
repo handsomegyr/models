@@ -72,7 +72,7 @@ class Game extends \App\Common\Models\Game\Game
      * @param string $id            
      * @param number $score            
      * @param number $user_num            
-     * @param number $now            
+     * @param int $now            
      */
     public function updateStatistics($id, $score, $user_num, $now)
     {

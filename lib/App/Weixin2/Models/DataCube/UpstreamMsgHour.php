@@ -9,7 +9,7 @@ class UpstreamMsgHour extends \App\Common\Models\Weixin2\DataCube\UpstreamMsgHou
      * 根据数据的日期获取信息
      *
      * @param string $ref_date            
-     * @param number $ref_hour            
+     * @param int $ref_hour            
      * @param string $authorizer_appid            
      * @param string $component_appid           
      */

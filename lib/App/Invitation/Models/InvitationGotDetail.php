@@ -32,7 +32,7 @@ class InvitationGotDetail extends \App\Common\Models\Invitation\InvitationGotDet
      * @param string $got_user_id            
      * @param string $got_user_name            
      * @param string $got_user_headimgurl              
-     * @param number $got_time            
+     * @param int $got_time            
      * @param int $got_worth 
      * @param int $got_worth2            
      * @param string $activity_id                 

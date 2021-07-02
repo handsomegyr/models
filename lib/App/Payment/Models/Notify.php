@@ -7,8 +7,7 @@ class Notify extends \App\Common\Models\Payment\Notify
 
     /**
      * 默认排序方式
-     *
-     * @param number $dir            
+     *            
      * @return array
      */
     public function getDefaultSort()

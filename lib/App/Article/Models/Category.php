@@ -1,13 +1,12 @@
 <?php
+
 namespace App\Article\Models;
 
 class Category extends \App\Common\Models\Article\Category
 {
 
     /**
-     * 默认排序方式
-     *
-     * @param number $dir            
+     * 默认排序方式          
      * @return array
      */
     public function getDefaultSort()

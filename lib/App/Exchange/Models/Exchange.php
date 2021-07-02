@@ -40,8 +40,8 @@ class Exchange extends \App\Common\Models\Exchange\Exchange
      *
      * @param string $user_id            
      * @param string $activity_id            
-     * @param number $startTime            
-     * @param number $endTime            
+     * @param int $startTime            
+     * @param int $endTime            
      * @return NULL
      */
     public function getExchangeBy($user_id = '', $activity_id = '', $startTime = 0, $endTime = 0)
@@ -99,8 +99,8 @@ class Exchange extends \App\Common\Models\Exchange\Exchange
      *
      * @param string $activity_id            
      * @param string $user_id            
-     * @param number $startTime            
-     * @param number $endTime            
+     * @param int $startTime            
+     * @param int $endTime            
      * @return multitype:number
      */
     public function filterExchangeByGroup($activity_id, $user_id, $startTime = 0, $endTime = 0)
@@ -234,8 +234,8 @@ class Exchange extends \App\Common\Models\Exchange\Exchange
      * @param string $activity_id 
      * @param string $user_id            
      * @param string $prize_id            
-     * @param number $start_time            
-     * @param number $end_time            
+     * @param int $start_time            
+     * @param int $end_time            
      * @return number
      */
     public function getExchangeNum($activity_id, $user_id, $prize_id, $start_time, $end_time)

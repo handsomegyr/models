@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Task\Models;
 
 class Log extends \App\Common\Models\Task\Log
@@ -6,14 +7,13 @@ class Log extends \App\Common\Models\Task\Log
 
     /**
      * 默认排序方式
-     *
-     * @param number $dir            
+     *            
      * @return array
      */
     public function getDefaultSort()
     {
         $sort = array();
-        $sort['log_time'] = - 1;
+        $sort['log_time'] = -1;
         return $sort;
     }
 

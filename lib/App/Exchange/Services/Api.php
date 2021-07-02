@@ -46,7 +46,7 @@ class Api
      *
      * @param string $activity_id            
      * @param string $identity_id            
-     * @param number $now            
+     * @param int $now            
      * @param string $rule_id            
      * @param number $quantity            
      * @param number $score            

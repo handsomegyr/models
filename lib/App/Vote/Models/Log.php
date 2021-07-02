@@ -61,8 +61,8 @@ class Log extends \App\Common\Models\Vote\Log
      * @param array $activitys            
      * @param array $subjects            
      * @param array $items            
-     * @param number $startTime            
-     * @param number $endTime            
+     * @param int $startTime            
+     * @param int $endTime            
      * @param array $cacheInfo            
      * @throws Exception
      * @return boolean

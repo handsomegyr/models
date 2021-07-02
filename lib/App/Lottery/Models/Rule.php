@@ -11,7 +11,7 @@ class Rule extends \App\Common\Models\Lottery\Rule
      * 获取指定活动的全部抽奖规则
      *
      * @param string $activity_id             
-     * @param number $now            
+     * @param int $now            
      * @param array $prize_ids           
      * @param array $exclude_prize_ids          
      */
@@ -123,8 +123,8 @@ class Rule extends \App\Common\Models\Lottery\Rule
      * @param string $prize_id            
      * @param number $allow_number            
      * @param number $allow_probability            
-     * @param number $allow_start_time            
-     * @param number $allow_end_time            
+     * @param int $allow_start_time            
+     * @param int $allow_end_time            
      */
     public function create($activity_id, $prize_id, $allow_number = 0, $allow_probability = 0, $allow_start_time = 0, $allow_end_time = 0)
     {

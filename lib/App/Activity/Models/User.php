@@ -72,7 +72,7 @@ class User extends \App\Common\Models\Activity\User
      *
      * @param string $activity_id
      * @param string $user_id
-     * @param number $log_time            
+     * @param int $log_time            
      * @param string $nickname            
      * @param string $headimgurl            
      * @param string $redpack_user            

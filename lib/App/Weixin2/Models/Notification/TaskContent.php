@@ -26,7 +26,7 @@ class TaskContent extends \App\Common\Models\Weixin2\Notification\TaskContent
      * @param string $notification_task_id            
      * @param array $openids              
      * @param string $tag_id            
-     * @param number $now            
+     * @param int $now            
      * @return array
      */
     public function logon($name, $notification_task_id, array $openids, $tag_id, $now)

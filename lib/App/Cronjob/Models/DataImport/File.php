@@ -13,11 +13,11 @@ class File extends \App\Common\Models\Cronjob\DataImport\File
     /**
      * 记录
      *
-     * @param number $cron_time            
+     * @param int $cron_time            
      * @param string $data_file            
      * @param string $flag_file            
      * @param string $lock_file               
-     * @param number $now          
+     * @param int $now          
      * @param number $data_count            
      * @param number $process_total            
      * @param number $status            

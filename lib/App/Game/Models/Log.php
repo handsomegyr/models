@@ -18,7 +18,7 @@ class Log extends \App\Common\Models\Game\Log
      * @param string $game_file            
      * @param string $game_img            
      * @param string $ip            
-     * @param number $play_time            
+     * @param int $play_time            
      * @param array $memo            
      * @return array
      */

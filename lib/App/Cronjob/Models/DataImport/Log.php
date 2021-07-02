@@ -12,7 +12,7 @@ class Log extends \App\Common\Models\Cronjob\DataImport\Log
      * @param string $returnback_cronjob_id            
      * @param string $stage            
      * @param string $running_id               
-     * @param number $now          
+     * @param int $now          
      * @param string $desc            
      * @return array
      */

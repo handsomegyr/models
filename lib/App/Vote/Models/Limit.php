@@ -30,7 +30,7 @@ class Limit extends \App\Common\Models\Vote\Limit
     /**
      * 获取限制列表
      *
-     * @param number $now 
+     * @param int $now 
      * @param array $activitys            
      * @param array $subjects            
      * @param array $items            
@@ -74,7 +74,7 @@ class Limit extends \App\Common\Models\Vote\Limit
     /**
      * 限制检查
      *
-     * @param number $now  
+     * @param int $now  
      * @param string $activityId            
      * @param string $subjectId            
      * @param string $itemId            

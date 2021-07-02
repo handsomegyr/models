@@ -17,7 +17,7 @@ class Task extends \App\Common\Models\Qyweixin\Notification\Task
     /**
      * 根据推送状态获取并锁住一条任务
      *
-     * @param number $now            
+     * @param int $now            
      */
     public function getAndLockOneTask4ByPushStatus($push_status, $now)
     {

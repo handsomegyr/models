@@ -7,8 +7,7 @@ class Express extends \App\Common\Models\Freight\Express
 
     /**
      * 默认排序方式
-     *
-     * @param number $dir            
+     *            
      * @return array
      */
     public function getDefaultSort()

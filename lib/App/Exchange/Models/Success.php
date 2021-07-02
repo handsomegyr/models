@@ -65,8 +65,8 @@ class Success extends \App\Common\Models\Exchange\Success
      *
      * @param string $user_id            
      * @param string $prize_id            
-     * @param number $start_time            
-     * @param number $end_time            
+     * @param int $start_time            
+     * @param int $end_time            
      * @return number
      */
     public function getExchangeNum($user_id, $prize_id, $start_time, $end_time)
@@ -113,8 +113,8 @@ class Success extends \App\Common\Models\Exchange\Success
      * 获取兑换成功列表
      *
      * @param string $user_id            
-     * @param number $start_time            
-     * @param number $end_time            
+     * @param int $start_time            
+     * @param int $end_time            
      * @param array $prize_ids            
      * @return array
      */

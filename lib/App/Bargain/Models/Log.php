@@ -54,7 +54,7 @@ class Log extends \App\Common\Models\Bargain\Log
      * @param number $bargain_amount         
      * @param boolean $is_system_bargain             
      * @param string $activity_id              
-     * @param number $bargain_time            
+     * @param int $bargain_time            
      * @param string $memo            
      */
     public function record($user_id, $user_name, $user_headimgurl, $client_ip, $bargain_id, $bargain_num, $bargain_amount, $is_system_bargain, $activity_id, $bargain_time, array $memo = array())

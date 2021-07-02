@@ -88,7 +88,7 @@ class User extends \App\Common\Models\Points\User
      *
      * @param number $id             
      * @param number $points        
-     * @param number $now          
+     * @param int $now          
      */
     public function addOrReduce($id, $points, $now)
     {
@@ -139,7 +139,7 @@ class User extends \App\Common\Models\Points\User
      * @param string $user_id            
      * @param string $user_name            
      * @param string $user_headimgurl              
-     * @param number $now           
+     * @param int $now           
      * @param number $current            
      * @param number $freeze            
      * @param number $consume            

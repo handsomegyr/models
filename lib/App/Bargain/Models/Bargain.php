@@ -81,8 +81,8 @@ class Bargain extends \App\Common\Models\Bargain\Bargain
      * @param number $bargain_num_limit            
      * @param boolean $is_both_bargain            
      * @param number $bargain_period            
-     * @param number $launch_time            
-     * @param number $bargain_to_minworth_time            
+     * @param int $launch_time            
+     * @param int $bargain_to_minworth_time            
      * @param string $memo            
      */
     public function create($activity_id, $user_id, $user_name, $user_headimgurl, $code, $name, $worth, $quantity, $bargain_from, $bargain_to, $worth_min, $bargain_max, $is_closed, $bargain_num_limit, $is_both_bargain, $start_time, $end_time, $bargain_period, $launch_time, $bargain_to_minworth_time, array $memo = array('memo' => ''))
@@ -125,7 +125,7 @@ class Bargain extends \App\Common\Models\Bargain\Bargain
      * @param string $identity_id            
      * @param number $amount            
      * @param number $num               
-     * @param number $now          
+     * @param int $now          
      * @throws Exception
      * @return array
      */

@@ -7,8 +7,7 @@ class Site extends \App\Common\Models\Site\Site
 
     /**
      * 默认排序方式
-     *
-     * @param number $dir            
+     *            
      * @return array
      */
     public function getDefaultSort()

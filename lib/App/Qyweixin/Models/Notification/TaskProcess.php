@@ -34,7 +34,7 @@ class TaskProcess extends \App\Common\Models\Qyweixin\Notification\TaskProcess
     /**
      * 根据推送状态获取并锁住一条任务
      *
-     * @param number $now            
+     * @param int $now            
      */
     public function getAndLockOneTask4ByPushStatus($push_status, $now)
     {
@@ -78,7 +78,7 @@ class TaskProcess extends \App\Common\Models\Qyweixin\Notification\TaskProcess
      * @param string $name            
      * @param number $notification_task_id            
      * @param number $task_process_total            
-     * @param number $now            
+     * @param int $now            
      * @return array
      */
     public function logon($name, $notification_task_id, $task_process_total, $now)

@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Goods\Models;
 
 class Goods extends \App\Common\Models\Goods\Goods
@@ -6,8 +7,7 @@ class Goods extends \App\Common\Models\Goods\Goods
 
     /**
      * 默认排序方式
-     *
-     * @param number $dir            
+     *           
      * @return array
      */
     public function getDefaultSort()
@@ -17,7 +17,7 @@ class Goods extends \App\Common\Models\Goods\Goods
         $sort = array(
             'salenum' => 1,
             'click' => 1,
-            '_id' => - 1
+            '_id' => -1
         );
         return $sort;
     }
@@ -121,7 +121,7 @@ class Goods extends \App\Common\Models\Goods\Goods
         $datas['verify'] = $goodsCommonInfo['verify'];
         $datas['is_hot'] = $goodsCommonInfo['is_hot'];
         $datas['is_new'] = $goodsCommonInfo['is_new'];
-        
+
         $datas['period'] = $period;
         $datas['lottery_code'] = $goodsCommonInfo['lottery_code'];
         $datas['total_person_time'] = intval($goodsCommonInfo['price'] / 100);
@@ -130,7 +130,7 @@ class Goods extends \App\Common\Models\Goods\Goods
         $datas['complete_percent'] = round($datas['purchase_person_time'] * 100.00 / $datas['total_person_time'], 2);
         $datas['restrict_person_time'] = $goodsCommonInfo['restrict_person_time'];
         $datas['sale_state'] = self::SALE_STATE1; // 进行中
-        
+
         $datas['gc_id'] = $goodsCommonInfo['gc_id'];
         $datas['gc_id_1'] = $goodsCommonInfo['gc_id_1'];
         $datas['gc_id_2'] = $goodsCommonInfo['gc_id_2'];
@@ -192,11 +192,11 @@ class Goods extends \App\Common\Models\Goods\Goods
         $query['sale_state'] = self::SALE_STATE1;
         $query['is_hot'] = false;
         $query['is_new'] = false;
-        if (! empty($otherConditions)) {
+        if (!empty($otherConditions)) {
             $query = array_merge($otherConditions, $query);
         }
         $sort = array(
-            'complete_percent' => - 1
+            'complete_percent' => -1
         );
         $list = $this->getPageList($page, $limit, $query, $sort, array());
         return $list;
@@ -230,7 +230,7 @@ class Goods extends \App\Common\Models\Goods\Goods
         $query = $this->getDefaultQuery();
         $query['goods_commonid'] = $goods_common_id;
         $sort = array();
-        $sort['period'] = - 1;
+        $sort['period'] = -1;
         $list = $this->getPageList($page, $limit, $query, $sort, array(
             '_id' => 1,
             'period' => 1
@@ -271,21 +271,21 @@ class Goods extends \App\Common\Models\Goods\Goods
         // 检查商品是否存在
         $goodsInfo = $this->getInfoById($goods_id);
         if (empty($goodsInfo)) {
-            $ret['error_code'] = - 1;
+            $ret['error_code'] = -1;
             $ret['error_msg'] = '商品不存在';
             return $ret;
         }
-        
+
         // 检查该商品的库存
         if (empty($goodsInfo['storage']) || $goodsInfo['storage'] < $quantity) {
-            $ret['error_code'] = - 2;
+            $ret['error_code'] = -2;
             $ret['error_msg'] = '商品库存不足';
             return $ret;
         }
-        
+
         // 检查该商品的剩余人次
         if (empty($goodsInfo['remain_person_time']) || $goodsInfo['remain_person_time'] < $quantity) {
-            $ret['error_code'] = - 3;
+            $ret['error_code'] = -3;
             $ret['error_msg'] = '商品剩余人次不足';
             return $ret;
         }
@@ -302,7 +302,7 @@ class Goods extends \App\Common\Models\Goods\Goods
     public function checkIsFull(array $goodsInfo)
     {
         // 检查该商品的剩余人次
-        if (! empty($goodsInfo['remain_person_time'])) {
+        if (!empty($goodsInfo['remain_person_time'])) {
             return false;
         }
         return true;
@@ -346,7 +346,7 @@ class Goods extends \App\Common\Models\Goods\Goods
         );
         $data = array();
         $data['purchase_person_time'] = $times;
-        $data['remain_person_time'] = - $times;
+        $data['remain_person_time'] = -$times;
         $data['last_purchase_time'] = round(microtime(true), 3);
         $ret = $this->update($query, array(
             '$inc' => $data,
@@ -405,11 +405,11 @@ class Goods extends \App\Common\Models\Goods\Goods
         $query = array(
             'sale_state' => self::SALE_STATE3
         );
-        if (! empty($otherConditions)) {
+        if (!empty($otherConditions)) {
             $query = array_merge($otherConditions, $query);
         }
         $sort = array(
-            'prize_time' => - 1
+            'prize_time' => -1
         );
         $list = $this->getPageList($page, $limit, $query, $sort, array());
         return $list;
@@ -430,7 +430,7 @@ class Goods extends \App\Common\Models\Goods\Goods
         $query['prize_time'] = array(
             '$lte' => round(microtime(true), 3)
         );
-        if (! empty($otherConditions)) {
+        if (!empty($otherConditions)) {
             $query = array_merge($otherConditions, $query);
         }
         $num = $this->count($query);
@@ -451,7 +451,7 @@ class Goods extends \App\Common\Models\Goods\Goods
         $query = array(
             'sale_state' => self::SALE_STATE2
         );
-        if (! empty($otherConditions)) {
+        if (!empty($otherConditions)) {
             $query = array_merge($otherConditions, $query);
         }
         $sort = array(

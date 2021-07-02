@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Goods\Models;
 
 class Ad extends \App\Common\Models\Goods\Ad
@@ -6,8 +7,7 @@ class Ad extends \App\Common\Models\Goods\Ad
 
     /**
      * 默认排序方式
-     *
-     * @param number $dir            
+     *           
      * @return array
      */
     public function getDefaultSort()
@@ -50,7 +50,7 @@ class Ad extends \App\Common\Models\Goods\Ad
         if (empty($list)) {
             $ret = $this->findAll($query, $sort, $fields);
             $list = array();
-            if (! empty($ret)) {
+            if (!empty($ret)) {
                 foreach ($ret as $item) {
                     $list[] = $item['goods_id'];
                 }

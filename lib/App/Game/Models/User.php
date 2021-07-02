@@ -41,7 +41,7 @@ class User extends \App\Common\Models\Game\User
      *
      * @param array $gameUserInfo            
      * @param number $score            
-     * @param number $now            
+     * @param int $now            
      */
     public function updateScore($gameUserInfo, $score, $now)
     {

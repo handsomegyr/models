@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Site\Models;
 
 class Banner extends \App\Common\Models\Site\Banner
@@ -6,8 +7,7 @@ class Banner extends \App\Common\Models\Site\Banner
 
     /**
      * 默认排序方式
-     *
-     * @param number $dir            
+     *            
      * @return array
      */
     public function getDefaultSort()
@@ -49,7 +49,7 @@ class Banner extends \App\Common\Models\Site\Banner
         $list = false; // $cache->get($key);
         if (empty($list)) {
             $list = $this->findAll($query, $sort, $fields);
-            if (! empty($list)) {
+            if (!empty($list)) {
                 $cache->save($key, $list, 60 * 60); // 一个小时
             }
         }

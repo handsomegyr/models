@@ -10,7 +10,7 @@ class Keyword extends \App\Common\Models\Search\Keyword
      *
      * @param number $id             
      * @param number $search_num        
-     * @param number $now          
+     * @param int $now          
      */
     public function incSearchNumByContent($content, $search_num, $now)
     {

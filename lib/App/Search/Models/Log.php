@@ -10,7 +10,7 @@ class Log extends \App\Common\Models\Search\Log
      * 记录日志
      *           
      * @param string $content            
-     * @param number $log_time          
+     * @param int $log_time          
      * @param string $member_id            
      * @param string $user_id           
      * @param string $channel               

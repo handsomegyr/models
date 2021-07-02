@@ -10,7 +10,7 @@ class Limit extends \App\Common\Models\Exchange\Limit
      * 获取全部限定条件
      *
      * @param string $activity_id            
-     * @param number $now            
+     * @param int $now            
      * @param string $prize_id            
      */
     public function getLimits($activity_id, $now, $prize_id)

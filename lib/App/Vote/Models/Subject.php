@@ -39,7 +39,7 @@ class Subject extends \App\Common\Models\Vote\Subject
      * 根据活动ID获取场主题列表
      *
      * @param string $activityId 
-     * @param number $now           
+     * @param int $now           
      * @return array
      */
     public function getListByActivityId($activityId, $now)
@@ -84,7 +84,7 @@ class Subject extends \App\Common\Models\Vote\Subject
      * 我的排名
      *
      * @param array $myInfo    
-     * @param number $now          
+     * @param int $now          
      * @param array $otherConditions            
      * @return number
      */

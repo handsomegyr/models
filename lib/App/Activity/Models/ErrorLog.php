@@ -10,7 +10,7 @@ class ErrorLog extends \App\Common\Models\Activity\ErrorLog
      *
      * @param string $activity_id        
      * @param \Exception $e    
-     * @param number $happen_time            
+     * @param int $happen_time            
      * @return array
      */
     public function log($activity_id, \Exception $e, $happen_time = 0)

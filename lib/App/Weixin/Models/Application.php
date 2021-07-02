@@ -13,7 +13,7 @@ class Application extends \App\Common\Models\Weixin\Application
     /**
      * 开启token的缓存信息
      *
-     * @param number $cacheTime            
+     * @param int $cacheTime            
      */
     public function setTokenCache($expire = 300)
     {

@@ -7,8 +7,7 @@ class Log extends \App\Common\Models\Payment\Log
 
     /**
      * 默认排序方式
-     *
-     * @param number $dir            
+     *            
      * @return array
      */
     public function getDefaultSort()

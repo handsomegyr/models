@@ -50,13 +50,13 @@ class FileContent extends \App\Common\Models\Cronjob\DataImport\FileContent
     /**
      * 记录
      *
-     * @param number $cron_time            
+     * @param int $cron_time            
      * @param string $cronjob_id            
      * @param number $line_no            
      * @param string $content_type               
      * @param string $content          
      * @param string $content_sign            
-     * @param number $now            
+     * @param int $now            
      * @return array
      */
     public function log($cron_time, $cronjob_id, $line_no, $content_type, $content, $content_sign, $now)

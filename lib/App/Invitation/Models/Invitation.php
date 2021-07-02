@@ -74,7 +74,7 @@ class Invitation extends \App\Common\Models\Invitation\Invitation
      * @param string $user_headimgurl            
      * @param string $url            
      * @param string $desc             
-     * @param number $send_time             
+     * @param int $send_time             
      * @param number $worth            
      * @param number $worth2            
      * @param number $invited_total            
@@ -124,7 +124,7 @@ class Invitation extends \App\Common\Models\Invitation\Invitation
      * @param string $user_headimgurl            
      * @param string $url            
      * @param string $desc              
-     * @param number $send_time            
+     * @param int $send_time            
      * @param number $worth            
      * @param number $worth2            
      * @param number $invited_total            

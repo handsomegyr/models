@@ -16,7 +16,7 @@ class Rule extends \App\Common\Models\Exchange\Rule
      * 获取指定活动的全部可兑换奖品规则
      *
      * @param string $activity_id            
-     * @param number $now            
+     * @param int $now            
      * @param number $score            
      * @param number $score_category            
      * @param array $prize_ids            

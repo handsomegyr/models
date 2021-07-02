@@ -36,19 +36,19 @@ class CardBag extends \App\Common\Models\Weixincard\CardBag
      * @param string $encrypt_code            
      * @param string $new_code            
      * @param number $is_got            
-     * @param number $got_time            
+     * @param int $got_time            
      * @param number $is_consumed            
-     * @param number $consume_time            
+     * @param int $consume_time            
      * @param string $StaffOpenId            
      * @param string $ConsumeSource            
      * @param string $LocationId            
      * @param string $LocationName            
      * @param number $is_deleted            
-     * @param number $delete_time            
+     * @param int $delete_time            
      * @param number $is_unavailable            
-     * @param number $unavailable_time            
+     * @param int $unavailable_time            
      * @param number $is_give_to_friend            
-     * @param number $give_to_friend_time            
+     * @param int $give_to_friend_time            
      * @param string $friend_card_bag_id            
      * @param array $memo            
      */
@@ -101,7 +101,7 @@ class CardBag extends \App\Common\Models\Weixincard\CardBag
      * @param string $card_id            
      * @param string $UserCardCode            
      * @param string $FromUserName            
-     * @param number $CreateTime            
+     * @param int $CreateTime            
      * @param number $IsGiveByFriend            
      * @param string $FriendUserName            
      * @param number $OuterId            
@@ -179,7 +179,7 @@ class CardBag extends \App\Common\Models\Weixincard\CardBag
      * @param string $card_id            
      * @param string $UserCardCode            
      * @param string $FromUserName            
-     * @param number $CreateTime            
+     * @param int $CreateTime            
      * @param string $friend_card_bag_id            
      * @param array $memo            
      */
@@ -220,7 +220,7 @@ class CardBag extends \App\Common\Models\Weixincard\CardBag
      * @param string $card_id            
      * @param string $UserCardCode            
      * @param string $FromUserName            
-     * @param number $CreateTime            
+     * @param int $CreateTime            
      * @param string $ConsumeSource            
      * @param string $StaffOpenId            
      * @param string $LocationId            
@@ -268,7 +268,7 @@ class CardBag extends \App\Common\Models\Weixincard\CardBag
      * @param string $card_id            
      * @param string $UserCardCode            
      * @param string $FromUserName            
-     * @param number $CreateTime            
+     * @param int $CreateTime            
      * @param array $memo            
      */
     public function userDelCard($card_id, $UserCardCode, $FromUserName, $CreateTime, array $memo = array('memo' => ''))
@@ -305,7 +305,7 @@ class CardBag extends \App\Common\Models\Weixincard\CardBag
      * @param string $card_id            
      * @param string $UserCardCode            
      * @param string $FromUserName            
-     * @param number $CreateTime            
+     * @param int $CreateTime            
      * @param array $memo            
      */
     public function unavailableCard($card_id, $UserCardCode, $FromUserName, $CreateTime, array $memo = array('memo' => ''))

@@ -11,7 +11,7 @@ class Limit extends \App\Common\Models\Lottery\Limit
      * 获取全部限定条件
      *
      * @param string $activity_id            
-     * @param number $now            
+     * @param int $now            
      */
     public function getLimits($activity_id, $now)
     {

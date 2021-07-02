@@ -9,8 +9,7 @@ class Pay extends \App\Common\Models\Order\Pay
     
     /**
      * 默认排序方式
-     *
-     * @param number $dir            
+     *            
      * @return array
      */
     public function getDefaultSort()

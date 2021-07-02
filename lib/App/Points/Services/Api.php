@@ -47,7 +47,7 @@ class Api
      * @param string $user_name            
      * @param string $user_headimgurl               
      * @param string $uniqueId          
-     * @param number $now          
+     * @param int $now          
      * @param number $points             
      * @param string $stage           
      * @param string $desc           

@@ -7,8 +7,7 @@ class Log extends \App\Common\Models\Points\Log
 
     /**
      * 默认排序方式
-     *
-     * @param number $dir            
+     *            
      * @return array
      */
     public function getDefaultSort($dir = -1)
@@ -78,8 +77,8 @@ class Log extends \App\Common\Models\Points\Log
      * @param number $category            
      * @param number $page            
      * @param number $limit            
-     * @param number $beginTime            
-     * @param number $endTime            
+     * @param int $beginTime            
+     * @param int $endTime            
      * @param array $otherConditions            
      * @return array
      */
@@ -110,7 +109,7 @@ class Log extends \App\Common\Models\Points\Log
      * @param string $user_name            
      * @param string $user_headimgurl             
      * @param number $points            
-     * @param number $log_time          
+     * @param int $log_time          
      * @param string $unique_id            
      * @param string $point_rule_id               
      * @param string $point_rule_code         

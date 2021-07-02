@@ -60,7 +60,7 @@ class Api
      *
      * @param string $activity_id            
      * @param string $identity_id            
-     * @param number $now            
+     * @param int $now            
      * @param array $prize_ids
      *            如果传入一组特定的奖品的话,那么就是抽该组奖品
      * @param array $exclude_prize_ids
