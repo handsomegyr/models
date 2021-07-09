@@ -1163,7 +1163,7 @@ class Menu
         $item = array(
             'menu_name' => '小程序消息管理',
             'menu_model' => '',
-            'level' => '微信开放平台管理',
+            'level' => '微信平台管理',
             'icon' => '',
             'model' => ''
         );
