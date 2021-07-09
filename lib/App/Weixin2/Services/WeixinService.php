@@ -2453,6 +2453,64 @@ class WeixinService
         return $res;
     }
 
+    // 创建小程序URL链接
+    public function createMiniappUrlLink($urllink_id)
+    {
+        $modelUrllink = new \App\Weixin2\Models\Miniprogram\Urllink();
+        $urllinkInfo = $modelUrllink->getInfoById($urllink_id);
+        if (empty($urllinkInfo)) {
+            throw new \Exception("小程序URL链接记录ID:{$urllink_id}所对应的记录不存在");
+        }
+
+        $path = trim($urllinkInfo['path']);
+        $query = trim($urllinkInfo['query_content']);
+        $is_expire = intval($urllinkInfo['is_expire']) ? true : false;
+        $expire_type = intval($urllinkInfo['expire_type']);
+        $expire_time = $urllinkInfo['expire_time']->sec;
+        $expire_interval = intval($urllinkInfo['expire_interval']);
+
+        $cloud_base = new \Weixin\Wx\Model\CloudBase();
+        $urllinkManager = $this->getWeixinObject()->getWxClient()->getUrllinkManager();
+        $res = $urllinkManager->generate($path, $query, $is_expire, $expire_type, $expire_time, $expire_interval, $cloud_base);
+
+        if (!empty($res['errcode'])) {
+            throw new \Exception($res['errmsg'], $res['errcode']);
+        }
+
+        $modelUrllink->recordUrllink($urllink_id, $res['url_link']);
+        return $res['url_link'];
+    }
+
+    // 创建小程序URL链接
+    public function createMiniappUrlScheme($urlscheme_id)
+    {
+        $modelUrlscheme = new \App\Weixin2\Models\Miniprogram\Urlscheme();
+        $urlschemeInfo = $modelUrlscheme->getInfoById($urlscheme_id);
+        if (empty($urlschemeInfo)) {
+            throw new \Exception("小程序URL链接记录ID:{$urlscheme_id}所对应的记录不存在");
+        }
+
+        $path = trim($urlschemeInfo['path']);
+        $query = trim($urlschemeInfo['query_content']);
+        $is_expire = intval($urlschemeInfo['is_expire']) ? true : false;
+        $expire_type = intval($urlschemeInfo['expire_type']);
+        $expire_time = $urlschemeInfo['expire_time']->sec;
+        $expire_interval = intval($urlschemeInfo['expire_interval']);
+
+        $jumpwxa = new \Weixin\Wx\Model\JumpWxa();
+        $jumpwxa->path = $path;
+        $jumpwxa->query = $query;
+        $urlschemeManager = $this->getWeixinObject()->getWxClient()->getUrlschemeManager();
+        $res = $urlschemeManager->generate($jumpwxa, $is_expire, $expire_type, $expire_time, $expire_interval);
+
+        if (!empty($res['errcode'])) {
+            throw new \Exception($res['errmsg'], $res['errcode']);
+        }
+
+        $modelUrlscheme->recordOpenlink($urlscheme_id, $res['openlink']);
+        return $res['openlink'];
+    }
+
     private function getMediaId4ReplyMsg($type, $reply)
     {
         if ($type == 'thumb') {

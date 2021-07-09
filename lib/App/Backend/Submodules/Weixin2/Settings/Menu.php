@@ -539,6 +539,26 @@ class Menu
         );
         $tree[] = $item;
 
+        // 小程序URL链接
+        $item = array(
+            'menu_name' => '小程序URL链接',
+            'menu_model' => 'weixin2-miniprogramurllink',
+            'level' => '小程序二维码管理',
+            'icon' => '',
+            'model' => '\App\Backend\Submodules\Weixin2\Models\Miniprogram\Urllink'
+        );
+        $tree[] = $item;
+
+        // 小程序scheme码
+        $item = array(
+            'menu_name' => '小程序scheme码',
+            'menu_model' => 'weixin2-miniprogramurlscheme',
+            'level' => '小程序二维码管理',
+            'icon' => '',
+            'model' => '\App\Backend\Submodules\Weixin2\Models\Miniprogram\Urlscheme'
+        );
+        $tree[] = $item;
+
         // 素材管理
         $item = array(
             'menu_name' => '素材管理',
