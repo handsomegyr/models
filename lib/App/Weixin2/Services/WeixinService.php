@@ -2464,6 +2464,8 @@ class WeixinService
 
         $path = trim($urllinkInfo['path']);
         $query = trim($urllinkInfo['query_content']);
+        // 将%改成()，前台会把()再次改成%
+        $query = str_ireplace('%', '()', $query);
         $is_expire = intval($urllinkInfo['is_expire']) ? true : false;
         $expire_type = intval($urllinkInfo['expire_type']);
         $expire_time = $urllinkInfo['expire_time']->sec;
@@ -2492,6 +2494,8 @@ class WeixinService
 
         $path = trim($urlschemeInfo['path']);
         $query = trim($urlschemeInfo['query_content']);
+        // 将%改成()，前台会把()再次改成%
+        $query = str_ireplace('%', '()', $query);
         $is_expire = intval($urlschemeInfo['is_expire']) ? true : false;
         $expire_type = intval($urlschemeInfo['expire_type']);
         $expire_time = $urlschemeInfo['expire_time']->sec;
