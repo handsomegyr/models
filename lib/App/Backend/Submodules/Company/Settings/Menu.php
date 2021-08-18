@@ -79,9 +79,9 @@ class Menu
         );
         $tree[] = $item;
 
-        // 项目组件管理
+        // 组件管理
         $item = array(
-            'menu_name' => '项目组件管理',
+            'menu_name' => '组件管理',
             'menu_model' => 'company-component',
             'level' => '公司CUT系统管理',
             'icon' => '',
