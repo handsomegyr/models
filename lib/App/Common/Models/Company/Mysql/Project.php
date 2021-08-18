@@ -25,6 +25,7 @@ class Project extends Base
         // $data['online'] = $this->changeToBoolean($data['online']);
         $data['ae'] = $this->changeToArray($data['ae']);
         $data['executives'] = $this->changeToArray($data['executives']);
+        $data['components'] = $this->changeToArray($data['components']);
         return $data;
     }
 }

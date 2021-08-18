@@ -49,6 +49,46 @@ class Menu
         );
         $tree[] = $item;
 
+        // 团队管理
+        $item = array(
+            'menu_name' => '团队管理',
+            'menu_model' => 'company-team',
+            'level' => '公司CUT系统管理',
+            'icon' => '',
+            'model' => '\App\Backend\Submodules\Company\Models\Team'
+        );
+        $tree[] = $item;
+
+        // 团队用户管理
+        $item = array(
+            'menu_name' => '团队用户管理',
+            'menu_model' => 'company-teamuser',
+            'level' => '公司CUT系统管理',
+            'icon' => '',
+            'model' => '\App\Backend\Submodules\Company\Models\TeamUser'
+        );
+        $tree[] = $item;
+
+        // 团队用户工作管理
+        $item = array(
+            'menu_name' => '团队用户工作管理',
+            'menu_model' => 'company-teamuserwork',
+            'level' => '公司CUT系统管理',
+            'icon' => '',
+            'model' => '\App\Backend\Submodules\Company\Models\TeamUserWork'
+        );
+        $tree[] = $item;
+
+        // 项目组件管理
+        $item = array(
+            'menu_name' => '项目组件管理',
+            'menu_model' => 'company-component',
+            'level' => '公司CUT系统管理',
+            'icon' => '',
+            'model' => '\App\Backend\Submodules\Company\Models\Component'
+        );
+        $tree[] = $item;
+
         return $tree;
     }
 }
