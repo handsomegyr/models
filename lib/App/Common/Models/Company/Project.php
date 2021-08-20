@@ -11,4 +11,9 @@ class Project extends Base
     {
         $this->setModel(new \App\Common\Models\Company\Mysql\Project());
     }
+
+    public function getUploadPath()
+    {
+        return trim("company/project", '/');
+    }
 }

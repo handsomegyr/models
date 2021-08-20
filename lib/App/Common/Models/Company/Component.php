@@ -11,4 +11,9 @@ class Component extends Base
     {
         $this->setModel(new \App\Common\Models\Company\Mysql\Component());
     }
+
+    public function getUploadPath()
+    {
+        return trim("company/component", '/');
+    }
 }
