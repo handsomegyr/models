@@ -20,7 +20,7 @@ class CorpTagMark extends Base
         $data = parent::reorganize($data);
         $data['add_tag'] = $this->changeToArray($data['add_tag']);
         $data['remove_tag'] = $this->changeToArray($data['remove_tag']);
-        $data['mark_tag_time'] = $this->changeToMongoDate($data['mark_tag_time']);
+        $data['mark_tag_time'] = $this->changeToValidDate($data['mark_tag_time']);
 
         return $data;
     }

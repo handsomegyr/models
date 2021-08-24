@@ -19,8 +19,8 @@ class User extends Base
     public function reorganize(array $data)
     {
         $data = parent::reorganize($data);
-        $data['log_time'] = $this->changeToMongoDate($data['log_time']);
-        $data['expire'] = $this->changeToMongoDate($data['expire']);
+        $data['log_time'] = $this->changeToValidDate($data['log_time']);
+        $data['expire'] = $this->changeToValidDate($data['expire']);
         $data['lock'] = $this->changeToBoolean($data['lock']);
         return $data;
     }

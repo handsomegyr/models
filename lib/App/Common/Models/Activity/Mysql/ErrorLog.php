@@ -19,7 +19,7 @@ class ErrorLog extends Base
     public function reorganize(array $data)
     {
         $data = parent::reorganize($data);
-        $data['happen_time'] = $this->changeToMongoDate($data['happen_time']);
+        $data['happen_time'] = $this->changeToValidDate($data['happen_time']);
         return $data;
     }
 }

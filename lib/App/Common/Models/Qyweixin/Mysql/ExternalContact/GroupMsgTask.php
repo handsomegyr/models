@@ -18,7 +18,7 @@ class GroupMsgTask extends Base
     public function reorganize(array $data)
     {
         $data = parent::reorganize($data);
-        $data['send_time'] = $this->changeToMongoDate($data['send_time']);
+        $data['send_time'] = $this->changeToValidDate($data['send_time']);
         return $data;
     }
 }

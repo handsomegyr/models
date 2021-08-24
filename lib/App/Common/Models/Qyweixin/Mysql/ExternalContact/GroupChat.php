@@ -19,8 +19,8 @@ class GroupChat extends Base
     {
         $data = parent::reorganize($data);
         $data['member_list'] = $this->changeToArray($data['member_list']);
-        $data['create_time'] = $this->changeToMongoDate($data['create_time']);
-        $data['sync_time'] = $this->changeToMongoDate($data['sync_time']);
+        $data['create_time'] = $this->changeToValidDate($data['create_time']);
+        $data['sync_time'] = $this->changeToValidDate($data['sync_time']);
         return $data;
     }
 }

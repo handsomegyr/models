@@ -19,7 +19,7 @@ class Conditional extends Base
     {
         $data = parent::reorganize($data);
 
-        $data['menu_time'] = $this->changeToMongoDate($data['menu_time']);
+        $data['menu_time'] = $this->changeToValidDate($data['menu_time']);
         return $data;
     }
 }

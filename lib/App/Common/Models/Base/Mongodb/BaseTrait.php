@@ -45,7 +45,7 @@ trait BaseTrait
         }
     }
 
-    protected function changeToMongoDate($field)
+    protected function changeToValidDate($field)
     {
         if (empty($field)) {
             return $field;

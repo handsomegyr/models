@@ -18,8 +18,8 @@ class GroupChatMember extends Base
     public function reorganize(array $data)
     {
         $data = parent::reorganize($data);
-        $data['join_time'] = $this->changeToMongoDate($data['join_time']);
-        $data['sync_time'] = $this->changeToMongoDate($data['sync_time']);
+        $data['join_time'] = $this->changeToValidDate($data['join_time']);
+        $data['sync_time'] = $this->changeToValidDate($data['sync_time']);
         return $data;
     }
 }

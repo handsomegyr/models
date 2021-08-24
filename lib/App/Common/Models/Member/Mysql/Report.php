@@ -18,7 +18,7 @@ class Report extends Base
     public function reorganize(array $data)
     {
         $data = parent::reorganize($data);
-        $data['report_time'] = $this->changeToMongoDate($data['report_time']);
+        $data['report_time'] = $this->changeToValidDate($data['report_time']);
         return $data;
     }
 }

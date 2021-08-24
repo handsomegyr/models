@@ -20,8 +20,8 @@ class ReplyLog extends Base
     {
         $data = parent::reorganize($data);
 
-        $data['reply_time'] = $this->changeToMongoDate($data['reply_time']);
-        $data['delete_reply_time'] = $this->changeToMongoDate($data['delete_reply_time']);
+        $data['reply_time'] = $this->changeToValidDate($data['reply_time']);
+        $data['delete_reply_time'] = $this->changeToValidDate($data['delete_reply_time']);
 
         $data['is_created'] = $this->changeToBoolean($data['is_created']);
         return $data;

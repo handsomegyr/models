@@ -18,8 +18,8 @@ class Unassigned extends Base
     public function reorganize(array $data)
     {
         $data = parent::reorganize($data);
-        $data['dimission_time'] = $this->changeToMongoDate($data['dimission_time']);
-        $data['sync_time'] = $this->changeToMongoDate($data['sync_time']);
+        $data['dimission_time'] = $this->changeToValidDate($data['dimission_time']);
+        $data['sync_time'] = $this->changeToValidDate($data['sync_time']);
         return $data;
     }
 }

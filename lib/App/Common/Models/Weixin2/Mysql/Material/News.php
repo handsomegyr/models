@@ -19,7 +19,7 @@ class News extends Base
     {
         $data = parent::reorganize($data);
 
-        $data['media_time'] = $this->changeToMongoDate($data['media_time']);
+        $data['media_time'] = $this->changeToValidDate($data['media_time']);
 
         $data['show_cover_pic'] = $this->changeToBoolean($data['show_cover_pic']);
         $data['need_open_comment'] = $this->changeToBoolean($data['need_open_comment']);

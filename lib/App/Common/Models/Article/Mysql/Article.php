@@ -18,7 +18,7 @@ class Article extends Base
     public function reorganize(array $data)
     {
         $data = parent::reorganize($data);
-        $data['article_time'] = $this->changeToMongoDate($data['article_time']);
+        $data['article_time'] = $this->changeToValidDate($data['article_time']);
         $data['is_show'] = $this->changeToBoolean($data['is_show']);
         return $data;
     }

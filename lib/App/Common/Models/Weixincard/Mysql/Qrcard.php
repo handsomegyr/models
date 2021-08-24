@@ -21,7 +21,7 @@ class Qrcard extends Base
         $data = parent::reorganize($data);
         $data['is_unique_code'] = $this->changeToBoolean($data['is_unique_code']);
         $data['is_created'] = $this->changeToBoolean($data['is_created']);
-        $data['ticket_time'] = $this->changeToMongoDate($data['ticket_time']);
+        $data['ticket_time'] = $this->changeToValidDate($data['ticket_time']);
         return $data;
     }
 }

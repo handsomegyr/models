@@ -21,7 +21,7 @@ class Task extends Base
         $data = parent::reorganize($data);
         $data['content'] = $this->changeToArray($data['content']);
         $data['is_done'] = $this->changeToBoolean($data['is_done']);
-        $data['do_time'] = $this->changeToMongoDate($data['do_time']);
+        $data['do_time'] = $this->changeToValidDate($data['do_time']);
         return $data;
     }
 }

@@ -19,8 +19,8 @@ class Invitation extends Base
     public function reorganize(array $data)
     {
         $data = parent::reorganize($data);
-        $data['send_time'] = $this->changeToMongoDate($data['send_time']);
-        $data['expire'] = $this->changeToMongoDate($data['expire']);
+        $data['send_time'] = $this->changeToValidDate($data['send_time']);
+        $data['expire'] = $this->changeToValidDate($data['expire']);
         $data['lock'] = $this->changeToBoolean($data['lock']);
         $data['is_need_subscribed'] = $this->changeToBoolean($data['is_need_subscribed']);
         return $data;

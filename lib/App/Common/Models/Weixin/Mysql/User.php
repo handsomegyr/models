@@ -20,7 +20,7 @@ class User extends Base
     {
         $data = parent::reorganize($data);
 
-        $data['subscribe_time'] = $this->changeToMongoDate($data['subscribe_time']);
+        $data['subscribe_time'] = $this->changeToValidDate($data['subscribe_time']);
         $data['subscribe'] = $this->changeToBoolean($data['subscribe']);
         $data['privilege'] = $this->changeToArray($data['privilege']);
         $data['access_token'] = $this->changeToArray($data['access_token']);

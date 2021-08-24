@@ -20,7 +20,7 @@ class UpstreamMsgMonth extends Base
     {
         $data = parent::reorganize($data);
 
-        $data['ref_date'] = $this->changeToMongoDate($data['ref_date']);
+        $data['ref_date'] = $this->changeToValidDate($data['ref_date']);
         return $data;
     }
 }

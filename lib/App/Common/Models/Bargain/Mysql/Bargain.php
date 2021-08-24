@@ -19,15 +19,15 @@ class Bargain extends Base
     public function reorganize(array $data)
     {
         $data = parent::reorganize($data);
-        $data['launch_time'] = $this->changeToMongoDate($data['launch_time']);
-        $data['start_time'] = $this->changeToMongoDate($data['start_time']);
-        $data['end_time'] = $this->changeToMongoDate($data['end_time']);
+        $data['launch_time'] = $this->changeToValidDate($data['launch_time']);
+        $data['start_time'] = $this->changeToValidDate($data['start_time']);
+        $data['end_time'] = $this->changeToValidDate($data['end_time']);
         $data['is_closed'] = $this->changeToBoolean($data['is_closed']);
         $data['is_both_bargain'] = $this->changeToBoolean($data['is_both_bargain']);
         $data['is_bargain_to_minworth'] = $this->changeToBoolean($data['is_bargain_to_minworth']);
-        $data['bargain_to_minworth_time'] = $this->changeToMongoDate($data['bargain_to_minworth_time']);
-        $data['bargain_time'] = $this->changeToMongoDate($data['bargain_time']);
-        $data['close_time'] = $this->changeToMongoDate($data['close_time']);
+        $data['bargain_to_minworth_time'] = $this->changeToValidDate($data['bargain_to_minworth_time']);
+        $data['bargain_time'] = $this->changeToValidDate($data['bargain_time']);
+        $data['close_time'] = $this->changeToValidDate($data['close_time']);
 
         return $data;
     }

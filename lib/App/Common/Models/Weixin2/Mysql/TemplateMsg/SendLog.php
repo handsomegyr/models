@@ -20,7 +20,7 @@ class SendLog extends Base
         $data = parent::reorganize($data);        
         $data['template_msg_content'] = $this->changeToArray($data['template_msg_content']);
         $data['data'] = $this->changeToArray($data['data']);
-        $data['log_time'] = $this->changeToMongoDate($data['log_time']);
+        $data['log_time'] = $this->changeToValidDate($data['log_time']);
         return $data;
     }
 }

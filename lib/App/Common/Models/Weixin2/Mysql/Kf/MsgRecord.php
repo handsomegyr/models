@@ -19,7 +19,7 @@ class MsgRecord extends Base
     {
         $data = parent::reorganize($data);
 
-        $data['msgrecord_time'] = $this->changeToMongoDate($data['msgrecord_time']);
+        $data['msgrecord_time'] = $this->changeToValidDate($data['msgrecord_time']);
         return $data;
     }
 }

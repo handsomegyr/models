@@ -18,7 +18,7 @@ class News extends Base
     public function reorganize(array $data)
     {
         $data = parent::reorganize($data);
-        $data['news_time'] = $this->changeToMongoDate($data['news_time']);
+        $data['news_time'] = $this->changeToValidDate($data['news_time']);
         return $data;
     }
 }

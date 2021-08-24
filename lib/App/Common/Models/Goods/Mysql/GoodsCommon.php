@@ -28,8 +28,8 @@ class GoodsCommon extends Base
         $data['is_own_shop'] = $this->changeToBoolean($data['is_own_shop']);
         $data['is_hot'] = $this->changeToBoolean($data['is_hot']);
         $data['is_new'] = $this->changeToBoolean($data['is_new']);
-        $data['addtime'] = $this->changeToMongoDate($data['addtime']);
-        $data['selltime'] = $this->changeToMongoDate($data['selltime']);
+        $data['addtime'] = $this->changeToValidDate($data['addtime']);
+        $data['selltime'] = $this->changeToValidDate($data['selltime']);
         
         return $data;
     }

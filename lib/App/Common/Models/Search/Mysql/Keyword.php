@@ -19,7 +19,7 @@ class Keyword extends Base
     public function reorganize(array $data)
     {
         $data = parent::reorganize($data);
-        $data['search_time'] = $this->changeToMongoDate($data['search_time']);
+        $data['search_time'] = $this->changeToValidDate($data['search_time']);
         return $data;
     }
 }

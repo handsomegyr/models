@@ -19,8 +19,8 @@ class Ad extends Base
     {
         $data = parent::reorganize($data);
         $data['is_show'] = $this->changeToBoolean($data['is_show']);
-        $data['start_time'] = $this->changeToMongoDate($data['start_time']);
-        $data['end_time'] = $this->changeToMongoDate($data['end_time']);
+        $data['start_time'] = $this->changeToValidDate($data['start_time']);
+        $data['end_time'] = $this->changeToValidDate($data['end_time']);
         return $data;
     }
 }

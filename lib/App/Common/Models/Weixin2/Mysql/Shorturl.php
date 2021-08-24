@@ -19,7 +19,7 @@ class Shorturl extends Base
     {
         $data = parent::reorganize($data);
 
-        $data['short_url_time'] = $this->changeToMongoDate($data['short_url_time']);
+        $data['short_url_time'] = $this->changeToValidDate($data['short_url_time']);
 
         $data['is_created'] = $this->changeToBoolean($data['is_created']);
         return $data;

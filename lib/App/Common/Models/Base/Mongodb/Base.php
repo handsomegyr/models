@@ -94,10 +94,10 @@ class Base implements \App\Common\Models\Base\IBase
             $data['_id'] = $this->getMongoId4Query($data['_id']);
         }
         if (isset($data['__CREATE_TIME__'])) {
-            $data['__CREATE_TIME__'] = $this->changeToMongoDate($data['__CREATE_TIME__']);
+            $data['__CREATE_TIME__'] = $this->changeToValidDate($data['__CREATE_TIME__']);
         }
         if (isset($data['__MODIFY_TIME__'])) {
-            $data['__MODIFY_TIME__'] = $this->changeToMongoDate($data['__MODIFY_TIME__']);
+            $data['__MODIFY_TIME__'] = $this->changeToValidDate($data['__MODIFY_TIME__']);
         }
         if (isset($data['__REMOVED__'])) {
             $data['__REMOVED__'] = $this->changeToBoolean($data['__REMOVED__']);

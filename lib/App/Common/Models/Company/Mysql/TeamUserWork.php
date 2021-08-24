@@ -19,9 +19,9 @@ class TeamUserWork extends Base
     public function reorganize(array $data)
     {
         $data = parent::reorganize($data);
-        $data['schedule_start_time'] = $this->changeToMongoDate($data['schedule_start_time']);
-        $data['schedule_end_time'] = $this->changeToMongoDate($data['schedule_end_time']);
-        $data['work_complete_time'] = $this->changeToMongoDate($data['work_complete_time']);
+        $data['schedule_start_time'] = $this->changeToValidDate($data['schedule_start_time']);
+        $data['schedule_end_time'] = $this->changeToValidDate($data['schedule_end_time']);
+        $data['work_complete_time'] = $this->changeToValidDate($data['work_complete_time']);
         return $data;
     }
 }

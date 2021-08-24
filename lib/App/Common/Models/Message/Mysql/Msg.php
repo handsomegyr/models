@@ -18,7 +18,7 @@ class Msg extends Base
     public function reorganize(array $data)
     {
         $data = parent::reorganize($data);
-        $data['msg_time'] = $this->changeToMongoDate($data['msg_time']);
+        $data['msg_time'] = $this->changeToValidDate($data['msg_time']);
         return $data;
     }
 }

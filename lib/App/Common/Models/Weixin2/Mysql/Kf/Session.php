@@ -19,7 +19,7 @@ class Session extends Base
     {
         $data = parent::reorganize($data);
 
-        $data['kfsession_time'] = $this->changeToMongoDate($data['kfsession_time']);
+        $data['kfsession_time'] = $this->changeToValidDate($data['kfsession_time']);
         $data['is_created'] = $this->changeToBoolean($data['is_created']);
         return $data;
     }

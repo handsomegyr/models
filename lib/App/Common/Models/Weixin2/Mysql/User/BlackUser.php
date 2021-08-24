@@ -19,8 +19,8 @@ class BlackUser extends Base
     {
         $data = parent::reorganize($data);
 
-        $data['black_time'] = $this->changeToMongoDate($data['black_time']);
-        $data['unblack_time'] = $this->changeToMongoDate($data['unblack_time']);
+        $data['black_time'] = $this->changeToValidDate($data['black_time']);
+        $data['unblack_time'] = $this->changeToValidDate($data['unblack_time']);
 
         $data['is_black'] = $this->changeToBoolean($data['is_black']);
         return $data;

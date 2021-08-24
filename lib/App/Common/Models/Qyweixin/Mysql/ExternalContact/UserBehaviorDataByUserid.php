@@ -18,10 +18,10 @@ class UserBehaviorDataByUserid extends Base
     public function reorganize(array $data)
     {
         $data = parent::reorganize($data);
-        $data['start_time'] = $this->changeToMongoDate($data['start_time']);
-        $data['end_time'] = $this->changeToMongoDate($data['end_time']);
-        $data['stat_time'] = $this->changeToMongoDate($data['stat_time']);
-        $data['get_time'] = $this->changeToMongoDate($data['get_time']);
+        $data['start_time'] = $this->changeToValidDate($data['start_time']);
+        $data['end_time'] = $this->changeToValidDate($data['end_time']);
+        $data['stat_time'] = $this->changeToValidDate($data['stat_time']);
+        $data['get_time'] = $this->changeToValidDate($data['get_time']);
         return $data;
     }
 }

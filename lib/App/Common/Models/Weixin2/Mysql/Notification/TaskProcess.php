@@ -19,7 +19,7 @@ class TaskProcess extends Base
     {
         $data = parent::reorganize($data);
 
-        $data['push_time'] = $this->changeToMongoDate($data['push_time']);
+        $data['push_time'] = $this->changeToValidDate($data['push_time']);
         return $data;
     }
 }

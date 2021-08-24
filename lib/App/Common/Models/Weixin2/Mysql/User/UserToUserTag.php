@@ -20,8 +20,8 @@ class UserToUserTag extends Base
     {
         $data = parent::reorganize($data);
 
-        $data['tag_time'] = $this->changeToMongoDate($data['tag_time']);
-        $data['untag_time'] = $this->changeToMongoDate($data['untag_time']);
+        $data['tag_time'] = $this->changeToValidDate($data['tag_time']);
+        $data['untag_time'] = $this->changeToValidDate($data['untag_time']);
 
         $data['is_tag'] = $this->changeToBoolean($data['is_tag']);
         return $data;

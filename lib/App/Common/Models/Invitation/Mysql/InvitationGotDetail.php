@@ -19,7 +19,7 @@ class InvitationGotDetail extends Base
     public function reorganize(array $data)
     {
         $data = parent::reorganize($data);
-        $data['got_time'] = $this->changeToMongoDate($data['got_time']);
+        $data['got_time'] = $this->changeToValidDate($data['got_time']);
         return $data;
     }
 }

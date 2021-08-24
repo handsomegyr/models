@@ -19,7 +19,7 @@ class Urllink extends Base
     {
         $data = parent::reorganize($data);
 
-        $data['expire_time'] = $this->changeToMongoDate($data['expire_time']);
+        $data['expire_time'] = $this->changeToValidDate($data['expire_time']);
 
         return $data;
     }

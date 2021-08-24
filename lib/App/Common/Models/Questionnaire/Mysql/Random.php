@@ -19,7 +19,7 @@ class Random extends Base
     public function reorganize(array $data)
     {
         $data = parent::reorganize($data);
-        $data['finish_time'] = $this->changeToMongoDate($data['finish_time']);
+        $data['finish_time'] = $this->changeToValidDate($data['finish_time']);
         $data['is_finish'] = $this->changeToBoolean($data['is_finish']);
         $data['question_ids'] = $this->changeToArray($data['question_ids']);
         return $data;

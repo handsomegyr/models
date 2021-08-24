@@ -27,7 +27,7 @@ class SendLog extends Base
         $data['enable_duplicate_check'] = $this->changeToBoolean($data['enable_duplicate_check']);
 
         $data['agent_msg_content'] = $this->changeToArray($data['agent_msg_content']);
-        $data['log_time'] = $this->changeToMongoDate($data['log_time']);
+        $data['log_time'] = $this->changeToValidDate($data['log_time']);
         return $data;
     }
 }

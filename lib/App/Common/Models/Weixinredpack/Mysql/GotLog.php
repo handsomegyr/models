@@ -19,7 +19,7 @@ class GotLog extends Base
     {
         $data = parent::reorganize($data);
         $data['isOK'] = $this->changeToBoolean($data['isOK']);
-        $data['got_time'] = $this->changeToMongoDate($data['got_time']);
+        $data['got_time'] = $this->changeToValidDate($data['got_time']);
         $data['error_logs'] = $this->changeToArray($data['error_logs']);
         
         return $data;

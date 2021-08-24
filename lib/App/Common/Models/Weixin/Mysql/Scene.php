@@ -21,7 +21,7 @@ class Scene extends Base
         
         $data['is_temporary'] = $this->changeToBoolean($data['is_temporary']);
         $data['is_created'] = $this->changeToBoolean($data['is_created']);
-        $data['ticket_time'] = $this->changeToMongoDate($data['ticket_time']);
+        $data['ticket_time'] = $this->changeToValidDate($data['ticket_time']);
         
         return $data;
     }

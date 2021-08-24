@@ -20,7 +20,7 @@ class ExternalUser extends Base
         $data = parent::reorganize($data);
         $data['external_profile'] = $this->changeToArray($data['external_profile']);
         $data['follow_user'] = $this->changeToArray($data['follow_user']);
-        $data['get_time'] = $this->changeToMongoDate($data['get_time']);
+        $data['get_time'] = $this->changeToValidDate($data['get_time']);
 
         return $data;
     }

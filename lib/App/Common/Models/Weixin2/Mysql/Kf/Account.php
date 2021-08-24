@@ -19,8 +19,8 @@ class Account extends Base
     {
         $data = parent::reorganize($data);
 
-        $data['kf_time'] = $this->changeToMongoDate($data['kf_time']);
-        $data['invite_expire_time'] = $this->changeToMongoDate($data['invite_expire_time']);
+        $data['kf_time'] = $this->changeToValidDate($data['kf_time']);
+        $data['invite_expire_time'] = $this->changeToValidDate($data['invite_expire_time']);
         $data['is_created'] = $this->changeToBoolean($data['is_created']);
         return $data;
     }

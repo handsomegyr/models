@@ -19,7 +19,7 @@ class Maxseq extends Base
     {
         $data = parent::reorganize($data);
 
-        $data['max_seq_got_time'] = $this->changeToMongoDate($data['max_seq_got_time']);
+        $data['max_seq_got_time'] = $this->changeToValidDate($data['max_seq_got_time']);
         return $data;
     }
 }

@@ -18,7 +18,7 @@ class FollowUser extends Base
     public function reorganize(array $data)
     {
         $data = parent::reorganize($data);
-        $data['get_time'] = $this->changeToMongoDate($data['get_time']);
+        $data['get_time'] = $this->changeToValidDate($data['get_time']);
         return $data;
     }
 }

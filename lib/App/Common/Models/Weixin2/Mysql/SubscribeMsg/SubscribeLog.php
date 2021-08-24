@@ -19,8 +19,8 @@ class SubscribeLog extends Base
     {
         $data = parent::reorganize($data);
 
-        $data['subscribe_time'] = $this->changeToMongoDate($data['subscribe_time']);
-        $data['used_time'] = $this->changeToMongoDate($data['used_time']);
+        $data['subscribe_time'] = $this->changeToValidDate($data['subscribe_time']);
+        $data['used_time'] = $this->changeToValidDate($data['used_time']);
 
         $data['is_used'] = $this->changeToBoolean($data['is_used']);
         return $data;

@@ -18,7 +18,7 @@ class GroupChatTransfer extends Base
     public function reorganize(array $data)
     {
         $data = parent::reorganize($data);
-        $data['transfer_time'] = $this->changeToMongoDate($data['transfer_time']);
+        $data['transfer_time'] = $this->changeToValidDate($data['transfer_time']);
         return $data;
     }
 }

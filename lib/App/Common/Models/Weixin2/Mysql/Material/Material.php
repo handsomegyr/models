@@ -19,8 +19,8 @@ class Material extends Base
     {
         $data = parent::reorganize($data);
 
-        $data['media_time'] = $this->changeToMongoDate($data['media_time']);
-        $data['delete_media_time'] = $this->changeToMongoDate($data['delete_media_time']);
+        $data['media_time'] = $this->changeToValidDate($data['media_time']);
+        $data['delete_media_time'] = $this->changeToValidDate($data['delete_media_time']);
         return $data;
     }
 }

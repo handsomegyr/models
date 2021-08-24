@@ -24,7 +24,7 @@ class SendLog extends Base
         $data['toall'] = $this->changeToBoolean($data['toall']);
         $data['safe'] = $this->changeToBoolean($data['safe']);
         $data['linkedcorp_msg_content'] = $this->changeToArray($data['linkedcorp_msg_content']);
-        $data['log_time'] = $this->changeToMongoDate($data['log_time']);
+        $data['log_time'] = $this->changeToValidDate($data['log_time']);
         return $data;
     }
 }

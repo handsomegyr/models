@@ -18,9 +18,9 @@ class WelcomeMsg extends Base
     public function reorganize(array $data)
     {
         $data = parent::reorganize($data);
-        $data['image_media_created_at'] = $this->changeToMongoDate($data['image_media_created_at']);
-        $data['miniprogram_pic_media_created_at'] = $this->changeToMongoDate($data['miniprogram_pic_media_created_at']);
-        $data['send_time'] = $this->changeToMongoDate($data['send_time']);
+        $data['image_media_created_at'] = $this->changeToValidDate($data['image_media_created_at']);
+        $data['miniprogram_pic_media_created_at'] = $this->changeToValidDate($data['miniprogram_pic_media_created_at']);
+        $data['send_time'] = $this->changeToValidDate($data['send_time']);
         return $data;
     }
 }

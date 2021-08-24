@@ -20,7 +20,7 @@ class Answer extends Base
     {
         $data = parent::reorganize($data);
         $data['answer_list'] = $this->changeToArray($data['answer_list']);
-        $data['answer_time'] = $this->changeToMongoDate($data['answer_time']);
+        $data['answer_time'] = $this->changeToValidDate($data['answer_time']);
         return $data;
     }
 }

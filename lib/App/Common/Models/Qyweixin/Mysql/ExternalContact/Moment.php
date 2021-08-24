@@ -18,7 +18,7 @@ class Moment extends Base
     public function reorganize(array $data)
     {
         $data = parent::reorganize($data);
-        $data['create_time'] = $this->changeToMongoDate($data['create_time']);
+        $data['create_time'] = $this->changeToValidDate($data['create_time']);
         return $data;
     }
 }

@@ -18,8 +18,8 @@ class Friend extends Base
     public function reorganize(array $data)
     {
         $data = parent::reorganize($data);
-        $data['apply_time'] = $this->changeToMongoDate($data['apply_time']);
-        $data['agree_time'] = $this->changeToMongoDate($data['agree_time']);
+        $data['apply_time'] = $this->changeToValidDate($data['apply_time']);
+        $data['agree_time'] = $this->changeToValidDate($data['agree_time']);
         return $data;
     }
 }

@@ -21,9 +21,9 @@ class CorpTag extends Base
         $data['tag_deleted'] = $this->changeToBoolean($data['tag_deleted']);
         $data['tag_group_deleted'] = $this->changeToBoolean($data['tag_group_deleted']);
 
-        $data['tag_create_time'] = $this->changeToMongoDate($data['tag_create_time']);
-        $data['tag_group_create_time'] = $this->changeToMongoDate($data['tag_group_create_time']);
-        $data['get_time'] = $this->changeToMongoDate($data['get_time']);
+        $data['tag_create_time'] = $this->changeToValidDate($data['tag_create_time']);
+        $data['tag_group_create_time'] = $this->changeToValidDate($data['tag_group_create_time']);
+        $data['get_time'] = $this->changeToValidDate($data['get_time']);
         return $data;
     }
 }

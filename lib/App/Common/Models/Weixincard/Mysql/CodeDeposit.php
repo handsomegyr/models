@@ -21,8 +21,8 @@ class CodeDeposit extends Base
         $data = parent::reorganize($data);
         $data['is_deposited'] = $this->changeToBoolean($data['is_deposited']);
         $data['is_consumed'] = $this->changeToBoolean($data['is_consumed']);
-        $data['start_time'] = $this->changeToMongoDate($data['start_time']);
-        $data['end_time'] = $this->changeToMongoDate($data['end_time']);
+        $data['start_time'] = $this->changeToValidDate($data['start_time']);
+        $data['end_time'] = $this->changeToValidDate($data['end_time']);
         return $data;
     }
 }

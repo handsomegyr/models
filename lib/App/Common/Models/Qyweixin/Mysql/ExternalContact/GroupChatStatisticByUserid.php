@@ -19,8 +19,8 @@ class GroupChatStatisticByUserid extends Base
     {
         $data = parent::reorganize($data);
         $data['order_asc'] = $this->changeToBoolean($data['order_asc']);
-        $data['day_begin_time'] = $this->changeToMongoDate($data['day_begin_time']);
-        $data['get_time'] = $this->changeToMongoDate($data['get_time']);
+        $data['day_begin_time'] = $this->changeToValidDate($data['day_begin_time']);
+        $data['get_time'] = $this->changeToValidDate($data['get_time']);
         return $data;
     }
 }

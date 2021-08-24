@@ -18,8 +18,8 @@ class SendLog extends Base
     {
         $data = parent::reorganize($data);
 
-        $data['log_time'] = $this->changeToMongoDate($data['log_time']);
-        $data['msg_time'] = $this->changeToMongoDate($data['msg_time']);
+        $data['log_time'] = $this->changeToValidDate($data['log_time']);
+        $data['msg_time'] = $this->changeToValidDate($data['msg_time']);
 
         $data['send_ignore_reprint'] = $this->changeToBoolean($data['send_ignore_reprint']);
         $data['is_to_all'] = $this->changeToBoolean($data['is_to_all']);

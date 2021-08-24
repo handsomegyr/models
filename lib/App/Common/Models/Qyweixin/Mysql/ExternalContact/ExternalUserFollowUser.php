@@ -20,8 +20,8 @@ class ExternalUserFollowUser extends Base
         $data = parent::reorganize($data);
         $data['tags'] = $this->changeToArray($data['tags']);
         $data['remark_mobiles'] = $this->changeToArray($data['remark_mobiles']);
-        $data['createtime'] = $this->changeToMongoDate($data['createtime']);
-        $data['get_time'] = $this->changeToMongoDate($data['get_time']);
+        $data['createtime'] = $this->changeToValidDate($data['createtime']);
+        $data['get_time'] = $this->changeToValidDate($data['get_time']);
 
         return $data;
     }

@@ -19,8 +19,8 @@ class Task extends Base
     {
         $data = parent::reorganize($data);
 
-        $data['scheduled_push_time'] = $this->changeToMongoDate($data['scheduled_push_time']);
-        $data['push_time'] = $this->changeToMongoDate($data['push_time']);
+        $data['scheduled_push_time'] = $this->changeToValidDate($data['scheduled_push_time']);
+        $data['push_time'] = $this->changeToValidDate($data['push_time']);
         return $data;
     }
 

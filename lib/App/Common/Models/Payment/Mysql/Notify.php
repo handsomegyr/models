@@ -19,7 +19,7 @@ class Notify extends Base
     public function reorganize(array $data)
     {
         $data = parent::reorganize($data);
-        $data['notify_time'] = $this->changeToMongoDate($data['notify_time']);
+        $data['notify_time'] = $this->changeToValidDate($data['notify_time']);
         return $data;
     }
 }

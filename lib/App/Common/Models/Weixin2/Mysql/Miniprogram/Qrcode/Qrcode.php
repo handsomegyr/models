@@ -20,7 +20,7 @@ class Qrcode extends Base
     {
         $data = parent::reorganize($data);
 
-        $data['qrcode_time'] = $this->changeToMongoDate($data['qrcode_time']);
+        $data['qrcode_time'] = $this->changeToValidDate($data['qrcode_time']);
         $data['line_color'] = $this->changeToArray($data['line_color']);
         $data['auto_color'] = $this->changeToBoolean($data['auto_color']);
         $data['is_hyaline'] = $this->changeToBoolean($data['is_hyaline']);

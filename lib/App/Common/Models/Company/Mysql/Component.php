@@ -19,7 +19,7 @@ class Component extends Base
     public function reorganize(array $data)
     {
         $data = parent::reorganize($data);
-        $data['publish_time'] = $this->changeToMongoDate($data['publish_time']);
+        $data['publish_time'] = $this->changeToValidDate($data['publish_time']);
         $data['is_publish'] = $this->changeToBoolean($data['is_publish']);
         return $data;
     }

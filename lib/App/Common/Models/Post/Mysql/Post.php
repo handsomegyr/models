@@ -18,9 +18,9 @@ class Post extends Base
     public function reorganize(array $data)
     {
         $data = parent::reorganize($data);
-        $data['post_time'] = $this->changeToMongoDate($data['post_time']);
+        $data['post_time'] = $this->changeToValidDate($data['post_time']);
         $data['goods_info'] = $this->changeToArray($data['goods_info']);
-        $data['verify_time'] = $this->changeToMongoDate($data['verify_time']);
+        $data['verify_time'] = $this->changeToValidDate($data['verify_time']);
         
         return $data;
     }

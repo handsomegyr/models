@@ -19,11 +19,11 @@ class Authorizer extends Base
     {
         $data = parent::reorganize($data);
 
-        $data['access_token_expire'] = $this->changeToMongoDate($data['access_token_expire']);
-        $data['jsapi_ticket_expire'] = $this->changeToMongoDate($data['jsapi_ticket_expire']);
-        $data['wx_card_api_ticket_expire'] = $this->changeToMongoDate($data['wx_card_api_ticket_expire']);
+        $data['access_token_expire'] = $this->changeToValidDate($data['access_token_expire']);
+        $data['jsapi_ticket_expire'] = $this->changeToValidDate($data['jsapi_ticket_expire']);
+        $data['wx_card_api_ticket_expire'] = $this->changeToValidDate($data['wx_card_api_ticket_expire']);
 
-        $data['suite_access_token_expire'] = $this->changeToMongoDate($data['suite_access_token_expire']);
+        $data['suite_access_token_expire'] = $this->changeToValidDate($data['suite_access_token_expire']);
 
         return $data;
     }

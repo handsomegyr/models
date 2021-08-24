@@ -17,7 +17,7 @@ class Log extends Base
     public function reorganize(array $data)
     {
         $data = parent::reorganize($data);
-        $data['sign_time'] = $this->changeToMongoDate($data['sign_time']);
+        $data['sign_time'] = $this->changeToValidDate($data['sign_time']);
         return $data;
     }
 }

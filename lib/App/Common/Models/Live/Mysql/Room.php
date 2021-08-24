@@ -19,12 +19,12 @@ class Room extends Base
     {
         $data = parent::reorganize($data);
         $data['is_opened'] = $this->changeToBoolean($data['is_opened']);
-        $data['start_time'] = $this->changeToMongoDate($data['start_time']);
-        $data['end_time'] = $this->changeToMongoDate($data['end_time']);
+        $data['start_time'] = $this->changeToValidDate($data['start_time']);
+        $data['end_time'] = $this->changeToValidDate($data['end_time']);
         $data['is_test'] = $this->changeToBoolean($data['is_test']);
         $data['is_direct'] = $this->changeToBoolean($data['is_direct']);
-        $data['live_start_time'] = $this->changeToMongoDate($data['live_start_time']);
-        $data['live_end_time'] = $this->changeToMongoDate($data['live_end_time']);
+        $data['live_start_time'] = $this->changeToValidDate($data['live_start_time']);
+        $data['live_end_time'] = $this->changeToValidDate($data['live_end_time']);
         $data['live_is_closed'] = $this->changeToBoolean($data['live_is_closed']);
         $data['live_is_paused'] = $this->changeToBoolean($data['live_is_paused']);
         $data['live_is_replay'] = $this->changeToBoolean($data['live_is_replay']);

@@ -19,7 +19,7 @@ class Success extends Base
     public function reorganize(array $data)
     {
         $data = parent::reorganize($data);
-        $data['exchange_time'] = $this->changeToMongoDate($data['exchange_time']);
+        $data['exchange_time'] = $this->changeToValidDate($data['exchange_time']);
         return $data;
     }
 }

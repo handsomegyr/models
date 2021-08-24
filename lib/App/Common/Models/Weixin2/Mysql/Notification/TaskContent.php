@@ -20,7 +20,7 @@ class TaskContent extends Base
         $data = parent::reorganize($data);
 
         $data['openids'] = $this->changeToArray($data['openids']);
-        $data['push_time'] = $this->changeToMongoDate($data['push_time']);
+        $data['push_time'] = $this->changeToValidDate($data['push_time']);
         return $data;
     }
 }

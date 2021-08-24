@@ -21,8 +21,8 @@ class Log extends Base
         $data['aes_info'] = $this->changeToArray($data['aes_info']);
         $data['request_params'] = $this->changeToArray($data['request_params']);
 
-        $data['request_time'] = $this->changeToMongoDate($data['request_time']);
-        $data['response_time'] = $this->changeToMongoDate($data['response_time']);
+        $data['request_time'] = $this->changeToValidDate($data['request_time']);
+        $data['response_time'] = $this->changeToValidDate($data['response_time']);
 
         $data['IsGiveByFriend'] = $this->changeToBoolean($data['IsGiveByFriend']);
         $data['IsRestoreMemberCard'] = $this->changeToBoolean($data['IsRestoreMemberCard']);

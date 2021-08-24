@@ -19,10 +19,10 @@ class MsgTemplateSendLog extends Base
     {
         $data = parent::reorganize($data);
         $data['check_status'] = $this->changeToBoolean($data['check_status']);
-        $data['image_media_created_at'] = $this->changeToMongoDate($data['image_media_created_at']);
-        $data['miniprogram_pic_media_created_at'] = $this->changeToMongoDate($data['miniprogram_pic_media_created_at']);
-        $data['send_time'] = $this->changeToMongoDate($data['send_time']);
-        $data['get_result_time'] = $this->changeToMongoDate($data['get_result_time']);
+        $data['image_media_created_at'] = $this->changeToValidDate($data['image_media_created_at']);
+        $data['miniprogram_pic_media_created_at'] = $this->changeToValidDate($data['miniprogram_pic_media_created_at']);
+        $data['send_time'] = $this->changeToValidDate($data['send_time']);
+        $data['get_result_time'] = $this->changeToValidDate($data['get_result_time']);
 
         $data['fail_list'] = $this->changeToArray($data['fail_list']);
         $data['detail_list'] = $this->changeToArray($data['detail_list']);

@@ -25,16 +25,16 @@ class CardBag extends Base
         $data['IsRecommendByFriend'] = $this->changeToBoolean($data['IsRecommendByFriend']);
 
         $data['is_got'] = $this->changeToBoolean($data['is_got']);
-        $data['got_time'] = $this->changeToMongoDate($data['got_time']);
+        $data['got_time'] = $this->changeToValidDate($data['got_time']);
         $data['is_consumed'] = $this->changeToBoolean($data['is_consumed']);
-        $data['consume_time'] = $this->changeToMongoDate($data['consume_time']);
+        $data['consume_time'] = $this->changeToValidDate($data['consume_time']);
         $data['is_deleted'] = $this->changeToBoolean($data['is_deleted']);
-        $data['delete_time'] = $this->changeToMongoDate($data['delete_time']);
+        $data['delete_time'] = $this->changeToValidDate($data['delete_time']);
         $data['is_unavailable'] = $this->changeToBoolean($data['is_unavailable']);
-        $data['unavailable_time'] = $this->changeToMongoDate($data['unavailable_time']);
+        $data['unavailable_time'] = $this->changeToValidDate($data['unavailable_time']);
 
         $data['is_give_to_friend'] = $this->changeToBoolean($data['is_give_to_friend']);
-        $data['give_to_friend_time'] = $this->changeToMongoDate($data['give_to_friend_time']);
+        $data['give_to_friend_time'] = $this->changeToValidDate($data['give_to_friend_time']);
 
         return $data;
     }

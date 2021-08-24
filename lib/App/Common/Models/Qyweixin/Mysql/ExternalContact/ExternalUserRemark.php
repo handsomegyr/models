@@ -19,8 +19,8 @@ class ExternalUserRemark extends Base
     {
         $data = parent::reorganize($data);
         $data['remark_mobiles'] = $this->changeToArray($data['remark_mobiles']);
-        $data['remark_pic_media_created_at'] = $this->changeToMongoDate($data['remark_pic_media_created_at']);
-        $data['update_remark_time'] = $this->changeToMongoDate($data['update_remark_time']);
+        $data['remark_pic_media_created_at'] = $this->changeToValidDate($data['remark_pic_media_created_at']);
+        $data['update_remark_time'] = $this->changeToValidDate($data['update_remark_time']);
 
         return $data;
     }

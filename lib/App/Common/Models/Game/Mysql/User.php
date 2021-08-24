@@ -20,7 +20,7 @@ class User extends Base
     {
         $data = parent::reorganize($data);
 
-        $data['max_score_time'] = $this->changeToMongoDate($data['max_score_time']);
+        $data['max_score_time'] = $this->changeToValidDate($data['max_score_time']);
 
         return $data;
     }

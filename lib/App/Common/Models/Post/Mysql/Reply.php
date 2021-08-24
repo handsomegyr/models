@@ -18,7 +18,7 @@ class Reply extends Base
     public function reorganize(array $data)
     {
         $data = parent::reorganize($data);
-        $data['reply_time'] = $this->changeToMongoDate($data['reply_time']);
+        $data['reply_time'] = $this->changeToValidDate($data['reply_time']);
         return $data;
     }
 }

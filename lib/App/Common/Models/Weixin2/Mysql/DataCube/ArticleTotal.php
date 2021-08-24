@@ -22,8 +22,8 @@ class ArticleTotal extends Base
     {
         $data = parent::reorganize($data);
 
-        $data['ref_date'] = $this->changeToMongoDate($data['ref_date']);
-        $data['stat_date'] = $this->changeToMongoDate($data['stat_date']);
+        $data['ref_date'] = $this->changeToValidDate($data['ref_date']);
+        $data['stat_date'] = $this->changeToValidDate($data['stat_date']);
         return $data;
     }
 }

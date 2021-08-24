@@ -19,7 +19,7 @@ class User extends Base
     public function reorganize(array $data)
     {
         $data = parent::reorganize($data);
-        $data['point_time'] = $this->changeToMongoDate($data['point_time']);
+        $data['point_time'] = $this->changeToValidDate($data['point_time']);
         return $data;
     }
 }

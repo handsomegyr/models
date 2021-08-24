@@ -20,7 +20,7 @@ class Event extends Base
     {
         $data = parent::reorganize($data);
         $data['IsGiveByFriend'] = $this->changeToBoolean($data['IsGiveByFriend']);
-        $data['CreateTime'] = $this->changeToMongoDate($data['CreateTime']);
+        $data['CreateTime'] = $this->changeToValidDate($data['CreateTime']);
         return $data;
     }
 }

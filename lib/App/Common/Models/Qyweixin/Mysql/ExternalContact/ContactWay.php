@@ -21,9 +21,9 @@ class ContactWay extends Base
         $data['skip_verify'] = $this->changeToBoolean($data['skip_verify']);
         $data['is_temp'] = $this->changeToBoolean($data['is_temp']);
 
-        $data['conclusions_image_media_created_at'] = $this->changeToMongoDate($data['conclusions_image_media_created_at']);
-        $data['conclusions_miniprogram_pic_media_created_at'] = $this->changeToMongoDate($data['conclusions_miniprogram_pic_media_created_at']);
-        $data['sync_time'] = $this->changeToMongoDate($data['sync_time']);
+        $data['conclusions_image_media_created_at'] = $this->changeToValidDate($data['conclusions_image_media_created_at']);
+        $data['conclusions_miniprogram_pic_media_created_at'] = $this->changeToValidDate($data['conclusions_miniprogram_pic_media_created_at']);
+        $data['sync_time'] = $this->changeToValidDate($data['sync_time']);
 
         return $data;
     }

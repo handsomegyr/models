@@ -18,9 +18,9 @@ class Member extends Base
     public function reorganize(array $data)
     {
         $data = parent::reorganize($data);
-        $data['reg_time'] = $this->changeToMongoDate($data['reg_time']);
-        $data['login_time'] = $this->changeToMongoDate($data['login_time']);
-        $data['old_login_time'] = $this->changeToMongoDate($data['old_login_time']);
+        $data['reg_time'] = $this->changeToValidDate($data['reg_time']);
+        $data['login_time'] = $this->changeToValidDate($data['login_time']);
+        $data['old_login_time'] = $this->changeToValidDate($data['old_login_time']);
         $data['email_bind'] = $this->changeToBoolean($data['email_bind']);
         $data['mobile_bind'] = $this->changeToBoolean($data['mobile_bind']);
         $data['inform_allow'] = $this->changeToBoolean($data['inform_allow']);

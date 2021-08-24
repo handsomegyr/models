@@ -18,7 +18,7 @@ class Qrcode extends Base
     public function reorganize(array $data)
     {
         $data = parent::reorganize($data);
-        $data['ticket_time'] = $this->changeToMongoDate($data['ticket_time']);
+        $data['ticket_time'] = $this->changeToValidDate($data['ticket_time']);
         $data['is_created'] = $this->changeToBoolean($data['is_created']);
         return $data;
     }

@@ -23,8 +23,8 @@ class Statistic extends Base
         $data['defaultQuery'] = $this->changeToArray($data['defaultQuery']);
         $data['dashboardQuery'] = $this->changeToArray($data['dashboardQuery']);
 
-        $data['lastExecuteTime'] = $this->changeToMongoDate($data['lastExecuteTime']);
-        $data['resultExpireTime'] = $this->changeToMongoDate($data['resultExpireTime']);
+        $data['lastExecuteTime'] = $this->changeToValidDate($data['lastExecuteTime']);
+        $data['resultExpireTime'] = $this->changeToValidDate($data['resultExpireTime']);
 
         $data['isDashboard'] = $this->changeToBoolean($data['isDashboard']);
         $data['colspan'] = $this->changeToBoolean($data['colspan']);

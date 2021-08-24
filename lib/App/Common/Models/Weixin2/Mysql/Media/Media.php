@@ -18,7 +18,7 @@ class Media extends Base
     {
         $data = parent::reorganize($data);
 
-        $data['media_time'] = $this->changeToMongoDate($data['media_time']);
+        $data['media_time'] = $this->changeToValidDate($data['media_time']);
         return $data;
     }
 }

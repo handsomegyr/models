@@ -19,7 +19,7 @@ class Log extends Base
     {
         $data = parent::reorganize($data);
         $data['is_success'] = $this->changeToBoolean($data['is_success']);
-        $data['log_time'] = $this->changeToMongoDate($data['log_time']);
+        $data['log_time'] = $this->changeToValidDate($data['log_time']);
         $data['request'] = $this->changeToArray($data['request']);
         $data['result'] = $this->changeToArray($data['result']);
         return $data;

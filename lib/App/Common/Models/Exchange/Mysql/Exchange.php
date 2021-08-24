@@ -20,7 +20,7 @@ class Exchange extends Base
     {
         $data = parent::reorganize($data);
         $data['is_valid'] = $this->changeToBoolean($data['is_valid']);
-        $data['got_time'] = $this->changeToMongoDate($data['got_time']);
+        $data['got_time'] = $this->changeToValidDate($data['got_time']);
 
         return $data;
     }

@@ -20,7 +20,7 @@ class Log extends Base
     {
         $data = parent::reorganize($data);
         $data['is_system_bargain'] = $this->changeToBoolean($data['is_system_bargain']);
-        $data['bargain_time'] = $this->changeToMongoDate($data['bargain_time']);
+        $data['bargain_time'] = $this->changeToValidDate($data['bargain_time']);
         return $data;
     }
 }

@@ -19,8 +19,8 @@ class Log extends Base
     {
         $data = parent::reorganize($data);
 
-        $data['comment_time'] = $this->changeToMongoDate($data['comment_time']);
-        $data['delete_comment_time'] = $this->changeToMongoDate($data['delete_comment_time']);
+        $data['comment_time'] = $this->changeToValidDate($data['comment_time']);
+        $data['delete_comment_time'] = $this->changeToValidDate($data['delete_comment_time']);
 
         $data['comment_type'] = $this->changeToBoolean($data['comment_type']);
         $data['is_created'] = $this->changeToBoolean($data['is_created']);

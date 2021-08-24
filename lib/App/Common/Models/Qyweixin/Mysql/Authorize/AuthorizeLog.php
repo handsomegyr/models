@@ -20,8 +20,8 @@ class AuthorizeLog extends Base
     {
         $data = parent::reorganize($data);
 
-        $data['request_time'] = $this->changeToMongoDate($data['request_time']);
-        $data['response_time'] = $this->changeToMongoDate($data['response_time']);
+        $data['request_time'] = $this->changeToValidDate($data['request_time']);
+        $data['response_time'] = $this->changeToValidDate($data['response_time']);
 
         $data['is_aes'] = $this->changeToBoolean($data['is_aes']);
         return $data;

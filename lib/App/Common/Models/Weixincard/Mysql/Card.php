@@ -23,16 +23,16 @@ class Card extends Base
         $data['bind_openid'] = $this->changeToBoolean($data['bind_openid']);
         $data['can_share'] = $this->changeToBoolean($data['can_share']);
         $data['can_give_friend'] = $this->changeToBoolean($data['can_give_friend']);
-        $data['date_info_begin_timestamp'] = $this->changeToMongoDate($data['date_info_begin_timestamp']);
-        $data['date_info_end_timestamp'] = $this->changeToMongoDate($data['date_info_end_timestamp']);
-        $data['date_info_fixed_end_timestamp'] = $this->changeToMongoDate($data['date_info_fixed_end_timestamp']);
+        $data['date_info_begin_timestamp'] = $this->changeToValidDate($data['date_info_begin_timestamp']);
+        $data['date_info_end_timestamp'] = $this->changeToValidDate($data['date_info_end_timestamp']);
+        $data['date_info_fixed_end_timestamp'] = $this->changeToValidDate($data['date_info_fixed_end_timestamp']);
         $data['can_shake'] = $this->changeToBoolean($data['can_shake']);
         $data['member_card_supply_bonus'] = $this->changeToBoolean($data['member_card_supply_bonus']);
         $data['member_card_supply_balance'] = $this->changeToBoolean($data['member_card_supply_balance']);
         $data['member_card_need_push_on_view'] = $this->changeToBoolean($data['member_card_need_push_on_view']);
 
-        $data['boarding_pass_departure_time'] = $this->changeToMongoDate($data['boarding_pass_departure_time']);
-        $data['boarding_pass_landing_time'] = $this->changeToMongoDate($data['boarding_pass_landing_time']);
+        $data['boarding_pass_departure_time'] = $this->changeToValidDate($data['boarding_pass_departure_time']);
+        $data['boarding_pass_landing_time'] = $this->changeToValidDate($data['boarding_pass_landing_time']);
 
         return $data;
     }

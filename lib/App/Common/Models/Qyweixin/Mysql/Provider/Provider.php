@@ -19,7 +19,7 @@ class Provider extends Base
     {
         $data = parent::reorganize($data);
 
-        $data['access_token_expire'] = $this->changeToMongoDate($data['access_token_expire']);
+        $data['access_token_expire'] = $this->changeToValidDate($data['access_token_expire']);
         return $data;
     }
 }

@@ -19,10 +19,10 @@ class Agent extends Base
     {
         $data = parent::reorganize($data);
 
-        $data['access_token_expire'] = $this->changeToMongoDate($data['access_token_expire']);
-        $data['jsapi_ticket_expire'] = $this->changeToMongoDate($data['jsapi_ticket_expire']);
+        $data['access_token_expire'] = $this->changeToValidDate($data['access_token_expire']);
+        $data['jsapi_ticket_expire'] = $this->changeToValidDate($data['jsapi_ticket_expire']);
 
-        $data['logo_media_created_at'] = $this->changeToMongoDate($data['logo_media_created_at']);
+        $data['logo_media_created_at'] = $this->changeToValidDate($data['logo_media_created_at']);
         $data['allow_userinfos'] = $this->changeToArray($data['allow_userinfos']);
         $data['allow_partys'] = $this->changeToArray($data['allow_partys']);
         $data['allow_tags'] = $this->changeToArray($data['allow_tags']);
@@ -31,7 +31,7 @@ class Agent extends Base
         $data['report_location_flag'] = $this->changeToBoolean($data['report_location_flag']);
         $data['isreportenter'] = $this->changeToBoolean($data['isreportenter']);
 
-        $data['sync_time'] = $this->changeToMongoDate($data['sync_time']);
+        $data['sync_time'] = $this->changeToValidDate($data['sync_time']);
         return $data;
     }
 }

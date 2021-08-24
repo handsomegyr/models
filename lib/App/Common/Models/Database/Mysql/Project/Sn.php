@@ -21,7 +21,7 @@ class Sn extends Base
         $data = parent::reorganize($data);
         $data['is_actived'] = $this->changeToBoolean($data['is_actived']);
         $data['is_default'] = $this->changeToBoolean($data['is_default']);
-        $data['expire_time'] = $this->changeToMongoDate($data['expire_time']);
+        $data['expire_time'] = $this->changeToValidDate($data['expire_time']);
         return $data;
     }
 }

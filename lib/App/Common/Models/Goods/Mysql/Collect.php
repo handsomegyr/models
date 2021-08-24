@@ -18,7 +18,7 @@ class Collect extends Base
     public function reorganize(array $data)
     {
         $data = parent::reorganize($data);
-        $data['collect_time'] = $this->changeToMongoDate($data['collect_time']);
+        $data['collect_time'] = $this->changeToValidDate($data['collect_time']);
         return $data;
     }
 }

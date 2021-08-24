@@ -21,8 +21,8 @@ class TaskLog extends Base
 
         $data['openids'] = $this->changeToArray($data['openids']);
         $data['errors'] = $this->changeToArray($data['errors']);
-        $data['log_time'] = $this->changeToMongoDate($data['log_time']);
-        $data['push_time'] = $this->changeToMongoDate($data['push_time']);
+        $data['log_time'] = $this->changeToValidDate($data['log_time']);
+        $data['push_time'] = $this->changeToValidDate($data['push_time']);
         $data['is_ok'] = $this->changeToBoolean($data['is_ok']);
         return $data;
     }

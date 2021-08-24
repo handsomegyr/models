@@ -18,7 +18,7 @@ class Visitor extends Base
     public function reorganize(array $data)
     {
         $data = parent::reorganize($data);
-        $data['browser_time'] = $this->changeToMongoDate($data['browser_time']);
+        $data['browser_time'] = $this->changeToValidDate($data['browser_time']);
         return $data;
     }
 }

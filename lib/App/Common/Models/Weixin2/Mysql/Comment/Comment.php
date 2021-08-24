@@ -19,8 +19,8 @@ class Comment extends Base
     {
         $data = parent::reorganize($data);
 
-        $data['open_time'] = $this->changeToMongoDate($data['open_time']);
-        $data['close_time'] = $this->changeToMongoDate($data['close_time']);
+        $data['open_time'] = $this->changeToValidDate($data['open_time']);
+        $data['close_time'] = $this->changeToValidDate($data['close_time']);
 
         $data['is_open'] = $this->changeToBoolean($data['is_open']);
         return $data;

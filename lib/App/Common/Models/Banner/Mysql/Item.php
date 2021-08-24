@@ -20,8 +20,8 @@ class Item extends Base
     {
         $data = parent::reorganize($data);
         $data['status'] = $this->changeToBoolean($data['status']);
-        $data['start_at'] = $this->changeToMongoDate($data['start_at']);
-        $data['end_at'] = $this->changeToMongoDate($data['end_at']);
+        $data['start_at'] = $this->changeToValidDate($data['start_at']);
+        $data['end_at'] = $this->changeToValidDate($data['end_at']);
         return $data;
     }
 }
