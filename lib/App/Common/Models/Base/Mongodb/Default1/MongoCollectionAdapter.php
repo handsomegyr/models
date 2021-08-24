@@ -427,7 +427,7 @@ class MongoCollectionAdapter
      */
     private function search($text)
     {
-        return new \MongoRegex('/' . preg_replace("/[\s\r\t\n]/", '.*', $text) . '/i');
+        return '/' . preg_replace("/[\s\r\t\n]/", '.*', $text) . '/i';
     }
 
     /**

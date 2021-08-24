@@ -163,11 +163,7 @@ trait BaseTrait
                         }
                     }
                 } else {
-                    if ($item instanceof \MongoRegex) {
-                        $conditions[] = "{$fieldKey} LIKE :{$bindKey}:";
-                    } else {
-                        $conditions[] = "{$fieldKey}=:{$bindKey}:";
-                    }
+                    $conditions[] = "{$fieldKey}=:{$bindKey}:";
                     $value = $this->changeValue4Conditions($item, $key);
                     $bind[$bindKey] = $value;
                 }
@@ -223,14 +219,6 @@ trait BaseTrait
             }
             if ($value instanceof \MongoDate) {
                 $value = date('Y-m-d H:i:s', $value->sec);
-                return $value;
-            }
-            if ($value instanceof \MongoRegex) {
-                // /系统管理员/i->'%Art%'
-                $value = $value->__toString();
-                $value = str_ireplace('/i', '%', $value);
-                $value = str_ireplace('/^$', '', $value);
-                $value = str_ireplace('/', '%', $value);
                 return $value;
             }
         }

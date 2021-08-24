@@ -174,17 +174,17 @@ class Input extends \stdClass
                                     if (strtolower(trim($field['search']['sqlWhere'])) == 'eq') {
                                         $where[$key] = $str1;
                                     } elseif (strtolower(trim($field['search']['sqlWhere'])) == 'prelike') {
-                                        $where[$key] = new \MongoRegex($str1 . '/i');
+                                        $where[$key]['$like'] = $str1 . '%';
                                     } else {
-                                        $where[$key] = new \MongoRegex('/' . $str1 . '/i');
+                                        $where[$key]['$like'] = '%' . $str1 . '%';
                                     }
                                 } else {
                                     if ($this->sqlWhere4String == 'eq') {
                                         $where[$key] = $str1;
                                     } elseif ($this->sqlWhere4String == 'prelike') {
-                                        $where[$key] = new \MongoRegex($str1 . '/i');
+                                        $where[$key]['$like'] = $str1 . '%';
                                     } else {
-                                        $where[$key] = new \MongoRegex('/' . $str1 . '/i');
+                                        $where[$key]['$like'] = '%' . $str1 . '%';
                                     }
                                 }
                             }
