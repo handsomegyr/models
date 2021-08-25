@@ -154,7 +154,7 @@ class Application extends \App\Common\Models\Weixin\Application
     {
         $cache = $this->getDI()->get('cache');
         if (isset($token['access_token_expire']) && ! empty($token['is_advanced'])) {
-            if ($token['access_token_expire']->sec <= time()) {
+            if (strtotime($token['access_token_expire']) <= time()) {
                 if (! empty($token['appid']) && ! empty($token['secret'])) {
                     $lockKey = cacheKey(__FILE__, __CLASS__, __METHOD__, __LINE__);
                     $objLock = new \iLock($lockKey);
@@ -191,15 +191,15 @@ class Application extends \App\Common\Models\Weixin\Application
             }
             
             // 缓存有效期不能超过token过期时间
-            if ((time() + $this->_expire) > $token['access_token_expire']->sec) {
-                $this->_expire = $token['access_token_expire']->sec - time();
+            if ((time() + $this->_expire) > strtotime($token['access_token_expire'])) {
+                $this->_expire = strtotime($token['access_token_expire']) - time();
             }
         }
         
         jsnoLock:
         // 获取jsapi_ticket
         if (! empty($token['is_advanced'])) {
-            if (! isset($token['jsapi_ticket_expire']) || $token['jsapi_ticket_expire']->sec <= time()) {
+            if (! isset($token['jsapi_ticket_expire']) || strtotime($token['jsapi_ticket_expire']) <= time()) {
                 if (! empty($token['appid']) && ! empty($token['secret'])) {
                     $lockKey = cacheKey(__FILE__, __CLASS__, __METHOD__, __LINE__);
                     $objLock = new \iLock($lockKey);
@@ -241,7 +241,7 @@ class Application extends \App\Common\Models\Weixin\Application
         weixincardnoLock:
         // 获取微信卡券的api_ticket
         if (! empty($token['is_weixin_card'])) {
-            if (! isset($token['wx_card_api_ticket_expire']) || $token['wx_card_api_ticket_expire']->sec <= time()) {
+            if (! isset($token['wx_card_api_ticket_expire']) || strtotime($token['wx_card_api_ticket_expire']) <= time()) {
                 if (! empty($token['appid']) && ! empty($token['secret'])) {
                     $lockKey = cacheKey(__FILE__, __CLASS__, __METHOD__, __LINE__);
                     $objLock = new \iLock($lockKey);

@@ -40,7 +40,7 @@ class Game extends \App\Common\Models\Game\Game
         if (empty($gameInfo)) {
             return false;
         } else {
-            if ($gameInfo['start_time']->sec <= $now) {
+            if (strtotime($gameInfo['start_time']) <= $now) {
                 return true;
             } else {
                 return false;
@@ -58,7 +58,7 @@ class Game extends \App\Common\Models\Game\Game
         if (empty($gameInfo)) {
             return false;
         } else {
-            if ($gameInfo['end_time']->sec < $now) {
+            if (strtotime($gameInfo['end_time']) < $now) {
                 return true;
             } else {
                 return false;

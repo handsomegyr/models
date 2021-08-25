@@ -217,19 +217,13 @@ trait BaseTrait
                 $value = intval($value);
                 return $value;
             }
-            if ($value instanceof \MongoDate) {
-                $value = date('Y-m-d H:i:s', $value->sec);
-                return $value;
-            }
         }
         return $value;
     }
 
     protected function changeValue4Save($value)
     {
-        if ($value instanceof \MongoDate) {
-            $value = date('Y-m-d H:i:s', $value->sec);
-        } elseif (is_bool($value)) {
+        if (is_bool($value)) {
             $value = intval($value);
         } elseif (is_array($value)) {
             if (!empty($value)) {

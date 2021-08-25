@@ -65,7 +65,7 @@ class Activity extends \App\Common\Models\Activity\Activity
         if (empty($activityInfo)) {
             return false;
         } else {
-            if ($activityInfo['start_time']->sec <= $now) {
+            if (strtotime($activityInfo['start_time']) <= $now) {
                 return true;
             } else {
                 return false;
@@ -83,7 +83,7 @@ class Activity extends \App\Common\Models\Activity\Activity
         if (empty($activityInfo)) {
             return false;
         } else {
-            if ($activityInfo['end_time']->sec < $now) {
+            if (strtotime($activityInfo['end_time']) < $now) {
                 return true;
             } else {
                 return false;
@@ -119,7 +119,7 @@ class Activity extends \App\Common\Models\Activity\Activity
         if (!empty($activityInfo['is_actived'])) {
             $now = time();
             if (!empty($activityInfo['start_time']) && !empty($activityInfo['end_time'])) {
-                if ($activityInfo['start_time']->sec <= $now && $now <= $activityInfo['end_time']->sec) {
+                if (strtotime($activityInfo['start_time']) <= $now && $now <= strtotime($activityInfo['end_time'])) {
                     return true;
                 } else {
                     return false;

@@ -229,7 +229,7 @@ class Api
         if (!empty($limits)) {
             foreach ($limits as $limit) {
 
-                $exchanges = $this->modelExchange->filterExchangeByGroup($activity_id, $identity_id, $limit['start_time']->sec, $limit['end_time']->sec);
+                $exchanges = $this->modelExchange->filterExchangeByGroup($activity_id, $identity_id, strtotime($limit['start_time']), strtotime($limit['end_time']));
 
                 if (!empty($exchanges)) {
                     if (empty($limit['prize_id']) && $prize_id == 'all' && !empty($limit['limit'])) {

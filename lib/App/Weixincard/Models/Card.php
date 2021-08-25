@@ -857,11 +857,11 @@ class Card extends \App\Common\Models\Weixincard\Card
     public function create(array $card, array $colors)
     {
         $type = ($card['date_info_type']);
-        $begin_timestamp = !empty($card['date_info_begin_timestamp']) ? intval($card['date_info_begin_timestamp']->sec) : 0;
+        $begin_timestamp = !empty($card['date_info_begin_timestamp']) ? intval(strtotime($card['date_info_begin_timestamp'])) : 0;
         if ($type == 'DATE_TYPE_FIX_TIME_RANGE') {
-            $end_timestamp = !empty($card['date_info_end_timestamp']) ? intval($card['date_info_end_timestamp']->sec) : 0;
+            $end_timestamp = !empty($card['date_info_end_timestamp']) ? intval(strtotime($card['date_info_end_timestamp'])) : 0;
         } else {
-            $end_timestamp = !empty($card['date_info_fixed_end_timestamp']) ? intval($card['date_info_fixed_end_timestamp']->sec) : 0;
+            $end_timestamp = !empty($card['date_info_fixed_end_timestamp']) ? intval(strtotime($card['date_info_fixed_end_timestamp'])) : 0;
         }
         $fixed_term = !empty($card['date_info_fixed_term']) ? intval($card['date_info_fixed_term']) : 0;
         $fixed_begin_term = !empty($card['date_info_fixed_begin_term']) ? intval($card['date_info_fixed_begin_term']) : 0;

@@ -69,7 +69,7 @@ class User extends \App\Common\Models\Backend\User
         $_SESSION['admin_id'] = $user['_id'];
         $_SESSION['admin_name'] = $user['username'];
         $_SESSION['admin_user_info'] = $user;
-        $_SESSION['admin_user_info']['lasttime'] = date("Y-m-d H:i:s", $user['lasttime']->sec);
+        $_SESSION['admin_user_info']['lasttime'] = date("Y-m-d H:i:s", strtotime($user['lasttime']));
 
         return $user;
     }

@@ -102,7 +102,7 @@ class Pay
                         // 预付款充值
                         // 增加预付款
                         $pay_amount_yuan = $pay_amount / 100;
-                        $this->modelPointsService->addOrReducePoint(POINTS_CATEGORY3, $buyerInfo['buyer_id'], $buyerInfo['buyer_name'], $buyerInfo['buyer_avatar'], $out_trade_no, $orderPayInfo['__CREATE_TIME__']->sec, $pay_amount, "预付款充值", "支付金额￥{$pay_amount_yuan}已充值到您的云购账户");
+                        $this->modelPointsService->addOrReducePoint(POINTS_CATEGORY3, $buyerInfo['buyer_id'], $buyerInfo['buyer_name'], $buyerInfo['buyer_avatar'], $out_trade_no, strtotime($orderPayInfo['__CREATE_TIME__']), $pay_amount, "预付款充值", "支付金额￥{$pay_amount_yuan}已充值到您的云购账户");
                         // 增加支付日志记录
                         $this->modelPayLog->recordLog($buyerInfo['buyer_id'], \App\Payment\Models\Log::TYPE1, $pay_amount, '预付款充值', $now, $orderPayInfo);
 
@@ -162,7 +162,7 @@ class Pay
                                         // 如果使用福分的话,扣除福分的处理
                                         if (!empty($orderPayInfo['is_points_used'])) {
                                             try {
-                                                // $pointInfo = $this->modelPointsService->addOrReduce(POINTS_CATEGORY1, $buyer_id, $buyerInfo['buyer_name'], $buyerInfo['buyer_avatar'], $orderPayInfo['_id'], $orderPayInfo['__CREATE_TIME__']->sec, - $integral, "支付", "云购商品编码(2542873)消耗{$integral}福分");
+                                                // $pointInfo = $this->modelPointsService->addOrReduce(POINTS_CATEGORY1, $buyer_id, $buyerInfo['buyer_name'], $buyerInfo['buyer_avatar'], $orderPayInfo['_id'], strtotime($orderPayInfo['__CREATE_TIME__']), - $integral, "支付", "云购商品编码(2542873)消耗{$integral}福分");
                                             } catch (\Exception $e) {;
                                             }
                                         }
@@ -170,7 +170,7 @@ class Pay
                                         if (!empty($orderPayInfo['is_pd_used'])) {
                                             if ($predepositInfo['current'] >= $goods_amount) {
                                                 try {
-                                                    $predepositInfo = $this->modelPointsService->addOrReduce(POINTS_CATEGORY3, $orderPayInfo['buyer_id'], $buyerInfo['buyer_name'], $buyerInfo['buyer_avatar'], $orderPayInfo['_id'], $orderPayInfo['__CREATE_TIME__']->sec, -$goods_amount, "支付", "云购商品");
+                                                    $predepositInfo = $this->modelPointsService->addOrReduce(POINTS_CATEGORY3, $orderPayInfo['buyer_id'], $buyerInfo['buyer_name'], $buyerInfo['buyer_avatar'], $orderPayInfo['_id'], strtotime($orderPayInfo['__CREATE_TIME__']), -$goods_amount, "支付", "云购商品");
                                                     $total_amount += $goods_amount; // 总花费金额
                                                     $isCanBuy = true;
                                                 } catch (\Exception $e) {;
@@ -225,15 +225,15 @@ class Pay
                                     // 参与云购每消费1元 1 10 生日当月享双倍福分
                                     $currentTime = \App\Common\Utils\Helper::getCurrentTime();
                                     $double = 1;
-                                    if (!empty($buyerInfo['birthday']) && substr($buyerInfo['birthday'], 5) == date('m-d', $currentTime->sec)) {
+                                    if (!empty($buyerInfo['birthday']) && substr($buyerInfo['birthday'], 5) == date('m-d', strtotime($currentTime))) {
                                         $double = 2;
                                     }
                                     $unique_id = getNewId();
                                     $pointsRuleInfo = $this->modelPointsRule->getInfoByCategoryAndCode(POINTS_CATEGORY1, 'buy');
-                                    $this->modelPointsService->addOrReduce(POINTS_CATEGORY1, $buyerInfo['buyer_id'], $buyerInfo['buyer_name'], $buyerInfo['buyer_avatar'], $unique_id, $currentTime->sec, $pointsRuleInfo['points'] * $double * $lottery_code_num, $pointsRuleInfo['item_category'], $pointsRuleInfo['item']);
+                                    $this->modelPointsService->addOrReduce(POINTS_CATEGORY1, $buyerInfo['buyer_id'], $buyerInfo['buyer_name'], $buyerInfo['buyer_avatar'], $unique_id, strtotime($currentTime), $pointsRuleInfo['points'] * $double * $lottery_code_num, $pointsRuleInfo['item_category'], $pointsRuleInfo['item']);
 
                                     $pointsRuleInfo = $this->modelPointsRule->getInfoByCategoryAndCode(POINTS_CATEGORY2, 'buy');
-                                    $this->modelPointsService->addOrReduce(POINTS_CATEGORY2, $buyerInfo['buyer_id'], $buyerInfo['buyer_name'], $buyerInfo['buyer_avatar'], $unique_id, $currentTime->sec, $pointsRuleInfo['points'] * $double * $lottery_code_num, $pointsRuleInfo['item_category'], $pointsRuleInfo['item']);
+                                    $this->modelPointsService->addOrReduce(POINTS_CATEGORY2, $buyerInfo['buyer_id'], $buyerInfo['buyer_name'], $buyerInfo['buyer_avatar'], $unique_id, strtotime($currentTime), $pointsRuleInfo['points'] * $double * $lottery_code_num, $pointsRuleInfo['item_category'], $pointsRuleInfo['item']);
 
                                     // 增加支付日志记录
                                     $this->modelPayLog->recordLog($buyerInfo['buyer_id'], \App\Payment\Models\Log::TYPE2, $lottery_code_num, '云购商品', $goodsInfo);
@@ -247,7 +247,7 @@ class Pay
                             $failure_amount = $total_amount - $pay_amount;
                             $failure_amount_yuan = $failure_amount_yuan / 100;
                             // 退回支付金额至预付款中
-                            $this->modelPointsService->addOrReduce(POINTS_CATEGORY3, $orderPayInfo['buyer_id'], $buyerInfo['buyer_name'], $buyerInfo['buyer_avatar'], getNewId(), $orderPayInfo['__CREATE_TIME__']->sec, $failure_amount, "支付", "云购失败，支付金额￥{$failure_amount_yuan}已退回到您的云购账户");
+                            $this->modelPointsService->addOrReduce(POINTS_CATEGORY3, $orderPayInfo['buyer_id'], $buyerInfo['buyer_name'], $buyerInfo['buyer_avatar'], getNewId(), strtotime($orderPayInfo['__CREATE_TIME__']), $failure_amount, "支付", "云购失败，支付金额￥{$failure_amount_yuan}已退回到您的云购账户");
                         }
 
                         // 更新支付订单的信息

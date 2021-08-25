@@ -99,7 +99,7 @@ class User extends \App\Common\Models\Game\User
     public function getMyRank($gameUserInfo, $gameInfo)
     {
         $myScore = intval($gameUserInfo["max_score"]);
-        $myScoreTime = date('Y-m-d H:i:s', $gameUserInfo["max_score_time"]->sec);
+        $myScoreTime = date('Y-m-d H:i:s', strtotime($gameUserInfo["max_score_time"]));
 
         $query = array(
             'user_id' => array('$ne' => $gameUserInfo['user_id']),

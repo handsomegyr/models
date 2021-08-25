@@ -2468,7 +2468,7 @@ class WeixinService
         $query = str_ireplace('%', '()', $query);
         $is_expire = intval($urllinkInfo['is_expire']) ? true : false;
         $expire_type = intval($urllinkInfo['expire_type']);
-        $expire_time = $urllinkInfo['expire_time']->sec;
+        $expire_time = strtotime($urllinkInfo['expire_time']);
         $expire_interval = intval($urllinkInfo['expire_interval']);
 
         $cloud_base = new \Weixin\Wx\Model\CloudBase();
@@ -2498,7 +2498,7 @@ class WeixinService
         $query = str_ireplace('%', '()', $query);
         $is_expire = intval($urlschemeInfo['is_expire']) ? true : false;
         $expire_type = intval($urlschemeInfo['expire_type']);
-        $expire_time = $urlschemeInfo['expire_time']->sec;
+        $expire_time = strtotime($urlschemeInfo['expire_time']);
         $expire_interval = intval($urlschemeInfo['expire_interval']);
 
         $jumpwxa = new \Weixin\Wx\Model\JumpWxa();

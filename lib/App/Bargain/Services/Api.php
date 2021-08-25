@@ -49,7 +49,7 @@ class Api
         if (!empty($bargainInfo)) {
             $bargainInfo['is_new'] = false; // 原有的砍价的记录
             // 检查是否已经过了能砍价的时间段
-            if (!empty($bargainInfo['bargain_period']) && $bargainInfo['launch_time']->sec <= ($now - $bargainInfo['bargain_period'] * 3600)) {
+            if (!empty($bargainInfo['bargain_period']) && strtotime($bargainInfo['launch_time']) <= ($now - $bargainInfo['bargain_period'] * 3600)) {
                 // 如果是再发起的话,那么就生成新的砍价对象
                 if (!empty($launchagain)) {
                     $bargainInfo = null;
@@ -140,13 +140,13 @@ class Api
                 return $ret;
             }
 
-            if ($bargainInfo['start_time']->sec > $now) {
+            if (strtotime($bargainInfo['start_time']) > $now) {
                 $ret['error_code'] = -4;
                 $ret['error_msg'] = '砍价物未开始';
                 return $ret;
             }
 
-            if ($bargainInfo['end_time']->sec < $now) {
+            if (strtotime($bargainInfo['end_time']) < $now) {
                 $ret['error_code'] = -5;
                 $ret['error_msg'] = '砍价物已结束';
                 return $ret;

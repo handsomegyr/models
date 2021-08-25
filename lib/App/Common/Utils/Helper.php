@@ -8,12 +8,12 @@ class Helper
     {
         if (empty($time)) {
             if (defined('CURRENT_TIMESTAMP')) {
-                return new \MongoDate(CURRENT_TIMESTAMP);
+                return date('Y-m-d H:i:s', CURRENT_TIMESTAMP);
             } else {
-                return new \MongoDate();
+                return date('Y-m-d H:i:s');
             }
         } else {
-            return new \MongoDate($time);
+            return date('Y-m-d H:i:s', $time);
         }
     }
 }

@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Common\Models\Base\Mongodb;
 
 trait BaseTrait
@@ -50,8 +51,8 @@ trait BaseTrait
         if (empty($field)) {
             return $field;
         }
-        if ($field instanceof \MongoDate) {
-            return $field;
+        if ($field == '0000-00-00 00:00:00') {
+            $field = '0001-01-01 00:00:00';
         }
         return \App\Common\Utils\Helper::getCurrentTime(strtotime($field));
     }
@@ -59,7 +60,7 @@ trait BaseTrait
     protected function getColumns(array $fields = array())
     {
         $ret = array();
-        if (! empty($fields)) {
+        if (!empty($fields)) {
             $ret['column'] = implode(',', $fields);
         }
         return $ret;
@@ -68,7 +69,7 @@ trait BaseTrait
     protected function getGroups(array $groups = array())
     {
         $ret = array();
-        if (! empty($groups)) {
+        if (!empty($groups)) {
             $ret['group'] = implode(',', $groups);
         }
         return $ret;

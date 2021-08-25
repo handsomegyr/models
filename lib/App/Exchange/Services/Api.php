@@ -94,11 +94,11 @@ class Api
                 }
 
                 // 检查时间
-                if ($ruleInfo['allow_start_time']->sec >= $now) {
+                if (strtotime($ruleInfo['allow_start_time']) >= $now) {
                     throw new \Exception("兑换未开始", -2);
                 }
 
-                if ($ruleInfo['allow_end_time']->sec < $now) {
+                if (strtotime($ruleInfo['allow_end_time']) < $now) {
                     throw new \Exception("兑换已结束", -3);
                 }
 
@@ -211,12 +211,12 @@ class Api
             foreach ($limits as $limit) {
 
                 // 从成功兑换表中获取该商品的数量
-                $successNum = $this->modelExchange->getExchangeNum($activity_id, $identity_id, $prize_id, $limit['start_time']->sec, $limit['end_time']->sec);
+                $successNum = $this->modelExchange->getExchangeNum($activity_id, $identity_id, $prize_id, strtotime($limit['start_time']), strtotime($limit['end_time']));
                 // 兑换数量>=限制时，无法兑换
                 if (($successNum + $quantity) > $limit['limit'])
                     return false;
 
-                // $exchanges = $this->modelExchange->filterExchangeByGroup($activity_id, $identity_id, $limit['start_time']->sec, $limit['end_time']->sec);
+                // $exchanges = $this->modelExchange->filterExchangeByGroup($activity_id, $identity_id, strtotime($limit['start_time']), strtotime($limit['end_time']));
                 // if (!empty($exchanges)) {
                 //     if (empty($limit['prize_id']) && $prize_id == 'all' && !empty($limit['limit'])) {
                 //         if ($exchanges['all'] >= $limit['limit']) {

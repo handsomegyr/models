@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Live\Models;
 
 class Room extends \App\Common\Models\Live\Room
@@ -10,7 +11,7 @@ class Room extends \App\Common\Models\Live\Room
     public function getDefaultSort()
     {
         $sort = array(
-            '_id' => - 1
+            '_id' => -1
         );
         return $sort;
     }
@@ -46,8 +47,8 @@ class Room extends \App\Common\Models\Live\Room
         $data = array();
         $data['room_id'] = $info['_id'];
         $data['name'] = $info['name'];
-        $data['start_time'] = date('Y-m-d H:i:s', $info['start_time']->sec);
-        $data['end_time'] = date('Y-m-d H:i:s', $info['end_time']->sec);
+        $data['start_time'] = date('Y-m-d H:i:s', strtotime($info['start_time']));
+        $data['end_time'] = date('Y-m-d H:i:s', strtotime($info['end_time']));
         $data['is_opened'] = empty($info['is_opened']) ? 0 : 1;
         $data['headline'] = $info['headline'];
         $data['bg_pic'] = $this->getImagePath("/", $info['bg_pic']);
@@ -56,21 +57,21 @@ class Room extends \App\Common\Models\Live\Room
         $data['show_order'] = $info['show_order'];
         $data['is_direct'] = empty($info['is_direct']) ? 0 : 1;
         $data['state'] = $info['state'];
-        
-        $data['live_start_time'] = date('Y-m-d H:i:s', $info['live_start_time']->sec);
-        $data['live_end_time'] = date('Y-m-d H:i:s', $info['live_end_time']->sec);
+
+        $data['live_start_time'] = date('Y-m-d H:i:s', strtotime($info['live_start_time']));
+        $data['live_end_time'] = date('Y-m-d H:i:s', strtotime($info['live_end_time']));
         $data['live_push_url'] = $info['live_push_url'];
         $data['live_play_url'] = $info['live_play_url'];
         $data['live_replay_url'] = $info['live_replay_url'];
-        
+
         $data['live_paused_bg_pic'] = $this->getImagePath("/", $info['live_paused_bg_pic']);
         $data['live_closed_bg_pic'] = $this->getImagePath("/", $info['live_closed_bg_pic']);
         $data['live_closed_redirect_url'] = $info['live_closed_redirect_url'];
-        
+
         $data['live_is_closed'] = empty($info['live_is_closed']) ? 0 : 1;
         $data['live_is_paused'] = empty($info['live_is_paused']) ? 0 : 1;
         $data['live_is_replay'] = empty($info['live_is_replay']) ? 0 : 1;
-        
+
         $data['view_num'] = $info['view_num'];
         $data['like_num'] = $info['like_num'];
         return $data;
@@ -99,27 +100,27 @@ class Room extends \App\Common\Models\Live\Room
         $data['room_id'] = $info['_id'];
         $data['auchor_id'] = $info['auchor_id'];
         $data['name'] = $info['name'];
-        $data['start_time'] = date('Y-m-d H:i:s', $info['start_time']->sec);
-        $data['end_time'] = date('Y-m-d H:i:s', $info['end_time']->sec);
+        $data['start_time'] = date('Y-m-d H:i:s', strtotime($info['start_time']));
+        $data['end_time'] = date('Y-m-d H:i:s', strtotime($info['end_time']));
         $data['is_opened'] = empty($info['is_opened']) ? 0 : 1;
         $data['is_test'] = empty($info['is_test']) ? 0 : 1;
         $data['state'] = $info['state'];
-        
-        $data['live_start_time'] = date('Y-m-d H:i:s', $info['live_start_time']->sec);
-        $data['live_end_time'] = date('Y-m-d H:i:s', $info['live_end_time']->sec);
+
+        $data['live_start_time'] = date('Y-m-d H:i:s', strtotime($info['live_start_time']));
+        $data['live_end_time'] = date('Y-m-d H:i:s', strtotime($info['live_end_time']));
         $data['live_is_closed'] = empty($info['live_is_closed']) ? 0 : 1;
         $data['live_is_paused'] = empty($info['live_is_paused']) ? 0 : 1;
         $data['live_is_replay'] = empty($info['live_is_replay']) ? 0 : 1;
-        
+
         $data['view_max_num'] = $info['view_max_num'];
         $data['view_random_num'] = $info['view_random_num'];
         $data['view_base_num'] = $info['view_base_num'];
         $data['like_random_num'] = $info['like_random_num'];
         $data['like_base_num'] = $info['like_base_num'];
-        
+
         // 机器人设置
         $data['robot_settings'] = $info['robot_settings'];
-        
+
         return $data;
     }
 
@@ -144,23 +145,18 @@ class Room extends \App\Common\Models\Live\Room
                 // 录播页面
                 $info['state'] = 7;
             } else {
-                // 检查该字段是否是mongodate类型的
-                if ($info['live_start_time'] instanceof \MongoDate) {
-                    $live_start_time = $info['live_start_time']->sec;
-                } else {
-                    $live_start_time = strtotime($info['live_start_time']);
-                }
-                
-                if (! $is_virtual && $live_start_time > $time) {
+                $live_start_time = strtotime($info['live_start_time']);
+
+                if (!$is_virtual && $live_start_time > $time) {
                     // 直播未开始
                     $info['state'] = 1;
                 } else {
                     // 直播是否结束
-                    if (! empty($info['live_is_closed'])) {
+                    if (!empty($info['live_is_closed'])) {
                         // 直播是否回放
-                        if (! empty($info['live_is_replay'])) {
+                        if (!empty($info['live_is_replay'])) {
                             // 直播是否有回放地址
-                            if (! empty($info['live_replay_url'])) {
+                            if (!empty($info['live_replay_url'])) {
                                 // 直播结束回放生成
                                 $info['state'] = 6;
                             } else {
@@ -173,7 +169,7 @@ class Room extends \App\Common\Models\Live\Room
                         }
                     } else {
                         // 直播是否暂停
-                        if (! empty($info['live_is_paused'])) {
+                        if (!empty($info['live_is_paused'])) {
                             // 直播暂停
                             $info['state'] = 3;
                         } else {
@@ -204,7 +200,7 @@ class Room extends \App\Common\Models\Live\Room
         if (empty($info)) {
             return array();
         }
-        
+
         return $info;
     }
 
@@ -218,15 +214,15 @@ class Room extends \App\Common\Models\Live\Room
         // 记录用户信息到redis
         $info = $this->getRedisData($info);
         // 如果不存在
-        if ($isForce || ! $this->redis->hexists($this->getRedisKey(), $info['room_id'])) {
+        if ($isForce || !$this->redis->hexists($this->getRedisKey(), $info['room_id'])) {
             $this->redis->hSet($this->getRedisKey(), $info['room_id'], json_encode($info));
         }
         // 如果开启了机器人的话
-        if (! empty($info['robot_settings']['is_open'])) {
+        if (!empty($info['robot_settings']['is_open'])) {
             $this->addRoomId4Robot($info['room_id']);
         }
     }
-    
+
     // 用户信息KEY
     protected function getRedisKey()
     {
@@ -237,13 +233,13 @@ class Room extends \App\Common\Models\Live\Room
     {
         $room_id = $roomInfo['room_id'];
         $auchor_id = $roomInfo['auchor_id'];
-        
+
         // 计算房间的虚拟围观人数
         $roomInfo['view_num_virtual'] = $this->calcVirtualViewNum($roomInfo);
-        
+
         // 计算围观峰值
         $roomInfo['view_peak_num'] = $this->calcViewPeakNum($room_id, $client_num);
-        
+
         // 是真实的用户的时候
         if (empty($is_robot)) {
             // 增加房间的真实围观人数
@@ -520,20 +516,20 @@ class Room extends \App\Common\Models\Live\Room
         if (empty($roomInfo)) {
             return array();
         }
-        
+
         if (empty($roomInfo['robot_settings']) || empty($roomInfo['robot_settings']['is_open'])) {
             return array();
         }
-        
+
         // 获取房间状态
         $roomInfo = $this->getState($roomInfo);
-        if (empty($roomInfo['state']) || ! in_array($roomInfo['state'], array(
+        if (empty($roomInfo['state']) || !in_array($roomInfo['state'], array(
             2, // 2 直播中 or 直播暂停
             3
         ))) {
             return array();
         }
-        
+
         return $roomInfo['robot_settings'];
     }
 
@@ -546,7 +542,7 @@ class Room extends \App\Common\Models\Live\Room
     {
         // 检测是否是主播 是主播直接跳过判定
         $is_auchor = false;
-        if (! empty($userInfo['is_auchor'])) {
+        if (!empty($userInfo['is_auchor'])) {
             // 如果该用户是该房间的主播的话
             if ($roomInfo['auchor_id'] == $userInfo['auchor_id']) {
                 $is_auchor = true;

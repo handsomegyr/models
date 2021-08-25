@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Weixinredpack\Models;
 
 class Limit extends \App\Common\Models\Weixinredpack\Limit
@@ -50,10 +51,10 @@ class Limit extends \App\Common\Models\Weixinredpack\Limit
     public function checkLimit($activity_id, $customer_id, $redpack_id, $re_openid)
     {
         $limits = $this->getLimits($activity_id, $customer_id, $redpack_id);
-        if (! empty($limits)) {
+        if (!empty($limits)) {
             foreach ($limits as $limit) {
                 // 增加log日志的查询
-                $redpackLogCount = $this->_log->getRedpackCountByOpenId($re_openid, $activity_id, $customer_id, $redpack_id, $limit['start_time']->sec, $limit['end_time']->sec);
+                $redpackLogCount = $this->_log->getRedpackCountByOpenId($re_openid, $activity_id, $customer_id, $redpack_id, strtotime($limit['start_time']), strtotime($limit['end_time']));
                 if ($redpackLogCount >= $limit['personal_got_num_limit']) {
                     return false;
                 }
