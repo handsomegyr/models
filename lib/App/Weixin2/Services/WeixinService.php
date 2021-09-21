@@ -345,13 +345,9 @@ class WeixinService
         return $res;
     }
 
-    public function getUserInfo($user_id)
+    public function getUserInfo($userInfo)
     {
-        $modelUser = new \App\Weixin2\Models\User\User();
-        $userInfo = $modelUser->getInfoById($user_id);
-        if (empty($userInfo)) {
-            throw new \Exception("用户记录ID:{$user_id}所对应的用户不存在");
-        }
+        $modelUser = new \App\Weixin2\Models\User\User();        
         $res = $this->getWeixinObject()
             ->getUserManager()
             ->getUserInfo($userInfo['openid']);

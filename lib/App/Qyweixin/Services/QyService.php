@@ -51,6 +51,16 @@ class QyService
         $this->modelQyweixinAgent = new \App\Qyweixin\Models\Agent\Agent();
     }
 
+    public function getAuthorizerAppid()
+    {
+        return $this->authorizer_appid;
+    }
+    
+    public function getProviderAppid()
+    {
+        return $this->provider_appid;
+    }
+
     public function getAppConfig4Provider()
     {
         $this->getToken4Provider();
@@ -1339,9 +1349,9 @@ class QyService
     }
 
     // 获取部门成员详情
-    public function getDepartmentUserDetaillist($dep_id, $fetch_child = 0)
+    public function getDepartmentUserDetaillist($dep_id, $fetch_child = 0, $is_root = false)
     {
-        $modelDepartmentUser = new \App\Qyweixin\Models\Contact\DepartmentUserModel();
+        $modelDepartmentUser = new \App\Qyweixin\Models\Contact\DepartmentUser();
         $res = $this->getQyWeixinObject()
             ->getUserManager()
             ->userlist($dep_id, $fetch_child);
@@ -1425,7 +1435,11 @@ class QyService
          * }]
          * }
          */
-        $modelDepartmentUser->syncDepartmentUserList($dep_id, $this->authorizer_appid, $this->provider_appid, $res, time());
+        if (!empty($is_root) && !empty($fetch_child)) {
+            $modelDepartmentUser->getModel()->update(array('is_exist' => 0));
+        }
+        $now = time();
+        $modelDepartmentUser->syncDepartmentUserList($dep_id, $this->authorizer_appid, $this->provider_appid, $res, $now);
         return $res;
     }
 
