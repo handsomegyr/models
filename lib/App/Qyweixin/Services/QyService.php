@@ -55,7 +55,7 @@ class QyService
     {
         return $this->authorizer_appid;
     }
-    
+
     public function getProviderAppid()
     {
         return $this->provider_appid;
@@ -190,18 +190,6 @@ class QyService
         return $authorizerInfo;
     }
 
-    public function getAuthorizerInfo()
-    {
-        $modelAuthorizer = new \App\Qyweixin\Models\Authorize\Authorizer();
-        $authorizerInfo = $modelAuthorizer->getInfoByAppid($this->provider_appid, $this->authorizer_appid, true);
-        if (empty($authorizerInfo)) {
-            throw new \Exception("对应的授权方不存在");
-        }
-        $res = $this->getQyweixinProvider()->apiGetAuthorizerInfo($this->authorizer_appid);
-        $modelAuthorizer->updateAuthorizerInfo($authorizerInfo['_id'], $res, $authorizerInfo['memo']);
-        return $res;
-    }
-
     //获取应用的jsapi_ticket
     public function getJsapiTicket4Agent()
     {
@@ -224,12 +212,16 @@ class QyService
      * 视频（video） ：10MB，支持MP4格式
      * 普通文件（file）：20MB
      */
-    public function uploadMedia($media_rec_id)
+    public function uploadMedia($mediaInfo)
     {
         $modelMedia = new \App\Qyweixin\Models\Media\Media();
-        $mediaInfo = $modelMedia->getInfoById($media_rec_id);
-        if (empty($mediaInfo)) {
-            throw new \Exception("临时素材记录ID:{$media_rec_id}所对应的临时素材不存在");
+        //标量变量是指那些包含了 integer、float、string 或 boolean的变量
+        if (is_scalar($mediaInfo)) {
+            $media_rec_id = $mediaInfo;
+            $mediaInfo = $modelMedia->getInfoById($media_rec_id);
+            if (empty($mediaInfo)) {
+                throw new \Exception("临时素材记录ID:{$media_rec_id}所对应的临时素材不存在");
+            }
         }
 
         $filePath = $modelMedia->getPhysicalFilePath($mediaInfo['media']);
@@ -644,13 +636,9 @@ class QyService
     }
 
     // 读取成员
-    public function getUserInfo($id)
+    public function getUserInfo($userInfo)
     {
         $modelUser = new \App\Qyweixin\Models\User\User();
-        $userInfo = $modelUser->getInfoById($id);
-        if (empty($userInfo)) {
-            throw new \Exception("用户记录ID:{$id}所对应的用户不存在");
-        }
         $res = $this->getQyWeixinObject()
             ->getUserManager()
             ->get($userInfo['userid']);
@@ -734,13 +722,9 @@ class QyService
     }
 
     // userid转openid
-    public function convertToOpenid($id)
+    public function convertToOpenid($userInfo)
     {
         $modelUser = new \App\Qyweixin\Models\User\User();
-        $userInfo = $modelUser->getInfoById($id);
-        if (empty($userInfo)) {
-            throw new \Exception("用户记录ID:{$id}所对应的用户不存在");
-        }
         $res = $this->getQyWeixinObject()
             ->getUserManager()
             ->convertToOpenid($userInfo['userid']);
@@ -761,13 +745,9 @@ class QyService
     }
 
     // openid转userid
-    public function convertToUserid($id)
+    public function convertToUserid($userInfo)
     {
         $modelUser = new \App\Qyweixin\Models\User\User();
-        $userInfo = $modelUser->getInfoById($id);
-        if (empty($userInfo)) {
-            throw new \Exception("用户记录ID:{$id}所对应的用户不存在");
-        }
         $res = $this->getQyWeixinObject()
             ->getUserManager()
             ->convertToUserid($userInfo['openid']);
@@ -788,13 +768,9 @@ class QyService
     }
 
     // 获取加入企业二维码
-    public function getJoinQrcode($id)
+    public function getJoinQrcode($qrcodeInfo)
     {
         $modelCorpJoinQrcode = new \App\Qyweixin\Models\Contact\CorpJoinQrcode();
-        $qrcodeInfo = $modelCorpJoinQrcode->getInfoById($id);
-        if (empty($qrcodeInfo)) {
-            throw new \Exception("记录ID:{$id}所对应的用户不存在");
-        }
         $res = $this->getQyWeixinObject()
             ->getUserManager()
             ->corpGetJoinQrcode($qrcodeInfo['size_type']);
@@ -813,13 +789,9 @@ class QyService
     }
 
     // 批量邀请成员
-    public function batchInvite($id)
+    public function batchInvite($batchInviteInfo)
     {
         $modelBatchInvite = new \App\Qyweixin\Models\Contact\BatchInvite();
-        $batchInviteInfo = $modelBatchInvite->getInfoById($id);
-        if (empty($batchInviteInfo)) {
-            throw new \Exception("记录ID:{$id}所对应的记录不存在");
-        }
         $user = empty($batchInviteInfo['user']) ? array() : (is_array($batchInviteInfo['user']) ? $batchInviteInfo['user'] : \json_decode($batchInviteInfo['user'], true));
         $party = empty($batchInviteInfo['party']) ? array() : (is_array($batchInviteInfo['party']) ? $batchInviteInfo['party'] : \json_decode($batchInviteInfo['party'], true));
         $tag = empty($batchInviteInfo['tag']) ? array() : (is_array($batchInviteInfo['tag']) ? $batchInviteInfo['tag'] : \json_decode($batchInviteInfo['tag'], true));
@@ -1317,14 +1289,18 @@ class QyService
          *]
          * }
          */
+        // 如果从跟部门进行同步的话 那么先将所有的记录is_exist改成0
+        if (empty($dep_id)) {
+            $modelDepartment->clearExist($this->authorizer_appid, $this->provider_appid);
+        }
         $modelDepartment->syncDepartmentList($this->authorizer_appid, $this->provider_appid, $res, time());
         return $res;
     }
 
     // 获取部门成员
-    public function getDepartmentUserSimplelist($dep_id, $fetch_child = 0)
+    public function getDepartmentUserSimplelist($dep_id, $fetch_child = 0, $is_root = false)
     {
-        $modelDepartmentUser = new \App\Qyweixin\Models\Contact\DepartmentUserModel();
+        $modelDepartmentUser = new \App\Qyweixin\Models\Contact\DepartmentUser();
         $res = $this->getQyWeixinObject()
             ->getUserManager()
             ->simplelist($dep_id, $fetch_child);
@@ -1344,6 +1320,9 @@ class QyService
          * }
          * ]}
          */
+        if (!empty($is_root) && !empty($fetch_child)) {
+            $modelDepartmentUser->clearExist($this->authorizer_appid, $this->provider_appid);
+        }
         $modelDepartmentUser->syncDepartmentUserList($dep_id, $this->authorizer_appid, $this->provider_appid, $res, time());
         return $res;
     }
@@ -1351,6 +1330,7 @@ class QyService
     // 获取部门成员详情
     public function getDepartmentUserDetaillist($dep_id, $fetch_child = 0, $is_root = false)
     {
+        $modelUser = new \App\Qyweixin\Models\User\User();
         $modelDepartmentUser = new \App\Qyweixin\Models\Contact\DepartmentUser();
         $res = $this->getQyWeixinObject()
             ->getUserManager()
@@ -1436,10 +1416,12 @@ class QyService
          * }
          */
         if (!empty($is_root) && !empty($fetch_child)) {
-            $modelDepartmentUser->getModel()->update(array('is_exist' => 0));
+            $modelDepartmentUser->clearExist($this->authorizer_appid, $this->provider_appid);
         }
         $now = time();
-        $modelDepartmentUser->syncDepartmentUserList($dep_id, $this->authorizer_appid, $this->provider_appid, $res, $now);
+        $modelDepartmentUser->syncDepartmentUserList($this->authorizer_appid, $this->provider_appid, $res, $now);
+        $modelUser->syncUserList($this->authorizer_appid, $this->provider_appid, $res, $now);
+
         return $res;
     }
 
@@ -1570,13 +1552,10 @@ class QyService
     }
 
     //获取客户详情
-    public function getExternalUserInfo($external_userid)
+    public function getExternalUserInfo($userInfo)
     {
         $modelExternalUser = new \App\Qyweixin\Models\ExternalContact\ExternalUser();
-        $userInfo = $modelExternalUser->getInfoByExternalUserId($external_userid, $this->authorizer_appid);
-        if (empty($userInfo)) {
-            throw new \Exception("客户ID:{$external_userid}所对应的记录不存在");
-        }
+        $external_userid = $userInfo['external_userid'];
 
         $res = $this->getQyWeixinObject()
             ->getExternalContactManager()
@@ -1754,13 +1733,10 @@ class QyService
     }
 
     //获取客户群详情
-    public function getGroupChatInfo($chatid)
+    public function getGroupChatInfo($groupChatInfo)
     {
         $modelGroupChat = new \App\Qyweixin\Models\ExternalContact\GroupChat();
-        $groupChatInfo = $modelGroupChat->getInfoByChatId($chatid, $this->authorizer_appid);
-        if (empty($groupChatInfo)) {
-            throw new \Exception("客户群ID:{$chatid}所对应的记录不存在");
-        }
+        $chatid = $groupChatInfo['chat_id'];
 
         $res = $this->getQyWeixinObject()
             ->getExternalContactManager()
@@ -1856,13 +1832,13 @@ class QyService
     }
 
     //离职成员的外部联系人再分配
-    public function transfer($external_userid, $handover_userid, $takeover_userid)
+    public function transfer($transferInfo)
     {
         $modelTransfer = new \App\Qyweixin\Models\ExternalContact\Transfer();
-        $transferInfo = $modelTransfer->getInfoByUserId($external_userid, $handover_userid, $takeover_userid, $this->authorizer_appid);
-        if (empty($transferInfo)) {
-            throw new \Exception("外部联系人的userid:{$external_userid},离职成员的userid:{$handover_userid},接替成员的userid:{$takeover_userid}所对应的记录不存在");
-        }
+
+        $external_userid = $transferInfo['external_userid'];
+        $handover_userid = $transferInfo['handover_userid'];
+        $takeover_userid = $transferInfo['takeover_userid'];
         $res = $this->getQyWeixinObject()
             ->getExternalContactManager()
             ->transfer($external_userid, $handover_userid, $takeover_userid);
@@ -1879,13 +1855,12 @@ class QyService
     }
 
     //离职成员的群再分配
-    public function groupChatTransfer($chat_id, $new_owner)
+    public function groupChatTransfer($transferInfo)
     {
         $modelGroupChatTransfer = new \App\Qyweixin\Models\ExternalContact\GroupChatTransfer();
-        $transferInfo = $modelGroupChatTransfer->getInfoByChatId($chat_id, $new_owner, $this->authorizer_appid);
-        if (empty($transferInfo)) {
-            throw new \Exception("客户群ID:{$chat_id},新群主ID:{$new_owner}所对应的记录不存在");
-        }
+        $chat_id = $transferInfo['chat_id'];
+        $new_owner = $transferInfo['new_owner'];
+
         $chat_id_list = array($chat_id);
         $res = $this->getQyWeixinObject()
             ->getExternalContactManager()

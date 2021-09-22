@@ -20,6 +20,18 @@ class Department extends \App\Common\Models\Qyweixin\Contact\Department
         return $info;
     }
 
+    public function clearExist($authorizer_appid, $provider_appid)
+    {
+        $updateData = array('is_exist' => 0);
+        return $this->update(
+            array(
+                'authorizer_appid' => $authorizer_appid,
+                'provider_appid' => $provider_appid
+            ),
+            array('$set' => $updateData)
+        );
+    }
+
     public function syncDepartmentList($authorizer_appid, $provider_appid, $res, $now)
     {
         /**

@@ -110,6 +110,37 @@ class User extends \App\Common\Models\Weixin2\User\User
         return $this->update(array('_id' => $checkInfo['_id']), array('$set' => $data));
     }
 
+    public function syncUserList($authorizer_appid, $provider_appid, $res, $now)
+    {
+        /**
+         * {
+         * "errcode": 0,
+         * "errmsg": "ok",
+         * "userlist": [
+         * {
+         *    "userid": "zhangsan",
+         *    "name": "李四",
+         *    "department": [1, 2],
+         *    "open_userid": "xxxxxx"
+         * }
+         *]
+         * }
+         */
+        if (!empty($res['userlist'])) {
+            foreach ($res['userlist'] as $userInfo) {
+                $userid = $userInfo['userid'];
+                $checkInfo = $this->getInfoByUserId($userid, $authorizer_appid, $provider_appid);
+                $data = $this->getPrepareData($userInfo, $authorizer_appid, $provider_appid, $checkInfo);
+
+                if (!empty($checkInfo)) {
+                    return $this->update(array('_id' => $checkInfo['_id']), array('$set' => $data));
+                } else {
+                    $checkInfo = $this->insert($data);
+                }
+            }
+        }
+    }
+
     private function getPrepareData($userInfo, $authorizer_appid, $provider_appid, $checkInfo)
     {
         /**

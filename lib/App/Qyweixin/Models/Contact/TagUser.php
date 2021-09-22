@@ -22,8 +22,22 @@ class TagUser extends \App\Common\Models\Qyweixin\Contact\TagUser
         return $info;
     }
 
+    public function clearExist($tagid, $authorizer_appid, $provider_appid)
+    {
+        $updateData = array('is_exist' => 0);
+        return $this->update(
+            array(
+                'tagid' => $tagid,
+                'authorizer_appid' => $authorizer_appid,
+                'provider_appid' => $provider_appid
+            ),
+            array('$set' => $updateData)
+        );
+    }
+
     public function syncTagUserList($tagid, $authorizer_appid, $provider_appid, $res, $now)
     {
+        $this->clearExist($tagid, $authorizer_appid, $provider_appid);
         /**
          * {
          * "errcode": 0,
