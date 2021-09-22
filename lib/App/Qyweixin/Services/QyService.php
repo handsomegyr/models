@@ -1475,8 +1475,9 @@ class QyService
 
         $modelTagParty = new \App\Qyweixin\Models\Contact\TagParty();
         $modelTagUser = new \App\Qyweixin\Models\Contact\TagUser();
-        $modelTagParty->syncTagDepartmentList($tagid, $this->authorizer_appid, $this->provider_appid, $res, time());
-        $modelTagUser->syncTagUserList($tagid, $this->authorizer_appid, $this->provider_appid, $res, time());
+        $now = time();
+        $modelTagParty->syncTagDepartmentList($tagid, $this->authorizer_appid, $this->provider_appid, $res, $now);
+        $modelTagUser->syncTagUserList($tagid, $this->authorizer_appid, $this->provider_appid, $res, $now);
         return $res;
     }
 
