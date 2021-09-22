@@ -14,4 +14,10 @@ class Tag extends Base
     {
         return 'iqyweixin_tag';
     }
+    public function reorganize(array $data)
+    {
+        $data = parent::reorganize($data);
+        $data['is_exist'] = $this->changeToBoolean($data['is_exist']);
+        return $data;
+    }
 }

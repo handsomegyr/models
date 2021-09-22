@@ -26,6 +26,7 @@ class User extends Base
         $data['extattr'] = $this->changeToArray($data['extattr']);
         $data['external_profile'] = $this->changeToArray($data['external_profile']);
         $data['external_position'] = $this->changeToArray($data['external_position']);
+        $data['is_exist'] = $this->changeToBoolean($data['is_exist']);
         return $data;
     }
 }

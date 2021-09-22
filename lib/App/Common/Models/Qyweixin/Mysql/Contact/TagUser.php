@@ -14,4 +14,10 @@ class TagUser extends Base
     {
         return 'iqyweixin_tag_user';
     }
+    public function reorganize(array $data)
+    {
+        $data = parent::reorganize($data);
+        $data['is_exist'] = $this->changeToBoolean($data['is_exist']);
+        return $data;
+    }
 }

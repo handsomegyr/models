@@ -14,4 +14,10 @@ class TagParty extends Base
     {
         return 'iqyweixin_tag_party';
     }
+    public function reorganize(array $data)
+    {
+        $data = parent::reorganize($data);
+        $data['is_exist'] = $this->changeToBoolean($data['is_exist']);
+        return $data;
+    }
 }
