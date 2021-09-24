@@ -2,7 +2,7 @@
 
 namespace App\Qyweixin\Models\User;
 
-class User extends \App\Common\Models\Weixin2\User\User
+class User extends \App\Common\Models\Qyweixin\User\User
 {
 
     /**
@@ -76,6 +76,10 @@ class User extends \App\Common\Models\Weixin2\User\User
      */
     public function updateUserInfoByAction($userid, $authorizer_appid, $provider_appid, $range = true)
     {
+        if (empty($userid) || $userid == 'sys') {
+            return array();
+        }
+
         $checkInfo = $this->getInfoByUserId($userid, $authorizer_appid, $provider_appid);
         // $range = (rand(0, 100) === 1);
         if (empty($checkInfo) || $range) { // || empty($checkInfo['subscribe'])
