@@ -33,8 +33,8 @@ class Log extends \App\Common\Models\Task\Log
         $data = array();
         $data['task'] = $task;
         $data['is_success'] = $is_success;
-        $data['request'] = json_encode($request);
-        $data['result'] = json_encode($result);
+        $data['request'] = \App\Common\Utils\Helper::myJsonEncode($request);
+        $data['result'] = \App\Common\Utils\Helper::myJsonEncode($result);
         $data['log_time'] = \App\Common\Utils\Helper::getCurrentTime();
         return $this->insert($data);
     }

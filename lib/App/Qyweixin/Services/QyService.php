@@ -429,7 +429,7 @@ class QyService
             $match['msg_template_chat_type'],
             $ToUserName,
             $FromUserName,
-            \json_encode($msg_template_content),
+            \\App\Common\Utils\Helper::myJsonEncode($msg_template_content),
             time()
         );
 
@@ -1011,7 +1011,7 @@ class QyService
             $match['agent_msg_type'],
             $ToUserName,
             $FromUserName,
-            \json_encode($agentmsg),
+            \\App\Common\Utils\Helper::myJsonEncode($agentmsg),
             time()
         );
 
@@ -1123,7 +1123,7 @@ class QyService
             $match['appchat_msg_type'],
             $ToUserName,
             $FromUserName,
-            \json_encode($appchatmsg),
+            \\App\Common\Utils\Helper::myJsonEncode($appchatmsg),
             time()
         );
 
@@ -1247,7 +1247,7 @@ class QyService
             $match['linkedcorp_msg_type'],
             $ToUserName,
             $FromUserName,
-            \json_encode($linkedcorpmsg),
+            \\App\Common\Utils\Helper::myJsonEncode($linkedcorpmsg),
             time()
         );
 

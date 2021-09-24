@@ -227,12 +227,12 @@ trait BaseTrait
             $value = intval($value);
         } elseif (is_array($value)) {
             if (!empty($value)) {
-                $value = json_encode($value);
+                $value = \App\Common\Utils\Helper::myJsonEncode($value);
             } else {
                 $value = "";
             }
         } elseif (is_object($value)) {
-            $value = json_encode($value);
+            $value = \App\Common\Utils\Helper::myJsonEncode($value);
         }
 
         return $value;

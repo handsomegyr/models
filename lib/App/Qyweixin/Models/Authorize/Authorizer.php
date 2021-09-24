@@ -71,22 +71,22 @@ class Authorizer extends \App\Common\Models\Qyweixin\Authorize\Authorizer
                     'memo' => $memo
                 );
                 if (!empty($extInfo['dealer_corp_info'])) {
-                    $datas['dealer_corp_info'] = \json_encode($extInfo['dealer_corp_info']);
+                    $datas['dealer_corp_info'] = \\App\Common\Utils\Helper::myJsonEncode($extInfo['dealer_corp_info']);
                 }
                 if (!empty($extInfo['auth_corp_info'])) {
-                    $datas['auth_corp_info'] = \json_encode($extInfo['auth_corp_info']);
+                    $datas['auth_corp_info'] = \\App\Common\Utils\Helper::myJsonEncode($extInfo['auth_corp_info']);
                 }
                 if (!empty($extInfo['auth_info'])) {
-                    $datas['auth_info'] = \json_encode($extInfo['auth_info']);
+                    $datas['auth_info'] = \\App\Common\Utils\Helper::myJsonEncode($extInfo['auth_info']);
                 }
                 if (!empty($extInfo['auth_user_info'])) {
-                    $datas['auth_user_info'] = \json_encode($extInfo['auth_user_info']);
+                    $datas['auth_user_info'] = \\App\Common\Utils\Helper::myJsonEncode($extInfo['auth_user_info']);
                 }
                 if (!empty($extInfo['register_code_info'])) {
-                    $datas['register_code_info'] = \json_encode($extInfo['register_code_info']);
+                    $datas['register_code_info'] = \\App\Common\Utils\Helper::myJsonEncode($extInfo['register_code_info']);
                 }
                 if (!empty($extInfo['admin'])) {
-                    $datas['admin_list'] = \json_encode($extInfo['admin']);
+                    $datas['admin_list'] = \\App\Common\Utils\Helper::myJsonEncode($extInfo['admin']);
                 }
                 return $this->insert($datas);
             } else {
@@ -107,22 +107,22 @@ class Authorizer extends \App\Common\Models\Qyweixin\Authorize\Authorizer
         $updateData['access_token_expire'] = \App\Common\Utils\Helper::getCurrentTime(time() + $expires_in);
         if (!empty($extInfo)) {
             if (!empty($extInfo['dealer_corp_info'])) {
-                $datas['dealer_corp_info'] = \json_encode($extInfo['dealer_corp_info']);
+                $datas['dealer_corp_info'] = \\App\Common\Utils\Helper::myJsonEncode($extInfo['dealer_corp_info']);
             }
             if (!empty($extInfo['auth_corp_info'])) {
-                $datas['auth_corp_info'] = \json_encode($extInfo['auth_corp_info']);
+                $datas['auth_corp_info'] = \\App\Common\Utils\Helper::myJsonEncode($extInfo['auth_corp_info']);
             }
             if (!empty($extInfo['auth_info'])) {
-                $datas['auth_info'] = \json_encode($extInfo['auth_info']);
+                $datas['auth_info'] = \\App\Common\Utils\Helper::myJsonEncode($extInfo['auth_info']);
             }
             if (!empty($extInfo['auth_user_info'])) {
-                $datas['auth_user_info'] = \json_encode($extInfo['auth_user_info']);
+                $datas['auth_user_info'] = \\App\Common\Utils\Helper::myJsonEncode($extInfo['auth_user_info']);
             }
             if (!empty($extInfo['register_code_info'])) {
-                $datas['register_code_info'] = \json_encode($extInfo['register_code_info']);
+                $datas['register_code_info'] = \\App\Common\Utils\Helper::myJsonEncode($extInfo['register_code_info']);
             }
             if (!empty($extInfo['admin'])) {
-                $datas['admin_list'] = \json_encode($extInfo['admin']);
+                $datas['admin_list'] = \\App\Common\Utils\Helper::myJsonEncode($extInfo['admin']);
             }
         }
         if (!empty($memo)) {
@@ -246,7 +246,7 @@ class Authorizer extends \App\Common\Models\Qyweixin\Authorize\Authorizer
                         $objToken = new \Qyweixin\Token\Server($token['appid'], $token['appsecret']);
                         $arrToken = $objToken->getAccessToken();
                         if (!isset($arrToken['access_token'])) {
-                            throw new \Exception(\json_encode($arrToken));
+                            throw new \Exception(\\App\Common\Utils\Helper::myJsonEncode($arrToken));
                         }
                         $token = $this->updateAccessToken($token['_id'], $arrToken['access_token'], $arrToken['access_token'], $arrToken['expires_in'], "", null);
                     }

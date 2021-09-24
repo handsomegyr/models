@@ -373,7 +373,7 @@ class Goods extends \App\Common\Models\Goods\Goods
         $data['sale_state'] = self::SALE_STATE3; // 已揭晓
         $data['prize_code'] = $prize_code;
         $data['prize_time'] = $prize_time;
-        $data['order_goods_list'] = json_encode($orderGoodsList);
+        $data['order_goods_list'] = \App\Common\Utils\Helper::myJsonEncode($orderGoodsList);
         $data['prize_buyer_id'] = $prizeOrderGoodsInfo['buyer_id'];
         $data['prize_buyer_name'] = $prizeOrderGoodsInfo['buyer_name'];
         $data['prize_buyer_avatar'] = $prizeOrderGoodsInfo['buyer_avatar'];

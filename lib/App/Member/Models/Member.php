@@ -265,7 +265,7 @@ class Member extends \App\Common\Models\Member\Member
     {
         $data = array(
             'qqopenid' => $qqopenid,
-            'qqinfo' => json_encode($qqinfo)
+            'qqinfo' => \App\Common\Utils\Helper::myJsonEncode($qqinfo)
         );
         $this->updateMemberInfo($member_id, $data);
     }
@@ -274,7 +274,7 @@ class Member extends \App\Common\Models\Member\Member
     {
         $data = array(
             'weixinopenid' => $weixinopenid,
-            'weixininfo' => json_encode($weixininfo)
+            'weixininfo' => \App\Common\Utils\Helper::myJsonEncode($weixininfo)
         );
         $this->updateMemberInfo($member_id, $data);
     }

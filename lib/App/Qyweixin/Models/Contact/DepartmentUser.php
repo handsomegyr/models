@@ -60,7 +60,7 @@ class DepartmentUser extends \App\Common\Models\Qyweixin\Contact\DepartmentUser
                         $data['provider_appid'] = $provider_appid;
                         $data['name'] = $departmentUserInfo['name'];
                         if (isset($departmentUserInfo['department'])) {
-                            $data['department'] = \json_encode($departmentUserInfo['department']);
+                            $data['department'] = \\App\Common\Utils\Helper::myJsonEncode($departmentUserInfo['department']);
                         }
                         if (isset($departmentUserInfo['open_userid'])) {
                             $data['open_userid'] = $departmentUserInfo['open_userid'];

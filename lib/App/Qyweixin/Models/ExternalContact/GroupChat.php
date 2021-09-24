@@ -92,7 +92,7 @@ class GroupChat extends \App\Common\Models\Qyweixin\ExternalContact\GroupChat
             $data['owner'] = isset($groupChatInfo['owner']) ? $groupChatInfo['owner'] : '';
             $data['create_time'] = \App\Common\Utils\Helper::getCurrentTime($groupChatInfo['create_time']);
             $data['notice'] = isset($groupChatInfo['notice']) ? $groupChatInfo['notice'] : '';
-            $data['member_list'] = isset($groupChatInfo['member_list']) ? \json_encode($groupChatInfo['member_list']) : '';
+            $data['member_list'] = isset($groupChatInfo['member_list']) ? \\App\Common\Utils\Helper::myJsonEncode($groupChatInfo['member_list']) : '';
         } else {
             $data = array();
             $data['provider_appid'] = $provider_appid;
@@ -109,7 +109,7 @@ class GroupChat extends \App\Common\Models\Qyweixin\ExternalContact\GroupChat
                 $data['notice'] = $groupChatInfo['notice'];
             }
             if (isset($groupChatInfo['member_list'])) {
-                $data['member_list'] = \json_encode($groupChatInfo['member_list']);
+                $data['member_list'] = \\App\Common\Utils\Helper::myJsonEncode($groupChatInfo['member_list']);
             }
         }
         return $data;

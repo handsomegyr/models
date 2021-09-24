@@ -59,12 +59,12 @@ class TagParty extends \App\Common\Models\Qyweixin\Contact\TagParty
                 $data['provider_appid'] = $provider_appid;
                 $data['tagname'] = $res['tagname'];
                 if (isset($res['invalidparty'])) {
-                    $data['invalidparty'] = \json_encode($res['invalidparty']);
+                    $data['invalidparty'] = \\App\Common\Utils\Helper::myJsonEncode($res['invalidparty']);
                 } else {
                     $data['invalidparty'] = "[]";
                 }
                 $data['get_time'] = \App\Common\Utils\Helper::getCurrentTime($now);
-                $data['memo'] = \json_encode($res);
+                $data['memo'] = \\App\Common\Utils\Helper::myJsonEncode($res);
                 if (!empty($info)) {
                     $this->update(array('_id' => $info['_id']), array('$set' => $data));
                 } else {

@@ -162,7 +162,7 @@ class Application extends \App\Common\Models\Weixin\Application
                         $objToken = new \Weixin\Token\Server($token['appid'], $token['secret']);
                         $arrToken = $objToken->getAccessToken();
                         if (! isset($arrToken['access_token'])) {
-                            throw new \Exception(json_encode($arrToken));
+                            throw new \Exception(\App\Common\Utils\Helper::myJsonEncode($arrToken));
                         }
                         
                         $cmd = array();
@@ -184,7 +184,7 @@ class Application extends \App\Common\Models\Weixin\Application
                             $objLock->release();
                             $token = $rst['value'];
                         } else {
-                            throw new \Exception(json_encode($rst));
+                            throw new \Exception(\App\Common\Utils\Helper::myJsonEncode($rst));
                         }
                     }
                 }
@@ -231,7 +231,7 @@ class Application extends \App\Common\Models\Weixin\Application
                             $objLock->release();
                             $token = $rst['value'];
                         } else {
-                            throw new \Exception(json_encode($rst));
+                            throw new \Exception(\App\Common\Utils\Helper::myJsonEncode($rst));
                         }
                     }
                 }
@@ -271,7 +271,7 @@ class Application extends \App\Common\Models\Weixin\Application
                             $objLock->release();
                             $token = $rst['value'];
                         } else {
-                            throw new \Exception(json_encode($rst));
+                            throw new \Exception(\App\Common\Utils\Helper::myJsonEncode($rst));
                         }
                     }
                 }

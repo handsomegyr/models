@@ -137,7 +137,7 @@ class ComponentApplication extends \App\Common\Models\Weixin\ComponentApplicatio
         $rst = $this->findAndModify($cmd);
 
         if (empty($rst['ok'])) {
-            throw new \Exception(json_encode($rst));
+            throw new \Exception(\App\Common\Utils\Helper::myJsonEncode($rst));
         }
 
         if (!empty($rst['value'])) {
@@ -155,7 +155,7 @@ class ComponentApplication extends \App\Common\Models\Weixin\ComponentApplicatio
 
             return $newInfo;
         } else {
-            throw new \Exception(json_encode($rst));
+            throw new \Exception(\App\Common\Utils\Helper::myJsonEncode($rst));
         }
     }
 
@@ -185,7 +185,7 @@ class ComponentApplication extends \App\Common\Models\Weixin\ComponentApplicatio
         $rst = $this->findAndModify($cmd);
 
         if (empty($rst['ok'])) {
-            throw new \Exception(json_encode($rst));
+            throw new \Exception(\App\Common\Utils\Helper::myJsonEncode($rst));
         }
 
         if (!empty($rst['value'])) {
@@ -203,7 +203,7 @@ class ComponentApplication extends \App\Common\Models\Weixin\ComponentApplicatio
 
             return $newInfo;
         } else {
-            throw new \Exception(json_encode($rst));
+            throw new \Exception(\App\Common\Utils\Helper::myJsonEncode($rst));
         }
     }
 
@@ -240,7 +240,7 @@ class ComponentApplication extends \App\Common\Models\Weixin\ComponentApplicatio
                         // $arrToken['authorizer_access_token'], $arrToken['authorizer_refresh_token'], $arrToken['expires_in']
 
                         if (!isset($arrToken['authorizer_access_token'])) {
-                            throw new \Exception(json_encode($arrToken));
+                            throw new \Exception(\App\Common\Utils\Helper::myJsonEncode($arrToken));
                         }
 
                         $cmd = array();
@@ -263,7 +263,7 @@ class ComponentApplication extends \App\Common\Models\Weixin\ComponentApplicatio
                             $objLock->release();
                             $token = $rst['value'];
                         } else {
-                            throw new \Exception(json_encode($rst));
+                            throw new \Exception(\App\Common\Utils\Helper::myJsonEncode($rst));
                         }
                     }
                 }
@@ -310,7 +310,7 @@ class ComponentApplication extends \App\Common\Models\Weixin\ComponentApplicatio
                             $objLock->release();
                             $token = $rst['value'];
                         } else {
-                            throw new \Exception(json_encode($rst));
+                            throw new \Exception(\App\Common\Utils\Helper::myJsonEncode($rst));
                         }
                     }
                 }
@@ -350,7 +350,7 @@ class ComponentApplication extends \App\Common\Models\Weixin\ComponentApplicatio
                             $objLock->release();
                             $token = $rst['value'];
                         } else {
-                            throw new \Exception(json_encode($rst));
+                            throw new \Exception(\App\Common\Utils\Helper::myJsonEncode($rst));
                         }
                     }
                 }
@@ -373,7 +373,7 @@ class ComponentApplication extends \App\Common\Models\Weixin\ComponentApplicatio
                         $arrToken = $objToken->apiComponentToken($token['component_verify_ticket']);
 
                         if (!isset($arrToken['component_access_token'])) {
-                            throw new \Exception(json_encode($arrToken));
+                            throw new \Exception(\App\Common\Utils\Helper::myJsonEncode($arrToken));
                         }
 
                         $cmd = array();
@@ -395,7 +395,7 @@ class ComponentApplication extends \App\Common\Models\Weixin\ComponentApplicatio
                             $objLock->release();
                             $token = $rst['value'];
                         } else {
-                            throw new \Exception(json_encode($rst));
+                            throw new \Exception(\App\Common\Utils\Helper::myJsonEncode($rst));
                         }
                     }
                 }

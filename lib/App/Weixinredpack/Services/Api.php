@@ -262,7 +262,7 @@ class Api
             'result' => $result
         );
         if ($this->_rtnMsgType == 'json') {
-            return json_encode($rst);
+            return \App\Common\Utils\Helper::myJsonEncode($rst);
         } else {
             return $rst;
         }
@@ -277,7 +277,7 @@ class Api
         );
 
         if ($this->_rtnMsgType == 'json') {
-            return json_encode($rst);
+            return \App\Common\Utils\Helper::myJsonEncode($rst);
         } else {
             return $rst;
         }

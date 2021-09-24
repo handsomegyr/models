@@ -242,7 +242,7 @@ class Redis
             $this->logout($old_client_id, $old_service_id, $old_room_id, $user_id);
         }
         // 添加
-        $this->redis->hSet($this->getUserKey(), $user_id, json_encode($info));
+        $this->redis->hSet($this->getUserKey(), $user_id, \App\Common\Utils\Helper::myJsonEncode($info));
     }
 
     public function removeUser($user_id)
@@ -474,7 +474,7 @@ class Redis
     public function pushWelcomeMsgRequest($request)
     {
         $key = $this->getWelcomeMsgRequestKey();
-        $this->redis->rpush($key, json_encode($request));
+        $this->redis->rpush($key, \App\Common\Utils\Helper::myJsonEncode($request));
     }
 
     /**

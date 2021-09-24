@@ -35,10 +35,10 @@ class Log extends Base
 
         return $this->insert(array(
             'uri' => isset($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : 'php cli',
-            'session_info' => !empty($_SESSION) ? \json_encode($_SESSION) : '{}',
-            'post_params' => !empty($_POST) ? \json_encode($_POST) : '{}',
-            'get_params' => !empty($_GET) ? \json_encode($_GET) : '{}',
-            'server_info' => !empty($_SERVER) ? \json_encode($_SERVER) : '{}',
+            'session_info' => !empty($_SESSION) ? \\App\Common\Utils\Helper::myJsonEncode($_SESSION) : '{}',
+            'post_params' => !empty($_POST) ? \\App\Common\Utils\Helper::myJsonEncode($_POST) : '{}',
+            'get_params' => !empty($_GET) ? \\App\Common\Utils\Helper::myJsonEncode($_GET) : '{}',
+            'server_info' => !empty($_SERVER) ? \\App\Common\Utils\Helper::myJsonEncode($_SERVER) : '{}',
             'company_project_id' => $company_project_id,
             'project_id' => $project_id,
             'project_collection_id' => $project_collection_id,

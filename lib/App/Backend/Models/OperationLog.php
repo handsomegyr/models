@@ -22,7 +22,7 @@ class OperationLog extends \App\Common\Models\Backend\OperationLog
         $data['path'] = $path;
         $data['method'] = $method;
         $data['ip'] = $ip;
-        $data['params'] = \json_encode($params);
+        $data['params'] = \\App\Common\Utils\Helper::myJsonEncode($params);
         $data['happen_time'] = \App\Common\Utils\Helper::getCurrentTime();
         $result = $this->insert($data);
 

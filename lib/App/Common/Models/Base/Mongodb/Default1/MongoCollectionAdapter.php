@@ -608,7 +608,7 @@ class MongoCollectionAdapter
         $fields = empty($fields) ? array() : $fields;
         $cursor = $this->find($query, $fields);
         if (!$cursor instanceof \MongoCursor)
-            throw new \Exception('$query error:' . json_encode($query));
+            throw new \Exception('$query error:' . \App\Common\Utils\Helper::myJsonEncode($query));
 
         if (!empty($sort))
             $cursor->sort($sort);
@@ -1055,14 +1055,14 @@ class MongoCollectionAdapter
                 ), array(
                     '$set' => array(
                         'isRunning' => false,
-                        'rst' => is_string($rst) ? $rst : json_encode($rst)
+                        'rst' => is_string($rst) ? $rst : \App\Common\Utils\Helper::myJsonEncode($rst)
                     )
                 ));
             };
 
             $failure = function ($code, $msg) {
                 if (is_array($msg)) {
-                    $msg = json_encode($msg);
+                    $msg = \App\Common\Utils\Helper::myJsonEncode($msg);
                 }
                 return array(
                     'ok' => 0,

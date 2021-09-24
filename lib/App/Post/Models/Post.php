@@ -99,7 +99,7 @@ class Post extends \App\Common\Models\Post\Post
         $data['goods_commonid'] = $goodsInfo['goods_commonid'];
         $data['goods_id'] = $goodsInfo['_id'];
         $data['buyer_id'] = $buyer_id;
-        $data['goods_info'] = json_encode($goodsInfo);
+        $data['goods_info'] = \App\Common\Utils\Helper::myJsonEncode($goodsInfo);
         $data['order_no'] = $goodsInfo['prize_order_goods_order_no'];
         $data['vote_num'] = 0;
         $data['reply_num'] = 0;

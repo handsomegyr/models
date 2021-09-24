@@ -48,9 +48,9 @@ class Log extends \App\Common\Models\Weixin2\Msg\Log
         $data['ChangeType'] = isset($info['ChangeType']) ? $info['ChangeType'] : ''; //ChangeType
 
         $data['MenuID'] = isset($info['MenuID']) ? $info['MenuID'] : '';
-        $data['ScanCodeInfo'] = isset($info['ScanCodeInfo']) ? \json_encode($info['ScanCodeInfo']) : '';
-        $data['SendPicsInfo'] = isset($info['SendPicsInfo']) ? \json_encode($info['SendPicsInfo']) : '';
-        $data['SendLocationInfo'] = isset($info['SendLocationInfo']) ? \json_encode($info['SendLocationInfo']) : '';
+        $data['ScanCodeInfo'] = isset($info['ScanCodeInfo']) ? \\App\Common\Utils\Helper::myJsonEncode($info['ScanCodeInfo']) : '';
+        $data['SendPicsInfo'] = isset($info['SendPicsInfo']) ? \\App\Common\Utils\Helper::myJsonEncode($info['SendPicsInfo']) : '';
+        $data['SendLocationInfo'] = isset($info['SendLocationInfo']) ? \\App\Common\Utils\Helper::myJsonEncode($info['SendLocationInfo']) : '';
 
         $data['Ticket'] = isset($info['Ticket']) ? $info['Ticket'] : '';
         $data['Latitude'] = isset($info['Latitude']) ? $info['Latitude'] : 0;
@@ -66,7 +66,7 @@ class Log extends \App\Common\Models\Weixin2\Msg\Log
         $data['FilterCount'] = isset($info['FilterCount']) ? $info['FilterCount'] : 0;
         $data['SentCount'] = isset($info['SentCount']) ? $info['SentCount'] : 0;
         $data['ErrorCount'] = isset($info['ErrorCount']) ? $info['ErrorCount'] : 0;
-        $data['CopyrightCheckResult'] = isset($info['CopyrightCheckResult']) ? \json_encode($info['CopyrightCheckResult']) : '';
+        $data['CopyrightCheckResult'] = isset($info['CopyrightCheckResult']) ? \\App\Common\Utils\Helper::myJsonEncode($info['CopyrightCheckResult']) : '';
 
         $data['CardId'] = isset($info['CardId']) ? $info['CardId'] : '';
         $data['RefuseReason'] = isset($info['RefuseReason']) ? $info['RefuseReason'] : '';
@@ -108,10 +108,10 @@ class Log extends \App\Common\Models\Weixin2\Msg\Log
         $data['AppId'] = isset($info['AppId']) ? $info['AppId'] : '';
         $data['Source'] = isset($info['Source']) ? $info['Source'] : '';
 
-        $data['request_params'] = isset($info['request_params']) ? \json_encode($info['request_params']) : '';
+        $data['request_params'] = isset($info['request_params']) ? \\App\Common\Utils\Helper::myJsonEncode($info['request_params']) : '';
         $data['request_xml'] = isset($info['request_xml']) ? ($info['request_xml']) : '';
         $data['response'] = isset($info['response']) ? ($info['response']) : '';
-        $data['aes_info'] = isset($info['aes_info']) ? \json_encode($info['aes_info']) : '';
+        $data['aes_info'] = isset($info['aes_info']) ? \\App\Common\Utils\Helper::myJsonEncode($info['aes_info']) : '';
         $data['is_aes'] = isset($info['is_aes']) ? intval($info['is_aes']) : 0;
         $data['request_time'] = isset($info['request_time']) ? \App\Common\Utils\Helper::getCurrentTime($info['request_time']) : '';
         $data['response_time'] = isset($info['response_time']) ? \App\Common\Utils\Helper::getCurrentTime($info['response_time']) : '';

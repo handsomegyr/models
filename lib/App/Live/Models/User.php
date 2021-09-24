@@ -86,7 +86,7 @@ class User extends \App\Common\Models\Live\User
         // 记录用户信息到redis
         $info = $this->getRedisData($info);
         if ($isForce || !$this->redis->hexists($this->getRedisKey(), $info['user_id'])) {
-            $this->redis->hSet($this->getRedisKey(), $info['user_id'], json_encode($info));
+            $this->redis->hSet($this->getRedisKey(), $info['user_id'], \App\Common\Utils\Helper::myJsonEncode($info));
         }
     }
 

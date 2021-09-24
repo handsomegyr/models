@@ -90,7 +90,7 @@ class TaskLog extends \App\Common\Models\Qyweixin\Notification\TaskLog
         if (empty($error)) {
             $updateData['errors'] = "";
         } else {
-            $updateData['errors'] = \json_encode($error);
+            $updateData['errors'] = \\App\Common\Utils\Helper::myJsonEncode($error);
         }
 
         $incData = array();

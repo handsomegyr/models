@@ -94,7 +94,7 @@ class Reply extends \App\Common\Models\Weixin\Reply
                 '_id' => $reply['_id']
             ), array(
                 '$set' => array(
-                    $type . '_media_result' => json_encode($media_result)
+                    $type . '_media_result' => \App\Common\Utils\Helper::myJsonEncode($media_result)
                 )
             ));
         }

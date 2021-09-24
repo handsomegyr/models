@@ -35,7 +35,7 @@ class Random extends \App\Common\Models\Questionnaire\Random
         $data = array();
         $data['user_id'] = $user_id;
         $data['questionnaire_id'] = $questionnaire_id;
-        $data['question_ids'] = json_encode($question_ids);
+        $data['question_ids'] = \App\Common\Utils\Helper::myJsonEncode($question_ids);
         $data['is_finish'] = false;
         return $this->insert($data);
     }

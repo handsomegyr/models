@@ -71,7 +71,7 @@ class Authorizer extends \App\Common\Models\Weixin2\Authorize\Authorizer
                     'access_token' => $access_token,
                     'access_token_expire' => \App\Common\Utils\Helper::getCurrentTime(time() + $expires_in),
                     'refresh_token' => $refresh_token,
-                    'func_info' => \json_encode($func_info),
+                    'func_info' => \\App\Common\Utils\Helper::myJsonEncode($func_info),
                     'memo' => $memo
                 );
                 return $this->insert($datas);
@@ -89,7 +89,7 @@ class Authorizer extends \App\Common\Models\Weixin2\Authorize\Authorizer
         $updateData['refresh_token'] = $refresh_token;
         $updateData['access_token_expire'] = \App\Common\Utils\Helper::getCurrentTime(time() + $expires_in);
         if (!empty($func_info)) {
-            $updateData['func_info'] = \json_encode($func_info);
+            $updateData['func_info'] = \\App\Common\Utils\Helper::myJsonEncode($func_info);
         }
         if (!empty($memo)) {
             $updateData["memo"] = $memo;
@@ -196,7 +196,7 @@ class Authorizer extends \App\Common\Models\Weixin2\Authorize\Authorizer
                         $objToken = new \Weixin\Token\Server($token['appid'], $token['appsecret']);
                         $arrToken = $objToken->getAccessToken();
                         if (!isset($arrToken['access_token'])) {
-                            throw new \Exception(json_encode($arrToken));
+                            throw new \Exception(\App\Common\Utils\Helper::myJsonEncode($arrToken));
                         }
                         if (!isset($arrToken['refresh_token'])) {
                             $arrToken['refresh_token'] = $arrToken['access_token'];

@@ -41,6 +41,6 @@ class Source extends \App\Common\Models\Weixin\Source
      */
     public function object2array($object)
     {
-        return @json_decode(preg_replace('/{}/', '""', @json_encode($object)), 1);
+        return @json_decode(preg_replace('/{}/', '""', @\App\Common\Utils\Helper::myJsonEncode($object)), 1);
     }
 }

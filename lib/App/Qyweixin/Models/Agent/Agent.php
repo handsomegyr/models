@@ -124,9 +124,9 @@ class Agent extends \App\Common\Models\Qyweixin\Agent\Agent
         $updateData['name'] = $res['name'];
         $updateData['square_logo_url'] = $res['square_logo_url'];
         $updateData['description'] = $res['description'];
-        $updateData['allow_userinfos'] = !empty($res['allow_userinfos']) ? \json_encode($res['allow_userinfos']) : "{}";
-        $updateData['allow_partys'] =  !empty($res['allow_partys']) ? \json_encode($res['allow_partys']) : "{}";
-        $updateData['allow_tags'] =  !empty($res['allow_tags']) ? \json_encode($res['allow_tags']) : "{}";
+        $updateData['allow_userinfos'] = !empty($res['allow_userinfos']) ? \\App\Common\Utils\Helper::myJsonEncode($res['allow_userinfos']) : "{}";
+        $updateData['allow_partys'] =  !empty($res['allow_partys']) ? \\App\Common\Utils\Helper::myJsonEncode($res['allow_partys']) : "{}";
+        $updateData['allow_tags'] =  !empty($res['allow_tags']) ? \\App\Common\Utils\Helper::myJsonEncode($res['allow_tags']) : "{}";
         $updateData['close'] = $res['close'];
         $updateData['redirect_domain'] = $res['redirect_domain'];
         $updateData['report_location_flag'] = $res['report_location_flag'];
@@ -159,7 +159,7 @@ class Agent extends \App\Common\Models\Qyweixin\Agent\Agent
                     $objToken = new \Qyweixin\Token\Server($token['agentid'], $token['secret']);
                     $arrToken = $objToken->getAccessToken();
                     if (!isset($arrToken['access_token'])) {
-                        throw new \Exception(json_encode($arrToken));
+                        throw new \Exception(\App\Common\Utils\Helper::myJsonEncode($arrToken));
                     }
                     $token = $this->updateAccessToken($token['_id'], $arrToken['access_token'], $arrToken['expires_in']);
                 }

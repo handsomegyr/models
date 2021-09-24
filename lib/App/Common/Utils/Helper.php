@@ -16,4 +16,17 @@ class Helper
             return date('Y-m-d H:i:s', $time);
         }
     }
+
+    /**
+     * \App\Common\Utils\Helper::myJsonEncode(不转义斜杠和中文)
+     *
+     * @param mixed $data
+     * @return false|string
+     */
+    public static function myJsonEncode($data)
+    {
+        $options = JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRESERVE_ZERO_FRACTION;
+
+        return \App\Common\Utils\Helper::myJsonEncode($data, $options);
+    }
 }

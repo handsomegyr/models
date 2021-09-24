@@ -280,7 +280,7 @@ class Goods extends \App\Common\Models\Order\Goods
             'order_state' => self::ORDER_STATE1
         );
         $data = array();
-        $data['consignee_info'] = json_encode($consigneeInfo);
+        $data['consignee_info'] = \App\Common\Utils\Helper::myJsonEncode($consigneeInfo);
         $data['order_message'] = $message;
         $data['order_state'] = self::ORDER_STATE2; // 待发货
         $this->update($query, array(
@@ -301,7 +301,7 @@ class Goods extends \App\Common\Models\Order\Goods
             'order_state' => self::ORDER_STATE2
         );
         $data = array();
-        $data['delivery_info'] = json_encode($deliveryInfo);
+        $data['delivery_info'] = \App\Common\Utils\Helper::myJsonEncode($deliveryInfo);
         $data['order_state'] = self::ORDER_STATE3; // 待确认收货
         $this->update($query, array(
             '$set' => $data

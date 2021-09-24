@@ -49,9 +49,9 @@ class Log extends \App\Common\Models\Qyweixin\Msg\Log
         $data['ChangeType'] = isset($info['ChangeType']) ? $info['ChangeType'] : ''; //ChangeType
 
         $data['MenuID'] = isset($info['MenuID']) ? $info['MenuID'] : '';
-        $data['ScanCodeInfo'] = isset($info['ScanCodeInfo']) ? \json_encode($info['ScanCodeInfo']) : '';
-        $data['SendPicsInfo'] = isset($info['SendPicsInfo']) ? \json_encode($info['SendPicsInfo']) : '';
-        $data['SendLocationInfo'] = isset($info['SendLocationInfo']) ? \json_encode($info['SendLocationInfo']) : '';
+        $data['ScanCodeInfo'] = isset($info['ScanCodeInfo']) ? \\App\Common\Utils\Helper::myJsonEncode($info['ScanCodeInfo']) : '';
+        $data['SendPicsInfo'] = isset($info['SendPicsInfo']) ? \\App\Common\Utils\Helper::myJsonEncode($info['SendPicsInfo']) : '';
+        $data['SendLocationInfo'] = isset($info['SendLocationInfo']) ? \\App\Common\Utils\Helper::myJsonEncode($info['SendLocationInfo']) : '';
 
         $data['Ticket'] = isset($info['Ticket']) ? $info['Ticket'] : '';
         $data['Latitude'] = isset($info['Latitude']) ? $info['Latitude'] : 0;
@@ -78,7 +78,7 @@ class Log extends \App\Common\Models\Qyweixin\Msg\Log
         $data['contact_Alias'] = isset($info['Alias']) ? $info['Alias'] : ''; // Alias 成员别名
         $data['contact_Telephone'] = isset($info['Telephone']) ? $info['Telephone'] : ''; // Telephone 座机
         $data['contact_Address'] = isset($info['Address']) ? $info['Address'] : ''; // Address 地址
-        $data['contact_ExtAttr'] = isset($info['ExtAttr']) ? \json_encode($info['ExtAttr']) : ''; // ExtAttr 扩展属性
+        $data['contact_ExtAttr'] = isset($info['ExtAttr']) ? \\App\Common\Utils\Helper::myJsonEncode($info['ExtAttr']) : ''; // ExtAttr 扩展属性
 
         //部门事件
         $data['contact_DeptId'] = isset($info['Id']) ? $info['Id'] : ''; // Id 部门Id
@@ -94,7 +94,7 @@ class Log extends \App\Common\Models\Qyweixin\Msg\Log
         $data['contact_DelPartyItems'] = isset($info['DelPartyItems']) ? $info['DelPartyItems'] : ''; // DelPartyItems 标签中删除的部门id列表，用逗号分隔
 
         //异步任务完成通知
-        $data['BatchJob'] = isset($info['BatchJob']) ? \json_encode($info['BatchJob']) : ''; // BatchJob
+        $data['BatchJob'] = isset($info['BatchJob']) ? \\App\Common\Utils\Helper::myJsonEncode($info['BatchJob']) : ''; // BatchJob
 
         //企业客户事件
         $data['external_contact_UserID'] = isset($info['UserID']) ? $info['UserID'] : ''; // UserID 企业服务人员的UserID
@@ -106,14 +106,14 @@ class Log extends \App\Common\Models\Qyweixin\Msg\Log
         $data['ChatId'] = isset($info['ChatId']) ? $info['ChatId'] : ''; // ChatId 群ID
 
         //审批状态通知事件 和 审批申请状态变化回调通知
-        $data['ApprovalInfo'] = isset($info['ApprovalInfo']) ? \json_encode($info['ApprovalInfo']) : ''; // ApprovalInfo 审批信息
+        $data['ApprovalInfo'] = isset($info['ApprovalInfo']) ? \\App\Common\Utils\Helper::myJsonEncode($info['ApprovalInfo']) : ''; // ApprovalInfo 审批信息
         
         $data['Mode'] = isset($info['Mode']) ? $info['Mode'] :  0; //1表示开启工作台自定义模式，0表示关闭工作台自定义模式
 
-        $data['request_params'] = isset($info['request_params']) ? \json_encode($info['request_params']) : '';
+        $data['request_params'] = isset($info['request_params']) ? \\App\Common\Utils\Helper::myJsonEncode($info['request_params']) : '';
         $data['request_xml'] = isset($info['request_xml']) ? ($info['request_xml']) : '';
         $data['response'] = isset($info['response']) ? ($info['response']) : '';
-        $data['aes_info'] = isset($info['aes_info']) ? \json_encode($info['aes_info']) : '';
+        $data['aes_info'] = isset($info['aes_info']) ? \\App\Common\Utils\Helper::myJsonEncode($info['aes_info']) : '';
         $data['is_aes'] = isset($info['is_aes']) ? intval($info['is_aes']) : 0;
         $data['request_time'] = isset($info['request_time']) ? \App\Common\Utils\Helper::getCurrentTime($info['request_time']) : '';
         $data['response_time'] = isset($info['response_time']) ? \App\Common\Utils\Helper::getCurrentTime($info['response_time']) : '';

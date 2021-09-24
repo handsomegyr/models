@@ -165,7 +165,7 @@ class Server extends Swoole\Protocol\CometServer
         unset($msg['users']);
         unset($msg['client_id']);
         ksort($msg);
-        $msg = json_encode($msg);
+        $msg = \App\Common\Utils\Helper::myJsonEncode($msg);
         if ($this->send($client_id, $msg) === false) {
             $this->onExit($client_id);
         }
@@ -182,7 +182,7 @@ class Server extends Swoole\Protocol\CometServer
         unset($msg['users']);
         unset($msg['client_id']);
         ksort($msg);
-        $msg = json_encode($msg);
+        $msg = \App\Common\Utils\Helper::myJsonEncode($msg);
         $this->broadcast($client_id, $msg, $room_id, $broadcastUsers);
     }
 

@@ -192,7 +192,7 @@ class Robot
         $msg['data'] = $this->getRandomMsg($room_id, $is_use_default);
         
         if (! empty($msg['data'])) {
-            $client->send(json_encode($msg));
+            $client->send(\App\Common\Utils\Helper::myJsonEncode($msg));
         }
     }
 
@@ -220,7 +220,7 @@ class Robot
         $msg['data'] = $this->getRandomMsg($room_id);
         
         if (! empty($msg['data'])) {
-            $client->send(json_encode($msg));
+            $client->send(\App\Common\Utils\Helper::myJsonEncode($msg));
         }
     }
 
@@ -250,7 +250,7 @@ class Robot
         $msg['uniqueId'] = $this->getUniqueId();
         $msg['nickname'] = $this->modelResource->getRandom(1);
         $msg['avatar'] = $this->modelResource->getRandom(2);
-        $client->send(json_encode($msg));
+        $client->send(\App\Common\Utils\Helper::myJsonEncode($msg));
     }
 
     /**
@@ -280,7 +280,7 @@ class Robot
             $msg['data'] = $this->modelResource->getRandom(4);
             
             if (! empty($msg['data'])) {
-                $client->send(json_encode($msg));
+                $client->send(\App\Common\Utils\Helper::myJsonEncode($msg));
             }
         }
     }
@@ -302,7 +302,7 @@ class Robot
         $msg['room_id'] = $room_id;
         $msg['openid'] = $this->getUniqueId();
         $msg['uniqueId'] = $this->getUniqueId();
-        $client->send(json_encode($msg));
+        $client->send(\App\Common\Utils\Helper::myJsonEncode($msg));
     }
 
     /**
@@ -320,7 +320,7 @@ class Robot
         $t1 = time();
         $period = $t1 - $t0;
         if ($period >= mt_rand(8, 15)) {
-            $client->send(json_encode(array(
+            $client->send(\App\Common\Utils\Helper::myJsonEncode(array(
                 'cmd' => 'polling'
             )));
             $this->redis->set($key2, $t1);
@@ -395,7 +395,7 @@ class Robot
      */
     protected function setLastRoomRobotOperation($room_id, $operation)
     {
-        $this->redis->hSet('live::lastRoomRobotOperation', $this->getRedisKey4LastRoomRobotOperation($room_id), json_encode($operation));
+        $this->redis->hSet('live::lastRoomRobotOperation', $this->getRedisKey4LastRoomRobotOperation($room_id), \App\Common\Utils\Helper::myJsonEncode($operation));
     }
 
     protected function getRedisKey4LastRoomRobotOperation($room_id)

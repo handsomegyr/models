@@ -81,7 +81,7 @@ class User extends \App\Common\Models\Weixin2\User\User
         if (empty($checkInfo) || $range) { // || empty($checkInfo['subscribe'])
             try {
                 $userInfo = $this->_qyweixin->getUserManager()->get($userid);
-                // $e = new \Exception(\json_encode($userInfo));
+                // $e = new \Exception(\\App\Common\Utils\Helper::myJsonEncode($userInfo));
                 // $modelErrorLog = new \App\Activity\Models\ErrorLog();
                 // $modelErrorLog->log(2, $e, time());
             } catch (\Exception $e) {
@@ -183,28 +183,28 @@ class User extends \App\Common\Models\Weixin2\User\User
             $data['avatar'] = isset($userInfo['avatar']) ? $userInfo['avatar'] : '';
             $data['email'] = isset($userInfo['email']) ? $userInfo['email'] : '';
             $data['telephone'] = isset($userInfo['telephone']) ? $userInfo['telephone'] : '';
-            $data['department'] = isset($userInfo['department']) ? \json_encode($userInfo['department']) : '';
+            $data['department'] = isset($userInfo['department']) ? \\App\Common\Utils\Helper::myJsonEncode($userInfo['department']) : '';
             $data['enable'] = isset($userInfo['enable']) ? intval($userInfo['enable']) : 0;
             $data['to_invite'] = isset($userInfo['to_invite']) ? intval($userInfo['to_invite']) : 0;
             $data['status'] = isset($userInfo['status']) ? intval($userInfo['status']) : 0;
             $data['qr_code'] = isset($userInfo['qr_code']) ? $userInfo['qr_code'] : '';
-            $data['is_leader_in_dept'] = isset($userInfo['is_leader_in_dept']) ? \json_encode($userInfo['is_leader_in_dept']) : '';
-            $data['department_order'] = isset($userInfo['order']) ? \json_encode($userInfo['order']) : '';
+            $data['is_leader_in_dept'] = isset($userInfo['is_leader_in_dept']) ? \\App\Common\Utils\Helper::myJsonEncode($userInfo['is_leader_in_dept']) : '';
+            $data['department_order'] = isset($userInfo['order']) ? \\App\Common\Utils\Helper::myJsonEncode($userInfo['order']) : '';
             $data['open_userid'] = isset($userInfo['open_userid']) ? $userInfo['open_userid'] : '';
             $data['hide_mobile'] = isset($userInfo['hide_mobile']) ? $userInfo['hide_mobile'] : '0';
             $data['english_name'] = isset($userInfo['english_name']) ? $userInfo['english_name'] : '';
             $data['mobile'] = isset($userInfo['mobile']) ? $userInfo['mobile'] : '';
             $data['avatar_mediaid_recid'] = isset($userInfo['avatar_mediaid_recid']) ? $userInfo['avatar_mediaid_recid'] : '0';
             $data['avatar_mediaid'] = isset($userInfo['avatar_mediaid']) ? $userInfo['avatar_mediaid'] : '';
-            $data['extattr'] = isset($userInfo['extattr']) ? \json_encode($userInfo['extattr']) : '';
-            $data['external_profile'] = isset($userInfo['external_profile']) ? \json_encode($userInfo['external_profile']) : '';
-            $data['external_position'] = isset($userInfo['external_position']) ? \json_encode($userInfo['external_position']) : '';
+            $data['extattr'] = isset($userInfo['extattr']) ? \\App\Common\Utils\Helper::myJsonEncode($userInfo['extattr']) : '';
+            $data['external_profile'] = isset($userInfo['external_profile']) ? \\App\Common\Utils\Helper::myJsonEncode($userInfo['external_profile']) : '';
+            $data['external_position'] = isset($userInfo['external_position']) ? \\App\Common\Utils\Helper::myJsonEncode($userInfo['external_position']) : '';
             $data['address'] = isset($userInfo['address']) ? $userInfo['address'] : '';
             $data['main_department'] = isset($userInfo['main_department']) ? $userInfo['main_department'] : '';
 
             $data['session_key'] = isset($userInfo['session_key']) ? $userInfo['session_key'] : '';
             $data['oss_headimgurl'] = isset($userInfo['oss_headimgurl']) ? $userInfo['oss_headimgurl'] : '';
-            $data['access_token'] = isset($userInfo['access_token']) ? \json_encode($userInfo['access_token']) : '';
+            $data['access_token'] = isset($userInfo['access_token']) ? \\App\Common\Utils\Helper::myJsonEncode($userInfo['access_token']) : '';
         } else {
             $data = array();
             if (isset($userInfo['userid'])) {
@@ -238,7 +238,7 @@ class User extends \App\Common\Models\Weixin2\User\User
                 $data['telephone'] = $userInfo['telephone'];
             }
             if (isset($userInfo['department'])) {
-                $data['department'] = \json_encode($userInfo['department']);
+                $data['department'] = \\App\Common\Utils\Helper::myJsonEncode($userInfo['department']);
             }
             if (isset($userInfo['enable'])) {
                 $data['enable'] = intval($userInfo['enable']);
@@ -253,13 +253,13 @@ class User extends \App\Common\Models\Weixin2\User\User
                 $data['qr_code'] = $userInfo['qr_code'];
             }
             if (isset($userInfo['is_leader_in_dept'])) {
-                $data['is_leader_in_dept'] = \json_encode($userInfo['is_leader_in_dept']);
+                $data['is_leader_in_dept'] = \\App\Common\Utils\Helper::myJsonEncode($userInfo['is_leader_in_dept']);
             }
             if (isset($userInfo['order'])) {
-                $data['department_order'] = \json_encode($userInfo['order']);
+                $data['department_order'] = \\App\Common\Utils\Helper::myJsonEncode($userInfo['order']);
             }
             if (isset($userInfo['access_token'])) {
-                $data['access_token'] = \json_encode($userInfo['access_token']);
+                $data['access_token'] = \\App\Common\Utils\Helper::myJsonEncode($userInfo['access_token']);
             }
             if (isset($userInfo['open_userid'])) {
                 $data['open_userid'] = $userInfo['open_userid'];
@@ -286,13 +286,13 @@ class User extends \App\Common\Models\Weixin2\User\User
                 $data['avatar_mediaid'] = $userInfo['avatar_mediaid'];
             }
             if (isset($userInfo['extattr'])) {
-                $data['extattr'] = \json_encode($userInfo['extattr']);
+                $data['extattr'] = \\App\Common\Utils\Helper::myJsonEncode($userInfo['extattr']);
             }
             if (isset($userInfo['external_profile'])) {
-                $data['external_profile'] = \json_encode($userInfo['external_profile']);
+                $data['external_profile'] = \\App\Common\Utils\Helper::myJsonEncode($userInfo['external_profile']);
             }
             if (isset($userInfo['external_position'])) {
-                $data['external_position'] = \json_encode($userInfo['external_position']);
+                $data['external_position'] = \\App\Common\Utils\Helper::myJsonEncode($userInfo['external_position']);
             }
             if (isset($userInfo['address'])) {
                 $data['address'] = $userInfo['address'];

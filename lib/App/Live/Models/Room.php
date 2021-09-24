@@ -215,7 +215,7 @@ class Room extends \App\Common\Models\Live\Room
         $info = $this->getRedisData($info);
         // 如果不存在
         if ($isForce || !$this->redis->hexists($this->getRedisKey(), $info['room_id'])) {
-            $this->redis->hSet($this->getRedisKey(), $info['room_id'], json_encode($info));
+            $this->redis->hSet($this->getRedisKey(), $info['room_id'], \App\Common\Utils\Helper::myJsonEncode($info));
         }
         // 如果开启了机器人的话
         if (!empty($info['robot_settings']['is_open'])) {

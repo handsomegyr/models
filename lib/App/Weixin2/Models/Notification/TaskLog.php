@@ -21,7 +21,7 @@ class TaskLog extends \App\Common\Models\Weixin2\Notification\TaskLog
         $data['changemsginfo_callback'] = $changemsginfo_callback;
         $data['notification_task_content_id'] = $notification_task_content_id;
         $data['notification_task_content_name'] = $notification_task_content_name;
-        $data['openids'] = \json_encode($openids);
+        $data['openids'] = \\App\Common\Utils\Helper::myJsonEncode($openids);
         $data['openid'] = $openid;
         $data['tag_id'] = $tag_id;
         $data['push_status'] = $push_status;
@@ -91,7 +91,7 @@ class TaskLog extends \App\Common\Models\Weixin2\Notification\TaskLog
         if (empty($error)) {
             $updateData['errors'] = "";
         } else {
-            $updateData['errors'] = \json_encode($error);
+            $updateData['errors'] = \\App\Common\Utils\Helper::myJsonEncode($error);
         }
 
         $incData = array();

@@ -59,9 +59,9 @@ class ExternalUserFollowUser extends \App\Common\Models\Qyweixin\ExternalContact
                 $data['description'] = isset($useridInfo['description']) ? $useridInfo['description'] : '';
                 $data['createtime'] = \App\Common\Utils\Helper::getCurrentTime($useridInfo['createtime']);
                 $data['remark_corp_name'] = isset($useridInfo['remark_corp_name']) ? $useridInfo['remark_corp_name'] : '';
-                $data['tags'] = isset($useridInfo['tags']) ? \json_encode($useridInfo['tags']) : '';
-                $data['remark_mobiles'] = isset($useridInfo['remark_mobiles']) ? \json_encode($useridInfo['remark_mobiles']) : '';
-                $data['oper_userid'] = isset($useridInfo['oper_userid']) ? \json_encode($useridInfo['oper_userid']) : '';
+                $data['tags'] = isset($useridInfo['tags']) ? \\App\Common\Utils\Helper::myJsonEncode($useridInfo['tags']) : '';
+                $data['remark_mobiles'] = isset($useridInfo['remark_mobiles']) ? \\App\Common\Utils\Helper::myJsonEncode($useridInfo['remark_mobiles']) : '';
+                $data['oper_userid'] = isset($useridInfo['oper_userid']) ? \\App\Common\Utils\Helper::myJsonEncode($useridInfo['oper_userid']) : '';
                 $data['add_way'] = isset($useridInfo['add_way']) ? intval($useridInfo['add_way']) : 0;
                 $data['state'] = isset($useridInfo['state']) ? $useridInfo['state'] : '';
 
