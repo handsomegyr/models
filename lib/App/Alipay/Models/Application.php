@@ -44,7 +44,7 @@ class Application extends \App\Common\Models\Alipay\Application
 
     private function getCacheKey($appid)
     {
-        $cacheKey = cacheKey(__FILE__, __CLASS__, $appid);
+        $cacheKey = cacheKey(__CLASS__, $appid);
         return $cacheKey;
     }
 }

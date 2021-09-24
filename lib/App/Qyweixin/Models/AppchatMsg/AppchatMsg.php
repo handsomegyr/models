@@ -16,7 +16,7 @@ class AppchatMsg extends \App\Common\Models\Qyweixin\AppchatMsg\AppchatMsg
         if (!empty($match['appchat_msg_ids'])) {
             $appchat_msg_ids = implode("_", $match['appchat_msg_ids']);
             $cacheKey = "appchat_msg:appchat_msg_ids:{$appchat_msg_ids}:authorizer_appid:{$match['authorizer_appid']}:provider_appid:{$match['provider_appid']}:agentid:{$match['agentid']}:msg_type:{$match['appchat_msg_type']}";
-            $cacheKey = cacheKey(__FILE__, __CLASS__, $cacheKey);
+            $cacheKey = cacheKey(__CLASS__, $cacheKey);
             $cache = $this->getDI()->get('cache');
             $rst = $cache->get($cacheKey);
             if (true || empty($rst)) {

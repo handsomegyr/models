@@ -34,7 +34,7 @@ class Api
             'result' => array()
         );
 
-        $lockKey = cacheKey(__FILE__, __CLASS__, __METHOD__, $user_id, $code, $activity_id);
+        $lockKey = cacheKey(__CLASS__, __METHOD__, $user_id, $code, $activity_id);
         $objLock = new \iLock($lockKey);
         if ($objLock->lock()) {
             $ret['error_code'] = -99;

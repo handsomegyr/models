@@ -14,7 +14,7 @@ class Keyword extends \App\Common\Models\Weixin2\Keyword\Keyword
     {
         $keywordList = array();
         $cacheKey = "keyword:authorizer_appid:{$authorizer_appid}:component_appid:{$component_appid}:fuzzy:{$fuzzy}";
-        $cacheKey = cacheKey(__FILE__, __CLASS__, $cacheKey);
+        $cacheKey = cacheKey(__CLASS__, $cacheKey);
         $cache = $this->getDI()->get('cache');
         $keywordList = $cache->get($cacheKey);
         if (empty($keywordList)) {

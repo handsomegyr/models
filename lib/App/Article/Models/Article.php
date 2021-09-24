@@ -52,7 +52,7 @@ class Article extends \App\Common\Models\Article\Article
      */
     public function getNewsList($page = 1, $limit = 3)
     {
-        $key = cacheKey(__FILE__, __CLASS__, __METHOD__, $page, $limit);
+        $key = cacheKey(__CLASS__, __METHOD__, $page, $limit);
         $cache = $this->getDI()->get("cache");
         $list = $cache->get($key);
         if (empty($list)) {

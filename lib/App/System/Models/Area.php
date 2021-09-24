@@ -32,7 +32,7 @@ class Area extends \App\Common\Models\System\Area
      */
     public function getProvinces()
     {
-        $key = cacheKey(__FILE__, __CLASS__, __METHOD__);
+        $key = cacheKey(__CLASS__, __METHOD__);
         $cache = $this->getDI()->get("cache");
         $provinceList = $cache->get($key);
         if (empty($provinceList)) {
@@ -60,7 +60,7 @@ class Area extends \App\Common\Models\System\Area
      */
     public function getCitys($province)
     {
-        $key = cacheKey(__FILE__, __CLASS__, __METHOD__, $province);
+        $key = cacheKey(__CLASS__, __METHOD__, $province);
         $cache = $this->getDI()->get("cache");
         $provinceList = $cache->get($key);
         if (empty($provinceList)) {
@@ -89,7 +89,7 @@ class Area extends \App\Common\Models\System\Area
      */
     public function getDistricts($city)
     {
-        $key = cacheKey(__FILE__, __CLASS__, __METHOD__, $city);
+        $key = cacheKey(__CLASS__, __METHOD__, $city);
         $cache = $this->getDI()->get("cache");
         $provinceList = $cache->get($key);
         if (empty($provinceList)) {
@@ -119,7 +119,7 @@ class Area extends \App\Common\Models\System\Area
      */
     public function getListByLevel($level)
     {
-        $key = cacheKey(__FILE__, __CLASS__, __METHOD__, $level);
+        $key = cacheKey(__CLASS__, __METHOD__, $level);
         $cache = $this->getDI()->get("cache");
         $provinceList = $cache->get($key);
         if (empty($provinceList)) {

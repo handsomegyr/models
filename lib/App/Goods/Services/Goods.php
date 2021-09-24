@@ -59,7 +59,7 @@ class Goods
         
         try {
             // 生成新的一期
-            $key = cacheKey(__FILE__, __CLASS__, __METHOD__, $goods_commonid);
+            $key = cacheKey(__CLASS__, __METHOD__, $goods_commonid);
             $objLock = new \iLock($key);
             if ($objLock->lock()) {
                 throw new \Exception('根据公共商品生成新一期的商品在处理中，请等待', - 99);
@@ -170,7 +170,7 @@ class Goods
             'goods_id' => $goods_id
         );
         try {
-            $key = cacheKey(__FILE__, __CLASS__, __METHOD__, $goods_id);
+            $key = cacheKey(__CLASS__, __METHOD__, $goods_id);
             $objLock = new \iLock($key);
             if ($objLock->lock()) {
                 throw new \Exception('满员的商品在处理中，请等待', - 99);

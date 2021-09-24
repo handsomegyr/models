@@ -17,7 +17,7 @@ class News extends \App\Common\Models\Qyweixin\AgentMsg\News
     {
         $articles = array();
         $cacheKey = "agentmsgnews:agent_msg_id:{$agent_msg_id}:msg_type:{$msg_type}";
-        $cacheKey = cacheKey(__FILE__, __CLASS__, $cacheKey);
+        $cacheKey = cacheKey(__CLASS__, $cacheKey);
         $cache = $this->getDI()->get('cache');
         $articles = $cache->get($cacheKey);
         if (true || empty($articles)) {

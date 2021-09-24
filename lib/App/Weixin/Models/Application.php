@@ -146,7 +146,7 @@ class Application extends \App\Common\Models\Weixin\Application
 
     private function getCacheKey($appid)
     {
-        $cacheKey = cacheKey(__FILE__, __CLASS__, $appid);
+        $cacheKey = cacheKey(__CLASS__, $appid);
         return $cacheKey;
     }
 
@@ -156,7 +156,7 @@ class Application extends \App\Common\Models\Weixin\Application
         if (isset($token['access_token_expire']) && ! empty($token['is_advanced'])) {
             if (strtotime($token['access_token_expire']) <= time()) {
                 if (! empty($token['appid']) && ! empty($token['secret'])) {
-                    $lockKey = cacheKey(__FILE__, __CLASS__, __METHOD__, __LINE__);
+                    $lockKey = cacheKey(__CLASS__, __METHOD__, __LINE__);
                     $objLock = new \iLock($lockKey);
                     if (! $objLock->lock()) {
                         $objToken = new \Weixin\Token\Server($token['appid'], $token['secret']);
@@ -201,7 +201,7 @@ class Application extends \App\Common\Models\Weixin\Application
         if (! empty($token['is_advanced'])) {
             if (! isset($token['jsapi_ticket_expire']) || strtotime($token['jsapi_ticket_expire']) <= time()) {
                 if (! empty($token['appid']) && ! empty($token['secret'])) {
-                    $lockKey = cacheKey(__FILE__, __CLASS__, __METHOD__, __LINE__);
+                    $lockKey = cacheKey(__CLASS__, __METHOD__, __LINE__);
                     $objLock = new \iLock($lockKey);
                     if (! $objLock->lock()) {
                         
@@ -243,7 +243,7 @@ class Application extends \App\Common\Models\Weixin\Application
         if (! empty($token['is_weixin_card'])) {
             if (! isset($token['wx_card_api_ticket_expire']) || strtotime($token['wx_card_api_ticket_expire']) <= time()) {
                 if (! empty($token['appid']) && ! empty($token['secret'])) {
-                    $lockKey = cacheKey(__FILE__, __CLASS__, __METHOD__, __LINE__);
+                    $lockKey = cacheKey(__CLASS__, __METHOD__, __LINE__);
                     $objLock = new \iLock($lockKey);
                     if (! $objLock->lock()) {
                         

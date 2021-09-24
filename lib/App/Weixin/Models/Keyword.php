@@ -14,7 +14,7 @@ class Keyword extends \App\Common\Models\Weixin\Keyword
     {
         $keywordList = array();
         $fuzzy = is_bool($fuzzy) ? $fuzzy : false;
-        $cacheKey = cacheKey(__FILE__, __CLASS__, __METHOD__, $fuzzy);
+        $cacheKey = cacheKey(__CLASS__, __METHOD__, $fuzzy);
         $cache = $this->getDI()->get('cache');
         $keywordList = $cache->get($cacheKey);
         if (empty($keywordList)) {

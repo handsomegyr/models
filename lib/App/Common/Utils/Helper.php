@@ -27,6 +27,6 @@ class Helper
     {
         $options = JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRESERVE_ZERO_FRACTION;
 
-        return \App\Common\Utils\Helper::myJsonEncode($data, $options);
+        return json_encode($data, $options);
     }
 }

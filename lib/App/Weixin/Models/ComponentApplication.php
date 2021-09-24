@@ -220,7 +220,7 @@ class ComponentApplication extends \App\Common\Models\Weixin\ComponentApplicatio
 
     private function getCacheKey($appid)
     {
-        $cacheKey = cacheKey(__FILE__, __CLASS__, $appid);
+        $cacheKey = cacheKey(__CLASS__, $appid);
         return $cacheKey;
     }
 
@@ -231,7 +231,7 @@ class ComponentApplication extends \App\Common\Models\Weixin\ComponentApplicatio
         if (isset($token['access_token_expire']) && !empty($token['is_advanced'])) {
             if (strtotime($token['access_token_expire']) <= time()) {
                 if (!empty($token['appid']) && !empty($token['secret']) && !empty($token['component_access_token']) && !empty($token['refresh_token']) && !empty($token['authorizer_appid'])) {
-                    $lockKey = cacheKey(__FILE__, __CLASS__, __METHOD__, __LINE__);
+                    $lockKey = cacheKey(__CLASS__, __METHOD__, __LINE__);
                     $objLock = new \iLock($lockKey);
                     if (!$objLock->lock()) {
                         $objToken = new \Weixin\Component($token['appid'], $token['secret']);
@@ -280,7 +280,7 @@ class ComponentApplication extends \App\Common\Models\Weixin\ComponentApplicatio
         if (!empty($token['is_advanced'])) {
             if (!isset($token['jsapi_ticket_expire']) || strtotime($token['jsapi_ticket_expire']) <= time()) {
                 if (!empty($token['appid']) && !empty($token['secret']) && !empty($token['access_token'])) {
-                    $lockKey = cacheKey(__FILE__, __CLASS__, __METHOD__, __LINE__);
+                    $lockKey = cacheKey(__CLASS__, __METHOD__, __LINE__);
                     $objLock = new \iLock($lockKey);
                     if (!$objLock->lock()) {
 
@@ -322,7 +322,7 @@ class ComponentApplication extends \App\Common\Models\Weixin\ComponentApplicatio
         if (!empty($token['is_weixin_card'])) {
             if (!isset($token['wx_card_api_ticket_expire']) || strtotime($token['wx_card_api_ticket_expire']) <= time()) {
                 if (!empty($token['appid']) && !empty($token['secret']) && !empty($token['access_token'])) {
-                    $lockKey = cacheKey(__FILE__, __CLASS__, __METHOD__, __LINE__);
+                    $lockKey = cacheKey(__CLASS__, __METHOD__, __LINE__);
                     $objLock = new \iLock($lockKey);
                     if (!$objLock->lock()) {
 
@@ -366,7 +366,7 @@ class ComponentApplication extends \App\Common\Models\Weixin\ComponentApplicatio
         if (isset($token['component_access_token_expire'])) {
             if (strtotime($token['component_access_token_expire']) <= time()) {
                 if (!empty($token['appid']) && !empty($token['secret']) && !empty($token['component_verify_ticket'])) {
-                    $lockKey = cacheKey(__FILE__, __CLASS__, __METHOD__, __LINE__);
+                    $lockKey = cacheKey(__CLASS__, __METHOD__, __LINE__);
                     $objLock = new \iLock($lockKey);
                     if (!$objLock->lock()) {
                         $objToken = new \Weixin\Component($token['appid'], $token['secret']);

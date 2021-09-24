@@ -11,7 +11,7 @@ class Application extends \App\Common\Models\Tencent\Application
      */
     public function getInfoByAppId($appid)
     {
-        $cacheKey = cacheKey(__FILE__, __CLASS__, $appid);
+        $cacheKey = cacheKey(__CLASS__, $appid);
         $cache = $this->getDI()->get('cache');
         $application = $cache->get($cacheKey);
         if (empty($application)) {

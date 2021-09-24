@@ -8,7 +8,7 @@ class Word extends \App\Common\Models\Qyweixin\Keyword\Word
     public function record($msg, $authorizer_appid, $provider_appid, $agentid)
     {
         $cacheKey = "word:authorizer_appid:{$authorizer_appid}:provider_appid:{$provider_appid}:agentid:{$agentid}:content:{$msg}";
-        $cacheKey = cacheKey(__FILE__, __CLASS__, $cacheKey);
+        $cacheKey = cacheKey(__CLASS__, $cacheKey);
         $cache = $this->getDI()->get('cache');
         $id = $cache->get($cacheKey);
         if (empty($id)) {

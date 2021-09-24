@@ -53,7 +53,7 @@ class Log extends \App\Common\Models\Points\Log
      */
     public function getPageList($page = 1, $limit = 10, array $query = array(), array $sort = array(), array $fields = array())
     {
-        $key = cacheKey(__FILE__, __CLASS__, __METHOD__, $query, $sort, $fields, $page, $limit);
+        $key = cacheKey(__CLASS__, __METHOD__, $query, $sort, $fields, $page, $limit);
         $cache = $this->getDI()->get("cache");
         $list = $cache->get($key);
         if (empty($list)) {

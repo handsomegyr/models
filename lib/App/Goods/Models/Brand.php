@@ -43,7 +43,7 @@ class Brand extends \App\Common\Models\Goods\Brand
         }
         $defaultQuery = $this->getDefaultQuery();
         $query = array_merge($query, $defaultQuery);
-        $key = cacheKey(__FILE__, __CLASS__, __METHOD__, $query, $sort, $fields);
+        $key = cacheKey(__CLASS__, __METHOD__, $query, $sort, $fields);
         $cache = $this->getDI()->get("cache");
         $list = false; // $cache->get($key);
         if (empty($list)) {

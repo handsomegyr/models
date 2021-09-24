@@ -16,7 +16,7 @@ class TemplateMsg extends \App\Common\Models\Weixin2\TemplateMsg\TemplateMsg
         if (!empty($match['template_msg_ids'])) {
             $template_msg_ids = implode("_", $match['template_msg_ids']);
             $cacheKey = "template_msg:template_msg_ids:{$template_msg_ids}:authorizer_appid:{$match['authorizer_appid']}:component_appid:{$match['component_appid']}}";
-            $cacheKey = cacheKey(__FILE__, __CLASS__, $cacheKey);
+            $cacheKey = cacheKey(__CLASS__, $cacheKey);
             $cache = $this->getDI()->get('cache');
             $rst = $cache->get($cacheKey);
             if (true || empty($rst)) {

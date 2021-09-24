@@ -44,7 +44,7 @@ class Ad extends \App\Common\Models\Goods\Ad
         }
         $defaultQuery = $this->getDefaultQuery();
         $query = array_merge($query, $defaultQuery);
-        $key = cacheKey(__FILE__, __CLASS__, __METHOD__, $query, $sort, $fields);
+        $key = cacheKey(__CLASS__, __METHOD__, $query, $sort, $fields);
         $cache = $this->getDI()->get("cache");
         $list = $cache->get($key);
         if (empty($list)) {

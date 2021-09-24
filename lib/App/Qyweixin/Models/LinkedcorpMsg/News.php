@@ -17,7 +17,7 @@ class News extends \App\Common\Models\Qyweixin\LinkedcorpMsg\News
     {
         $articles = array();
         $cacheKey = "linkedcorpmsgnews:linkedcorp_msg_id:{$linkedcorp_msg_id}:msg_type:{$msg_type}";
-        $cacheKey = cacheKey(__FILE__, __CLASS__, $cacheKey);
+        $cacheKey = cacheKey(__CLASS__, $cacheKey);
         $cache = $this->getDI()->get('cache');
         $articles = $cache->get($cacheKey);
         if (true || empty($articles)) {

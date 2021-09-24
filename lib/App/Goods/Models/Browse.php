@@ -14,7 +14,7 @@ class Browse extends \App\Common\Models\Goods\Brand
      */
     public function getList(array $query = array(), array $sort = array('browse_time'=>-1), array $fields = array())
     {
-        $key = cacheKey(__FILE__, __CLASS__, __METHOD__, $query, $sort, $fields);
+        $key = cacheKey(__CLASS__, __METHOD__, $query, $sort, $fields);
         $cache = $this->getDI()->get("cache");
         $list = $cache->get($key);
         if (empty($list)) {
@@ -34,7 +34,7 @@ class Browse extends \App\Common\Models\Goods\Brand
      */
     public function getPageList($page = 1, $limit = 10, array $query = array(), array $sort = array(), array $fields = array())
     {
-        $key = cacheKey(__FILE__, __CLASS__, __METHOD__, $query, $sort, $fields, $page, $limit);
+        $key = cacheKey(__CLASS__, __METHOD__, $query, $sort, $fields, $page, $limit);
         $cache = $this->getDI()->get("cache");
         $list = $cache->get($key);
         if (empty($list)) {

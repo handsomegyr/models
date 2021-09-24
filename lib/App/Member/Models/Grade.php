@@ -27,7 +27,7 @@ class Grade extends \App\Common\Models\Member\Grade
      */
     public function getAll()
     {
-        $key = cacheKey(__FILE__, __CLASS__, __METHOD__);
+        $key = cacheKey(__CLASS__, __METHOD__);
         $cache = $this->getDI()->get("cache");
         $gradeList = $cache->get($key);
         if (empty($gradeList)) {

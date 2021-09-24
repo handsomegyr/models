@@ -16,7 +16,7 @@ class LinkedcorpMsg extends \App\Common\Models\Qyweixin\LinkedcorpMsg\Linkedcorp
         if (!empty($match['linkedcorp_msg_ids'])) {
             $linkedcorp_msg_ids = implode("_", $match['linkedcorp_msg_ids']);
             $cacheKey = "linkedcorp_msg:linkedcorp_msg_ids:{$linkedcorp_msg_ids}:authorizer_appid:{$match['authorizer_appid']}:provider_appid:{$match['provider_appid']}:agentid:{$match['agentid']}:msg_type:{$match['linkedcorp_msg_type']}";
-            $cacheKey = cacheKey(__FILE__, __CLASS__, $cacheKey);
+            $cacheKey = cacheKey(__CLASS__, $cacheKey);
             $cache = $this->getDI()->get('cache');
             $rst = $cache->get($cacheKey);
             if (true || empty($rst)) {

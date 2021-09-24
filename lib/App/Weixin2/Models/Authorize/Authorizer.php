@@ -170,7 +170,7 @@ class Authorizer extends \App\Common\Models\Weixin2\Authorize\Authorizer
     private function getCacheKey4Appid($component_appid, $appid)
     {
         $cacheKey = "authorizer:component_appid:{$component_appid}:appid:{$appid}";
-        $cacheKey = cacheKey(__FILE__, __CLASS__, $cacheKey);
+        $cacheKey = cacheKey(__CLASS__, $cacheKey);
         return $cacheKey;
     }
 
@@ -178,7 +178,7 @@ class Authorizer extends \App\Common\Models\Weixin2\Authorize\Authorizer
     {
         if (empty($token['access_token_expire']) || strtotime($token['access_token_expire']) <= time()) {
             if (((!empty($token['refresh_token']) && !empty($token['component_appid'])) || empty($token['component_appid'])) && !empty($token['appid'])) {
-                $lockKey = cacheKey(__FILE__, __CLASS__, __METHOD__, __LINE__, $token['component_appid'], $token['appid']);
+                $lockKey = cacheKey(__CLASS__, __METHOD__, __LINE__, $token['component_appid'], $token['appid']);
                 $objLock = new \iLock($lockKey);
                 if (!$objLock->lock()) {
                     // 如果是微信开放平台的话
@@ -216,7 +216,7 @@ class Authorizer extends \App\Common\Models\Weixin2\Authorize\Authorizer
         // 获取jsapi_ticket
         if (empty($token['jsapi_ticket_expire']) || strtotime($token['jsapi_ticket_expire']) <= time()) {
             if (!empty($token['access_token'])) {
-                $lockKey = cacheKey(__FILE__, __CLASS__, __METHOD__, __LINE__, $token['appid']);
+                $lockKey = cacheKey(__CLASS__, __METHOD__, __LINE__, $token['appid']);
                 $objLock = new \iLock($lockKey);
                 if (!$objLock->lock()) {
                     // 获取jsapi_ticket
@@ -234,7 +234,7 @@ class Authorizer extends \App\Common\Models\Weixin2\Authorize\Authorizer
         if (!empty($token['is_weixin_card'])) {
             if (empty($token['wx_card_api_ticket_expire']) || strtotime($token['wx_card_api_ticket_expire']) <= time()) {
                 if (!empty($token['access_token'])) {
-                    $lockKey = cacheKey(__FILE__, __CLASS__, __METHOD__, __LINE__, $token['appid']);
+                    $lockKey = cacheKey(__CLASS__, __METHOD__, __LINE__, $token['appid']);
                     $objLock = new \iLock($lockKey);
                     if (!$objLock->lock()) {
                         // 获取微信卡券的api_ticket

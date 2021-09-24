@@ -138,7 +138,7 @@ class Category extends \App\Common\Models\Goods\Category
      */
     public function getAllCategorys()
     {
-        $key = cacheKey(__FILE__, __CLASS__, __METHOD__);
+        $key = cacheKey(__CLASS__, __METHOD__);
         $cache = $this->getDI()->get("cache");
         $categoryList = $cache->get($key);
         if (empty($categoryList)) {
@@ -165,7 +165,7 @@ class Category extends \App\Common\Models\Goods\Category
      */
     public function getCategorys($parent_id)
     {
-        $key = cacheKey(__FILE__, __CLASS__, __METHOD__, $parent_id);
+        $key = cacheKey(__CLASS__, __METHOD__, $parent_id);
         $cache = $this->getDI()->get("cache");
         $categoryList = $cache->get($key);
         if (empty($categoryList)) {
