@@ -29,4 +29,15 @@ class Helper
 
         return json_encode($data, $options);
     }
+
+    /**
+     * cache key字符串
+     *
+     * @return string
+     */
+    public static function myCacheKey()
+    {
+        $args = func_get_args();
+        return md5(serialize($args));
+    }
 }

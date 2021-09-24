@@ -16,7 +16,7 @@ class AgentMsg extends \App\Common\Models\Qyweixin\AgentMsg\AgentMsg
         if (!empty($match['agent_msg_ids'])) {
             $agent_msg_ids = implode("_", $match['agent_msg_ids']);
             $cacheKey = "agent_msg:agent_msg_ids:{$agent_msg_ids}:authorizer_appid:{$match['authorizer_appid']}:provider_appid:{$match['provider_appid']}:agentid:{$match['agentid']}:msg_type:{$match['agent_msg_type']}";
-            $cacheKey = cacheKey(__CLASS__, $cacheKey);
+            $cacheKey = \App\Common\Utils\Helper::myCacheKey(__CLASS__, $cacheKey);
             $cache = $this->getDI()->get('cache');
             $rst = $cache->get($cacheKey);
             if (true || empty($rst)) {

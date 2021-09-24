@@ -18,7 +18,7 @@ class CustomMsg extends \App\Common\Models\Weixin2\CustomMsg\CustomMsg
         if (!empty($match['custom_msg_ids'])) {
             $custom_msg_ids = implode("_", $match['custom_msg_ids']);
             $cacheKey = "custom_msg:custom_msg_ids:{$custom_msg_ids}:authorizer_appid:{$match['authorizer_appid']}:component_appid:{$match['component_appid']}:msg_type:{$match['custom_msg_type']}";
-            $cacheKey = cacheKey(__CLASS__, $cacheKey);
+            $cacheKey = \App\Common\Utils\Helper::myCacheKey(__CLASS__, $cacheKey);
             $cache = $this->getDI()->get('cache');
             $rst = $cache->get($cacheKey);
             if (true || empty($rst)) {

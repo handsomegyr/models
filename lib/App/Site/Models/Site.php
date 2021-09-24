@@ -29,7 +29,7 @@ class Site extends \App\Common\Models\Site\Site
 
     public function getSettings($id)
     {
-        $key = cacheKey(__CLASS__, __METHOD__, $id);
+        $key = \App\Common\Utils\Helper::myCacheKey(__CLASS__, __METHOD__, $id);
         $cache = $this->getDI()->get("cache");
         $info = $cache->get($key);
         if (empty($info)) {

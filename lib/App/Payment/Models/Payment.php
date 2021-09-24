@@ -49,7 +49,7 @@ class Payment extends \App\Common\Models\Payment\Payment
 
     public function getAll()
     {
-        $cacheKey = cacheKey(__CLASS__, __METHOD__);
+        $cacheKey = \App\Common\Utils\Helper::myCacheKey(__CLASS__, __METHOD__);
         $cache = $this->getDI()->get('cache');
         $list = $cache->get($cacheKey);
         if (empty($list)) {

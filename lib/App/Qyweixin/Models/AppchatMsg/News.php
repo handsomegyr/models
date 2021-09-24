@@ -17,7 +17,7 @@ class News extends \App\Common\Models\Qyweixin\AppchatMsg\News
     {
         $articles = array();
         $cacheKey = "appchatmsgnews:appchat_msg_id:{$appchat_msg_id}:msg_type:{$msg_type}";
-        $cacheKey = cacheKey(__CLASS__, $cacheKey);
+        $cacheKey = \App\Common\Utils\Helper::myCacheKey(__CLASS__, $cacheKey);
         $cache = $this->getDI()->get('cache');
         $articles = $cache->get($cacheKey);
         if (true || empty($articles)) {

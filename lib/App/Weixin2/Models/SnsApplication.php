@@ -56,7 +56,7 @@ class SnsApplication extends \App\Common\Models\Weixin2\SnsApplication
     private function getCacheKey4Appid($appid)
     {
         $cacheKey = "sns_application:appid:{$appid}";
-        $cacheKey = cacheKey(__CLASS__, $cacheKey);
+        $cacheKey = \App\Common\Utils\Helper::myCacheKey(__CLASS__, $cacheKey);
         return $cacheKey;
     }
 }

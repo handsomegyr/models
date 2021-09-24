@@ -7,7 +7,7 @@ class Callbackurls extends \App\Common\Models\Qyweixin\Callbackurls
     public function getValidCallbackUrlList($authorizer_appid, $provider_appid, $agentid, $is_get_latest = false)
     {
         $cacheKey = "callbackurls:authorizer_appid:{$authorizer_appid}:provider_appid:{$provider_appid}:agentid:{$agentid}:callbackurllist";
-        $cacheKey = cacheKey(__CLASS__, $cacheKey);
+        $cacheKey = \App\Common\Utils\Helper::myCacheKey(__CLASS__, $cacheKey);
         $cache = $this->getDI()->get('cache');
         $list = $cache->get($cacheKey);
 

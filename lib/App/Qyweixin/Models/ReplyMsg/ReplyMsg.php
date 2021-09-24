@@ -16,7 +16,7 @@ class ReplyMsg extends \App\Common\Models\Qyweixin\ReplyMsg\ReplyMsg
         if (!empty($match['reply_msg_ids'])) {
             $reply_msg_ids = implode("_", $match['reply_msg_ids']);
             $cacheKey = "reply_msg:reply_msg_ids:{$reply_msg_ids}:authorizer_appid:{$match['authorizer_appid']}:provider_appid:{$match['provider_appid']}:agentid:{$match['agentid']}:msg_type:{$match['reply_msg_type']}";
-            $cacheKey = cacheKey(__CLASS__, $cacheKey);
+            $cacheKey = \App\Common\Utils\Helper::myCacheKey(__CLASS__, $cacheKey);
             $cache = $this->getDI()->get('cache');
             $rst = $cache->get($cacheKey);
             if (true || empty($rst)) {

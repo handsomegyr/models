@@ -48,7 +48,7 @@ class Category extends \App\Common\Models\Goods\Category
         }
         $defaultQuery = $this->getDefaultQuery();
         $query = array_merge($query, $defaultQuery);
-        $key = cacheKey(__CLASS__, __METHOD__, $query, $sort);
+        $key = \App\Common\Utils\Helper::myCacheKey(__CLASS__, __METHOD__, $query, $sort);
         $cache = $this->getDI()->get("cache");
         $list = $cache->get($key);
         if (empty($list)) {
@@ -69,7 +69,7 @@ class Category extends \App\Common\Models\Goods\Category
      */
     public function getExtendList(array $query = array(), array $sort = array(), array $fields = array())
     {
-        $key = cacheKey(__CLASS__, __METHOD__, $query, $sort);
+        $key = \App\Common\Utils\Helper::myCacheKey(__CLASS__, __METHOD__, $query, $sort);
         $cache = $this->getDI()->get("cache");
         $list = false; // $cache->get($key);
         if (empty($list)) {
@@ -143,7 +143,7 @@ class Category extends \App\Common\Models\Goods\Category
      */
     public function getTree(array $query = array(), array $sort = array(), array $fields = array())
     {
-        $key = cacheKey(__CLASS__, __METHOD__, $query, $sort);
+        $key = \App\Common\Utils\Helper::myCacheKey(__CLASS__, __METHOD__, $query, $sort);
         $cache = $this->getDI()->get("cache");
         $tree = $cache->get($key);
         if (empty($tree)) {

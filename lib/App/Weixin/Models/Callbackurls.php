@@ -7,7 +7,7 @@ class Callbackurls extends \App\Common\Models\Weixin\Callbackurls
     public function getValidCallbackUrlList()
     {
         $cache = $this->getDI()->get('cache');
-        $cacheKey = cacheKey(__CLASS__, __METHOD__, __LINE__);
+        $cacheKey = \App\Common\Utils\Helper::myCacheKey(__CLASS__, __METHOD__, __LINE__);
         $list = $cache->get($cacheKey);
         // $list = array();
         if (empty($list)) {

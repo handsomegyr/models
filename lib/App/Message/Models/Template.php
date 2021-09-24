@@ -6,7 +6,7 @@ class Template extends \App\Common\Models\Message\Template
 
     public function getInfoByCode($code)
     {
-        $key = cacheKey(__CLASS__, __METHOD__);
+        $key = \App\Common\Utils\Helper::myCacheKey(__CLASS__, __METHOD__);
         $cache = $this->getDI()->get("cache");
         $info = false; // $cache->get($key);
         if (empty($info)) {

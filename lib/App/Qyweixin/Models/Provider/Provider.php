@@ -119,7 +119,7 @@ class Provider extends \App\Common\Models\Qyweixin\Provider\Provider
     private function getCacheKey4Appid($appid)
     {
         $cacheKey = "Provider:Provider_appid:{$appid}";
-        $cacheKey = cacheKey(__CLASS__, $cacheKey);
+        $cacheKey = \App\Common\Utils\Helper::myCacheKey(__CLASS__, $cacheKey);
         return $cacheKey;
     }
 
@@ -128,7 +128,7 @@ class Provider extends \App\Common\Models\Qyweixin\Provider\Provider
         if (isset($token['access_token_expire'])) {
             if (strtotime($token['access_token_expire']) <= time()) {
                 if (!empty($token['appid']) && !empty($token['appsecret']) && !empty($token['verify_ticket'])) {
-                    $lockKey = cacheKey(__CLASS__, __METHOD__, __LINE__, $token['appid']);
+                    $lockKey = \App\Common\Utils\Helper::myCacheKey(__CLASS__, __METHOD__, __LINE__, $token['appid']);
                     $objLock = new \iLock($lockKey);
                     if (!$objLock->lock()) {
                         $objToken = new \Weixin\Provider($token['appid'], $token['appsecret']);

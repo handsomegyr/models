@@ -90,7 +90,7 @@ class Api
             $this->_isInstance = true;
 
             // 控制活动流速，降低刷风险，同时只能有一个请求执行成功逻辑，将导致无法满足100%中奖要求
-            $objLock = new \iLock(cacheKey($activity_id, $identity_id));
+            $objLock = new \iLock(\App\Common\Utils\Helper::myCacheKey($activity_id, $identity_id));
             if ($objLock->lock()) {
                 $ret['error_code'] = -99;
                 $ret['error_msg'] = '抽奖处于锁定状态，请稍后尝试';

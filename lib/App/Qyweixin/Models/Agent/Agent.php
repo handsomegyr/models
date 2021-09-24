@@ -145,7 +145,7 @@ class Agent extends \App\Common\Models\Qyweixin\Agent\Agent
     private function getCacheKey4AppId($provider_appid, $authorizer_appid, $agentid)
     {
         $cacheKey = "agent:provider_appid:{$provider_appid}:authorizer_appid:{$authorizer_appid}:agentid:{$agentid}";
-        $cacheKey = cacheKey(__CLASS__, $cacheKey);
+        $cacheKey = \App\Common\Utils\Helper::myCacheKey(__CLASS__, $cacheKey);
         return $cacheKey;
     }
 
@@ -153,7 +153,7 @@ class Agent extends \App\Common\Models\Qyweixin\Agent\Agent
     {
         if (empty($token['access_token_expire']) || strtotime($token['access_token_expire']) <= time()) {
             if (!empty($token['authorizer_appid']) && !empty($token['agentid'])) {
-                $lockKey = cacheKey(__CLASS__, __METHOD__, __LINE__, $token['provider_appid'], $token['authorizer_appid'], $token['agentid']);
+                $lockKey = \App\Common\Utils\Helper::myCacheKey(__CLASS__, __METHOD__, __LINE__, $token['provider_appid'], $token['authorizer_appid'], $token['agentid']);
                 $objLock = new \iLock($lockKey);
                 if (!$objLock->lock()) {
                     $objToken = new \Qyweixin\Token\Server($token['agentid'], $token['secret']);
@@ -176,7 +176,7 @@ class Agent extends \App\Common\Models\Qyweixin\Agent\Agent
         // 获取jsapi_ticket
         if (empty($token['jsapi_ticket_expire']) || strtotime($token['jsapi_ticket_expire']) <= time()) {
             if (!empty($token['access_token'])) {
-                $lockKey = cacheKey(__CLASS__, __METHOD__, __LINE__, $token['provider_appid'], $token['authorizer_appid'], $token['agentid'], 'jsapi_ticket');
+                $lockKey = \App\Common\Utils\Helper::myCacheKey(__CLASS__, __METHOD__, __LINE__, $token['provider_appid'], $token['authorizer_appid'], $token['agentid'], 'jsapi_ticket');
                 $objLock = new \iLock($lockKey);
                 if (!$objLock->lock()) {
                     // 获取jsapi_ticket

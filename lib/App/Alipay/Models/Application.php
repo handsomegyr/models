@@ -16,7 +16,7 @@ class Application extends \App\Common\Models\Alipay\Application
      */
     public function getApplicationInfoByAppId($appid)
     {
-        $cacheKey = $this->getCacheKey($appid);
+        $cacheKey = \App\Common\Utils\Helper::myCacheKey(__CLASS__, $appid);
         $cache = $this->getDI()->get('cache');
         $application = $cache->get($cacheKey);
         if (empty($application)) {
@@ -40,11 +40,5 @@ class Application extends \App\Common\Models\Alipay\Application
     {
         $expire_time = 60;
         return $expire_time;
-    }
-
-    private function getCacheKey($appid)
-    {
-        $cacheKey = cacheKey(__CLASS__, $appid);
-        return $cacheKey;
     }
 }

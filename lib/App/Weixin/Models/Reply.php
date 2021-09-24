@@ -110,7 +110,7 @@ class Reply extends \App\Common\Models\Weixin\Reply
     public function getReplyDetail($match)
     {
         if (isset($match['reply_ids'])) {
-            $cacheKey = cacheKey(__CLASS__, __METHOD__, $match['reply_ids']);
+            $cacheKey = \App\Common\Utils\Helper::myCacheKey(__CLASS__, __METHOD__, $match['reply_ids']);
             $cache = $this->getDI()->get('cache'); // Zend_Registry::get('cache');
             $rst = $cache->get($cacheKey);
             if (empty($rst)) {

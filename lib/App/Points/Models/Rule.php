@@ -34,7 +34,7 @@ class Rule extends \App\Common\Models\Points\Rule
      */
     public function getAll()
     {
-        $key = cacheKey(__CLASS__, __METHOD__);
+        $key = \App\Common\Utils\Helper::myCacheKey(__CLASS__, __METHOD__);
         $cache = $this->getDI()->get("cache");
         $ruleList = $cache->get($key);
         if (empty($ruleList)) {
@@ -62,7 +62,7 @@ class Rule extends \App\Common\Models\Points\Rule
      */
     public function getInfoByCategoryAndCode($category, $code)
     {
-        $key = cacheKey(__CLASS__, __METHOD__, $category, $code);
+        $key = \App\Common\Utils\Helper::myCacheKey(__CLASS__, __METHOD__, $category, $code);
         $cache = $this->getDI()->get("cache");
         $info = $cache->get($key);
         if (empty($info)) {

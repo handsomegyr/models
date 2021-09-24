@@ -115,7 +115,7 @@ class Log extends \App\Common\Models\Bargain\Log
         $defaultQuery = $this->getDefaultQuery();
         $query = array_merge($query, $defaultQuery);
 
-        $key = cacheKey(__CLASS__, __METHOD__, $query, $sort, $fields, $page, $limit);
+        $key = \App\Common\Utils\Helper::myCacheKey(__CLASS__, __METHOD__, $query, $sort, $fields, $page, $limit);
 
         $cache = $this->getDI()->get("cache");
 

@@ -44,7 +44,7 @@ class Images extends \App\Common\Models\Goods\Images
         }
         $defaultQuery = $this->getDefaultQuery();
         $query = array_merge($query, $defaultQuery);
-        $key = cacheKey(__CLASS__, __METHOD__, $query, $sort, $fields);
+        $key = \App\Common\Utils\Helper::myCacheKey(__CLASS__, __METHOD__, $query, $sort, $fields);
         $cache = $this->getDI()->get("cache");
         $list = $cache->get($key);
         if (empty($list)) {

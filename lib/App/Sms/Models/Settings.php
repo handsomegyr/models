@@ -11,7 +11,7 @@ class Settings extends \App\Common\Models\Sms\Settings
      */
     public function getSettings()
     {
-        $key = cacheKey(__CLASS__, __METHOD__);
+        $key = \App\Common\Utils\Helper::myCacheKey(__CLASS__, __METHOD__);
         $cache = $this->getDI()->get("cache");
         $settings = $cache->get($key);
         if (empty($settings)) {

@@ -29,7 +29,7 @@ class ComponentApplication extends \App\Common\Models\Weixin\ComponentApplicatio
      */
     public function getApplicationInfoByAppId($appid)
     {
-        $cacheKey = $this->getCacheKey($appid);
+        $cacheKey = \App\Common\Utils\Helper::myCacheKey(__CLASS__, $appid);
         $cache = $this->getDI()->get('cache');
         $application = $cache->get($cacheKey);
         if (empty($application)) {
@@ -51,7 +51,7 @@ class ComponentApplication extends \App\Common\Models\Weixin\ComponentApplicatio
      */
     public function getApplicationInfoByAuthorizerAppId($appid)
     {
-        $cacheKey = $this->getCacheKey($appid);
+        $cacheKey = \App\Common\Utils\Helper::myCacheKey(__CLASS__, $appid);
         $cache = $this->getDI()->get('cache');
         $application = $cache->get($cacheKey);
         if (empty($application)) {
@@ -81,7 +81,7 @@ class ComponentApplication extends \App\Common\Models\Weixin\ComponentApplicatio
         }
 
         try {
-            $cacheKey = $this->getCacheKey($appid);
+            $cacheKey = \App\Common\Utils\Helper::myCacheKey(__CLASS__, $appid);
             $token = $this->refreshInfo($cacheKey, $token);
         } catch (\Exception $e) {
         }
@@ -103,7 +103,7 @@ class ComponentApplication extends \App\Common\Models\Weixin\ComponentApplicatio
             return null;
         }
         try {
-            $cacheKey = $this->getCacheKey($appid);
+            $cacheKey = \App\Common\Utils\Helper::myCacheKey(__CLASS__, $appid);
             $token = $this->refreshInfo($cacheKey, $token);
         } catch (\Exception $e) {
         }
@@ -146,11 +146,11 @@ class ComponentApplication extends \App\Common\Models\Weixin\ComponentApplicatio
             $expire_time = $this->getExpireTime($newInfo);
             // 更新缓存
             $appid = $newInfo['appid'];
-            $cacheKey = $this->getCacheKey($appid);
+            $cacheKey = \App\Common\Utils\Helper::myCacheKey(__CLASS__, $appid);
             $cache->save($cacheKey, $newInfo, $expire_time);
 
             $authorizer_appid = $newInfo['authorizer_appid'];
-            $cacheKey2 = $this->getCacheKey($authorizer_appid);
+            $cacheKey2 = \App\Common\Utils\Helper::myCacheKey(__CLASS__, $authorizer_appid);
             $cache->save($cacheKey2, $newInfo, $expire_time);
 
             return $newInfo;
@@ -194,11 +194,11 @@ class ComponentApplication extends \App\Common\Models\Weixin\ComponentApplicatio
             $expire_time = $this->getExpireTime($newInfo);
             // 更新缓存
             $appid = $newInfo['appid'];
-            $cacheKey = $this->getCacheKey($appid);
+            $cacheKey = \App\Common\Utils\Helper::myCacheKey(__CLASS__, $appid);
             $cache->save($cacheKey, $newInfo, $expire_time);
 
             $authorizer_appid = $newInfo['authorizer_appid'];
-            $cacheKey2 = $this->getCacheKey($authorizer_appid);
+            $cacheKey2 = \App\Common\Utils\Helper::myCacheKey(__CLASS__, $authorizer_appid);
             $cache->save($cacheKey2, $newInfo, $expire_time);
 
             return $newInfo;
@@ -218,12 +218,6 @@ class ComponentApplication extends \App\Common\Models\Weixin\ComponentApplicatio
         return $expire_time;
     }
 
-    private function getCacheKey($appid)
-    {
-        $cacheKey = cacheKey(__CLASS__, $appid);
-        return $cacheKey;
-    }
-
     private function refreshInfo($cacheKey, $token)
     {
         $cache = $this->getDI()->get('cache');
@@ -231,7 +225,7 @@ class ComponentApplication extends \App\Common\Models\Weixin\ComponentApplicatio
         if (isset($token['access_token_expire']) && !empty($token['is_advanced'])) {
             if (strtotime($token['access_token_expire']) <= time()) {
                 if (!empty($token['appid']) && !empty($token['secret']) && !empty($token['component_access_token']) && !empty($token['refresh_token']) && !empty($token['authorizer_appid'])) {
-                    $lockKey = cacheKey(__CLASS__, __METHOD__, __LINE__);
+                    $lockKey = \App\Common\Utils\Helper::myCacheKey(__CLASS__, __METHOD__, __LINE__);
                     $objLock = new \iLock($lockKey);
                     if (!$objLock->lock()) {
                         $objToken = new \Weixin\Component($token['appid'], $token['secret']);
@@ -280,7 +274,7 @@ class ComponentApplication extends \App\Common\Models\Weixin\ComponentApplicatio
         if (!empty($token['is_advanced'])) {
             if (!isset($token['jsapi_ticket_expire']) || strtotime($token['jsapi_ticket_expire']) <= time()) {
                 if (!empty($token['appid']) && !empty($token['secret']) && !empty($token['access_token'])) {
-                    $lockKey = cacheKey(__CLASS__, __METHOD__, __LINE__);
+                    $lockKey = \App\Common\Utils\Helper::myCacheKey(__CLASS__, __METHOD__, __LINE__);
                     $objLock = new \iLock($lockKey);
                     if (!$objLock->lock()) {
 
@@ -322,7 +316,7 @@ class ComponentApplication extends \App\Common\Models\Weixin\ComponentApplicatio
         if (!empty($token['is_weixin_card'])) {
             if (!isset($token['wx_card_api_ticket_expire']) || strtotime($token['wx_card_api_ticket_expire']) <= time()) {
                 if (!empty($token['appid']) && !empty($token['secret']) && !empty($token['access_token'])) {
-                    $lockKey = cacheKey(__CLASS__, __METHOD__, __LINE__);
+                    $lockKey = \App\Common\Utils\Helper::myCacheKey(__CLASS__, __METHOD__, __LINE__);
                     $objLock = new \iLock($lockKey);
                     if (!$objLock->lock()) {
 
@@ -359,14 +353,13 @@ class ComponentApplication extends \App\Common\Models\Weixin\ComponentApplicatio
         return $token;
     }
 
-
     private function refreshComponentAccessTokenInfo($cacheKey, $token)
     {
         $cache = $this->getDI()->get('cache');
         if (isset($token['component_access_token_expire'])) {
             if (strtotime($token['component_access_token_expire']) <= time()) {
                 if (!empty($token['appid']) && !empty($token['secret']) && !empty($token['component_verify_ticket'])) {
-                    $lockKey = cacheKey(__CLASS__, __METHOD__, __LINE__);
+                    $lockKey = \App\Common\Utils\Helper::myCacheKey(__CLASS__, __METHOD__, __LINE__);
                     $objLock = new \iLock($lockKey);
                     if (!$objLock->lock()) {
                         $objToken = new \Weixin\Component($token['appid'], $token['secret']);
