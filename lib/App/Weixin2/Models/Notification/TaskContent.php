@@ -34,7 +34,7 @@ class TaskContent extends \App\Common\Models\Weixin2\Notification\TaskContent
         $data = array();
         $data['name'] = $name;
         $data['notification_task_id'] = $notification_task_id;
-        $data['openids'] = \\App\Common\Utils\Helper::myJsonEncode($openids);
+        $data['openids'] = \App\Common\Utils\Helper::myJsonEncode($openids);
         $data['tag_id'] = $tag_id;
         $data['push_status'] = 0;
         $data['push_time'] = \App\Common\Utils\Helper::getCurrentTime($now);

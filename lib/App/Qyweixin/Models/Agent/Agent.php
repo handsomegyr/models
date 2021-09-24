@@ -124,9 +124,9 @@ class Agent extends \App\Common\Models\Qyweixin\Agent\Agent
         $updateData['name'] = $res['name'];
         $updateData['square_logo_url'] = $res['square_logo_url'];
         $updateData['description'] = $res['description'];
-        $updateData['allow_userinfos'] = !empty($res['allow_userinfos']) ? \\App\Common\Utils\Helper::myJsonEncode($res['allow_userinfos']) : "{}";
-        $updateData['allow_partys'] =  !empty($res['allow_partys']) ? \\App\Common\Utils\Helper::myJsonEncode($res['allow_partys']) : "{}";
-        $updateData['allow_tags'] =  !empty($res['allow_tags']) ? \\App\Common\Utils\Helper::myJsonEncode($res['allow_tags']) : "{}";
+        $updateData['allow_userinfos'] = !empty($res['allow_userinfos']) ? \App\Common\Utils\Helper::myJsonEncode($res['allow_userinfos']) : "{}";
+        $updateData['allow_partys'] =  !empty($res['allow_partys']) ? \App\Common\Utils\Helper::myJsonEncode($res['allow_partys']) : "{}";
+        $updateData['allow_tags'] =  !empty($res['allow_tags']) ? \App\Common\Utils\Helper::myJsonEncode($res['allow_tags']) : "{}";
         $updateData['close'] = $res['close'];
         $updateData['redirect_domain'] = $res['redirect_domain'];
         $updateData['report_location_flag'] = $res['report_location_flag'];

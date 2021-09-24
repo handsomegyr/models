@@ -674,7 +674,7 @@ class WeixinService
                             ->getMediaManager()
                             ->uploadVideo($media_id, $title, $description);
                         if (!empty($res4UploadVideo['errcode'])) {
-                            throw new \Exception($res4UploadVideo['errmsg'] . \\App\Common\Utils\Helper::myJsonEncode(array(
+                            throw new \Exception($res4UploadVideo['errmsg'] . \App\Common\Utils\Helper::myJsonEncode(array(
                                 'media_id' => $media_id,
                                 'title' => $title,
                                 'description' => $description
@@ -729,7 +729,7 @@ class WeixinService
                         ->getMediaManager()
                         ->uploadNews($articles);
                     if (!empty($res4UploadNews['errcode'])) {
-                        throw new \Exception($res4UploadNews['errmsg'] . \\App\Common\Utils\Helper::myJsonEncode($articles), $res4UploadNews['errcode']);
+                        throw new \Exception($res4UploadNews['errmsg'] . \App\Common\Utils\Helper::myJsonEncode($articles), $res4UploadNews['errcode']);
                     }
                     /**
                      * {
@@ -791,7 +791,7 @@ class WeixinService
 
         // 记录日志
         $modelMassMsgSendLog = new \App\Weixin2\Models\MassMsg\SendLog();
-        $modelMassMsgSendLog->record($massMsgInfo['component_appid'], $massMsgInfo['authorizer_appid'], $massMsgInfo['_id'], $massMsgInfo['name'], $massMsgInfo['msg_type'], $massMsgInfo['media'], $massMsgInfo['media_id'], $massMsgInfo['thumb_media'], $massMsgInfo['thumb_media_id'], $massMsgInfo['title'], $massMsgInfo['description'], $massMsgInfo['card_id'], $massMsgInfo['card_ext'], $massMsgInfo['upload_media_id'], $massMsgInfo['upload_media_created_at'], $massMsgInfo['upload_media_type'], $is_to_all, $tag_id, \\App\Common\Utils\Helper::myJsonEncode($toUsers), $send_ignore_reprint, $clientmsgid, $match['_id'], $match['keyword'], $match['mass_msg_type'], "", "", \\App\Common\Utils\Helper::myJsonEncode($massmsg), $msg_id, $msg_data_id, time());
+        $modelMassMsgSendLog->record($massMsgInfo['component_appid'], $massMsgInfo['authorizer_appid'], $massMsgInfo['_id'], $massMsgInfo['name'], $massMsgInfo['msg_type'], $massMsgInfo['media'], $massMsgInfo['media_id'], $massMsgInfo['thumb_media'], $massMsgInfo['thumb_media_id'], $massMsgInfo['title'], $massMsgInfo['description'], $massMsgInfo['card_id'], $massMsgInfo['card_ext'], $massMsgInfo['upload_media_id'], $massMsgInfo['upload_media_created_at'], $massMsgInfo['upload_media_type'], $is_to_all, $tag_id, \App\Common\Utils\Helper::myJsonEncode($toUsers), $send_ignore_reprint, $clientmsgid, $match['_id'], $match['keyword'], $match['mass_msg_type'], "", "", \App\Common\Utils\Helper::myJsonEncode($massmsg), $msg_id, $msg_data_id, time());
 
         return array(
             'is_ok' => $is_ok,
@@ -1040,7 +1040,7 @@ class WeixinService
         }
         // 记录日志
         $modelCustomMsgSendLog = new \App\Weixin2\Models\CustomMsg\SendLog();
-        $modelCustomMsgSendLog->record($customMsgInfo['component_appid'], $customMsgInfo['authorizer_appid'], $customMsgInfo['_id'], $customMsgInfo['name'], $customMsgInfo['msg_type'], $customMsgInfo['media'], $customMsgInfo['media_id'], $customMsgInfo['thumb_media'], $customMsgInfo['thumb_media_id'], $customMsgInfo['title'], $customMsgInfo['description'], $customMsgInfo['music'], $customMsgInfo['hqmusic'], $customMsgInfo['appid'], $customMsgInfo['pagepath'], $customMsgInfo['card_id'], $customMsgInfo['card_ext'], $customMsgInfo['kf_account'], $match['_id'], $match['keyword'], $match['custom_msg_type'], $ToUserName, $FromUserName, \\App\Common\Utils\Helper::myJsonEncode($custommsg), time());
+        $modelCustomMsgSendLog->record($customMsgInfo['component_appid'], $customMsgInfo['authorizer_appid'], $customMsgInfo['_id'], $customMsgInfo['name'], $customMsgInfo['msg_type'], $customMsgInfo['media'], $customMsgInfo['media_id'], $customMsgInfo['thumb_media'], $customMsgInfo['thumb_media_id'], $customMsgInfo['title'], $customMsgInfo['description'], $customMsgInfo['music'], $customMsgInfo['hqmusic'], $customMsgInfo['appid'], $customMsgInfo['pagepath'], $customMsgInfo['card_id'], $customMsgInfo['card_ext'], $customMsgInfo['kf_account'], $match['_id'], $match['keyword'], $match['custom_msg_type'], $ToUserName, $FromUserName, \App\Common\Utils\Helper::myJsonEncode($custommsg), time());
 
         return array(
             'is_ok' => $is_ok,
@@ -1273,7 +1273,7 @@ class WeixinService
 
         // 记录日志
         $modelTemplateMsgSendLog = new \App\Weixin2\Models\TemplateMsg\SendLog();
-        $modelTemplateMsgSendLog->record($templateMsgInfo['component_appid'], $templateMsgInfo['authorizer_appid'], $templateMsgInfo['_id'], $templateMsgInfo['name'], $templateMsgInfo['template_id'], $templateMsgInfo['url'], $templateMsgInfo['data'], $templateMsgInfo['color'], $templateMsgInfo['appid'], $templateMsgInfo['pagepath'], $match['_id'], $match['keyword'], $ToUserName, $FromUserName, \\App\Common\Utils\Helper::myJsonEncode($templatemsg), time(), 0);
+        $modelTemplateMsgSendLog->record($templateMsgInfo['component_appid'], $templateMsgInfo['authorizer_appid'], $templateMsgInfo['_id'], $templateMsgInfo['name'], $templateMsgInfo['template_id'], $templateMsgInfo['url'], $templateMsgInfo['data'], $templateMsgInfo['color'], $templateMsgInfo['appid'], $templateMsgInfo['pagepath'], $match['_id'], $match['keyword'], $ToUserName, $FromUserName, \App\Common\Utils\Helper::myJsonEncode($templatemsg), time(), 0);
 
         return array(
             'is_ok' => $is_ok,
@@ -2273,7 +2273,7 @@ class WeixinService
         // 发送小程序发送订阅消息     
         $res = $this->subscribeMsgSend($openid, $templateMsgParams['template_id'], $templateMsgParams['data'], $templateMsgParams['page']);
         if (!empty($res['errcode'])) {
-            $templateMsgParams2 = \\App\Common\Utils\Helper::myJsonEncode($templateMsgParams);
+            $templateMsgParams2 = \App\Common\Utils\Helper::myJsonEncode($templateMsgParams);
             throw new \Exception("openid为{$openid}的订阅消息发送失败，错误：{$res['errmsg']}，参数：{$templateMsgParams2}", $res['errcode']);
         }
         return $res;
@@ -2325,7 +2325,7 @@ class WeixinService
 
         // 记录日志
         $modelSubscribeMsgSendLog = new \App\Weixin2\Models\Miniprogram\SubscribeMsg\SendLog();
-        $modelSubscribeMsgSendLog->record($subscribeMsgInfo['component_appid'], $subscribeMsgInfo['authorizer_appid'], $subscribeMsgInfo['id'], $subscribeMsgInfo['name'], $subscribeMsgInfo['template_id'], $subscribeMsgInfo['data'], $subscribeMsgInfo['pageurl'], $subscribeMsgInfo['miniprogram_state'], $subscribeMsgInfo['lang'], $match['id'], $match['keyword'], $ToUserName, $FromUserName, \\App\Common\Utils\Helper::myJsonEncode($templatemsg), time());
+        $modelSubscribeMsgSendLog->record($subscribeMsgInfo['component_appid'], $subscribeMsgInfo['authorizer_appid'], $subscribeMsgInfo['id'], $subscribeMsgInfo['name'], $subscribeMsgInfo['template_id'], $subscribeMsgInfo['data'], $subscribeMsgInfo['pageurl'], $subscribeMsgInfo['miniprogram_state'], $subscribeMsgInfo['lang'], $match['id'], $match['keyword'], $ToUserName, $FromUserName, \App\Common\Utils\Helper::myJsonEncode($templatemsg), time());
 
         return array(
             'is_ok' => $is_ok,
@@ -2410,7 +2410,7 @@ class WeixinService
 
         // 记录日志
         $modelTemplateMsgSendLog = new \App\Weixin2\Models\TemplateMsg\SendLog();
-        $modelTemplateMsgSendLog->record($templateMsgInfo['component_appid'], $templateMsgInfo['authorizer_appid'], $templateMsgInfo['id'], $templateMsgInfo['name'], $templateMsgInfo['template_id'], $templateMsgInfo['url'], $templateMsgInfo['data'], $templateMsgInfo['color'], $templateMsgInfo['appid'], $templateMsgInfo['pagepath'], $match['id'], $match['keyword'], $ToUserName, $FromUserName, \\App\Common\Utils\Helper::myJsonEncode($templatemsg), time(), 1);
+        $modelTemplateMsgSendLog->record($templateMsgInfo['component_appid'], $templateMsgInfo['authorizer_appid'], $templateMsgInfo['id'], $templateMsgInfo['name'], $templateMsgInfo['template_id'], $templateMsgInfo['url'], $templateMsgInfo['data'], $templateMsgInfo['color'], $templateMsgInfo['appid'], $templateMsgInfo['pagepath'], $match['id'], $match['keyword'], $ToUserName, $FromUserName, \App\Common\Utils\Helper::myJsonEncode($templatemsg), time(), 1);
 
         return array(
             'is_ok' => $is_ok,

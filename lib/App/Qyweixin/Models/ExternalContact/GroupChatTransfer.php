@@ -34,7 +34,7 @@ class GroupChatTransfer extends \App\Common\Models\Qyweixin\ExternalContact\Grou
             $updateData['failed_chat_errcode'] = $res['failed_chat_list']['errcode'];
             $updateData['failed_chat_errmsg'] = $res['failed_chat_list']['errmsg'];
         }
-        $updateData['memo'] = \\App\Common\Utils\Helper::myJsonEncode($res);
+        $updateData['memo'] = \App\Common\Utils\Helper::myJsonEncode($res);
         $this->update(array('_id' => $id), array('$set' => $updateData));
     }
 }

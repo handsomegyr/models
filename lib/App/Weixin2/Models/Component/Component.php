@@ -135,7 +135,7 @@ class Component extends \App\Common\Models\Weixin2\Component\Component
                         $arrToken = $objToken->apiComponentToken($token['verify_ticket']);
 
                         if (!isset($arrToken['access_token'])) {
-                            throw new \Exception(\\App\Common\Utils\Helper::myJsonEncode($arrToken));
+                            throw new \Exception(\App\Common\Utils\Helper::myJsonEncode($arrToken));
                         }
 
                         $token = $this->updateAccessToken($id, $arrToken['access_token'], $arrToken['expires_in'], $token['verify_ticket']);

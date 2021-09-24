@@ -88,8 +88,8 @@ class ExternalUser extends \App\Common\Models\Qyweixin\ExternalContact\ExternalU
             $data['position'] = isset($externalContactInfo['position']) ? $externalContactInfo['position'] : '';
             $data['corp_name'] = isset($externalContactInfo['corp_name']) ? $externalContactInfo['corp_name'] : '';
             $data['corp_full_name'] = isset($externalContactInfo['corp_full_name']) ? $externalContactInfo['corp_full_name'] : '';
-            $data['external_profile'] = isset($externalContactInfo['external_profile']) ? \\App\Common\Utils\Helper::myJsonEncode($externalContactInfo['external_profile']) : '';
-            $data['follow_user'] = isset($userInfo['follow_user']) ? \\App\Common\Utils\Helper::myJsonEncode($userInfo['follow_user']) : '';
+            $data['external_profile'] = isset($externalContactInfo['external_profile']) ? \App\Common\Utils\Helper::myJsonEncode($externalContactInfo['external_profile']) : '';
+            $data['follow_user'] = isset($userInfo['follow_user']) ? \App\Common\Utils\Helper::myJsonEncode($userInfo['follow_user']) : '';
         } else {
             $data = array();
             $data['provider_appid'] = $provider_appid;
@@ -118,10 +118,10 @@ class ExternalUser extends \App\Common\Models\Qyweixin\ExternalContact\ExternalU
                 $data['corp_full_name'] = $externalContactInfo['corp_full_name'];
             }
             if (isset($externalContactInfo['external_profile'])) {
-                $data['external_profile'] = \\App\Common\Utils\Helper::myJsonEncode($externalContactInfo['external_profile']);
+                $data['external_profile'] = \App\Common\Utils\Helper::myJsonEncode($externalContactInfo['external_profile']);
             }
             if (isset($userInfo['follow_user'])) {
-                $data['follow_user'] = \\App\Common\Utils\Helper::myJsonEncode($userInfo['follow_user']);
+                $data['follow_user'] = \App\Common\Utils\Helper::myJsonEncode($userInfo['follow_user']);
             }
         }
         return $data;

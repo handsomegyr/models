@@ -30,7 +30,7 @@ class Transfer extends \App\Common\Models\Qyweixin\ExternalContact\Transfer
         $updateData = array();
         $updateData['is_transfered'] = 1;
         $updateData['transfer_time'] = \App\Common\Utils\Helper::getCurrentTime($now);
-        $updateData['memo'] = \\App\Common\Utils\Helper::myJsonEncode($res);
+        $updateData['memo'] = \App\Common\Utils\Helper::myJsonEncode($res);
         $this->update(array('_id' => $id), array('$set' => $updateData));
     }
 }

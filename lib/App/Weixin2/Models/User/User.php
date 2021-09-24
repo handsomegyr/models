@@ -120,12 +120,12 @@ class User extends \App\Common\Models\Weixin2\User\User
             $data['headimgurl'] = isset($userInfo['headimgurl']) ? $userInfo['headimgurl'] : '';
             $data['remark'] = isset($userInfo['remark']) ? $userInfo['remark'] : '';
             $data['groupid'] = isset($userInfo['groupid']) ? $userInfo['groupid'] : '';
-            $data['tagid_list'] = isset($userInfo['tagid_list']) ? \\App\Common\Utils\Helper::myJsonEncode($userInfo['tagid_list']) : '';
+            $data['tagid_list'] = isset($userInfo['tagid_list']) ? \App\Common\Utils\Helper::myJsonEncode($userInfo['tagid_list']) : '';
             $data['subscribe'] = isset($userInfo['subscribe']) ? intval($userInfo['subscribe']) : 0;
             $data['subscribe_time'] = isset($userInfo['subscribe_time']) ? \App\Common\Utils\Helper::getCurrentTime($userInfo['subscribe_time']) : '';
             $data['unionid'] = isset($userInfo['unionid']) ? $userInfo['unionid'] : '';
-            $data['privilege'] = isset($userInfo['privilege']) ? \\App\Common\Utils\Helper::myJsonEncode($userInfo['privilege']) : '';
-            $data['access_token'] = isset($userInfo['access_token']) ? \\App\Common\Utils\Helper::myJsonEncode($userInfo['access_token']) : '';
+            $data['privilege'] = isset($userInfo['privilege']) ? \App\Common\Utils\Helper::myJsonEncode($userInfo['privilege']) : '';
+            $data['access_token'] = isset($userInfo['access_token']) ? \App\Common\Utils\Helper::myJsonEncode($userInfo['access_token']) : '';
             $data['subscribe_scene'] = isset($userInfo['subscribe_scene']) ? $userInfo['subscribe_scene'] : '';
             $data['qr_scene'] = isset($userInfo['qr_scene']) ? $userInfo['qr_scene'] : '';
             $data['qr_scene_str'] = isset($userInfo['qr_scene_str']) ? $userInfo['qr_scene_str'] : '';
@@ -162,7 +162,7 @@ class User extends \App\Common\Models\Weixin2\User\User
                 $data['groupid'] = $userInfo['groupid'];
             }
             if (isset($userInfo['tagid_list'])) {
-                $data['tagid_list'] = \\App\Common\Utils\Helper::myJsonEncode($userInfo['tagid_list']);
+                $data['tagid_list'] = \App\Common\Utils\Helper::myJsonEncode($userInfo['tagid_list']);
             }
             if (isset($userInfo['subscribe'])) {
                 $data['subscribe'] = intval($userInfo['subscribe']);
@@ -174,10 +174,10 @@ class User extends \App\Common\Models\Weixin2\User\User
                 $data['unionid'] = $userInfo['unionid'];
             }
             if (isset($userInfo['privilege'])) {
-                $data['privilege'] = \\App\Common\Utils\Helper::myJsonEncode($userInfo['privilege']);
+                $data['privilege'] = \App\Common\Utils\Helper::myJsonEncode($userInfo['privilege']);
             }
             if (!empty($userInfo['access_token'])) {
-                $data['access_token'] = \\App\Common\Utils\Helper::myJsonEncode($userInfo['access_token']);
+                $data['access_token'] = \App\Common\Utils\Helper::myJsonEncode($userInfo['access_token']);
             }
             if (!empty($userInfo['subscribe_scene'])) {
                 $data['subscribe_scene'] = $userInfo['subscribe_scene'];

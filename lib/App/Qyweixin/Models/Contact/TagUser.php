@@ -62,12 +62,12 @@ class TagUser extends \App\Common\Models\Qyweixin\Contact\TagUser
                 $data['tagname'] = $res['tagname'];
                 $data['username'] = $username;
                 if (isset($res['invalidlist'])) {
-                    $data['invalidlist'] = \\App\Common\Utils\Helper::myJsonEncode($res['invalidlist']);
+                    $data['invalidlist'] = \App\Common\Utils\Helper::myJsonEncode($res['invalidlist']);
                 } else {
                     $data['invalidlist'] = "[]";
                 }
                 $data['get_time'] = \App\Common\Utils\Helper::getCurrentTime($now);
-                $data['memo'] = \\App\Common\Utils\Helper::myJsonEncode($res);
+                $data['memo'] = \App\Common\Utils\Helper::myJsonEncode($res);
                 if (!empty($info)) {
                     $this->update(array('_id' => $info['_id']), array('$set' => $data));
                 } else {

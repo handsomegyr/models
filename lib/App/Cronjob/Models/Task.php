@@ -29,7 +29,7 @@ class Task extends \App\Common\Models\Cronjob\Task
     {
         $data = array();
         $data['type'] = intval($type);
-        $data['content'] = \\App\Common\Utils\Helper::myJsonEncode($content);
+        $data['content'] = \App\Common\Utils\Helper::myJsonEncode($content);
         $data['is_done'] = false;
         $data['do_num'] = 0;
         $data['memo'] = $memo;

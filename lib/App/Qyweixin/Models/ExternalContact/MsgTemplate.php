@@ -99,7 +99,7 @@ class MsgTemplate extends \App\Common\Models\Qyweixin\ExternalContact\MsgTemplat
     {
         $updateData = array();
         $updateData['msgid'] = $res['msgid'];
-        $updateData['fail_list'] = \\App\Common\Utils\Helper::myJsonEncode($res['fail_list']);
+        $updateData['fail_list'] = \App\Common\Utils\Helper::myJsonEncode($res['fail_list']);
         $updateData['send_time'] = \App\Common\Utils\Helper::getCurrentTime($now);
         return $this->update(array('_id' => $id), array('$set' => $updateData));
     }
@@ -108,7 +108,7 @@ class MsgTemplate extends \App\Common\Models\Qyweixin\ExternalContact\MsgTemplat
     {
         $updateData = array();
         $updateData['check_status'] = $res['check_status'];
-        $updateData['detail_list'] = \\App\Common\Utils\Helper::myJsonEncode($res['detail_list']);
+        $updateData['detail_list'] = \App\Common\Utils\Helper::myJsonEncode($res['detail_list']);
         $updateData['get_result_time'] = \App\Common\Utils\Helper::getCurrentTime($now);
         return $this->update(array('_id' => $id), array('$set' => $updateData));
     }

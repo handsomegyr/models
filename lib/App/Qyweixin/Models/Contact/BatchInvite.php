@@ -18,10 +18,10 @@ class BatchInvite extends \App\Common\Models\Qyweixin\Contact\BatchInvite
          */
         $updateData = array();
         $updateData['invite_time'] = \App\Common\Utils\Helper::getCurrentTime($now);
-        $updateData['invaliduser'] = empty($res['invaliduser']) ? "[]" : \\App\Common\Utils\Helper::myJsonEncode($res['invaliduser']);
-        $updateData['invalidparty'] = empty($res['invalidparty']) ? "[]" : \\App\Common\Utils\Helper::myJsonEncode($res['invalidparty']);
-        $updateData['invalidtag'] = empty($res['invalidtag']) ? "[]" : \\App\Common\Utils\Helper::myJsonEncode($res['invalidtag']);
-        $updateData['memo'] = empty($res) ? "{}" : \\App\Common\Utils\Helper::myJsonEncode($res);
+        $updateData['invaliduser'] = empty($res['invaliduser']) ? "[]" : \App\Common\Utils\Helper::myJsonEncode($res['invaliduser']);
+        $updateData['invalidparty'] = empty($res['invalidparty']) ? "[]" : \App\Common\Utils\Helper::myJsonEncode($res['invalidparty']);
+        $updateData['invalidtag'] = empty($res['invalidtag']) ? "[]" : \App\Common\Utils\Helper::myJsonEncode($res['invalidtag']);
+        $updateData['memo'] = empty($res) ? "{}" : \App\Common\Utils\Helper::myJsonEncode($res);
         return $this->update(array('_id' => $id), array('$set' => $updateData));
     }
 }
