@@ -129,15 +129,15 @@ class Menu
         );
         $tree[] = $item;
 
-        // 企业用户
-        $item = array(
-            'menu_name' => '企业用户',
-            'menu_model' => 'qyweixin-user',
-            'level' => '企业平台用户管理',
-            'icon' => '',
-            'model' => '\App\Backend\Submodules\Qyweixin\Models\User\User'
-        );
-        $tree[] = $item;
+        // // 企业用户
+        // $item = array(
+        //     'menu_name' => '企业用户',
+        //     'menu_model' => 'qyweixin-user',
+        //     'level' => '企业平台用户管理',
+        //     'icon' => '',
+        //     'model' => '\App\Backend\Submodules\Qyweixin\Models\User\User'
+        // );
+        // $tree[] = $item;
 
         // // 用户标签
         // $item = array(
@@ -958,6 +958,16 @@ class Menu
             'level' => '企业平台用户管理',
             'icon' => '',
             'model' => ''
+        );
+        $tree[] = $item;
+
+        // 成员
+        $item = array(
+            'menu_name' => '成员',
+            'menu_model' => 'qyweixin-user',
+            'level' => '企业平台用户管理',
+            'icon' => '',
+            'model' => '\App\Backend\Submodules\Qyweixin\Models\Contact\User'
         );
         $tree[] = $item;
 

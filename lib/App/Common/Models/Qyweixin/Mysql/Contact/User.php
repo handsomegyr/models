@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Common\Models\Qyweixin\Mysql\User;
+namespace App\Common\Models\Qyweixin\Mysql\Contact;
 
 use App\Common\Models\Base\Mysql\Base;
 

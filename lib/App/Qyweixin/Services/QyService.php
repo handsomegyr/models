@@ -638,7 +638,7 @@ class QyService
     // 读取成员
     public function getUserInfo($userInfo)
     {
-        $modelUser = new \App\Qyweixin\Models\User\User();
+        $modelUser = new \App\Qyweixin\Models\Contact\User();
         $res = $this->getQyWeixinObject()
             ->getUserManager()
             ->get($userInfo['userid']);
@@ -724,7 +724,7 @@ class QyService
     // userid转openid
     public function convertToOpenid($userInfo)
     {
-        $modelUser = new \App\Qyweixin\Models\User\User();
+        $modelUser = new \App\Qyweixin\Models\Contact\User();
         $res = $this->getQyWeixinObject()
             ->getUserManager()
             ->convertToOpenid($userInfo['userid']);
@@ -747,7 +747,7 @@ class QyService
     // openid转userid
     public function convertToUserid($userInfo)
     {
-        $modelUser = new \App\Qyweixin\Models\User\User();
+        $modelUser = new \App\Qyweixin\Models\Contact\User();
         $res = $this->getQyWeixinObject()
             ->getUserManager()
             ->convertToUserid($userInfo['openid']);
@@ -1300,6 +1300,7 @@ class QyService
     // 获取部门成员
     public function getDepartmentUserSimplelist($dep_id, $fetch_child = 0, $is_root = false)
     {
+        $modelUser = new \App\Qyweixin\Models\Contact\User();
         $modelDepartmentUser = new \App\Qyweixin\Models\Contact\DepartmentUser();
         $res = $this->getQyWeixinObject()
             ->getUserManager()
@@ -1323,14 +1324,17 @@ class QyService
         if (!empty($is_root) && !empty($fetch_child)) {
             $modelDepartmentUser->clearExist($this->authorizer_appid, $this->provider_appid);
         }
-        $modelDepartmentUser->syncDepartmentUserList($dep_id, $this->authorizer_appid, $this->provider_appid, $res, time());
+        $now = time();
+        $modelDepartmentUser->syncDepartmentUserList($this->authorizer_appid, $this->provider_appid, $res, $now);
+        $modelUser->syncUserList($this->authorizer_appid, $this->provider_appid, $res, $now);
+
         return $res;
     }
 
     // 获取部门成员详情
     public function getDepartmentUserDetaillist($dep_id, $fetch_child = 0, $is_root = false)
     {
-        $modelUser = new \App\Qyweixin\Models\User\User();
+        $modelUser = new \App\Qyweixin\Models\Contact\User();
         $modelDepartmentUser = new \App\Qyweixin\Models\Contact\DepartmentUser();
         $res = $this->getQyWeixinObject()
             ->getUserManager()

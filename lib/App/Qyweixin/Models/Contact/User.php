@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Qyweixin\Models\User;
+namespace App\Qyweixin\Models\Contact;
 
-class User extends \App\Common\Models\Qyweixin\User\User
+class User extends \App\Common\Models\Qyweixin\Contact\User
 {
 
     /**
