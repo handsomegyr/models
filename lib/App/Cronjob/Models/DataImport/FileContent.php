@@ -52,7 +52,7 @@ class FileContent extends \App\Common\Models\Cronjob\DataImport\FileContent
      *
      * @param int $cron_time            
      * @param string $cronjob_id            
-     * @param number $line_no            
+     * @param int $line_no            
      * @param string $content_type               
      * @param string $content          
      * @param string $content_sign            

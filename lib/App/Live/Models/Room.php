@@ -260,7 +260,7 @@ class Room extends \App\Common\Models\Live\Room
      * 增加房间的真实围观人数
      *
      * @param string $room_id            
-     * @param number $num            
+     * @param int $num            
      * @return number
      */
     public function incrViewNum($room_id, $num = 1)
@@ -304,7 +304,7 @@ class Room extends \App\Common\Models\Live\Room
      * 增加房间的虚拟围观人数
      *
      * @param string $room_id            
-     * @param number $num            
+     * @param int $num            
      * @return number
      */
     public function incrVirtualViewNum($room_id, $num = 1)
@@ -345,7 +345,7 @@ class Room extends \App\Common\Models\Live\Room
      * 计算房间的围观峰值
      *
      * @param string $room_id            
-     * @param number $client_num            
+     * @param int $client_num            
      * @return number
      */
     public function calcViewPeakNum($room_id, $client_num)
@@ -360,7 +360,7 @@ class Room extends \App\Common\Models\Live\Room
      * 设置房间的围观峰值
      *
      * @param string $room_id            
-     * @param number $client_num            
+     * @param int $client_num            
      * @return number
      */
     public function setViewPeakNum($room_id, $client_num)
@@ -411,7 +411,7 @@ class Room extends \App\Common\Models\Live\Room
      *
      * @param string $room_id            
      * @param string $auchor_id            
-     * @param number $num            
+     * @param int $num            
      * @return number
      */
     public function incrVirtualLikeNum($room_id, $auchor_id, $num = 1)
@@ -451,7 +451,7 @@ class Room extends \App\Common\Models\Live\Room
      *
      * @param string $room_id            
      * @param string $auchor_id            
-     * @param number $num            
+     * @param int $num            
      * @return number
      */
     public function incrLikeNum($room_id, $auchor_id, $num = 1)

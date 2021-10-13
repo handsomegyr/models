@@ -47,8 +47,8 @@ class User extends \App\Common\Models\Invitation\User
      * @param string $user_id            
      * @param string $user_name            
      * @param string $user_headimgurl            
-     * @param number $worth            
-     * @param number $worth2            
+     * @param int $worth            
+     * @param int $worth2            
      * @param string $activity_id            
      * @param array $memo            
      * @return array
@@ -76,8 +76,8 @@ class User extends \App\Common\Models\Invitation\User
      * @param string $user_id            
      * @param string $user_name            
      * @param string $user_headimgurl            
-     * @param number $worth            
-     * @param number $worth2            
+     * @param int $worth            
+     * @param int $worth2            
      * @param string $activity_id            
      * @param array $memo            
      * @return array

@@ -88,8 +88,8 @@ class InvitationGotDetail extends \App\Common\Models\Invitation\InvitationGotDet
      * 分页读取某个用户的全部邀请函
      *
      * @param string $invitationId            
-     * @param number $page            
-     * @param number $limit            
+     * @param int $page            
+     * @param int $limit            
      * @return array
      */
     public function getListByPage($invitationId, $page = 1, $limit = 10)
@@ -108,8 +108,8 @@ class InvitationGotDetail extends \App\Common\Models\Invitation\InvitationGotDet
      *
      * @param string $user_id            
      * @param string $activity_id            
-     * @param number $page            
-     * @param number $limit            
+     * @param int $page            
+     * @param int $limit            
      * @param array $sort            
      * @return array
      */
@@ -132,8 +132,8 @@ class InvitationGotDetail extends \App\Common\Models\Invitation\InvitationGotDet
      *
      * @param string $user_id            
      * @param string $activity_id            
-     * @param number $page            
-     * @param number $limit            
+     * @param int $page            
+     * @param int $limit            
      * @param array $sort            
      * @return array
      */

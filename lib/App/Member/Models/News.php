@@ -7,8 +7,8 @@ class News extends \App\Common\Models\Member\News
     /**
      * 分页获取用户动态的列表
      *
-     * @param number $page            
-     * @param number $limit            
+     * @param int $page            
+     * @param int $limit            
      * @param array $otherConditions            
      * @param array $sort            
      * @return array

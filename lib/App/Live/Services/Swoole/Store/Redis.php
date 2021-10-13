@@ -323,7 +323,7 @@ class Redis
      * @param string $item            
      * @param string $room_id            
      * @param array $log            
-     * @param number $history_max_size            
+     * @param int $history_max_size            
      */
     public function addHistory($item, $room_id, array $log, $history_max_size = 30)
     {
@@ -343,8 +343,8 @@ class Redis
      *
      * @param string $item            
      * @param string $room_id            
-     * @param number $offset            
-     * @param number $num            
+     * @param int $offset            
+     * @param int $num            
      * @return array
      */
     public function getHistoryList($item, $room_id, $offset = 0, $num = 30)
@@ -381,7 +381,7 @@ class Redis
      *
      * @param string $room_id            
      * @param string $user_id            
-     * @param number $rate            
+     * @param int $rate            
      * @param string $item            
      */
     public function isSendFrequencyLimited($item, $room_id, $user_id, $rate)

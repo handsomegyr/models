@@ -43,9 +43,9 @@ class Consignee extends \App\Common\Models\Member\Consignee
      * @param string $member_id            
      * @param string $member_id            
      * @param string $name            
-     * @param number $province            
-     * @param number $city            
-     * @param number $district            
+     * @param int $province            
+     * @param int $city            
+     * @param int $district            
      * @param string $address            
      * @param string $zipcode            
      * @param string $telephone            

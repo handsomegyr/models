@@ -7,8 +7,8 @@ class Collect extends \App\Common\Models\Goods\Collect
     /**
      * 分页获取云购记录的商品列表
      *
-     * @param number $page            
-     * @param number $limit            
+     * @param int $page            
+     * @param int $limit            
      * @param array $otherConditions            
      * @return array
      */

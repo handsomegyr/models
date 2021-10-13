@@ -55,7 +55,7 @@ class Sign extends \App\Common\Models\Sign\Sign
      * @param int $sign_time              
      * @param string $ip          
      * @param string $valid_log_id            
-     * @param number $judgeResult            
+     * @param int $judgeResult            
      * @param array $info            
      * @param array $memo            
      * @throws \Exception

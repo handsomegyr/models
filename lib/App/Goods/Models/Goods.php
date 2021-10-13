@@ -106,7 +106,7 @@ class Goods extends \App\Common\Models\Goods\Goods
     /**
      * 根据公共商品生成新一期的商品
      *
-     * @param number $period            
+     * @param int $period            
      * @param array $goodsCommonInfo            
      */
     public function createNewPeriodGoodsByGoodsCommon($period, array $goodsCommonInfo)
@@ -147,8 +147,8 @@ class Goods extends \App\Common\Models\Goods\Goods
     /**
      * 分页获取人气推荐商品列表
      *
-     * @param number $page            
-     * @param number $limit            
+     * @param int $page            
+     * @param int $limit            
      * @return array
      */
     public function getCommendList($page = 1, $limit = 4)
@@ -164,8 +164,8 @@ class Goods extends \App\Common\Models\Goods\Goods
     /**
      * 分页获取热门商品列表
      *
-     * @param number $page            
-     * @param number $limit            
+     * @param int $page            
+     * @param int $limit            
      * @return array
      */
     public function getHotList($page = 1, $limit = 8)
@@ -181,8 +181,8 @@ class Goods extends \App\Common\Models\Goods\Goods
     /**
      * 分页获取即将揭晓商品列表
      *
-     * @param number $page            
-     * @param number $limit            
+     * @param int $page            
+     * @param int $limit            
      * @param array $otherConditions            
      * @return array
      */
@@ -205,8 +205,8 @@ class Goods extends \App\Common\Models\Goods\Goods
     /**
      * 分页获取新品上架商品列表
      *
-     * @param number $page            
-     * @param number $limit            
+     * @param int $page            
+     * @param int $limit            
      * @return array
      */
     public function getNewList($page = 1, $limit = 4)
@@ -242,7 +242,7 @@ class Goods extends \App\Common\Models\Goods\Goods
      * 获取云信息
      *
      * @param string $goods_common_id            
-     * @param number $period            
+     * @param int $period            
      * @return array
      */
     public function getPeriodInfo($goods_common_id, $period)
@@ -258,7 +258,7 @@ class Goods extends \App\Common\Models\Goods\Goods
      * 检查商品是否有效
      *
      * @param string $goods_id            
-     * @param number $quantity            
+     * @param int $quantity            
      * @return array
      */
     public function checkGoods($goods_id, $quantity)
@@ -330,7 +330,7 @@ class Goods extends \App\Common\Models\Goods\Goods
      * 商品云购参与人次加1
      *
      * @param string $goods_id            
-     * @param number $times            
+     * @param int $times            
      */
     public function incPurchasePersonTime($goods_id, $times = 1)
     {
@@ -394,8 +394,8 @@ class Goods extends \App\Common\Models\Goods\Goods
     /**
      * 分页获取最新揭晓的商品列表
      *
-     * @param number $page            
-     * @param number $limit            
+     * @param int $page            
+     * @param int $limit            
      * @param array $otherConditions            
      * @return array
      */
@@ -440,8 +440,8 @@ class Goods extends \App\Common\Models\Goods\Goods
     /**
      * 分页获取需要揭晓中的商品列表
      *
-     * @param number $page            
-     * @param number $limit            
+     * @param int $page            
+     * @param int $limit            
      * @param array $otherConditions            
      * @return array
      */

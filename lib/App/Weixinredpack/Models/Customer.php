@@ -28,7 +28,7 @@ class Customer extends \App\Common\Models\Weixinredpack\Customer
      * 更新客户的总使用金额
      *
      * @param string $customer_id            
-     * @param number $total_amount            
+     * @param int $total_amount            
      */
     public function incUsedAmount($customer_id, $total_amount)
     {

@@ -13,8 +13,8 @@ class Success extends \App\Common\Models\Exchange\Success
      *
      * @param string $user_id            
      * @param string $prize_id            
-     * @param number $quantity            
-     * @param number $score            
+     * @param int $quantity            
+     * @param int $score            
      * @param array $rule_info            
      * @param array $prize_code_info            
      * @param array $prize_info            

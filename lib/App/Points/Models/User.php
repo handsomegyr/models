@@ -29,14 +29,14 @@ class User extends \App\Common\Models\Points\User
      * 根据用户ID获取用户信息
      *
      * @param string $user_id            
-     * @param number $category            
+     * @param string $category            
      * @return array
      */
     public function getInfoByUserId($user_id, $category)
     {
         $info = $this->findOne(array(
             'user_id' => strval($user_id),
-            'category' => intval($category)
+            'category' => trim($category)
         ));
         return $info;
     }
@@ -59,7 +59,7 @@ class User extends \App\Common\Models\Points\User
      * 根据用户IDs获取用户列表信息
      *
      * @param string $user_id            
-     * @param number $category            
+     * @param string $category            
      * @return array
      */
     public function getListByUserIds(array $user_ids, $category)
@@ -68,7 +68,7 @@ class User extends \App\Common\Models\Points\User
             'user_id' => array(
                 '$in' => $user_ids
             ),
-            'category' => intval($category)
+            'category' => trim($category)
         );
         $sort = array(
             '_id' => -1
@@ -86,8 +86,8 @@ class User extends \App\Common\Models\Points\User
     /**
      * 添加或消耗积分
      *
-     * @param number $id             
-     * @param number $points        
+     * @param int $id             
+     * @param int $points        
      * @param int $now          
      */
     public function addOrReduce($id, $points, $now)
@@ -135,15 +135,15 @@ class User extends \App\Common\Models\Points\User
     /**
      * 生成记录
      *
-     * @param number $category            
+     * @param string $category            
      * @param string $user_id            
      * @param string $user_name            
      * @param string $user_headimgurl              
      * @param int $now           
-     * @param number $current            
-     * @param number $freeze            
-     * @param number $consume            
-     * @param number $expire            
+     * @param int $current            
+     * @param int $freeze            
+     * @param int $consume            
+     * @param int $expire            
      * @param array $memo            
      * @return array
      */

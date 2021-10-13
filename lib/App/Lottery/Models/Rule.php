@@ -121,8 +121,8 @@ class Rule extends \App\Common\Models\Lottery\Rule
      *
      * @param string $activity_id            
      * @param string $prize_id            
-     * @param number $allow_number            
-     * @param number $allow_probability            
+     * @param int $allow_number            
+     * @param int $allow_probability            
      * @param int $allow_start_time            
      * @param int $allow_end_time            
      */

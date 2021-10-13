@@ -52,7 +52,7 @@ class Cart extends \App\Common\Models\Order\Cart
      *
      * @param string $buyer_id            
      * @param string $goods_id            
-     * @param number $num            
+     * @param int $num            
      */
     public function updateNum($buyer_id, $goods_id, $num)
     {

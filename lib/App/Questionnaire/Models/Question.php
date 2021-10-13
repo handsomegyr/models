@@ -19,7 +19,7 @@ class Question extends \App\Common\Models\Questionnaire\Question
     /**
      * 默认排序
      *
-     * @param number $sort            
+     * @param int $sort            
      * @return array
      */
     public function getDefaultSort($sort = -1)
@@ -165,7 +165,7 @@ class Question extends \App\Common\Models\Questionnaire\Question
      *
      * @param string $id            
      * @param boolean $is_right            
-     * @param number $num            
+     * @param int $num            
      */
     public function incCorrectWrongCount($id, $is_right = true, $num = 1)
     {

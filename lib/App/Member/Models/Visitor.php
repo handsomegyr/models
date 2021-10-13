@@ -16,8 +16,8 @@ class Visitor extends \App\Common\Models\Member\Visitor
     /**
      * 分页获取获取申请好友的列表
      *
-     * @param number $page            
-     * @param number $limit            
+     * @param int $page            
+     * @param int $limit            
      * @param array $otherConditions            
      * @param array $sort            
      * @return array

@@ -24,7 +24,7 @@ class GoodsCommon extends \App\Common\Models\Goods\GoodsCommon
      * 更新当前期数和当期商品ID
      *
      * @param string $id            
-     * @param number $period            
+     * @param int $period            
      * @param string $period_goods_id            
      */
     public function updateCurrentPeriod($id, $period, $period_goods_id)

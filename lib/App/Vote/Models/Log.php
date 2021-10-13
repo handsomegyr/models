@@ -8,7 +8,7 @@ class Log extends \App\Common\Models\Vote\Log
     /**
      * 默认排序
      *
-     * @param number $sort            
+     * @param int $sort            
      * @return array
      */
     public function getDefaultSort($sort = -1)
@@ -28,9 +28,9 @@ class Log extends \App\Common\Models\Vote\Log
      * @param string $identity            
      * @param string $ip            
      * @param string $session_id            
-     * @param number $vote_num            
-     * @param number $view_num            
-     * @param number $share_num            
+     * @param int $vote_num            
+     * @param int $view_num            
+     * @param int $share_num            
      * @param array $memo            
      * @return array
      */
@@ -57,7 +57,7 @@ class Log extends \App\Common\Models\Vote\Log
      * 根据投票人获取他是否投票了$num次
      *
      * @param array $judgeBy            
-     * @param number $num            
+     * @param int $num            
      * @param array $activitys            
      * @param array $subjects            
      * @param array $items            

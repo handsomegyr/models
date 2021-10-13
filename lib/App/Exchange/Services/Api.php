@@ -48,8 +48,8 @@ class Api
      * @param string $identity_id            
      * @param int $now            
      * @param string $rule_id            
-     * @param number $quantity            
-     * @param number $score            
+     * @param int $quantity            
+     * @param int $score            
      * @param string $source            
      * @param array $user_info            
      * @param array $user_contact            

@@ -70,7 +70,7 @@ class Category extends \App\Common\Models\Article\Category
      *
      * @param array $categoryList            
      * @param string $pkey            
-     * @param number $level            
+     * @param int $level            
      * @return Ambigous <multitype:, multitype:number >
      */
     private function recursiveGet($categoryList, $pkey, $level = 0)

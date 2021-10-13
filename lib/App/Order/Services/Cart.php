@@ -41,7 +41,7 @@ class Cart
      *
      * @param string $buyer_id            
      * @param string $goods_id            
-     * @param number $quantity            
+     * @param int $quantity            
      * @return array
      */
     public function addCart($buyer_id, $goods_id, $quantity)
@@ -76,7 +76,7 @@ class Cart
      *
      * @param string $buyer_id            
      * @param string $goods_id            
-     * @param number $num            
+     * @param int $num            
      */
     public function updateCart($buyer_id, $goods_id, $quantity)
     {
@@ -164,7 +164,7 @@ class Cart
      *
      * @param string $buyer_id            
      * @param string $goods_id            
-     * @param number $quantity            
+     * @param int $quantity            
      * @param array $cart            
      * @return array
      */

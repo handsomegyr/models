@@ -83,7 +83,7 @@ class CodeDeposit extends \App\Common\Models\Weixincard\CodeDeposit
      * 更新导入信息
      *
      * @param array $id            
-     * @param number $is_deposited            
+     * @param int $is_deposited            
      */
     public function updateIsDeposited(array $ids, $is_deposited = true, array $demo = array('memo' => ''))
     {

@@ -42,9 +42,9 @@ class Order extends \App\Common\Models\Order\Order
      * @param array $storeInfo            
      * @param array $buyerInfo            
      * @param string $payment_code            
-     * @param number $goods_amount            
-     * @param number $shipping_fee            
-     * @param number $order_from            
+     * @param int $goods_amount            
+     * @param int $shipping_fee            
+     * @param int $order_from            
      * @throws \Exception
      * @return array
      */
@@ -142,7 +142,7 @@ class Order extends \App\Common\Models\Order\Order
      * 订单状态：0(已取消)10(默认):未付款;20:已付款;30:已发货;40:已收货;
      *
      * @param array $order_ids            
-     * @param number $order_state            
+     * @param int $order_state            
      */
     public function updateOrderState(array $order_ids, $order_state)
     {

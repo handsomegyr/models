@@ -57,7 +57,7 @@ class TaskLog extends \App\Common\Models\Qyweixin\Notification\TaskLog
     /**
      * 根据推送任务ID获取并锁住任务日志列表
      *
-     * @param number $notification_task_id            
+     * @param int $notification_task_id            
      */
     public function getAndLockListByTaskId($notification_task_id, $push_status)
     {

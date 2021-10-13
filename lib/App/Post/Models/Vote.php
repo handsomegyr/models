@@ -51,7 +51,7 @@ class Vote extends \App\Common\Models\Post\Vote
      * 增加投票数量
      *
      * @param string $vote_id            
-     * @param number $num            
+     * @param int $num            
      */
     public function incNum($vote_id, $num = 1)
     {

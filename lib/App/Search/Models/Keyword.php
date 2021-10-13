@@ -8,8 +8,8 @@ class Keyword extends \App\Common\Models\Search\Keyword
     /**
      * 增加搜索次数
      *
-     * @param number $id             
-     * @param number $search_num        
+     * @param int $id             
+     * @param int $search_num        
      * @param int $now          
      */
     public function incSearchNumByContent($content, $search_num, $now)

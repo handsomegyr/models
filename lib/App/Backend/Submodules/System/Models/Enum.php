@@ -74,7 +74,7 @@ class Enum extends \App\Common\Models\System\Enum
      *
      * @param array $enumList            
      * @param string $pkey            
-     * @param number $level            
+     * @param int $level            
      * @return Ambigous <multitype:, multitype:number >
      */
     private function recursiveGet($enumList, $pkey, $level = 0)

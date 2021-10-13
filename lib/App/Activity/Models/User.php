@@ -77,8 +77,8 @@ class User extends \App\Common\Models\Activity\User
      * @param string $headimgurl            
      * @param string $redpack_user            
      * @param string $thirdparty_user            
-     * @param number $worth            
-     * @param number $worth2            
+     * @param int $worth            
+     * @param int $worth2            
      * @param string $activity_id              
      * @param string $scene          
      * @param array $extendFields          
@@ -116,8 +116,8 @@ class User extends \App\Common\Models\Activity\User
      * @param string $headimgurl            
      * @param string $redpack_user            
      * @param string $thirdparty_user            
-     * @param number $worth            
-     * @param number $worth2            
+     * @param int $worth            
+     * @param int $worth2            
      * @param string $activity_id               
      * @param string $scene            
      * @param array $extendFields           

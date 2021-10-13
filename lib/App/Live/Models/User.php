@@ -123,8 +123,8 @@ class User extends \App\Common\Models\Live\User
      * @param string $headimgurl            
      * @param string $redpack_user            
      * @param string $thirdparty_user            
-     * @param number $worth            
-     * @param number $worth2            
+     * @param int $worth            
+     * @param int $worth2            
      * @param string $room_id            
      * @param array $memo            
      * @return array
@@ -162,8 +162,8 @@ class User extends \App\Common\Models\Live\User
      * @param string $headimgurl            
      * @param string $redpack_user            
      * @param string $thirdparty_user            
-     * @param number $worth            
-     * @param number $worth2            
+     * @param int $worth            
+     * @param int $worth2            
      * @param string $room_id            
      * @param array $memo            
      * @return array

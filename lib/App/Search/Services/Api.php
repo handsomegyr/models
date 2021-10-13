@@ -20,7 +20,7 @@ class Api
      *
      * @param string $content       
      * @param int $now             
-     * @param number $member_id          
+     * @param int $member_id          
      * @param string $user_id           
      * @param string $channel           
      * @param array $memo        

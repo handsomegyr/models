@@ -33,8 +33,8 @@ class Post extends \App\Common\Models\Post\Post
     /**
      * 分页获取帖子列表
      *
-     * @param number $page            
-     * @param number $limit            
+     * @param int $page            
+     * @param int $limit            
      * @param array $otherConditions            
      * @param array $sort            
      * @return array
@@ -55,8 +55,8 @@ class Post extends \App\Common\Models\Post\Post
     /**
      * 分页获取某个买家的帖子列表
      *
-     * @param number $page            
-     * @param number $limit            
+     * @param int $page            
+     * @param int $limit            
      * @param array $otherConditions            
      * @param array $sort            
      * @return array
@@ -129,7 +129,7 @@ class Post extends \App\Common\Models\Post\Post
      * 增加投票数量
      *
      * @param string $post_id            
-     * @param number $num            
+     * @param int $num            
      */
     public function incVoteNum($post_id, $num = 1)
     {
@@ -146,7 +146,7 @@ class Post extends \App\Common\Models\Post\Post
      * 增加评论数量
      *
      * @param string $post_id            
-     * @param number $num            
+     * @param int $num            
      */
     public function incReplyNum($post_id, $num = 1)
     {
@@ -163,7 +163,7 @@ class Post extends \App\Common\Models\Post\Post
      * 增加阅读数量
      *
      * @param string $post_id            
-     * @param number $num            
+     * @param int $num            
      */
     public function incReadNum($post_id, $num = 1)
     {

@@ -15,8 +15,8 @@ class Reply extends \App\Common\Models\Post\Reply
     /**
      * 分页获取某个帖子的评论列表
      *
-     * @param number $page            
-     * @param number $limit            
+     * @param int $page            
+     * @param int $limit            
      * @param array $otherConditions            
      * @param array $sort            
      * @return array
@@ -37,8 +37,8 @@ class Reply extends \App\Common\Models\Post\Reply
     /**
      * 分页获取某个帖子的评论列表
      *
-     * @param number $page            
-     * @param number $limit            
+     * @param int $page            
+     * @param int $limit            
      * @param array $otherConditions            
      * @param array $sort            
      * @return array
@@ -61,8 +61,8 @@ class Reply extends \App\Common\Models\Post\Reply
     /**
      * 分页获取某人的列表
      *
-     * @param number $page            
-     * @param number $limit            
+     * @param int $page            
+     * @param int $limit            
      * @param array $otherConditions            
      * @param array $sort            
      * @return array
@@ -124,7 +124,7 @@ class Reply extends \App\Common\Models\Post\Reply
      * 增加回复数量
      *
      * @param string $reply_id            
-     * @param number $num            
+     * @param int $num            
      */
     public function incNum($reply_id, $num = 1)
     {
@@ -142,7 +142,7 @@ class Reply extends \App\Common\Models\Post\Reply
      * 增加删除数量
      *
      * @param string $reply_id            
-     * @param number $num            
+     * @param int $num            
      */
     public function incDelNum($reply_id, $num = 1)
     {

@@ -137,7 +137,7 @@ class Exchange extends \App\Common\Models\Lottery\Exchange
      * @param string $isValid            
      * @param string $source             
      * @param string $got_time            
-     * @param number $rule_id           
+     * @param int $rule_id           
      * @param array $memo            
      */
     public function record($activity_id, $prize_id, $prize_info, $prize_code, $user_id, $user_info, $user_contact, $isValid, $source, $got_time, $rule_id, array $memo = array())

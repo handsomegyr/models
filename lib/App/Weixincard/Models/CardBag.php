@@ -26,28 +26,28 @@ class CardBag extends \App\Common\Models\Weixincard\CardBag
      * @param string $card_id            
      * @param string $UserCardCode            
      * @param string $FromUserName            
-     * @param number $IsGiveByFriend            
+     * @param int $IsGiveByFriend            
      * @param string $FriendUserName            
-     * @param number $OuterId            
+     * @param int $OuterId            
      * @param string $OldUserCardCode            
-     * @param number $IsRestoreMemberCard            
-     * @param number $IsRecommendByFriend            
+     * @param int $IsRestoreMemberCard            
+     * @param int $IsRecommendByFriend            
      * @param string $SourceScene            
      * @param string $encrypt_code            
      * @param string $new_code            
-     * @param number $is_got            
+     * @param int $is_got            
      * @param int $got_time            
-     * @param number $is_consumed            
+     * @param int $is_consumed            
      * @param int $consume_time            
      * @param string $StaffOpenId            
      * @param string $ConsumeSource            
      * @param string $LocationId            
      * @param string $LocationName            
-     * @param number $is_deleted            
+     * @param int $is_deleted            
      * @param int $delete_time            
-     * @param number $is_unavailable            
+     * @param int $is_unavailable            
      * @param int $unavailable_time            
-     * @param number $is_give_to_friend            
+     * @param int $is_give_to_friend            
      * @param int $give_to_friend_time            
      * @param string $friend_card_bag_id            
      * @param array $memo            
@@ -102,12 +102,12 @@ class CardBag extends \App\Common\Models\Weixincard\CardBag
      * @param string $UserCardCode            
      * @param string $FromUserName            
      * @param int $CreateTime            
-     * @param number $IsGiveByFriend            
+     * @param int $IsGiveByFriend            
      * @param string $FriendUserName            
-     * @param number $OuterId            
+     * @param int $OuterId            
      * @param string $OldUserCardCode            
-     * @param number $IsRestoreMemberCard            
-     * @param number $IsRecommendByFriend            
+     * @param int $IsRestoreMemberCard            
+     * @param int $IsRecommendByFriend            
      * @param string $SourceScene            
      * @param string $encrypt_code            
      * @param string $new_code            

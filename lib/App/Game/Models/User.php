@@ -40,7 +40,7 @@ class User extends \App\Common\Models\Game\User
      * 记录单人游戏分数，更新游戏的最高分
      *
      * @param array $gameUserInfo            
-     * @param number $score            
+     * @param int $score            
      * @param int $now            
      */
     public function updateScore($gameUserInfo, $score, $now)
@@ -71,8 +71,8 @@ class User extends \App\Common\Models\Game\User
      * 按游戏分数和游戏时间，获取排名列表
      *
      * @param array $gameInfo            
-     * @param number $page            
-     * @param number $limit            
+     * @param int $page            
+     * @param int $limit            
      * @return array
      */
     public function getRankList($gameInfo, $page, $limit)

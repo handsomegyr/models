@@ -50,8 +50,8 @@ class Log extends \App\Common\Models\Bargain\Log
      * @param string $user_headimgurl            
      * @param string $client_ip            
      * @param string $bargain_id            
-     * @param number $bargain_num            
-     * @param number $bargain_amount         
+     * @param int $bargain_num            
+     * @param int $bargain_amount         
      * @param boolean $is_system_bargain             
      * @param string $activity_id              
      * @param int $bargain_time            
@@ -82,8 +82,8 @@ class Log extends \App\Common\Models\Bargain\Log
     /**
      * 获取日志列表
      *
-     * @param number $page            
-     * @param number $limit            
+     * @param int $page            
+     * @param int $limit            
      * @param array $otherConditon            
      * @param array $sort            
      * @param array $cacheInfo            

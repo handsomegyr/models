@@ -17,11 +17,11 @@ class Rule extends \App\Common\Models\Exchange\Rule
      *
      * @param string $activity_id            
      * @param int $now            
-     * @param number $score            
-     * @param number $score_category            
+     * @param int $score            
+     * @param string $score_category            
      * @param array $prize_ids            
      */
-    public function getRules($activity_id, $now, $score = 0, $score_category = 0, array $prize_ids = array())
+    public function getRules($activity_id, $now, $score = 0, $score_category = "", array $prize_ids = array())
     {
         $query = array();
         $query['activity_id'] = $activity_id;
@@ -71,7 +71,7 @@ class Rule extends \App\Common\Models\Exchange\Rule
      * 兑换处理
      *
      * @param string $rule_id            
-     * @param number $quantity            
+     * @param int $quantity            
      * @return bool false表示错误 true表示正确
      */
     public function exchange($rule_id, $quantity)

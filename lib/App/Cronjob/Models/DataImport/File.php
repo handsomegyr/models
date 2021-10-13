@@ -18,9 +18,9 @@ class File extends \App\Common\Models\Cronjob\DataImport\File
      * @param string $flag_file            
      * @param string $lock_file               
      * @param int $now          
-     * @param number $data_count            
-     * @param number $process_total            
-     * @param number $status            
+     * @param int $data_count            
+     * @param int $process_total            
+     * @param int $status            
      * @param string $desc            
      * @return array
      */

@@ -298,7 +298,7 @@ class Member extends \App\Common\Models\Member\Member
      *
      * @param string $member_id            
      * @param boolean $is_open            
-     * @param number $smallmoney            
+     * @param int $smallmoney            
      */
     public function setSmallMoney($member_id, $is_open = true, $smallmoney = 0)
     {
@@ -351,8 +351,8 @@ class Member extends \App\Common\Models\Member\Member
     /**
      * 分页获取查找好友的列表
      *
-     * @param number $page            
-     * @param number $limit            
+     * @param int $page            
+     * @param int $limit            
      * @param array $otherConditions            
      * @param array $sort            
      * @return array
@@ -422,15 +422,15 @@ class Member extends \App\Common\Models\Member\Member
      * $postSet = 0; // 个人主页-晒单 0:所有人可见 1:好友可见 2:仅自己可见
      * $postShowNum = 0; // 个人主页-晒单 显示
      *
-     * @param number $msgSet            
-     * @param number $areaSet            
-     * @param number $searchSet            
-     * @param number $buySet            
-     * @param number $buyShowNum            
-     * @param number $rafSet            
-     * @param number $rafShowNum            
-     * @param number $postSet            
-     * @param number $postShowNum            
+     * @param int $msgSet            
+     * @param int $areaSet            
+     * @param int $searchSet            
+     * @param int $buySet            
+     * @param int $buyShowNum            
+     * @param int $rafSet            
+     * @param int $rafShowNum            
+     * @param int $postSet            
+     * @param int $postShowNum            
      * @return array
      */
     public function getPrivacyInfo($msgSet = 1, $areaSet = 0, $searchSet = 0, $buySet = 0, $buyShowNum = 0, $rafSet = 0, $rafShowNum = 0, $postSet = 0, $postShowNum = 0)
@@ -451,8 +451,8 @@ class Member extends \App\Common\Models\Member\Member
     /**
      * 常用设置
      *
-     * @param number $sysMsgSet            
-     * @param number $wxMailSet            
+     * @param int $sysMsgSet            
+     * @param int $wxMailSet            
      * @return array
      */
     public function getNoticeSettings($sysMsgSet = 0, $wxMailSet = 0)
@@ -594,7 +594,7 @@ class Member extends \App\Common\Models\Member\Member
      * 是否需要支付密码
      *
      * @param array $buyerInfo            
-     * @param number $pay_amount            
+     * @param int $pay_amount            
      * @return boolean
      */
     public function isNeedPaypwd(array $buyerInfo, $pay_amount)
@@ -618,7 +618,7 @@ class Member extends \App\Common\Models\Member\Member
      *
      * @param array $buyerInfo            
      * @param string $password            
-     * @param number $pay_amount            
+     * @param int $pay_amount            
      * @return boolean
      */
     public function checkPaypwd(array $buyerInfo, $password, $pay_amount)

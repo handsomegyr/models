@@ -9,7 +9,7 @@ class UserCumulate extends \App\Common\Models\Weixin2\DataCube\UserCumulate
      * 根据数据的日期获取信息
      *
      * @param string $ref_date            
-     * @param number $user_source            
+     * @param int $user_source            
      * @param string $authorizer_appid            
      * @param string $component_appid           
      */

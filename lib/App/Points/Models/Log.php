@@ -33,12 +33,12 @@ class Log extends \App\Common\Models\Points\Log
      *
      * @param string $uniqueId            
      */
-    public function getInfoByUniqueId($uniqueId, $point_rule_id, $category = 0)
+    public function getInfoByUniqueId($uniqueId, $point_rule_id, $category)
     {
         $query = array(
             'unique_id' => strval($uniqueId),
             'point_rule_id' => strval($point_rule_id),
-            'category' => intval($category)
+            'category' => trim($category)
         );
         return $this->findOne($query);
     }
@@ -74,9 +74,9 @@ class Log extends \App\Common\Models\Points\Log
      * 根据用户ID分页获取对应的积分记录
      * 
      * @param string $user_id            
-     * @param number $category            
-     * @param number $page            
-     * @param number $limit            
+     * @param string $category            
+     * @param int $page            
+     * @param int $limit            
      * @param int $beginTime            
      * @param int $endTime            
      * @param array $otherConditions            
@@ -104,11 +104,11 @@ class Log extends \App\Common\Models\Points\Log
     /**
      * 记录日志
      *
-     * @param number $category            
+     * @param string $category            
      * @param string $user_id            
      * @param string $user_name            
      * @param string $user_headimgurl             
-     * @param number $points            
+     * @param int $points            
      * @param int $log_time          
      * @param string $unique_id            
      * @param string $point_rule_id               

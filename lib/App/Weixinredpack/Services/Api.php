@@ -60,7 +60,7 @@ class Api
      * @param string $customer_id            
      * @param string $redpack_id            
      * @param string $re_openid            
-     * @param number $amount            
+     * @param int $amount            
      * @param array $info            
      */
     public function sendRedpack($activity_id, $customer_id, $redpack_id, $re_openid, $amount = 0, array $info = array('openid' => '', 'nickname' => '', 'headimgurl' => '', 're_nickname' => '', 're_headimgurl' => ''))
@@ -291,13 +291,13 @@ class Api
      * @param string $nick_name            
      * @param string $send_name            
      * @param string $re_openid            
-     * @param number $total_amount
+     * @param int $total_amount
      *            单位分
-     * @param number $min_value
+     * @param int $min_value
      *            单位分
-     * @param number $max_value
+     * @param int $max_value
      *            单位分
-     * @param number $total_num            
+     * @param int $total_num            
      * @param string $wishing            
      * @param string $client_ip            
      * @param string $act_id            

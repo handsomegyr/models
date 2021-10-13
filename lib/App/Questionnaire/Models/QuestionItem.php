@@ -8,7 +8,7 @@ class QuestionItem extends \App\Common\Models\Questionnaire\QuestionItem
     /**
      * 默认排序
      *
-     * @param number $sort            
+     * @param int $sort            
      * @return array
      */
     public function getDefaultSort($sort = -1)
@@ -65,7 +65,7 @@ class QuestionItem extends \App\Common\Models\Questionnaire\QuestionItem
      * 增加使用数
      *
      * @param string $itemId            
-     * @param number $num            
+     * @param int $num            
      */
     public function incUsedCount($itemId, $num = 1)
     {

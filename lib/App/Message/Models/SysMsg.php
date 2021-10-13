@@ -17,8 +17,8 @@ class SysMsg extends \App\Common\Models\Message\SysMsg
     /**
      * 分页获取获取消息的列表
      *
-     * @param number $page            
-     * @param number $limit            
+     * @param int $page            
+     * @param int $limit            
      * @param array $otherConditions            
      * @param array $sort            
      * @return array

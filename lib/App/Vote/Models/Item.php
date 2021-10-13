@@ -8,7 +8,7 @@ class Item extends \App\Common\Models\Vote\Item
     /**
      * 默认排序
      *
-     * @param number $sort            
+     * @param int $sort            
      * @return array
      */
     public function getDefaultSort($sort = -1)
@@ -23,7 +23,7 @@ class Item extends \App\Common\Models\Vote\Item
     /**
      * 根据投票数排序
      *
-     * @param number $sort            
+     * @param int $sort            
      * @return array
      */
     public function getRankSort($sort = -1)
@@ -102,7 +102,7 @@ class Item extends \App\Common\Models\Vote\Item
      * 增加投票数
      *
      * @param string $itemId            
-     * @param number $vote_count            
+     * @param int $vote_count            
      */
     public function incVoteCount($itemId, $vote_count = 1)
     {
@@ -147,9 +147,9 @@ class Item extends \App\Common\Models\Vote\Item
      * @param string $name            
      * @param string $desc            
      * @param array $subjects            
-     * @param number $vote_count            
+     * @param int $vote_count            
      * @param boolean $is_closed            
-     * @param number $show_order            
+     * @param int $show_order            
      * @param array $memo            
      * @return array
      */
@@ -173,7 +173,7 @@ class Item extends \App\Common\Models\Vote\Item
      * 设置排行期数
      *
      * @param string $itemId            
-     * @param number $rank_period            
+     * @param int $rank_period            
      */
     public function updateRankPeriod($itemId, $rank_period)
     {
@@ -191,7 +191,7 @@ class Item extends \App\Common\Models\Vote\Item
      * 按照名字设置排行期数
      *
      * @param string $name            
-     * @param number $rank_period            
+     * @param int $rank_period            
      */
     public function updateRankPeriodByName($name, $rank_period)
     {
@@ -225,8 +225,8 @@ class Item extends \App\Common\Models\Vote\Item
     /**
      * 获取排名,排除了重复名称
      *
-     * @param number $page            
-     * @param number $limit            
+     * @param int $page            
+     * @param int $limit            
      * @param array $otherConditon            
      * @param array $sort            
      * @param array $cacheInfo            

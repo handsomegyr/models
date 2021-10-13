@@ -8,7 +8,7 @@ class TaskContent extends \App\Common\Models\Weixin2\Notification\TaskContent
     /**
      * 根据推送任务ID获取并锁住任务内容列表
      *
-     * @param number $notification_task_id            
+     * @param int $notification_task_id            
      */
     public function getAndLockListByTaskId($notification_task_id)
     {

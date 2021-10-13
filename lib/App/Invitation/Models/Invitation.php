@@ -75,10 +75,10 @@ class Invitation extends \App\Common\Models\Invitation\Invitation
      * @param string $url            
      * @param string $desc             
      * @param int $send_time             
-     * @param number $worth            
-     * @param number $worth2            
-     * @param number $invited_total            
-     * @param number $personal_receive_num            
+     * @param int $worth            
+     * @param int $worth2            
+     * @param int $invited_total            
+     * @param int $personal_receive_num            
      * @param boolean $is_need_subscribed            
      * @param string $subscibe_hint_url            
      * @param string $activity_id                
@@ -125,10 +125,10 @@ class Invitation extends \App\Common\Models\Invitation\Invitation
      * @param string $url            
      * @param string $desc              
      * @param int $send_time            
-     * @param number $worth            
-     * @param number $worth2            
-     * @param number $invited_total            
-     * @param number $personal_receive_num            
+     * @param int $worth            
+     * @param int $worth2            
+     * @param int $invited_total            
+     * @param int $personal_receive_num            
      * @param boolean $is_need_subscribed            
      * @param string $subscibe_hint_url            
      * @param string $activity_id                 
@@ -321,8 +321,8 @@ class Invitation extends \App\Common\Models\Invitation\Invitation
      *
      * @param string $user_id            
      * @param string $activity_id            
-     * @param number $page            
-     * @param number $limit            
+     * @param int $page            
+     * @param int $limit            
      * @return array
      */
     public function getListByPage($user_id, $activity_id = '', $page = 1, $limit = 10)

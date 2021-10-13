@@ -15,7 +15,7 @@ class Event extends \App\Common\Models\Weixincard\Event
      * @param string $Event            
      * @param string $CardId            
      * @param string $FriendUserName            
-     * @param number $IsGiveByFriend            
+     * @param int $IsGiveByFriend            
      * @param string $UserCardCode            
      * @param string $OuterId            
      * @param string $xml_data            

@@ -17,8 +17,8 @@ class Msg extends \App\Common\Models\Message\Msg
     /**
      * 分页获取获取消息的列表
      *
-     * @param number $page            
-     * @param number $limit            
+     * @param int $page            
+     * @param int $limit            
      * @param array $otherConditions            
      * @param array $sort            
      * @return array

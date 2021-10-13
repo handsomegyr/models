@@ -81,7 +81,7 @@ class Limit extends \App\Common\Models\Vote\Limit
      * @param string $identity              
      * @param string $ip            
      * @param string $session_id             
-     * @param number $num         
+     * @param int $num         
      * @param array $activitys            
      * @param array $subjects            
      * @param array $items            

@@ -140,7 +140,7 @@ class Menu extends \App\Common\Models\Weixin\Menu
      *
      * @param array $menuList            
      * @param string $pkey            
-     * @param number $level            
+     * @param int $level            
      * @return Ambigous <multitype:, multitype:number >
      */
     private function recursiveGet($menuList, $pkey, $level = 0)

@@ -61,7 +61,7 @@ class TaskProcess extends \App\Common\Models\Weixin2\Notification\TaskProcess
     /**
      * 根据推送状态获取并锁住一条任务
      *
-     * @param number $notification_task_id            
+     * @param int $notification_task_id            
      */
     public function getAndLockOneTask4ByTaskid($notification_task_id, $now)
     {
@@ -76,8 +76,8 @@ class TaskProcess extends \App\Common\Models\Weixin2\Notification\TaskProcess
      * 登录
      *
      * @param string $name            
-     * @param number $notification_task_id            
-     * @param number $task_process_total            
+     * @param int $notification_task_id            
+     * @param int $task_process_total            
      * @param int $now            
      * @return array
      */

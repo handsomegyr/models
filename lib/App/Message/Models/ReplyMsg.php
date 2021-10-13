@@ -14,8 +14,8 @@ class ReplyMsg extends \App\Common\Models\Message\ReplyMsg
     /**
      * 分页获取某人的列表
      *
-     * @param number $page            
-     * @param number $limit            
+     * @param int $page            
+     * @param int $limit            
      * @param array $otherConditions            
      * @param array $sort            
      * @return array

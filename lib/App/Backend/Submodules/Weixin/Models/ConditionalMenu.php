@@ -71,7 +71,7 @@ class ConditionalMenu extends \App\Common\Models\Weixin\ConditionalMenu
      *
      * @param array $menuList            
      * @param string $pkey            
-     * @param number $level            
+     * @param int $level            
      * @return Ambigous <multitype:, multitype:number >
      */
     private function recursiveGet($menuList, $pkey, $level = 0)

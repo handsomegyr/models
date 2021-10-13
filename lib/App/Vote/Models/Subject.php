@@ -8,7 +8,7 @@ class Subject extends \App\Common\Models\Vote\Subject
     /**
      * 默认排序
      *
-     * @param number $sort            
+     * @param int $sort            
      * @return array
      */
     public function getDefaultSort($sort = -1)
@@ -23,7 +23,7 @@ class Subject extends \App\Common\Models\Vote\Subject
     /**
      * 根据投票数排序
      *
-     * @param number $sort            
+     * @param int $sort            
      * @return array
      */
     public function getRankSort($sort = -1)
@@ -64,7 +64,7 @@ class Subject extends \App\Common\Models\Vote\Subject
      * 增加投票数
      *
      * @param string $id            
-     * @param number $vote_count            
+     * @param int $vote_count            
      */
     public function incVoteCount($id, $vote_count = 1, $view_count = 0, $share_count = 0)
     {

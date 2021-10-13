@@ -86,7 +86,7 @@ class Goods extends \App\Common\Models\Order\Goods
      * @param string $id            
      * @param boolean $is_success            
      * @param string $lottery_code            
-     * @param number $failure_num            
+     * @param int $failure_num            
      */
     public function updateIsSuccess($id, $is_success, $lottery_code, $failure_num)
     {
@@ -110,7 +110,7 @@ class Goods extends \App\Common\Models\Order\Goods
      *
      * @param string $id            
      * @param string $order_no            
-     * @param number $order_state            
+     * @param int $order_state            
      */
     public function updateOrderNoById($id, $order_no, $order_state)
     {
@@ -175,7 +175,7 @@ class Goods extends \App\Common\Models\Order\Goods
      * 取该商品最后购买记录
      *
      * @param string $goods_id            
-     * @param number $limit            
+     * @param int $limit            
      * @return array
      */
     public function getLastPurchaseInfo($goods_id)
@@ -200,7 +200,7 @@ class Goods extends \App\Common\Models\Order\Goods
      * 取该商品最后购买时间前网站所有商品的最后100条购买时间记录
      *
      * @param string $goods_id            
-     * @param number $limit            
+     * @param int $limit            
      * @return array
      */
     public function getLastPurchaseList($last_purchase_time, $limit = 100)
@@ -229,8 +229,8 @@ class Goods extends \App\Common\Models\Order\Goods
     /**
      * 分页获取最新购买的商品列表
      *
-     * @param number $page            
-     * @param number $limit            
+     * @param int $page            
+     * @param int $limit            
      * @param array $otherConditions            
      * @return array
      */
@@ -385,9 +385,9 @@ class Goods extends \App\Common\Models\Order\Goods
      * 根据购买者ID，获取云购列表
      *
      * @param string $buyer_id            
-     * @param number $page            
-     * @param number $limit            
-     * @param number $state            
+     * @param int $page            
+     * @param int $limit            
+     * @param int $state            
      * @param int $beginTime            
      * @param int $endTime            
      * @param array $otherConditions            

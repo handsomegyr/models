@@ -36,11 +36,11 @@ class GotLog extends \App\Common\Models\Weixinredpack\GotLog
      * @param array $activity_id            
      * @param array $customer            
      * @param string $redpack_id            
-     * @param number $total_num            
-     * @param number $total_amount            
+     * @param int $total_num            
+     * @param int $total_amount            
      * @param boolean $isNeedSendRedpack            
      * @param boolean $isOK            
-     * @param number $try_count            
+     * @param int $try_count            
      * @param boolean $is_reissue            
      * @param string $memo            
      */

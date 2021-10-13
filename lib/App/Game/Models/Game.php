@@ -70,8 +70,8 @@ class Game extends \App\Common\Models\Game\Game
      * 更新游戏的统计信息
      *
      * @param string $id            
-     * @param number $score            
-     * @param number $user_num            
+     * @param int $score            
+     * @param int $user_num            
      * @param int $now            
      */
     public function updateStatistics($id, $score, $user_num, $now)

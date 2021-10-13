@@ -8,7 +8,7 @@ class Category extends \App\Common\Models\Goods\Category
     /**
      * 默认排序方式
      *
-     * @param number $dir            
+     * @param int $dir            
      * @return array
      */
     public function getDefaultSort($dir = 1)

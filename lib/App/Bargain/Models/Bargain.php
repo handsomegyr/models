@@ -71,16 +71,16 @@ class Bargain extends \App\Common\Models\Bargain\Bargain
      * @param string $user_headimgurl            
      * @param string $code            
      * @param string $name            
-     * @param number $worth            
-     * @param number $quantity            
-     * @param number $bargain_from            
-     * @param number $bargain_to            
-     * @param number $worth_min            
-     * @param number $bargain_max            
+     * @param int $worth            
+     * @param int $quantity            
+     * @param int $bargain_from            
+     * @param int $bargain_to            
+     * @param int $worth_min            
+     * @param int $bargain_max            
      * @param boolean $is_closed            
-     * @param number $bargain_num_limit            
+     * @param int $bargain_num_limit            
      * @param boolean $is_both_bargain            
-     * @param number $bargain_period            
+     * @param int $bargain_period            
      * @param int $launch_time            
      * @param int $bargain_to_minworth_time            
      * @param string $memo            
@@ -123,8 +123,8 @@ class Bargain extends \App\Common\Models\Bargain\Bargain
      *
      * @param array $bargainInfo            
      * @param string $identity_id            
-     * @param number $amount            
-     * @param number $num               
+     * @param int $amount            
+     * @param int $num               
      * @param int $now          
      * @throws Exception
      * @return array

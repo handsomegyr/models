@@ -12,7 +12,7 @@ class RankPeriod extends \App\Common\Models\Vote\RankPeriod
     /**
      * 默认排序
      *
-     * @param number $sort            
+     * @param int $sort            
      * @return array
      */
     public function getDefaultSort($sort = -1)
@@ -30,12 +30,12 @@ class RankPeriod extends \App\Common\Models\Vote\RankPeriod
      * 生成
      *
      * @param string $subject_id            
-     * @param number $period            
+     * @param int $period            
      * @param string $name            
      * @param string $desc            
-     * @param number $vote_count            
+     * @param int $vote_count            
      * @param boolean $is_closed            
-     * @param number $show_order            
+     * @param int $show_order            
      * @param array $memo            
      * @return array
      */

@@ -73,7 +73,7 @@ class Area extends \App\Common\Models\System\Area
      *
      * @param array $areaList            
      * @param string $pkey            
-     * @param number $level            
+     * @param int $level            
      * @return Ambigous <multitype:, multitype:number >
      */
     private function recursiveGet($areaList, $pkey, $level = 1)

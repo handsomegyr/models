@@ -13,8 +13,8 @@ class Log extends \App\Common\Models\Game\Log
      * @param string $user_id            
      * @param string $user_nickname            
      * @param string $user_headimgurl            
-     * @param number $game_score            
-     * @param number $game_score2            
+     * @param int $game_score            
+     * @param int $game_score2            
      * @param string $game_file            
      * @param string $game_img            
      * @param string $ip            

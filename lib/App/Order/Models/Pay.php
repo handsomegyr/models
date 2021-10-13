@@ -156,8 +156,8 @@ class Pay extends \App\Common\Models\Order\Pay
      * 增加成功次数和失败次数
      *
      * @param string $id            
-     * @param number $success_count            
-     * @param number $failure_count            
+     * @param int $success_count            
+     * @param int $failure_count            
      */
     public function incSuccessAndFailureCount($id, $success_count, $failure_count)
     {
@@ -189,8 +189,8 @@ class Pay extends \App\Common\Models\Order\Pay
     /**
      * 分页获取已支付,未处理的支付单列表
      *
-     * @param number $page            
-     * @param number $limit            
+     * @param int $page            
+     * @param int $limit            
      * @param array $otherConditions            
      * @return array
      */
