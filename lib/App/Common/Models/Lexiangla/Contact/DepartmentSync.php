@@ -1,0 +1,14 @@
+<?php
+
+namespace App\Common\Models\Lexiangla\Contact;
+
+use App\Common\Models\Base\Base;
+
+class DepartmentSync extends Base
+{
+
+    function __construct()
+    {
+        $this->setModel(new \App\Common\Models\Lexiangla\Mysql\Contact\DepartmentSync());
+    }
+}

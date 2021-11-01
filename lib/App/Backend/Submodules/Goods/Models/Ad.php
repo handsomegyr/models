@@ -4,7 +4,7 @@ namespace App\Backend\Submodules\Goods\Models;
 class Ad extends \App\Common\Models\Goods\Ad
 {
     
-    use\App\Backend\Models\Base;
+    use \App\Backend\Models\Base;
 
     /**
      * 默认排序

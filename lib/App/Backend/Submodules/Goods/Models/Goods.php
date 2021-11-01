@@ -4,7 +4,7 @@ namespace App\Backend\Submodules\Goods\Models;
 class Goods extends \App\Common\Models\Goods\Goods
 {
     
-    use\App\Backend\Models\Base;
+    use \App\Backend\Models\Base;
 
     /**
      * 获取所有属性列表

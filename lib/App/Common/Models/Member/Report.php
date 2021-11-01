@@ -1,11 +1,12 @@
 <?php
+
 namespace App\Common\Models\Member;
 
 use App\Common\Models\Base\Base;
 
 class Report extends Base
 {
-    
+
     // 举报类型 1钓鱼欺诈 2广告骚扰 3色情暴力 4其他
     const TYPEDATAS = array(
         '1' => array(

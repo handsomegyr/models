@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Member\Models;
 
 class Grade extends \App\Common\Models\Member\Grade
@@ -16,7 +17,7 @@ class Grade extends \App\Common\Models\Member\Grade
     public function getDefaultSort()
     {
         $sort = array();
-        $sort['level'] = - 1;
+        $sort['level'] = -1;
         return $sort;
     }
 
@@ -35,12 +36,12 @@ class Grade extends \App\Common\Models\Member\Grade
             $sort = $this->getDefaultSort();
             $list = $this->findAll($query, $sort);
             $gradeList = array();
-            if (! empty($list)) {
+            if (!empty($list)) {
                 foreach ($list as $item) {
                     $gradeList[$item['_id']] = $item;
                 }
             }
-            if (! empty($gradeList)) {
+            if (!empty($gradeList)) {
                 $cache->save($key, $gradeList, 60 * 60 * 24 * 30); // 30天
             }
         }

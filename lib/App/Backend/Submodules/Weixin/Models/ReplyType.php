@@ -4,7 +4,7 @@ namespace App\Backend\Submodules\Weixin\Models;
 class ReplyType extends \App\Common\Models\Weixin\ReplyType
 {
     
-    use\App\Backend\Models\Base;
+    use \App\Backend\Models\Base;
 
     /**
      * 默认排序

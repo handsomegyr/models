@@ -4,7 +4,7 @@ namespace App\Backend\Submodules\Tencent\Models;
 class AppKey extends \App\Common\Models\Tencent\AppKey
 {
     
-    use\App\Backend\Models\Base;
+    use \App\Backend\Models\Base;
 
     /**
      * 获取所有列表

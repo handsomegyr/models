@@ -4,7 +4,7 @@ namespace App\Backend\Submodules\Goods\Models;
 class SpecValue extends \App\Common\Models\Goods\SpecValue
 {
     
-    use\App\Backend\Models\Base;
+    use \App\Backend\Models\Base;
 
     /**
      * 获取所有属性列表

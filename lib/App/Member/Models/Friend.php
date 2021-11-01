@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Member\Models;
 
 class Friend extends \App\Common\Models\Member\Friend
@@ -31,9 +32,9 @@ class Friend extends \App\Common\Models\Member\Friend
         );
         if (empty($sort)) {
             $sort = array();
-            $sort['apply_time'] = - 1;
+            $sort['apply_time'] = -1;
         }
-        if (! empty($otherConditions)) {
+        if (!empty($otherConditions)) {
             $query = array_merge($otherConditions, $query);
         }
         $list = $this->find($query, $sort, ($page - 1) * $limit, $limit, array());
@@ -45,7 +46,7 @@ class Friend extends \App\Common\Models\Member\Friend
         $query = array(
             'state' => self::STATE0
         );
-        if (! empty($otherConditions)) {
+        if (!empty($otherConditions)) {
             $query = array_merge($otherConditions, $query);
         }
         $num = $this->count($query);
@@ -66,9 +67,9 @@ class Friend extends \App\Common\Models\Member\Friend
         $query = array();
         if (empty($sort)) {
             $sort = array();
-            $sort['agree_time'] = - 1;
+            $sort['agree_time'] = -1;
         }
-        if (! empty($otherConditions)) {
+        if (!empty($otherConditions)) {
             $query = array_merge($otherConditions, $query);
         }
         // $this->setDebug(true);
@@ -103,7 +104,7 @@ class Friend extends \App\Common\Models\Member\Friend
     public function ignore($to_user_id, $applyId)
     {
         $query = array();
-        if (! empty($applyId)) {
+        if (!empty($applyId)) {
             $query['_id'] = $applyId;
         }
         $query['to_user_id'] = $to_user_id;
@@ -119,7 +120,7 @@ class Friend extends \App\Common\Models\Member\Friend
     public function agree($to_user_id, $applyId)
     {
         $query = array();
-        if (! empty($applyId)) {
+        if (!empty($applyId)) {
             $query['_id'] = $applyId;
         }
         $query['to_user_id'] = $to_user_id;
@@ -142,7 +143,7 @@ class Friend extends \App\Common\Models\Member\Friend
         $query1 = array();
         $query1['to_user_id'] = $to_user_id;
         $query1['from_user_id'] = $from_user_id;
-        
+
         $query2 = array();
         $query2['from_user_id'] = $to_user_id;
         $query2['to_user_id'] = $from_user_id;
@@ -160,7 +161,7 @@ class Friend extends \App\Common\Models\Member\Friend
         $query1 = array();
         $query1['from_user_id'] = $from_user_id;
         $query1['to_user_id'] = $to_user_id;
-        
+
         $query2 = array();
         $query2['from_user_id'] = $to_user_id;
         $query2['to_user_id'] = $from_user_id;
@@ -170,7 +171,7 @@ class Friend extends \App\Common\Models\Member\Friend
                 $query2
             )
         );
-        
+
         return $this->findOne($query);
     }
 
@@ -180,11 +181,11 @@ class Friend extends \App\Common\Models\Member\Friend
         $query1 = array();
         $query1['to_user_id'] = $my;
         $query1['state'] = \App\Member\Models\Friend::STATE1;
-        
+
         $query2 = array();
         $query2['from_user_id'] = $my;
         $query2['state'] = \App\Member\Models\Friend::STATE1;
-        
+
         $otherConditions = array(
             '__QUERY_OR__' => array(
                 $query1,
@@ -193,7 +194,7 @@ class Friend extends \App\Common\Models\Member\Friend
         );
         $friendList = $this->getAgreeList($page, $limit, $otherConditions, $sort);
         $friend_ids = array();
-        if (! empty($friendList['datas'])) {            
+        if (!empty($friendList['datas'])) {
             foreach ($friendList['datas'] as $friend) {
                 if ($friend['from_user_id'] == $my) {
                     $friend_ids[] = $friend['to_user_id'];

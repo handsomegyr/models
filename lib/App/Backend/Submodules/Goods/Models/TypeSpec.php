@@ -4,7 +4,7 @@ namespace App\Backend\Submodules\Goods\Models;
 class TypeSpec extends \App\Common\Models\Goods\TypeSpec
 {
     
-    use\App\Backend\Models\Base;
+    use \App\Backend\Models\Base;
 
     /**
      * 默认排序

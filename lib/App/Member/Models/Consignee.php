@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Member\Models;
 
 class Consignee extends \App\Common\Models\Member\Consignee
@@ -7,7 +8,7 @@ class Consignee extends \App\Common\Models\Member\Consignee
     public function getDefaultSort()
     {
         $sort = array();
-        $sort['is_default'] = - 1;
+        $sort['is_default'] = -1;
         return $sort;
     }
 
@@ -24,12 +25,12 @@ class Consignee extends \App\Common\Models\Member\Consignee
             'member_id' => $member_id
         );
         $sort = $this->getDefaultSort();
-        if (! empty($is_default)) {
+        if (!empty($is_default)) {
             $query['is_default'] = $is_default;
         }
         $list = $this->findAll($query, $sort);
         $ret = array();
-        if (! empty($list)) {
+        if (!empty($list)) {
             foreach ($list as $item) {
                 $ret[$item['_id']] = $item;
             }
@@ -96,7 +97,7 @@ class Consignee extends \App\Common\Models\Member\Consignee
         $this->update($query, array(
             '$set' => $data
         ));
-        
+
         $query = array(
             '_id' => $id
         );

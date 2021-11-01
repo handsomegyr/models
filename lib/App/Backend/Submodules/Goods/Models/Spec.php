@@ -4,7 +4,7 @@ namespace App\Backend\Submodules\Goods\Models;
 class Spec extends \App\Common\Models\Goods\Spec
 {
     
-    use\App\Backend\Models\Base;
+    use \App\Backend\Models\Base;
 
     /**
      * 默认排序

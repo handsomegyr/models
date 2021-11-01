@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Member\Models;
 
 class News extends \App\Common\Models\Member\News
@@ -18,9 +19,9 @@ class News extends \App\Common\Models\Member\News
         $query = array();
         if (empty($sort)) {
             $sort = array();
-            $sort['news_time'] = - 1;
+            $sort['news_time'] = -1;
         }
-        if (! empty($otherConditions)) {
+        if (!empty($otherConditions)) {
             $query = array_merge($otherConditions, $query);
         }
         $list = $this->find($query, $sort, ($page - 1) * $limit, $limit, array());

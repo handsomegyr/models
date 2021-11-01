@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Common\Models\Member\Mysql;
 
 use App\Common\Models\Base\Mysql\Base;
@@ -27,12 +28,12 @@ class Member extends Base
         $data['is_buy'] = $this->changeToBoolean($data['is_buy']);
         $data['is_allowtalk'] = $this->changeToBoolean($data['is_allowtalk']);
         $data['state'] = $this->changeToBoolean($data['state']);
-        
+
         $data['privacy'] = $this->changeToArray($data['privacy']);
         $data['noticesettings'] = $this->changeToArray($data['noticesettings']);
         $data['is_login_tip'] = $this->changeToBoolean($data['is_login_tip']);
         $data['is_smallmoney_open'] = $this->changeToBoolean($data['is_smallmoney_open']);
-        
+
         return $data;
     }
 }

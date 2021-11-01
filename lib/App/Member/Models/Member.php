@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Member\Models;
 
 class Member extends \App\Common\Models\Member\Member
@@ -73,7 +74,7 @@ class Member extends \App\Common\Models\Member\Member
         ));
         return $result;
     }
-    
+
     /**
      * 注册处理
      *
@@ -87,14 +88,14 @@ class Member extends \App\Common\Models\Member\Member
     public function register($name, $email, $mobile, $password, $inviter_id = '')
     {
         $userData = array();
-        if (! empty($name)) {
+        if (!empty($name)) {
             $userData['register_by'] = self::REGISTERBY3;
             $userData['name'] = $name;
-        } elseif (! empty($email)) {
+        } elseif (!empty($email)) {
             $userData['register_by'] = self::REGISTERBY2;
             $userData['email'] = $email;
             $userData['email_bind'] = true;
-        } elseif (! empty($mobile)) {
+        } elseif (!empty($mobile)) {
             $userData['register_by'] = self::REGISTERBY1;
             $userData['mobile'] = $mobile;
             $userData['mobile_bind'] = true;
@@ -118,7 +119,7 @@ class Member extends \App\Common\Models\Member\Member
         // 常用设置
         $userData['noticesettings'] = $this->getNoticeSettings();
         $memberInfo = $this->insert($userData);
-        
+
         return $memberInfo;
     }
 
@@ -132,7 +133,7 @@ class Member extends \App\Common\Models\Member\Member
     {
         // 存入会话
         $this->saveSession($memberInfo);
-        
+
         $query = array(
             '_id' => $memberInfo['_id']
         );
@@ -191,7 +192,7 @@ class Member extends \App\Common\Models\Member\Member
     public function updatePwd($id, $new_password)
     {
         $data = array();
-        if (! empty($new_password)) {
+        if (!empty($new_password)) {
             $data['passwd'] = md5($new_password);
         } else {
             $data['passwd'] = '';
@@ -208,7 +209,7 @@ class Member extends \App\Common\Models\Member\Member
     public function updatePaypwd($id, $new_password)
     {
         $data = array();
-        if (! empty($new_password)) {
+        if (!empty($new_password)) {
             $data['paypwd'] = md5($new_password);
         } else {
             $data['paypwd'] = '';
@@ -319,11 +320,11 @@ class Member extends \App\Common\Models\Member\Member
         $_SESSION['member_mobile'] = $memberInfo['mobile'];
         $_SESSION['is_buy'] = isset($memberInfo['is_buy']) ? $memberInfo['is_buy'] : 1;
         $_SESSION['avatar'] = $memberInfo['avatar'];
-        
-        if (! empty($memberInfo['qqopenid'])) {
+
+        if (!empty($memberInfo['qqopenid'])) {
             $_SESSION['qqopenid'] = $memberInfo['qqopenid'];
         }
-        if (! empty($memberInfo['sinaopenid'])) {
+        if (!empty($memberInfo['sinaopenid'])) {
             $_SESSION['sinaopenid'] = $memberInfo['sinaopenid'];
         }
     }
@@ -360,7 +361,7 @@ class Member extends \App\Common\Models\Member\Member
     public function getSearchFriendsList($page = 1, $limit = 5, array $otherConditions = array(), array $sort = array())
     {
         $query = array();
-        if (! empty($otherConditions)) {
+        if (!empty($otherConditions)) {
             $query = array_merge($otherConditions, $query);
         }
         $list = $this->find($query, $sort, ($page - 1) * $limit, $limit, array());
@@ -378,7 +379,7 @@ class Member extends \App\Common\Models\Member\Member
         if (empty($memberInfo)) {
             return $loginName;
         } else {
-            if (! empty($memberInfo['nickname'])) {
+            if (!empty($memberInfo['nickname'])) {
                 $loginName = $memberInfo['nickname'];
             } else {
                 $loginName = $this->getRegisterName($memberInfo);
@@ -603,9 +604,9 @@ class Member extends \App\Common\Models\Member\Member
         if (empty($buyerInfo['paypwd'])) {
             return false;
         }
-        
+
         // 小额免密码设置 开启后支付金额小于设置额度时，无需输入支付密码。
-        if (! empty($buyerInfo['is_smallmoney_open'])) {
+        if (!empty($buyerInfo['is_smallmoney_open'])) {
             if ($buyerInfo['smallmoney'] >= $pay_amount) {
                 return false;
             }
@@ -625,7 +626,7 @@ class Member extends \App\Common\Models\Member\Member
     {
         // 检查该会员是否需要填写支付密码进行支付
         $isNeed = $this->isNeedPaypwd($buyerInfo, $pay_amount);
-        
+
         if (empty($isNeed)) {
             return true;
         }
@@ -633,7 +634,7 @@ class Member extends \App\Common\Models\Member\Member
         if ($buyerInfo['paypwd'] == md5($password)) {
             return true;
         }
-        
+
         return false;
     }
 }

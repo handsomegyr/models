@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Member\Models;
 
 class Report extends \App\Common\Models\Member\Report
@@ -41,7 +42,7 @@ class Report extends \App\Common\Models\Member\Report
     public function ignore($to_user_id, $applyId)
     {
         $query = array();
-        if (! empty($applyId)) {
+        if (!empty($applyId)) {
             $query['_id'] = $applyId;
         }
         $query['to_user_id'] = $to_user_id;
@@ -57,7 +58,7 @@ class Report extends \App\Common\Models\Member\Report
     public function agree($to_user_id, $applyId)
     {
         $query = array();
-        if (! empty($applyId)) {
+        if (!empty($applyId)) {
             $query['_id'] = $applyId;
         }
         $query['to_user_id'] = $to_user_id;
@@ -80,7 +81,7 @@ class Report extends \App\Common\Models\Member\Report
         $query1 = array();
         $query1['to_user_id'] = $to_user_id;
         $query1['from_user_id'] = $from_user_id;
-        
+
         $query2 = array();
         $query2['from_user_id'] = $to_user_id;
         $query2['to_user_id'] = $from_user_id;
@@ -98,7 +99,7 @@ class Report extends \App\Common\Models\Member\Report
         $query1 = array();
         $query1['from_user_id'] = $from_user_id;
         $query1['to_user_id'] = $to_user_id;
-        
+
         $query2 = array();
         $query2['from_user_id'] = $to_user_id;
         $query2['to_user_id'] = $from_user_id;
@@ -108,7 +109,7 @@ class Report extends \App\Common\Models\Member\Report
                 $query2
             )
         );
-        
+
         return $this->findOne($query);
     }
 }
