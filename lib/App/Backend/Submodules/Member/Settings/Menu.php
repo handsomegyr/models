@@ -72,10 +72,10 @@ class Menu
         // 会员完成任务管理
         $item = array(
             'menu_name' => '会员完成任务管理',
-            'menu_model' => 'member-tasklog',
+            'menu_model' => 'member-task',
             'level' => '会员管理',
             'icon' => '',
-            'model' => '\App\Backend\Submodules\Member\Models\MemberTask'
+            'model' => '\App\Backend\Submodules\Member\Models\Task'
         );
         $tree[] = $item;
 
@@ -85,7 +85,7 @@ class Menu
             'menu_model' => 'member-behaviorstat',
             'level' => '会员管理',
             'icon' => '',
-            'model' => '\App\Backend\Submodules\Member\Models\MemberBehaviorStat'
+            'model' => '\App\Backend\Submodules\Member\Models\BehaviorStat'
         );
         $tree[] = $item;
 
@@ -95,7 +95,7 @@ class Menu
             'menu_model' => 'member-behaviordailystat',
             'level' => '会员管理',
             'icon' => '',
-            'model' => '\App\Backend\Submodules\Member\Models\MemberBehaviorDailyStat'
+            'model' => '\App\Backend\Submodules\Member\Models\BehaviorDailyStat'
         );
         $tree[] = $item;
 
@@ -105,7 +105,7 @@ class Menu
             'menu_model' => 'member-behaviorlog',
             'level' => '会员管理',
             'icon' => '',
-            'model' => '\App\Backend\Submodules\Member\Models\MemberBehaviorLog'
+            'model' => '\App\Backend\Submodules\Member\Models\BehaviorLog'
         );
         $tree[] = $item;
 
@@ -115,7 +115,7 @@ class Menu
             'menu_model' => 'member-tag',
             'level' => '会员管理',
             'icon' => '',
-            'model' => '\App\Backend\Submodules\Member\Models\MemberTag'
+            'model' => '\App\Backend\Submodules\Member\Models\Tag'
         );
         $tree[] = $item;
 

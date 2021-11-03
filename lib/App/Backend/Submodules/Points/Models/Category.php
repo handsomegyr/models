@@ -33,4 +33,27 @@ class Category extends \App\Common\Models\Points\Category
         }
         return $list;
     }
+
+    /**
+     * 获取所有积分分类列表
+     *
+     * @return array
+     */
+    public function getAllExcludeParent($isAll = false)
+    {
+        $query = $this->getQuery();
+        // $query['parent_code'] = array('$ne' => '');
+        $sort = array('code' => 1);
+        $list = $this->findAll($query, $sort);
+
+        $options = array();
+        foreach ($list as $item) {
+            if ($isAll) {
+                $options[$item['code']] = $item;
+            } else {
+                $options[$item['code']] = $item['name'];
+            }
+        }
+        return $options;
+    }
 }

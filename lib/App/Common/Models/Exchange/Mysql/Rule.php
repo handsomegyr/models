@@ -21,6 +21,7 @@ class Rule extends Base
         $data = parent::reorganize($data);
         $data['allow_start_time'] = $this->changeToValidDate($data['allow_start_time']);
         $data['allow_end_time'] = $this->changeToValidDate($data['allow_end_time']);
+        $data['other_conditions'] = $this->changeToArray($data['other_conditions']);
         return $data;
     }
 }
