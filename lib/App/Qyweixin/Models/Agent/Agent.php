@@ -54,7 +54,7 @@ class Agent extends \App\Common\Models\Qyweixin\Agent\Agent
     {
         $updateData = array();
         $updateData['access_token'] = $access_token;
-        $updateData['access_token_expire'] = \App\Common\Utils\Helper::getCurrentTime(time() + $expires_in);
+        $updateData['access_token_expire'] = \App\Common\Utils\Helper::getCurrentTime(time() + $expires_in - 1800);
         if (!empty($memo)) {
             $updateData["memo"] = $memo;
         }
@@ -73,7 +73,7 @@ class Agent extends \App\Common\Models\Qyweixin\Agent\Agent
     {
         $updateData = array();
         $updateData['jsapi_ticket'] = $jsapi_ticket;
-        $updateData['jsapi_ticket_expire'] = \App\Common\Utils\Helper::getCurrentTime(time() + $expires_in);
+        $updateData['jsapi_ticket_expire'] = \App\Common\Utils\Helper::getCurrentTime(time() + $expires_in - 1800);
         if (!empty($memo)) {
             $updateData["memo"] = $memo;
         }
@@ -151,12 +151,24 @@ class Agent extends \App\Common\Models\Qyweixin\Agent\Agent
 
     private function refreshInfo($token)
     {
+        $cache = $this->getDI()->get('cache');
+        // 把昨天的key删除掉
+        $yesterday = date("Ymd", time() - 24 * 3600);
+        $cache->delete($this->getCacheKey4Appid($token['provider_appid'], $token['authorizer_appid'], $token['agentid']) . ":" . $yesterday);
+
+        $ymd = date("Ymd");
+        $requestLimitKey = $this->getCacheKey4Appid($token['provider_appid'], $token['authorizer_appid'], $token['agentid']) . ":" . $ymd;
+        $requestTimes = $cache->get($requestLimitKey, 0);
+        if (1500 < $requestTimes) {
+            throw new \Exception("请求次数快要超限制2000");
+        }
+
         if (empty($token['access_token_expire']) || strtotime($token['access_token_expire']) <= time()) {
             if (!empty($token['authorizer_appid']) && !empty($token['agentid'])) {
                 $lockKey = \App\Common\Utils\Helper::myCacheKey(__CLASS__, __METHOD__, __LINE__, $token['provider_appid'], $token['authorizer_appid'], $token['agentid']);
                 $objLock = new \iLock($lockKey);
                 if (!$objLock->lock()) {
-                    $objToken = new \Qyweixin\Token\Server($token['agentid'], $token['secret']);
+                    $objToken = new \Qyweixin\Token\Server($token['authorizer_appid'], $token['secret']);
                     $arrToken = $objToken->getAccessToken();
                     if (!isset($arrToken['access_token'])) {
                         throw new \Exception(\App\Common\Utils\Helper::myJsonEncode($arrToken));

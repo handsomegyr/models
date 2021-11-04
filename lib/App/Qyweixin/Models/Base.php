@@ -4,5 +4,5 @@ namespace App\Qyweixin\Models;
 
 class Base
 {
-    protected $cache_tag = "Weixinopen";
+    protected $cache_tag = "Qyweixin";
 }

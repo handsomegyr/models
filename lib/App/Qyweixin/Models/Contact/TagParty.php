@@ -63,6 +63,7 @@ class TagParty extends \App\Common\Models\Qyweixin\Contact\TagParty
                 } else {
                     $data['invalidparty'] = "[]";
                 }
+                $data['is_exist'] = 1;
                 $data['get_time'] = \App\Common\Utils\Helper::getCurrentTime($now);
                 $data['memo'] = \App\Common\Utils\Helper::myJsonEncode($res);
                 if (!empty($info)) {

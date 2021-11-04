@@ -401,7 +401,7 @@ class QyService
             $msgTemplateInfo['provider_appid'],
             $msgTemplateInfo['authorizer_appid'],
             $msgTemplateInfo['agentid'],
-            $msgTemplateInfo['id'],
+            $msgTemplateInfo['_id'],
             $msgTemplateInfo['name'],
             $msgTemplateInfo['chat_type'],
             $msgTemplateInfo['external_userid'],

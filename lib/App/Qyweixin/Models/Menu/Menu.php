@@ -5,9 +5,10 @@ namespace App\Qyweixin\Models\Menu;
 class Menu extends \App\Common\Models\Qyweixin\Menu\Menu
 {
 
-    public function getMenus($authorizer_appid, $provider_appid)
+    public function getMenus($authorizer_appid, $provider_appid, $agentid)
     {
         $ret = $this->findAll(array(
+            'agentid' => $agentid,
             'authorizer_appid' => $authorizer_appid,
             'provider_appid' => $provider_appid
         ), array('priority' => 1, '_id' => 1));
@@ -19,14 +20,14 @@ class Menu extends \App\Common\Models\Qyweixin\Menu\Menu
      *
      * @return array
      */
-    public function buildMenu($authorizer_appid, $provider_appid)
+    public function buildMenu($authorizer_appid, $provider_appid, $agentid)
     {
-        $menus = $this->getMenus($authorizer_appid, $provider_appid);
+        $menus = $this->getMenus($authorizer_appid, $provider_appid, $agentid);
         if (!empty($menus)) {
             $parent = array();
             $new = array();
             foreach ($menus as $a) {
-                unset($a['authorizer_appid'], $a['provider_appid'], $a['created_at'], $a['updated_at'], $a['deleted_at']);
+                unset($a['authorizer_appid'], $a['provider_appid'], $a['agentid'], $a['created_at'], $a['updated_at'], $a['deleted_at']);
                 if (empty($a['parent'])) {
                     $parent[] = $a;
                 }

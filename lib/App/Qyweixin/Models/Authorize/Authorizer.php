@@ -104,7 +104,7 @@ class Authorizer extends \App\Common\Models\Qyweixin\Authorize\Authorizer
         if (!empty($permanent_code)) {
             $updateData['permanent_code'] = $permanent_code;
         }
-        $updateData['access_token_expire'] = \App\Common\Utils\Helper::getCurrentTime(time() + $expires_in);
+        $updateData['access_token_expire'] = \App\Common\Utils\Helper::getCurrentTime(time() + $expires_in - 1800);
         if (!empty($extInfo)) {
             if (!empty($extInfo['dealer_corp_info'])) {
                 $datas['dealer_corp_info'] = \App\Common\Utils\Helper::myJsonEncode($extInfo['dealer_corp_info']);
@@ -143,7 +143,7 @@ class Authorizer extends \App\Common\Models\Qyweixin\Authorize\Authorizer
     {
         $updateData = array();
         $updateData['jsapi_ticket'] = $jsapi_ticket;
-        $updateData['jsapi_ticket_expire'] = \App\Common\Utils\Helper::getCurrentTime(time() + $expires_in);
+        $updateData['jsapi_ticket_expire'] = \App\Common\Utils\Helper::getCurrentTime(time() + $expires_in - 1800);
         if (!empty($memo)) {
             $updateData["memo"] = $memo;
         }
@@ -163,7 +163,7 @@ class Authorizer extends \App\Common\Models\Qyweixin\Authorize\Authorizer
     {
         $updateData = array();
         $updateData['wx_card_api_ticket'] = $wx_card_api_ticket;
-        $updateData['wx_card_api_ticket_expire'] = \App\Common\Utils\Helper::getCurrentTime(time() + $expires_in);
+        $updateData['wx_card_api_ticket_expire'] = \App\Common\Utils\Helper::getCurrentTime(time() + $expires_in - 1800);
         if (!empty($memo)) {
             $updateData["memo"] = $memo;
         }
@@ -200,7 +200,7 @@ class Authorizer extends \App\Common\Models\Qyweixin\Authorize\Authorizer
     {
         $updateData = array();
         $updateData['suite_access_token'] = $suite_access_token;
-        $updateData['suite_access_token_expire'] = \App\Common\Utils\Helper::getCurrentTime(time() + $expires_in);
+        $updateData['suite_access_token_expire'] = \App\Common\Utils\Helper::getCurrentTime(time() + $expires_in - 1800);
         $updateData['suite_ticket'] = $suite_ticket;
         if (!empty($memo)) {
             $updateData["memo"] = $memo;

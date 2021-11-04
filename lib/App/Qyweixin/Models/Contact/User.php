@@ -48,6 +48,9 @@ class User extends \App\Common\Models\Qyweixin\Contact\User
             $affectRows = $this->update(array('_id' => $checkInfo['_id']), array('$set' => $data));
             return array_merge($checkInfo, $data);
         } else {
+            if (empty($data['userid'])) {
+                throw new \Exception('userid is empty');
+            }
             return $this->insert($data);
         }
     }
@@ -100,6 +103,9 @@ class User extends \App\Common\Models\Qyweixin\Contact\User
                 $affectRows = $this->update(array('_id' => $checkInfo['_id']), array('$set' => $data));
                 return $userInfo;
             } else {
+                if (empty($data['userid'])) {
+                    throw new \Exception('userid is empty');
+                }
                 $checkInfo = $this->insert($data);
             }
         }
@@ -133,12 +139,18 @@ class User extends \App\Common\Models\Qyweixin\Contact\User
         if (!empty($res['userlist'])) {
             foreach ($res['userlist'] as $userInfo) {
                 $userid = $userInfo['userid'];
+                if (empty($userid)) {
+                    continue;
+                }
                 $checkInfo = $this->getInfoByUserId($userid, $authorizer_appid, $provider_appid);
                 $data = $this->getPrepareData($userInfo, $authorizer_appid, $provider_appid, $checkInfo);
 
                 if (!empty($checkInfo)) {
                     return $this->update(array('_id' => $checkInfo['_id']), array('$set' => $data));
                 } else {
+                    if (empty($data['userid'])) {
+                        throw new \Exception('userid is empty');
+                    }
                     $checkInfo = $this->insert($data);
                 }
             }

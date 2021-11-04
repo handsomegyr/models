@@ -4,12 +4,6 @@ namespace App\Qyweixin\Models\Authorize;
 
 class AuthorizeLog extends \App\Common\Models\Qyweixin\Authorize\AuthorizeLog
 {
-
-    protected $changeToArrayFields = array(
-        'request_params',
-        'aes_info'
-    );
-
     /**
      * 记录日志
      *

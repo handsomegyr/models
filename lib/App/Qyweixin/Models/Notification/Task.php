@@ -28,7 +28,7 @@ class Task extends \App\Common\Models\Qyweixin\Notification\Task
             ),
             'push_status' => $push_status,
         );
-        $sort  = array('_id' => 1);
+        $sort  = array('scheduled_push_time' => 1, '_id' => 1);
         $list = $this->find($query, $sort, 0, 1);
         if (empty($list['datas'])) {
             return null;

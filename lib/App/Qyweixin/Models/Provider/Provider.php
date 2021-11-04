@@ -55,7 +55,7 @@ class Provider extends \App\Common\Models\Qyweixin\Provider\Provider
     {
         $updateData = array();
         $updateData['access_token'] = $access_token;
-        $updateData['access_token_expire'] = \App\Common\Utils\Helper::getCurrentTime(time() + $expires_in);
+        $updateData['access_token_expire'] = \App\Common\Utils\Helper::getCurrentTime(time() + $expires_in - 1800);
         $updateData['verify_ticket'] = $verify_ticket;
         if (!empty($memo)) {
             $updateData["memo"] = $memo;
@@ -75,7 +75,7 @@ class Provider extends \App\Common\Models\Qyweixin\Provider\Provider
     {
         $updateData = array();
         $updateData['jsapi_ticket'] = $jsapi_ticket;
-        $updateData['jsapi_ticket_expire'] = \App\Common\Utils\Helper::getCurrentTime(time() + $expires_in);
+        $updateData['jsapi_ticket_expire'] = \App\Common\Utils\Helper::getCurrentTime(time() + $expires_in - 1800);
         if (!empty($memo)) {
             $updateData["memo"] = $memo;
         }
@@ -95,7 +95,7 @@ class Provider extends \App\Common\Models\Qyweixin\Provider\Provider
     {
         $updateData = array();
         $updateData['wx_card_api_ticket'] = $wx_card_api_ticket;
-        $updateData['wx_card_api_ticket_expire'] = \App\Common\Utils\Helper::getCurrentTime(time() + $expires_in);
+        $updateData['wx_card_api_ticket_expire'] = \App\Common\Utils\Helper::getCurrentTime(time() + $expires_in - 1800);
         if (!empty($memo)) {
             $updateData["memo"] = $memo;
         }

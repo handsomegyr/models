@@ -10,6 +10,9 @@ class ContactWay extends \App\Common\Models\Qyweixin\ExternalContact\ContactWay
         $updateData = array();
         $updateData['config_id'] = $res['config_id'];
         $updateData['sync_time'] = \App\Common\Utils\Helper::getCurrentTime($now);
+        if (isset($res['qr_code'])) {
+            $updateData['qr_code'] = $res['qr_code'];
+        }
         return $this->update(array('_id' => $id), array('$set' => $updateData));
     }
 

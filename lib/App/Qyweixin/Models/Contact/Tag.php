@@ -54,6 +54,7 @@ class Tag extends \App\Common\Models\Qyweixin\Contact\Tag
                 $data['provider_appid'] = $provider_appid;
                 $data['tagname'] = $tagInfo['tagname'];
                 $data['sync_time'] = \App\Common\Utils\Helper::getCurrentTime($now);
+                $data['is_exist'] = 1;
                 if (!empty($info)) {
                     $this->update(array('_id' => $info['_id']), array('$set' => $data));
                 } else {

@@ -52,7 +52,7 @@ class SendLog extends \App\Common\Models\Qyweixin\LinkedcorpMsg\SendLog
             'pagepath' => empty($pagepath) ? "" : $pagepath,
             'emphasis_first_item' => empty($emphasis_first_item) ? "0" : $emphasis_first_item,
             'content_item' => empty($content_item) ? "" : $content_item,
-            'enable_id_trans' => empty($toall) ? "0" : $toall,
+            'toall' => empty($toall) ? "0" : $toall,
             'safe' => empty($safe) ? "0" : $safe,
             'keyword_id' => empty($keyword_id) ? "" : $keyword_id,
             'keyword' => empty($keyword) ? "" : $keyword,

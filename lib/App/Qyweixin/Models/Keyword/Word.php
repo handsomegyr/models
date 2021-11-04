@@ -13,10 +13,10 @@ class Word extends \App\Common\Models\Qyweixin\Keyword\Word
         $id = $cache->get($cacheKey);
         if (empty($id)) {
             $info = $this->findOne(array(
-                'content' => $msg,
                 'agentid' => intval($agentid),
                 'authorizer_appid' => $authorizer_appid,
                 'provider_appid' => $provider_appid,
+                'content' => $msg,
             ));
             if (!empty($info)) {
                 $id = $info['_id'];

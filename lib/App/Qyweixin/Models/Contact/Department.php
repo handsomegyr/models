@@ -69,6 +69,8 @@ class Department extends \App\Common\Models\Qyweixin\Contact\Department
                 $data['parentid'] = $departmentInfo['parentid'];
                 $data['order'] = $departmentInfo['order'];
                 $data['sync_time'] = \App\Common\Utils\Helper::getCurrentTime($now);
+                // 通过这个字段来表明企业微信那边有这条记录
+                $data['is_exist'] = 1;
                 if (!empty($info)) {
                     $this->update(array('_id' => $info['_id']), array('$set' => $data));
                 } else {
