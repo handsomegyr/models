@@ -16,7 +16,7 @@ class UserBehaviorDataByUserid extends \App\Common\Models\Qyweixin\ExternalConta
     {
         $query = array();
         $query['userid'] = $userid;
-        $query['stat_time'] = $stat_time;
+        $query['stat_time'] = \App\Common\Utils\Helper::getCurrentTime($stat_time);
         $query['authorizer_appid'] = $authorizer_appid;
         $info = $this->findOne($query);
 
@@ -27,8 +27,7 @@ class UserBehaviorDataByUserid extends \App\Common\Models\Qyweixin\ExternalConta
     {
         if (!empty($res['behavior_data'])) {
             foreach ($res['behavior_data'] as $behavior_data_info) {
-                $stat_time = \App\Common\Utils\Helper::getCurrentTime($behavior_data_info['stat_time']);
-                $info = $this->getInfoByUserId($userid, $stat_time, $authorizer_appid);
+                $info = $this->getInfoByUserId($userid, $behavior_data_info['stat_time'], $authorizer_appid);
                 $data = array();
                 $data['provider_appid'] = $provider_appid;
                 $data['get_time'] = \App\Common\Utils\Helper::getCurrentTime($now);
@@ -49,7 +48,7 @@ class UserBehaviorDataByUserid extends \App\Common\Models\Qyweixin\ExternalConta
                 } else {
                     $data['authorizer_appid'] = $authorizer_appid;
                     $data['userid'] = $userid;
-                    $data['stat_time'] = $stat_time;
+                    $data['stat_time'] = \App\Common\Utils\Helper::getCurrentTime($behavior_data_info['stat_time']);
                     $this->insert($data);
                 }
             }

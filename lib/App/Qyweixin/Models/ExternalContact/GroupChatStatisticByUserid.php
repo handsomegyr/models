@@ -16,7 +16,7 @@ class GroupChatStatisticByUserid extends \App\Common\Models\Qyweixin\ExternalCon
     {
         $query = array();
         $query['owner'] = $owner;
-        $query['day_begin_time'] = $day_begin_time;
+        $query['day_begin_time'] = \App\Common\Utils\Helper::getCurrentTime($day_begin_time);
         $query['authorizer_appid'] = $authorizer_appid;
         $info = $this->findOne($query);
 
@@ -25,7 +25,6 @@ class GroupChatStatisticByUserid extends \App\Common\Models\Qyweixin\ExternalCon
 
     public function syncGroupchatStatisticList($day_begin_time, $authorizer_appid, $provider_appid, $res, $now)
     {
-        $day_begin_time = \App\Common\Utils\Helper::getCurrentTime($day_begin_time);
         // "items": [{
         //     "owner": "zhangsan",
         //     "data": {
@@ -60,7 +59,8 @@ class GroupChatStatisticByUserid extends \App\Common\Models\Qyweixin\ExternalCon
                 $data['msg_total'] = $statisticInfo['msg_total'];
                 if (!empty($info)) {
                     $this->update(array('_id' => $info['_id']), array('$set' => $data));
-                } else {
+                } else {                    
+                    $data['day_begin_time'] = \App\Common\Utils\Helper::getCurrentTime($day_begin_time);
                     $data['authorizer_appid'] = $authorizer_appid;
                     $data['owner'] = $owner;
                     $this->insert($data);
