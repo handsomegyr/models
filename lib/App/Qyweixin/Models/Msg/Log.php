@@ -61,6 +61,7 @@ class Log extends \App\Common\Models\Qyweixin\Msg\Log
         $data['TaskId'] = isset($info['TaskId']) ? $info['TaskId'] : ''; //TaskId 与发送任务卡片消息时指定的task_id相同
         $data['Status'] = isset($info['Status']) ? $info['Status'] : '';
         $data['AppId'] = isset($info['AppId']) ? $info['AppId'] : '';
+        $data['Token'] = isset($info['Token']) ? $info['Token'] : '';
         $data['Source'] = isset($info['Source']) ? $info['Source'] : '';
 
         //成员事件
