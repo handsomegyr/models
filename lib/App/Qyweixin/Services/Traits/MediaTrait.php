@@ -28,7 +28,7 @@ trait MediaTrait
 
         // 发生了改变就更新
         if ($res['media_id'] != $mediaInfo['media_id']) {
-            $modelMedia->recordMediaId($media_rec_id, $res, time());
+            $modelMedia->recordMediaId($mediaInfo['id'], $res, time());
         }
 
         return $res;
