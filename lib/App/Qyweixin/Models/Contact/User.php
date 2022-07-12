@@ -198,6 +198,7 @@ class User extends \App\Common\Models\Qyweixin\Contact\User
             $data['thumb_avatar'] = isset($userInfo['thumb_avatar']) ? $userInfo['thumb_avatar'] : '';
             $data['avatar'] = isset($userInfo['avatar']) ? $userInfo['avatar'] : '';
             $data['email'] = isset($userInfo['email']) ? $userInfo['email'] : '';
+            $data['biz_mail'] = isset($userInfo['biz_mail']) ? $userInfo['biz_mail'] : '';
             $data['telephone'] = isset($userInfo['telephone']) ? $userInfo['telephone'] : '';
             $data['department'] = isset($userInfo['department']) ? \App\Common\Utils\Helper::myJsonEncode($userInfo['department']) : '';
             $data['enable'] = isset($userInfo['enable']) ? intval($userInfo['enable']) : 0;
@@ -205,6 +206,7 @@ class User extends \App\Common\Models\Qyweixin\Contact\User
             $data['status'] = isset($userInfo['status']) ? intval($userInfo['status']) : 0;
             $data['qr_code'] = isset($userInfo['qr_code']) ? $userInfo['qr_code'] : '';
             $data['is_leader_in_dept'] = isset($userInfo['is_leader_in_dept']) ? \App\Common\Utils\Helper::myJsonEncode($userInfo['is_leader_in_dept']) : '';
+            $data['direct_leader'] = isset($userInfo['direct_leader']) ? \App\Common\Utils\Helper::myJsonEncode($userInfo['direct_leader']) : '';
             $data['department_order'] = isset($userInfo['order']) ? \App\Common\Utils\Helper::myJsonEncode($userInfo['order']) : '';
             $data['open_userid'] = isset($userInfo['open_userid']) ? $userInfo['open_userid'] : '';
             $data['hide_mobile'] = isset($userInfo['hide_mobile']) ? $userInfo['hide_mobile'] : '0';
@@ -250,6 +252,9 @@ class User extends \App\Common\Models\Qyweixin\Contact\User
             if (isset($userInfo['email'])) {
                 $data['email'] = $userInfo['email'];
             }
+            if (isset($userInfo['biz_mail'])) {
+                $data['biz_mail'] = $userInfo['biz_mail'];
+            }
             if (isset($userInfo['telephone'])) {
                 $data['telephone'] = $userInfo['telephone'];
             }
@@ -270,6 +275,9 @@ class User extends \App\Common\Models\Qyweixin\Contact\User
             }
             if (isset($userInfo['is_leader_in_dept'])) {
                 $data['is_leader_in_dept'] = \App\Common\Utils\Helper::myJsonEncode($userInfo['is_leader_in_dept']);
+            }
+            if (isset($userInfo['direct_leader'])) {
+                $data['direct_leader'] = \App\Common\Utils\Helper::myJsonEncode($userInfo['direct_leader']);
             }
             if (isset($userInfo['order'])) {
                 $data['department_order'] = \App\Common\Utils\Helper::myJsonEncode($userInfo['order']);

@@ -43,6 +43,7 @@ class Department extends \App\Common\Models\Qyweixin\Contact\Department
          *      "id": 2,
          *      "name": "广州研发中心",
          *      "name_en": "RDGZ",
+         *      "department_leader":["zhangsan","lisi"],
          *      "parentid": 1,
          *      "order": 10
          *  },
@@ -50,6 +51,7 @@ class Department extends \App\Common\Models\Qyweixin\Contact\Department
          *      "id": 3,
          *      "name": "邮箱产品部",
          *      "name_en": "mail",
+         *      "department_leader":["zhangsan","lisi"],
          *      "parentid": 2,
          *      "order": 40
          *  }
@@ -65,6 +67,9 @@ class Department extends \App\Common\Models\Qyweixin\Contact\Department
                 $data['name'] = $departmentInfo['name'];
                 if (isset($departmentInfo['name_en'])) {
                     $data['name_en'] = $departmentInfo['name_en'];
+                }
+                if (!empty($departmentInfo['department_leader'])) {
+                    $data['department_leader'] = \App\Common\Utils\Helper::myJsonEncode($departmentInfo['department_leader']);
                 }
                 $data['parentid'] = $departmentInfo['parentid'];
                 $data['order'] = $departmentInfo['order'];

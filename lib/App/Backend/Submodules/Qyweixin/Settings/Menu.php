@@ -801,6 +801,56 @@ class Menu
         );
         $tree[] = $item;
 
+        // 企业发表内容到客户的朋友圈
+        $item = array(
+            'menu_name' => '企业发表内容到客户的朋友圈',
+            'menu_model' => 'qyweixin-externalcontactmomenttask',
+            'level' => '企业客户朋友圈管理',
+            'icon' => '',
+            'model' => '\App\Backend\Submodules\Qyweixin\Models\ExternalContact\MomentTask'
+        );
+        $tree[] = $item;
+
+        // 客户朋友圈企业发表列表
+        $item = array(
+            'menu_name' => '客户朋友圈企业发表列表',
+            'menu_model' => 'qyweixin-externalcontactmomenttaskuser',
+            'level' => '企业客户朋友圈管理',
+            'icon' => '',
+            'model' => '\App\Backend\Submodules\Qyweixin\Models\ExternalContact\MomentTaskUser'
+        );
+        $tree[] = $item;
+
+        // 客户朋友圈发表时选择的可见范围
+        $item = array(
+            'menu_name' => '客户朋友圈发表时选择的可见范围',
+            'menu_model' => 'qyweixin-externalcontactmomentcustomer',
+            'level' => '企业客户朋友圈管理',
+            'icon' => '',
+            'model' => '\App\Backend\Submodules\Qyweixin\Models\ExternalContact\MomentCustomer'
+        );
+        $tree[] = $item;
+
+        // 客户朋友圈发表后的可见客户列表
+        $item = array(
+            'menu_name' => '客户朋友圈发表后的可见客户列表',
+            'menu_model' => 'qyweixin-externalcontactmomentsendresult',
+            'level' => '企业客户朋友圈管理',
+            'icon' => '',
+            'model' => '\App\Backend\Submodules\Qyweixin\Models\ExternalContact\MomentSendResult'
+        );
+        $tree[] = $item;
+
+        // 客户朋友圈的互动数据
+        $item = array(
+            'menu_name' => '客户朋友圈的互动数据',
+            'menu_model' => 'qyweixin-externalcontactmomentcomment',
+            'level' => '企业客户朋友圈管理',
+            'icon' => '',
+            'model' => '\App\Backend\Submodules\Qyweixin\Models\ExternalContact\MomentComment'
+        );
+        $tree[] = $item;
+
         // 企业客户消息推送管理
         $item = array(
             'menu_name' => '企业客户消息推送管理',
@@ -881,9 +931,9 @@ class Menu
         );
         $tree[] = $item;
 
-        // 离职成员的客户
+        // 待分配的离职成员列表
         $item = array(
-            'menu_name' => '离职成员的客户',
+            'menu_name' => '待分配的离职成员列表',
             'menu_model' => 'qyweixin-externalcontactunassigned',
             'level' => '企业服务人员离职管理',
             'icon' => '',
@@ -891,23 +941,93 @@ class Menu
         );
         $tree[] = $item;
 
-        // 离职成员的外部联系人再分配
+        // // 离职成员的外部联系人再分配
+        // $item = array(
+        //     'menu_name' => '离职成员的外部联系人再分配',
+        //     'menu_model' => 'qyweixin-externalcontacttransfer',
+        //     'level' => '企业服务人员离职管理',
+        //     'icon' => '',
+        //     'model' => '\App\Backend\Submodules\Qyweixin\Models\ExternalContact\Transfer'
+        // );
+        // $tree[] = $item;
+
+        // // 离职成员的群再分配
+        // $item = array(
+        //     'menu_name' => '离职成员的群再分配',
+        //     'menu_model' => 'qyweixin-externalcontactgroupchattransfer',
+        //     'level' => '企业服务人员离职管理',
+        //     'icon' => '',
+        //     'model' => '\App\Backend\Submodules\Qyweixin\Models\ExternalContact\GroupChatTransfer'
+        // );
+        // $tree[] = $item;
+
+        // 分配离职成员的客户
         $item = array(
-            'menu_name' => '离职成员的外部联系人再分配',
-            'menu_model' => 'qyweixin-externalcontacttransfer',
+            'menu_name' => '分配离职成员的客户',
+            'menu_model' => 'qyweixin-externalcontactresignedtransfercustomer',
             'level' => '企业服务人员离职管理',
             'icon' => '',
-            'model' => '\App\Backend\Submodules\Qyweixin\Models\ExternalContact\Transfer'
+            'model' => '\App\Backend\Submodules\Qyweixin\Models\ExternalContact\ResignedTransferCustomer'
         );
         $tree[] = $item;
 
-        // 离职成员的群再分配
+        // 离职成员的客户分配情况
         $item = array(
-            'menu_name' => '离职成员的群再分配',
-            'menu_model' => 'qyweixin-externalcontactgroupchattransfer',
+            'menu_name' => '离职成员的客户分配情况',
+            'menu_model' => 'qyweixin-externalcontactresignedtransferresult',
             'level' => '企业服务人员离职管理',
             'icon' => '',
-            'model' => '\App\Backend\Submodules\Qyweixin\Models\ExternalContact\GroupChatTransfer'
+            'model' => '\App\Backend\Submodules\Qyweixin\Models\ExternalContact\ResignedTransferResult'
+        );
+        $tree[] = $item;
+
+        // 分配离职成员的客户群
+        $item = array(
+            'menu_name' => '分配离职成员的客户群',
+            'menu_model' => 'qyweixin-externalcontactresignedtransfergroupchat',
+            'level' => '企业服务人员离职管理',
+            'icon' => '',
+            'model' => '\App\Backend\Submodules\Qyweixin\Models\ExternalContact\ResignedTransferGroupchat'
+        );
+        $tree[] = $item;
+
+        // 企业服务人员在职管理
+        $item = array(
+            'menu_name' => '企业服务人员在职管理',
+            'menu_model' => '',
+            'level' => '企业平台外部联系人管理',
+            'icon' => '',
+            'model' => ''
+        );
+        $tree[] = $item;
+
+        // 分配在职成员的客户
+        $item = array(
+            'menu_name' => '分配在职成员的客户',
+            'menu_model' => 'qyweixin-externalcontactonjobtransfercustomer',
+            'level' => '企业服务人员在职管理',
+            'icon' => '',
+            'model' => '\App\Backend\Submodules\Qyweixin\Models\ExternalContact\OnjobTransferCustomer'
+        );
+        $tree[] = $item;
+
+        // 在职成员的客户分配情况
+        $item = array(
+            'menu_name' => '在职成员的客户分配情况',
+            'menu_model' => 'qyweixin-externalcontactonjobtransferresult',
+            'level' => '企业服务人员在职管理',
+            'icon' => '',
+            'model' => '\App\Backend\Submodules\Qyweixin\Models\ExternalContact\OnjobTransferResult'
+        );
+        $tree[] = $item;
+
+        // 分配在职成员的客户群
+        $item = array(
+            'menu_name' => '分配在职成员的客户群',
+            'menu_model' => 'qyweixin-externalcontactonjobtransfergroupchat',
+            'level' => '企业服务人员在职管理',
+            'icon' => '',
+            'model' => '\App\Backend\Submodules\Qyweixin\Models\ExternalContact\OnjobTransferGroupchat'
         );
         $tree[] = $item;
 

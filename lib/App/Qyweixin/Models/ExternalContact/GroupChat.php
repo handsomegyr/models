@@ -81,6 +81,11 @@ class GroupChat extends \App\Common\Models\Qyweixin\ExternalContact\GroupChat
          *           "type": 2,
          *          "join_time": 1572505491,
          *          "join_scene": 1
+         *      }],
+         *      "admin_list": [{
+         *      	"userid": "sam"
+         *      }, {
+         *      	"userid": "pony"
          *      }]
          *  }
          */
@@ -93,6 +98,7 @@ class GroupChat extends \App\Common\Models\Qyweixin\ExternalContact\GroupChat
             $data['create_time'] = \App\Common\Utils\Helper::getCurrentTime($groupChatInfo['create_time']);
             $data['notice'] = isset($groupChatInfo['notice']) ? $groupChatInfo['notice'] : '';
             $data['member_list'] = isset($groupChatInfo['member_list']) ? \App\Common\Utils\Helper::myJsonEncode($groupChatInfo['member_list']) : '';
+            $data['admin_list'] = isset($groupChatInfo['admin_list']) ? \App\Common\Utils\Helper::myJsonEncode($groupChatInfo['admin_list']) : '';
         } else {
             $data = array();
             $data['provider_appid'] = $provider_appid;
@@ -110,6 +116,9 @@ class GroupChat extends \App\Common\Models\Qyweixin\ExternalContact\GroupChat
             }
             if (isset($groupChatInfo['member_list'])) {
                 $data['member_list'] = \App\Common\Utils\Helper::myJsonEncode($groupChatInfo['member_list']);
+            }
+            if (isset($groupChatInfo['admin_list'])) {
+                $data['admin_list'] = \App\Common\Utils\Helper::myJsonEncode($groupChatInfo['admin_list']);
             }
         }
         return $data;
