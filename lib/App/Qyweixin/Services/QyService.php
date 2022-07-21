@@ -12,6 +12,7 @@ class QyService
     use \App\Qyweixin\Services\Traits\MediaTrait;
     use \App\Qyweixin\Services\Traits\MenuTrait;
     use \App\Qyweixin\Services\Traits\ReplyMsgTrait;
+    use \App\Qyweixin\Services\Traits\TransferTrait;
 
     private $authorizer_appid = "";
 

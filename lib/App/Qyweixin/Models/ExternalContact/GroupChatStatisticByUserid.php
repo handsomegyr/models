@@ -34,7 +34,8 @@ class GroupChatStatisticByUserid extends \App\Common\Models\Qyweixin\ExternalCon
         //         "new_member_cnt": 0,
         //         "member_total": 6,
         //         "member_has_msg": 0,
-        //         "msg_total": 0
+        //         "msg_total": 0,
+        //         "migrate_trainee_chat_cnt": 3
         //     }
         // }]
         if (!empty($res['items'])) {
@@ -57,6 +58,9 @@ class GroupChatStatisticByUserid extends \App\Common\Models\Qyweixin\ExternalCon
                 $data['member_total'] = $statisticInfo['member_total'];
                 $data['member_has_msg'] = $statisticInfo['member_has_msg'];
                 $data['msg_total'] = $statisticInfo['msg_total'];
+                if (isset($statisticInfo['migrate_trainee_chat_cnt'])) {
+                    $data['migrate_trainee_chat_cnt'] = $statisticInfo['migrate_trainee_chat_cnt'];
+                }
                 if (!empty($info)) {
                     $this->update(array('_id' => $info['_id']), array('$set' => $data));
                 } else {                    

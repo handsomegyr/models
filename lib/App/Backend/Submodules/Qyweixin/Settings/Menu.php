@@ -781,6 +781,16 @@ class Menu
         );
         $tree[] = $item;
 
+        // 配置客户群进群方式
+        $item = array(
+            'menu_name' => '配置客户群进群方式',
+            'menu_model' => 'qyweixin-externalcontactgroupchatjoinway',
+            'level' => '企业客户群管理',
+            'icon' => '',
+            'model' => '\App\Backend\Submodules\Qyweixin\Models\ExternalContact\GroupChatJoinWay'
+        );
+        $tree[] = $item;
+
         // 企业客户朋友圈管理
         $item = array(
             'menu_name' => '企业客户朋友圈管理',
@@ -1248,6 +1258,26 @@ class Menu
             'level' => '企业消息推送管理',
             'icon' => '',
             'model' => '\App\Backend\Submodules\Qyweixin\Models\Notification\TaskProcess'
+        );
+        $tree[] = $item;
+
+        // 企业商品图册管理
+        $item = array(
+            'menu_name' => '企业商品图册管理',
+            'menu_model' => 'qyweixin-externalcontactproductalbum',
+            'level' => '企业平台外部联系人管理',
+            'icon' => '',
+            'model' => '\App\Backend\Submodules\Qyweixin\Models\ExternalContact\ProductAlbum'
+        );
+        $tree[] = $item;
+
+        // 企业聊天敏感词管理
+        $item = array(
+            'menu_name' => '企业聊天敏感词管理',
+            'menu_model' => 'qyweixin-externalcontactinterceptrule',
+            'level' => '企业平台外部联系人管理',
+            'icon' => '',
+            'model' => '\App\Backend\Submodules\Qyweixin\Models\ExternalContact\InterceptRule'
         );
         $tree[] = $item;
 

@@ -2,7 +2,7 @@
 
 namespace App\Qyweixin\Models\ExternalContact;
 
-class GroupChatMember extends \App\Common\Models\Qyweixin\ExternalContact\GroupChatMember
+class GroupChatJoinWay extends \App\Common\Models\Qyweixin\ExternalContact\GroupChatJoinWay
 {
 
     /**
