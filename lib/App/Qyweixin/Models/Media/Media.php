@@ -9,6 +9,20 @@ class Media extends \App\Common\Models\Qyweixin\Media\Media
      *
      * @return array
      */
+    public function getInfoByMediaId($media_id, $authorizer_appid)
+    {
+        $info = $this->findOne(array(
+            'media_id' => $media_id,
+            'authorizer_appid' => $authorizer_appid
+        ));
+        return $info;
+    }
+
+    /**
+     * 获取信息
+     *
+     * @return array
+     */
     public function getInfoByMedia($provider_appid, $authorizer_appid, $agentid, $media, $type)
     {
         $info = $this->findOne(array(
