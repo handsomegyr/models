@@ -43,10 +43,10 @@ class Provider extends \App\Common\Models\Qyweixin\Provider\Provider
             return null;
         }
 
-        // try {
-        // $token = $this->refreshAccessTokenInfo($token);
-        // } catch (\Exception $e) {
-        // }
+        try {
+            $token = $this->refreshAccessTokenInfo($token);
+        } catch (\Exception $e) {
+        }
 
         return $token;
     }
@@ -56,7 +56,7 @@ class Provider extends \App\Common\Models\Qyweixin\Provider\Provider
         $updateData = array();
         $updateData['access_token'] = $access_token;
         $updateData['access_token_expire'] = \App\Common\Utils\Helper::getCurrentTime(time() + $expires_in - 1800);
-        $updateData['verify_ticket'] = $verify_ticket;
+        // $updateData['verify_ticket'] = $verify_ticket;
         if (!empty($memo)) {
             $updateData["memo"] = $memo;
         }
@@ -111,6 +111,24 @@ class Provider extends \App\Common\Models\Qyweixin\Provider\Provider
         return $newInfo;
     }
 
+    public function updateSuiteTicket($id, $suite_ticket, $memo = array())
+    {
+        $updateData = array();
+        $updateData['suite_ticket'] = $suite_ticket;
+        if (!empty($memo)) {
+            $updateData["memo"] = $memo;
+        }
+        $affectRows = $this->update(array('_id' => $id), array('$set' => $updateData));
+        // 重新获取数据
+        $newInfo = $this->getInfoById($id);
+        if (!empty($newInfo)) {
+            $expire_time = 5 * 60;
+            $cache = $this->getDI()->get('cache');
+            $cache->save($this->getCacheKey4Appid($newInfo['appid']), $newInfo, $expire_time);
+        }
+        return $newInfo;
+    }
+
     public function getSignKey($openid, $secretKey, $timestamp = 0)
     {
         return sha1($openid . "|" . $secretKey . "|" . $timestamp);
@@ -127,18 +145,18 @@ class Provider extends \App\Common\Models\Qyweixin\Provider\Provider
     {
         if (isset($token['access_token_expire'])) {
             if (strtotime($token['access_token_expire']) <= time()) {
-                if (!empty($token['appid']) && !empty($token['appsecret']) && !empty($token['verify_ticket'])) {
+                if (!empty($token['appid']) && !empty($token['appsecret'])) {
                     $lockKey = \App\Common\Utils\Helper::myCacheKey(__CLASS__, __METHOD__, __LINE__, $token['appid']);
                     $objLock = new \iLock($lockKey);
                     if (!$objLock->lock()) {
-                        $objToken = new \Weixin\Provider($token['appid'], $token['appsecret']);
-                        $arrToken = $objToken->apiProviderToken($token['verify_ticket']);
+                        $objToken = new \Qyweixin\Service();
+                        $arrToken = $objToken->getProviderToken($token['appid'], $token['appsecret']);
 
-                        if (!isset($arrToken['access_token'])) {
+                        if (!isset($arrToken['provider_access_token'])) {
                             throw new \Exception(\App\Common\Utils\Helper::myJsonEncode($arrToken));
                         }
 
-                        $token = $this->updateAccessToken($id, $arrToken['access_token'], $arrToken['expires_in'], $token['verify_ticket']);
+                        $token = $this->updateAccessToken($arrToken['id'], $arrToken['provider_access_token'], $arrToken['expires_in'], "");
                     }
                 }
             }

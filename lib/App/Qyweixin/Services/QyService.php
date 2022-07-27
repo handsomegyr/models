@@ -91,17 +91,25 @@ class QyService
 
     public function getQyWeixinObject()
     {
-        if (empty($this->agentid)) {
-            $this->getToken4Authorizer();
-            $this->objQyWeixin = new \Qyweixin\Client($this->authorizerConfig['appid'], $this->authorizerConfig['appsecret']);
-            if (!empty($this->authorizerConfig['access_token'])) {
-                $this->objQyWeixin->setAccessToken($this->authorizerConfig['access_token']);
+        if (!empty($this->provider_appid)) {
+            $this->getToken4Provider();
+            $this->objQyWeixin = new \Qyweixin\Client($this->providerConfig['appid'], $this->providerConfig['appsecret']);
+            if (!empty($this->providerConfig['access_token'])) {
+                $this->objQyWeixin->setAccessToken($this->providerConfig['access_token']);
             }
         } else {
-            $agentInfo = $this->modelQyweixinAgent->getTokenByAppid($this->provider_appid, $this->authorizer_appid, $this->agentid);
-            $this->objQyWeixin = new \Qyweixin\Client($agentInfo['authorizer_appid'], $agentInfo['secret']);
-            if (!empty($agentInfo['access_token'])) {
-                $this->objQyWeixin->setAccessToken($agentInfo['access_token']);
+            if (empty($this->agentid)) {
+                $this->getToken4Authorizer();
+                $this->objQyWeixin = new \Qyweixin\Client($this->authorizerConfig['appid'], $this->authorizerConfig['appsecret']);
+                if (!empty($this->authorizerConfig['access_token'])) {
+                    $this->objQyWeixin->setAccessToken($this->authorizerConfig['access_token']);
+                }
+            } else {
+                $agentInfo = $this->modelQyweixinAgent->getTokenByAppid($this->provider_appid, $this->authorizer_appid, $this->agentid);
+                $this->objQyWeixin = new \Qyweixin\Client($agentInfo['authorizer_appid'], $agentInfo['secret']);
+                if (!empty($agentInfo['access_token'])) {
+                    $this->objQyWeixin->setAccessToken($agentInfo['access_token']);
+                }
             }
         }
 
@@ -116,6 +124,16 @@ class QyService
                 throw new \Exception("provider_appid:{$this->provider_appid}所对应的记录不存在");
             }
         }
+    }
+
+    public function getAccessToken4Provider()
+    {
+        $modelProvider = new \App\Qyweixin\Models\Provider\Provider();
+        $providerInfo = $modelProvider->getTokenByAppid($this->provider_appid);
+        if (empty($providerInfo)) {
+            throw new \Exception("对应的第三方服务商不存在");
+        }
+        return $providerInfo;
     }
 
     protected function getToken4Authorizer()
