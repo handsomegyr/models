@@ -21,6 +21,19 @@ class FollowUser extends \App\Common\Models\Qyweixin\ExternalContact\FollowUser
         return $info;
     }
 
+    public function clearExist($authorizer_appid, $provider_appid, $now)
+    {
+        $updateData = array('is_exist' => 0);
+        $updateData['get_time'] = \App\Common\Utils\Helper::getCurrentTime($now);
+        return $this->update(
+            array(
+                'authorizer_appid' => $authorizer_appid,
+                'provider_appid' => $provider_appid
+            ),
+            array('$set' => $updateData)
+        );
+    }
+
     public function syncFollowUserList($authorizer_appid, $provider_appid, $res, $now)
     {
         if (!empty($res['follow_user'])) {
@@ -29,6 +42,8 @@ class FollowUser extends \App\Common\Models\Qyweixin\ExternalContact\FollowUser
                 $data = array();
                 $data['provider_appid'] = $provider_appid;
                 $data['get_time'] = \App\Common\Utils\Helper::getCurrentTime($now);
+                // 通过这个字段来表明企业微信那边有这条记录
+                $data['is_exist'] = 1;
                 if (!empty($info)) {
                     $this->update(array('_id' => $info['_id']), array('$set' => $data));
                 } else {

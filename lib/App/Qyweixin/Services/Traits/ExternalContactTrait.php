@@ -352,7 +352,9 @@ trait ExternalContactTrait
          *  ]
          * }
          */
-        $modelFollowUser->syncFollowUserList($this->authorizer_appid, $this->provider_appid, $res, time());
+        $now = time();
+        $modelFollowUser->clearExist($this->authorizer_appid, $this->provider_appid, $now);
+        $modelFollowUser->syncFollowUserList($this->authorizer_appid, $this->provider_appid, $res, $now);
         return $res;
     }
 
@@ -386,10 +388,10 @@ trait ExternalContactTrait
     {
         $modelExternalUser = new \App\Qyweixin\Models\ExternalContact\ExternalUser();
         $external_userid = $userInfo['external_userid'];
-
+        $cursor = "";
         $res = $this->getQyWeixinObject()
             ->getExternalContactManager()
-            ->get($external_userid);
+            ->get($external_userid, $cursor);
         if (!empty($res['errcode'])) {
             throw new \Exception($res['errmsg'], $res['errcode']);
         }
@@ -404,14 +406,34 @@ trait ExternalContactTrait
            
          * }
          */
-        $modelExternalUser->updateExternalUserInfoByApi($userInfo, $res, time());
+        $now = time();
+        $modelExternalUser->updateExternalUserInfoByApi($userInfo, $res, $now);
 
         // 同步follow_user
+        $modelExternalUserFollowUser = new \App\Qyweixin\Models\ExternalContact\ExternalUserFollowUser();
+        $modelExternalUserFollowUser->clearExist($external_userid, $this->authorizer_appid, $this->provider_appid, $now);
+
         if (!empty($res['follow_user'])) {
-            $modelExternalUserFollowUser = new \App\Qyweixin\Models\ExternalContact\ExternalUserFollowUser();
-            $modelExternalUserFollowUser->syncFollowUserList($external_userid, $this->authorizer_appid, $this->provider_appid, $res, time());
+            $modelExternalUserFollowUser->syncFollowUserList($external_userid, $this->authorizer_appid, $this->provider_appid, $res, $now);
         }
 
+        if (!empty($res['next_cursor'])) {
+            do {
+                $cursor = $res['next_cursor'];
+                $res = $this->getQyWeixinObject()
+                    ->getExternalContactManager()
+                    ->get($external_userid, $cursor);
+                if (!empty($res['errcode'])) {
+                    throw new \Exception($res['errmsg'], $res['errcode']);
+                }
+                if (!empty($res['follow_user'])) {
+                    $modelExternalUserFollowUser->syncFollowUserList($external_userid, $this->authorizer_appid, $this->provider_appid, $res, $now);
+                }
+                if (empty($res['next_cursor'])) {
+                    break;
+                }
+            } while ($res['next_cursor']);
+        }
         return $res;
     }
 

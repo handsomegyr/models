@@ -107,22 +107,22 @@ class Authorizer extends \App\Common\Models\Qyweixin\Authorize\Authorizer
         $updateData['access_token_expire'] = \App\Common\Utils\Helper::getCurrentTime(time() + $expires_in - 1800);
         if (!empty($extInfo)) {
             if (!empty($extInfo['dealer_corp_info'])) {
-                $datas['dealer_corp_info'] = \App\Common\Utils\Helper::myJsonEncode($extInfo['dealer_corp_info']);
+                $updateData['dealer_corp_info'] = \App\Common\Utils\Helper::myJsonEncode($extInfo['dealer_corp_info']);
             }
             if (!empty($extInfo['auth_corp_info'])) {
-                $datas['auth_corp_info'] = \App\Common\Utils\Helper::myJsonEncode($extInfo['auth_corp_info']);
+                $updateData['auth_corp_info'] = \App\Common\Utils\Helper::myJsonEncode($extInfo['auth_corp_info']);
             }
             if (!empty($extInfo['auth_info'])) {
-                $datas['auth_info'] = \App\Common\Utils\Helper::myJsonEncode($extInfo['auth_info']);
+                $updateData['auth_info'] = \App\Common\Utils\Helper::myJsonEncode($extInfo['auth_info']);
             }
             if (!empty($extInfo['auth_user_info'])) {
-                $datas['auth_user_info'] = \App\Common\Utils\Helper::myJsonEncode($extInfo['auth_user_info']);
+                $updateData['auth_user_info'] = \App\Common\Utils\Helper::myJsonEncode($extInfo['auth_user_info']);
             }
             if (!empty($extInfo['register_code_info'])) {
-                $datas['register_code_info'] = \App\Common\Utils\Helper::myJsonEncode($extInfo['register_code_info']);
+                $updateData['register_code_info'] = \App\Common\Utils\Helper::myJsonEncode($extInfo['register_code_info']);
             }
             if (!empty($extInfo['admin'])) {
-                $datas['admin_list'] = \App\Common\Utils\Helper::myJsonEncode($extInfo['admin']);
+                $updateData['admin_list'] = \App\Common\Utils\Helper::myJsonEncode($extInfo['admin']);
             }
         }
         if (!empty($memo)) {
