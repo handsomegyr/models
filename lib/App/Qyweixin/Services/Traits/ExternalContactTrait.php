@@ -480,12 +480,12 @@ trait ExternalContactTrait
     }
 
     //获取企业标签库
-    public function getCorpTagList($tag_id)
+    public function getCorpTagList($tag_id = array(), $group_id = array())
     {
         $modelCorpTag = new \App\Qyweixin\Models\ExternalContact\CorpTag();
         $res = $this->getQyWeixinObject()
             ->getExternalContactManager()
-            ->getCorpTagList($tag_id);
+            ->getCorpTagList($tag_id, $group_id);
         if (!empty($res['errcode'])) {
             throw new \Exception($res['errmsg'], $res['errcode']);
         }
@@ -523,7 +523,11 @@ trait ExternalContactTrait
          *    ]
          * }
          */
-        $modelCorpTag->syncCorpTagList($this->authorizer_appid, $this->provider_appid, $res, time());
+        $now = time();
+        if (empty($tag_id) && empty($group_id)) {
+            $modelCorpTag->clearExist($this->authorizer_appid, $this->provider_appid, $now);
+        }
+        $modelCorpTag->syncCorpTagList($this->authorizer_appid, $this->provider_appid, $res, $now);
         return $res;
     }
 

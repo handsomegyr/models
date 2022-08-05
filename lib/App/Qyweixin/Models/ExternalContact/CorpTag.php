@@ -21,6 +21,19 @@ class CorpTag extends \App\Common\Models\Qyweixin\ExternalContact\CorpTag
         return $info;
     }
 
+    public function clearExist($authorizer_appid, $provider_appid, $now)
+    {
+        $updateData = array('is_exist' => 0);
+        $updateData['get_time'] = \App\Common\Utils\Helper::getCurrentTime($now);
+        return $this->update(
+            array(
+                'authorizer_appid' => $authorizer_appid,
+                'provider_appid' => $provider_appid
+            ),
+            array('$set' => $updateData)
+        );
+    }
+
     public function syncCorpTagList($authorizer_appid, $provider_appid, $res, $now)
     {
         if (!empty($res['tag_group'])) {
@@ -51,6 +64,8 @@ class CorpTag extends \App\Common\Models\Qyweixin\ExternalContact\CorpTag
                     $data['tag_group_order'] = $tagGroupInfo['order'];
                     $data['tag_group_deleted'] = (isset($tagGroupInfo['deleted']) ? intval($tagGroupInfo['deleted']) : 0);
                     $data['provider_appid'] = $provider_appid;
+                    // 通过这个字段来表明企业微信那边有这条记录
+                    $data['is_exist'] = 1;
                     $data['get_time'] = \App\Common\Utils\Helper::getCurrentTime($now);
                     if (!empty($info)) {
                         $this->update(array('_id' => $info['_id']), array('$set' => $data));
