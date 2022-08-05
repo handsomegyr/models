@@ -561,13 +561,13 @@ trait ExternalContactTrait
     }
 
     //获取客户群列表
-    public function getGroupChatList($status_filter = 0, $owner_filter = array(), $offset = 0, $limit = 1000)
+    public function getGroupChatList($status_filter = 0, $owner_filter = array(), $cursor = '', $limit = 1000)
     {
         $modelGroupChat = new \App\Qyweixin\Models\ExternalContact\GroupChat();
         $res = $this->getQyWeixinObject()
             ->getExternalContactManager()
             ->getGroupChatManager()
-            ->getGroupchatList($status_filter, $owner_filter, $offset, $limit);
+            ->getGroupchatList($status_filter, $owner_filter, $cursor, $limit);
         if (!empty($res['errcode'])) {
             throw new \Exception($res['errmsg'], $res['errcode']);
         }
