@@ -616,7 +616,11 @@ trait ExternalContactTrait
             ->getGroupChatManager()
             ->get($chatid, $need_name);
         if (!empty($res['errcode'])) {
-            throw new \Exception($res['errmsg'], $res['errcode']);
+            //chatid不存在
+            if ($res['errcode'] == 40050) {
+            } else {
+                throw new \Exception($res['errmsg'], $res['errcode']);
+            }
         }
         /**
          * {
@@ -646,12 +650,14 @@ trait ExternalContactTrait
          *      }]
          *  }
          */
-        $modelGroupChat->updateGroupChatInfoByApi($groupChatInfo, $res, time());
+        $now = time();
+        $modelGroupChat->updateGroupChatInfoByApi($groupChatInfo, $res, $now);
 
         // 同步member_list
+        $modelGroupChatMember = new \App\Qyweixin\Models\ExternalContact\GroupChatMember();
+        $modelGroupChatMember->clearExist($chatid, $this->authorizer_appid, $this->provider_appid, $now);
         if (!empty($res['group_chat']['member_list'])) {
-            $modelGroupChatMember = new \App\Qyweixin\Models\ExternalContact\GroupChatMember();
-            $modelGroupChatMember->syncMemberList($chatid, $this->authorizer_appid, $this->provider_appid, $res, time());
+            $modelGroupChatMember->syncMemberList($chatid, $this->authorizer_appid, $this->provider_appid, $res, $now);
         }
 
         return $res;

@@ -61,6 +61,12 @@ class GroupChat extends \App\Common\Models\Qyweixin\ExternalContact\GroupChat
 
     public function updateGroupChatInfoByApi($checkInfo, $groupChatInfo, $now)
     {
+        if (!empty($groupChatInfo['errcode']) && $groupChatInfo['errcode'] == 40050) {
+            $data = array();
+            $data['is_exist'] = 0;
+            $data['sync_time'] = \App\Common\Utils\Helper::getCurrentTime($now);
+            return  $this->update(array('_id' => $checkInfo['_id']), array('$set' => $data));
+        }
         $authorizer_appid = $checkInfo['authorizer_appid'];
         $provider_appid = $checkInfo['provider_appid'];
         $data = $this->getPrepareData($groupChatInfo, $authorizer_appid, $provider_appid, $checkInfo, $now);
