@@ -584,12 +584,29 @@ trait ExternalContactTrait
          *  }]
          * }
          */
-        $modelGroupChat->syncGroupChatList($this->authorizer_appid, $this->provider_appid, $res, time());
+        $now = time();
+        $modelGroupChat->syncGroupChatList($this->authorizer_appid, $this->provider_appid, $res, $now);
+        if (!empty($res['next_cursor'])) {
+            do {
+                $cursor = $res['next_cursor'];
+                $res = $this->getQyWeixinObject()
+                    ->getExternalContactManager()
+                    ->getGroupChatManager()
+                    ->getGroupchatList($status_filter, $owner_filter, $cursor, $limit);
+                if (!empty($res['errcode'])) {
+                    throw new \Exception($res['errmsg'], $res['errcode']);
+                }
+                $modelGroupChat->syncGroupChatList($this->authorizer_appid, $this->provider_appid, $res, $now);
+                if (empty($res['next_cursor'])) {
+                    break;
+                }
+            } while ($res['next_cursor']);
+        }
         return $res;
     }
 
     //获取客户群详情
-    public function getGroupChatInfo($groupChatInfo)
+    public function getGroupChatInfo($groupChatInfo, $need_name = 1)
     {
         $modelGroupChat = new \App\Qyweixin\Models\ExternalContact\GroupChat();
         $chatid = $groupChatInfo['chat_id'];
@@ -597,7 +614,7 @@ trait ExternalContactTrait
         $res = $this->getQyWeixinObject()
             ->getExternalContactManager()
             ->getGroupChatManager()
-            ->get($chatid);
+            ->get($chatid, $need_name);
         if (!empty($res['errcode'])) {
             throw new \Exception($res['errmsg'], $res['errcode']);
         }

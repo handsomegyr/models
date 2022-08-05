@@ -21,6 +21,19 @@ class GroupChat extends \App\Common\Models\Qyweixin\ExternalContact\GroupChat
         return $info;
     }
 
+    public function clearExist($authorizer_appid, $provider_appid, $now)
+    {
+        $updateData = array('is_exist' => 0);
+        $updateData['sync_time'] = \App\Common\Utils\Helper::getCurrentTime($now);
+        return $this->update(
+            array(
+                'authorizer_appid' => $authorizer_appid,
+                'provider_appid' => $provider_appid
+            ),
+            array('$set' => $updateData)
+        );
+    }
+
     public function syncGroupChatList($authorizer_appid, $provider_appid, $res, $now)
     {
         if (!empty($res['group_chat_list'])) {
@@ -32,6 +45,8 @@ class GroupChat extends \App\Common\Models\Qyweixin\ExternalContact\GroupChat
                 $data = array();
                 $data['provider_appid'] = $provider_appid;
                 $data['sync_time'] = \App\Common\Utils\Helper::getCurrentTime($now);
+                // 通过这个字段来表明企业微信那边有这条记录
+                $data['is_exist'] = 1;
                 $data['status'] = $status;
                 if (!empty($info)) {
                     $this->update(array('_id' => $info['_id']), array('$set' => $data));
@@ -48,12 +63,11 @@ class GroupChat extends \App\Common\Models\Qyweixin\ExternalContact\GroupChat
     {
         $authorizer_appid = $checkInfo['authorizer_appid'];
         $provider_appid = $checkInfo['provider_appid'];
-        $data = $this->getPrepareData($groupChatInfo, $authorizer_appid, $provider_appid, $checkInfo);
-        $data['sync_time'] = \App\Common\Utils\Helper::getCurrentTime($now);
+        $data = $this->getPrepareData($groupChatInfo, $authorizer_appid, $provider_appid, $checkInfo, $now);
         return  $this->update(array('_id' => $checkInfo['_id']), array('$set' => $data));
     }
 
-    private function getPrepareData($groupChatInfo, $authorizer_appid, $provider_appid, $checkInfo)
+    private function getPrepareData($groupChatInfo, $authorizer_appid, $provider_appid, $checkInfo, $now)
     {
         $groupChatInfo = $groupChatInfo['group_chat'];
         /**
@@ -121,6 +135,8 @@ class GroupChat extends \App\Common\Models\Qyweixin\ExternalContact\GroupChat
                 $data['admin_list'] = \App\Common\Utils\Helper::myJsonEncode($groupChatInfo['admin_list']);
             }
         }
+        $data['is_exist'] = 1;
+        $data['sync_time'] = \App\Common\Utils\Helper::getCurrentTime($now);
         return $data;
     }
 }
