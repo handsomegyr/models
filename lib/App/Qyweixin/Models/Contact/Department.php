@@ -20,9 +20,10 @@ class Department extends \App\Common\Models\Qyweixin\Contact\Department
         return $info;
     }
 
-    public function clearExist($authorizer_appid, $provider_appid)
+    public function clearExist($authorizer_appid, $provider_appid, $now)
     {
         $updateData = array('is_exist' => 0);
+        $updateData['sync_time'] = \App\Common\Utils\Helper::getCurrentTime($now);
         return $this->update(
             array(
                 'authorizer_appid' => $authorizer_appid,

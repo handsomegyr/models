@@ -393,7 +393,11 @@ trait ExternalContactTrait
             ->getExternalContactManager()
             ->get($external_userid, $cursor);
         if (!empty($res['errcode'])) {
-            throw new \Exception($res['errmsg'], $res['errcode']);
+            // {"errcode":84061,"errmsg":"not external contact, hint: [1646594702057801817545474], from ip: 115.29.169.68, more info at https://open.work.weixin.qq.com/devtool/query?e=84061","follow_user":[]}
+            if ($res['errcode'] == 84061) {
+            } else {
+                throw new \Exception($res['errmsg'], $res['errcode']);
+            }
         }
         /**
          * {

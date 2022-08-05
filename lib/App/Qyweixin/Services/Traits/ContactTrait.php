@@ -84,7 +84,11 @@ trait ContactTrait
          * }
          */
         if (!empty($res['errcode'])) {
-            throw new \Exception($res['errmsg'], $res['errcode']);
+            // [errmsg] => userid not found, hint: [1646185148234890469598501], from ip: 115.29.169.68, more info at https://open.work.weixin.qq.com/devtool/query?e=60111
+            if ($res['errcode'] == 60111) {
+            } else {
+                throw new \Exception($res['errmsg'], $res['errcode']);
+            }
         }
         $modelUser->updateUserInfoById($userInfo, $res);
         return $res;
@@ -216,10 +220,11 @@ trait ContactTrait
          * }
          */
         // 如果从跟部门进行同步的话 那么先将所有的记录is_exist改成0
+        $now = time();
         if (empty($dep_id)) {
-            $modelDepartment->clearExist($this->authorizer_appid, $this->provider_appid);
+            $modelDepartment->clearExist($this->authorizer_appid, $this->provider_appid, $now);
         }
-        $modelDepartment->syncDepartmentList($this->authorizer_appid, $this->provider_appid, $res, time());
+        $modelDepartment->syncDepartmentList($this->authorizer_appid, $this->provider_appid, $res, $now);
         return $res;
     }
 
@@ -247,10 +252,10 @@ trait ContactTrait
          * }
          * ]}
          */
-        if (!empty($is_root) && !empty($fetch_child)) {
-            $modelDepartmentUser->clearExist($this->authorizer_appid, $this->provider_appid);
-        }
         $now = time();
+        if (!empty($is_root) && !empty($fetch_child)) {
+            $modelDepartmentUser->clearExist($this->authorizer_appid, $this->provider_appid, $now);
+        }
         $modelDepartmentUser->syncDepartmentUserList($this->authorizer_appid, $this->provider_appid, $res, $now);
         $modelUser->syncUserList($this->authorizer_appid, $this->provider_appid, $res, $now);
 
@@ -345,10 +350,10 @@ trait ContactTrait
          * }]
          * }
          */
-        if (!empty($is_root) && !empty($fetch_child)) {
-            $modelDepartmentUser->clearExist($this->authorizer_appid, $this->provider_appid);
-        }
         $now = time();
+        if (!empty($is_root) && !empty($fetch_child)) {
+            $modelDepartmentUser->clearExist($this->authorizer_appid, $this->provider_appid, $now);
+        }
         $modelDepartmentUser->syncDepartmentUserList($this->authorizer_appid, $this->provider_appid, $res, $now);
         $modelUser->syncUserList($this->authorizer_appid, $this->provider_appid, $res, $now);
 

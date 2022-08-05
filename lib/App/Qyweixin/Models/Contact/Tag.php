@@ -21,9 +21,10 @@ class Tag extends \App\Common\Models\Qyweixin\Contact\Tag
         return $info;
     }
 
-    public function clearExist($authorizer_appid, $provider_appid)
+    public function clearExist($authorizer_appid, $provider_appid, $now)
     {
         $updateData = array('is_exist' => 0);
+        $updateData['sync_time'] = \App\Common\Utils\Helper::getCurrentTime($now);
         return $this->update(
             array(
                 'authorizer_appid' => $authorizer_appid,
@@ -35,7 +36,7 @@ class Tag extends \App\Common\Models\Qyweixin\Contact\Tag
 
     public function syncTagList($authorizer_appid, $provider_appid, $res, $now)
     {
-        $this->clearExist($authorizer_appid, $provider_appid);
+        $this->clearExist($authorizer_appid, $provider_appid, $now);
         /**
          * {
          * "errcode": 0,
