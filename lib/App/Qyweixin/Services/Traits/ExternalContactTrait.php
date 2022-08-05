@@ -846,6 +846,54 @@ trait ExternalContactTrait
         return $res;
     }
 
+    // 获取客户群统计数据 按自然日聚合的方式
+    public function getGroupChatStatisticGroupByDay($userid, $day_begin_time, $day_end_time)
+    {
+        $modelGroupChatStatisticByUserid = new \App\Qyweixin\Models\ExternalContact\GroupChatStatisticByUserid();
+        $owner_filter = array();
+        $owner_filter['userid_list'] = $userid;
+        $res = $this->getQyWeixinObject()
+            ->getExternalContactManager()
+            ->getGroupChatManager()
+            ->statisticGroupByDay($day_begin_time, $day_end_time, $owner_filter);
+        if (!empty($res['errcode'])) {
+            throw new \Exception($res['errmsg'], $res['errcode']);
+        }
+        // {
+        //     "errcode": 0,
+        //     "errmsg": "ok",
+        //     "items": [{
+        //             "stat_time": 1600272000,
+        //             "data": {
+        //                 "new_chat_cnt": 2,
+        //                 "chat_total": 2,
+        //                 "chat_has_msg": 0,
+        //                 "new_member_cnt": 0,
+        //                 "member_total": 6,
+        //                 "member_has_msg": 0,
+        //                 "msg_total": 0,
+        //                 "migrate_trainee_chat_cnt": 3
+        //             }
+        //         },
+        //         {
+        //             "stat_time": 1600358400,
+        //             "data": {
+        //                 "new_chat_cnt": 2,
+        //                 "chat_total": 2,
+        //                 "chat_has_msg": 0,
+        //                 "new_member_cnt": 0,
+        //                 "member_total": 6,
+        //                 "member_has_msg": 0,
+        //                 "msg_total": 0,
+        //                 "migrate_trainee_chat_cnt": 3
+        //             }
+        //         }
+        //     ]
+        // }
+        $modelGroupChatStatisticByUserid->syncGroupchatStatisticListGroupByDay($userid, $this->authorizer_appid, $this->provider_appid, $res, time());
+        return $res;
+    }
+
     // 获取企业的全部群发记录
     public function getGroupmsgList($chat_type, $start_time, $end_time, $creator = "", $filter_type = 2, $limit = 100, $cursor = "")
     {
