@@ -812,13 +812,13 @@ trait ExternalContactTrait
     }
 
     //获取客户群统计数据
-    public function getGroupChatStatistic($day_begin_time, array $owner_filter, $order_by = 1, $order_asc = 0, $offset = 0, $limit = 1000)
+    public function getGroupChatStatistic($day_begin_time, $day_end_time, array $owner_filter, $order_by = 1, $order_asc = 0, $offset = 0, $limit = 1000)
     {
         $modelGroupChatStatisticByUserid = new \App\Qyweixin\Models\ExternalContact\GroupChatStatisticByUserid();
         $res = $this->getQyWeixinObject()
             ->getExternalContactManager()
             ->getGroupChatManager()
-            ->statistic($day_begin_time, $owner_filter, $order_by, $order_asc, $offset, $limit);
+            ->statistic($day_begin_time, $day_end_time, $owner_filter, $order_by, $order_asc, $offset, $limit);
         if (!empty($res['errcode'])) {
             throw new \Exception($res['errmsg'], $res['errcode']);
         }
@@ -851,7 +851,7 @@ trait ExternalContactTrait
     {
         $modelGroupChatStatisticByUserid = new \App\Qyweixin\Models\ExternalContact\GroupChatStatisticByUserid();
         $owner_filter = array();
-        $owner_filter['userid_list'] = $userid;
+        $owner_filter['userid_list'] = array($userid);
         $res = $this->getQyWeixinObject()
             ->getExternalContactManager()
             ->getGroupChatManager()

@@ -88,6 +88,25 @@ class Agent extends \App\Common\Models\Qyweixin\Agent\Agent
         return $newInfo;
     }
 
+    public function updateAgentJsapiTicket($id, $jsapi_ticket,  $expires_in, $memo = array())
+    {
+        $updateData = array();
+        $updateData['agent_jsapi_ticket'] = $jsapi_ticket;
+        $updateData['agent_jsapi_ticket_expire'] = \App\Common\Utils\Helper::getCurrentTime(time() + $expires_in - 1800);
+        if (!empty($memo)) {
+            $updateData["memo"] = $memo;
+        }
+        $affectRows = $this->update(array('_id' => $id), array('$set' => $updateData));
+        // 重新获取数据
+        $newInfo = $this->getInfoById($id);
+        if (!empty($newInfo)) {
+            $expire_time = 5 * 60;
+            $cache = $this->getDI()->get('cache');
+            $cache->save($this->getCacheKey4AppId($newInfo['provider_appid'], $newInfo['authorizer_appid'], $newInfo['agentid']), $newInfo, $expire_time);
+        }
+        return $newInfo;
+    }
+
     public function updateAgentInfo($id, $res, $now, $orginalMemo)
     {
         $updateData = array();
@@ -193,15 +212,16 @@ class Agent extends \App\Common\Models\Qyweixin\Agent\Agent
                 if (!$objLock->lock()) {
                     // 获取jsapi_ticket
                     $objJssdk = new \Qyweixin\Jssdk();
+                    // 获取企业的jsapi_ticket
+                    $arrJsApiTicket = $objJssdk->getJsApiTicket($token['access_token']);
+                    $token = $this->updateJsapiTicket($token['id'], $arrJsApiTicket['ticket'], $arrJsApiTicket['expires_in']);
                     // 企业内部应用的时候
                     if (empty($token['agent_type'])) {
-                        // 获取企业的jsapi_ticket
-                        $arrJsApiTicket = $objJssdk->getJsApiTicket($token['access_token']);
                     } else {
                         // 获取应用的jsapi_ticket
                         $arrJsApiTicket = $objJssdk->getJsApiTicket4Agent($token['access_token']);
+                        $token = $this->updateAgentJsapiTicket($token['id'], $arrJsApiTicket['ticket'], $arrJsApiTicket['expires_in']);
                     }
-                    $token = $this->updateJsapiTicket($token['id'], $arrJsApiTicket['ticket'], $arrJsApiTicket['expires_in']);
                 }
             }
         }

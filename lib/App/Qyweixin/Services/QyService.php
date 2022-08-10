@@ -218,16 +218,20 @@ class QyService
     }
 
     //获取应用的jsapi_ticket
-    public function getJsapiTicket4Agent()
+    public function getJsapiTicket4Agent($is_agent_jsapi_ticket = 0)
     {
         $agentInfo = $this->getAccessToken4Agent();
-        return $agentInfo['jsapi_ticket'];
+        if ($is_agent_jsapi_ticket != 0) {
+            return $agentInfo['agent_jsapi_ticket'];
+        } else {
+            return $agentInfo['jsapi_ticket'];
+        }
     }
 
     //获取应用的JS-SDK使用权限签名
-    public function getSignPackage($url)
+    public function getSignPackage($url, $is_agent_jsapi_ticket = 0)
     {
-        $jsapi_ticket = $this->getJsapiTicket4Agent();
+        $jsapi_ticket = $this->getJsapiTicket4Agent($is_agent_jsapi_ticket);
         $objJssdk = new \Qyweixin\Jssdk();
         return $objJssdk->getSignPackage($url, $jsapi_ticket);
     }
