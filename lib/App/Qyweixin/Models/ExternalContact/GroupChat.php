@@ -61,7 +61,7 @@ class GroupChat extends \App\Common\Models\Qyweixin\ExternalContact\GroupChat
 
     public function updateGroupChatInfoByApi($checkInfo, $groupChatInfo, $now)
     {
-        if (!empty($groupChatInfo['errcode']) && $groupChatInfo['errcode'] == 40050) {
+        if (!empty($groupChatInfo['errcode']) && in_array($groupChatInfo['errcode'], array(40050, 49008))) {
             $data = array();
             $data['is_exist'] = 0;
             $data['sync_time'] = \App\Common\Utils\Helper::getCurrentTime($now);

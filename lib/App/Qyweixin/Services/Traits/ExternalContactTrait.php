@@ -366,7 +366,11 @@ trait ExternalContactTrait
             ->getExternalContactManager()
             ->getExternalContactList($userid);
         if (!empty($res['errcode'])) {
-            throw new \Exception($res['errmsg'], $res['errcode']);
+            // 不存在外部联系人的关系 https://open.work.weixin.qq.com/devtool/query?e=84061
+            if ($res['errcode'] == 84061) {
+            } else {
+                throw new \Exception($res['errmsg'], $res['errcode']);
+            }
         }
         /**
          * {
@@ -620,8 +624,9 @@ trait ExternalContactTrait
             ->getGroupChatManager()
             ->get($chatid, $need_name);
         if (!empty($res['errcode'])) {
-            //chatid不存在
+            //chatid不存在 https://open.work.weixin.qq.com/devtool/query?e=40050
             if ($res['errcode'] == 40050) {
+            } else if ($res['errcode'] == 49008) { //群已经解散 https://open.work.weixin.qq.com/devtool/query?e=49008
             } else {
                 throw new \Exception($res['errmsg'], $res['errcode']);
             }
