@@ -1281,6 +1281,16 @@ class Menu
         );
         $tree[] = $item;
 
+        // 附件资源设置
+        $item = array(
+            'menu_name' => '附件资源设置',
+            'menu_model' => 'qyweixin-attachment',
+            'level' => '企业平台外部联系人管理',
+            'icon' => '',
+            'model' => '\App\Backend\Submodules\Qyweixin\Models\attachment\Attachment'
+        );
+        $tree[] = $item;
+
         return $tree;
     }
 }
