@@ -891,6 +891,16 @@ class Menu
         );
         $tree[] = $item;
 
+        // 企业群发记录
+        $item = array(
+            'menu_name' => '企业群发记录',
+            'menu_model' => 'qyweixin-externalcontactgroupmsg',
+            'level' => '企业客户消息推送管理',
+            'icon' => '',
+            'model' => '\App\Backend\Submodules\Qyweixin\Models\ExternalContact\GroupMsg'
+        );
+        $tree[] = $item;
+
         // 企业群发成员发送任务
         $item = array(
             'menu_name' => '企业群发成员发送任务',
