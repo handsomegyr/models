@@ -368,6 +368,7 @@ trait ExternalContactTrait
         if (!empty($res['errcode'])) {
             // 不存在外部联系人的关系 https://open.work.weixin.qq.com/devtool/query?e=84061
             if ($res['errcode'] == 84061) {
+            } elseif ($res['errcode'] == 60111) { //https://open.work.weixin.qq.com/devtool/query?e=60111
             } else {
                 throw new \Exception($res['errmsg'], $res['errcode']);
             }
@@ -683,6 +684,62 @@ trait ExternalContactTrait
             throw new \Exception($res['errmsg'], $res['errcode']);
         }
         $modelMoment->syncMomentList($this->authorizer_appid, $this->provider_appid, $res, time());
+        /**
+         * {
+         * "errcode":0,
+         * "errmsg":"ok",
+         * "next_cursor":"CURSOR",
+         * "moment_list":[
+         *     {
+         *        "moment_id":"momxxx",
+         *     }
+         * ]
+         * }
+         */
+        if (!empty($res['moment_list'])) {
+            foreach ($res['moment_list'] as $momentInfo) {
+                $moment_id = $momentInfo['moment_id'];
+                try {
+                    $cursor2 = "";
+                    do {
+                        $res4MomentTask = $this->getMomentTask($moment_id, 1000, $cursor2);
+                        // 分页游标，下次请求时填写以获取之后分页的记录，如果已经没有更多的数据则返回空
+                        if (empty($res4MomentTask['next_cursor'])) {
+                            $cursor2 = "";
+                        } else {
+                            $cursor2 = $res4MomentTask['next_cursor'];
+                        }
+                    } while (!empty($cursor2));
+                } catch (\Exception $th) {
+                    //throw $th;
+                }
+            }
+        }
+        return $res;
+    }
+
+    // 获取客户朋友圈企业发表的列表
+    public function getMomentTask($moment_id, $limit = 1000, $cursor = "")
+    {
+        $modelMomentTaskUser = new \App\Qyweixin\Models\ExternalContact\MomentTaskUser();;
+        $res = $this->getQyWeixinObject()
+            ->getExternalContactManager()
+            ->getMomentManager()->getMomentTask($moment_id, $limit, $cursor);
+        if (!empty($res['errcode'])) {
+            throw new \Exception($res['errmsg'], $res['errcode']);
+        }
+        // {
+        //     "errcode":0,
+        //     "errmsg":"ok",
+        //     "next_cursor":"CURSOR",
+        //     "task_list":[
+        //         {
+        //             "userid":"zhangsan",
+        //             "publish_status":1
+        //         }
+        //     ]
+        // }
+        $modelMomentTaskUser->syncMomentTaskList($moment_id, $this->authorizer_appid, $this->provider_appid, $res, time());
         return $res;
     }
 
@@ -902,14 +959,43 @@ trait ExternalContactTrait
     // 获取企业的全部群发记录
     public function getGroupmsgList($chat_type, $start_time, $end_time, $creator = "", $filter_type = 2, $limit = 100, $cursor = "")
     {
-        $modelMsgTemplate = new \App\Qyweixin\Models\ExternalContact\MsgTemplate();
+        $modelGroupMsg = new \App\Qyweixin\Models\ExternalContact\GroupMsg();
         $res = $this->getQyWeixinObject()
             ->getExternalContactManager()
             ->getGroupMsgManager()->getGroupmsgList($chat_type, $start_time, $end_time, $creator, $filter_type, $limit, $cursor);
         if (!empty($res['errcode'])) {
             throw new \Exception($res['errmsg'], $res['errcode']);
         }
-        $modelMsgTemplate->syncGroupmsgList($this->authorizer_appid, $this->provider_appid, $this->agentid, $chat_type, $res, time());
+        $modelGroupMsg->syncGroupmsgList($this->authorizer_appid, $this->provider_appid, $this->agentid, $chat_type, $res, time());
+        // {
+        //     "errcode":0,
+        //     "errmsg":"ok",
+        //     "next_cursor":"CURSOR",
+        //     "group_msg_list":[
+        //         {
+        //             "msgid":"msgGCAAAXtWyujaWJHDDGi0mAAAA",
+        //         }
+        //     ]
+        // }
+        if (!empty($res['group_msg_list'])) {
+            foreach ($res['group_msg_list'] as $groupmsgInfo) {
+                $msgid = $groupmsgInfo['msgid'];
+                try {
+                    $cursor2 = "";
+                    do {
+                        $res4GroupmsgTask = $this->getGroupmsgTask($msgid, 1000, $cursor2);
+                        // 分页游标，下次请求时填写以获取之后分页的记录，如果已经没有更多的数据则返回空
+                        if (empty($res4GroupmsgTask['next_cursor'])) {
+                            $cursor2 = "";
+                        } else {
+                            $cursor2 = $res4GroupmsgTask['next_cursor'];
+                        }
+                    } while (!empty($cursor2));
+                } catch (\Exception $th) {
+                    //throw $th;
+                }
+            }
+        }
         return $res;
     }
 
@@ -924,12 +1010,46 @@ trait ExternalContactTrait
             throw new \Exception($res['errmsg'], $res['errcode']);
         }
         $modelGroupMsgTask->syncTaskList($msgid, $this->authorizer_appid, $this->provider_appid, $this->agentid, $res, time());
+        /**
+         *{
+         *"errcode": 0,
+         *"errmsg": "ok",
+         *"next_cursor":"CURSOR",
+         *"task_list": [
+         *    {
+         *        "userid": "zhangsan",
+         *        "status": 1,
+         *        "send_time": 1552536375
+         *    }
+         *]
+         *}
+         */
+        if (!empty($res['task_list'])) {
+            foreach ($res['task_list'] as $useridInfo) {
+                $userid = $useridInfo['userid'];
+                try {
+                    $cursor2 = "";
+                    do {
+                        $res4SendResult = $this->getGroupMsgSendResult($msgid, $userid, 1000, $cursor2);
+                        // 分页游标，下次请求时填写以获取之后分页的记录，如果已经没有更多的数据则返回空
+                        if (empty($res4SendResult['next_cursor'])) {
+                            $cursor2 = "";
+                        } else {
+                            $cursor2 = $res4SendResult['next_cursor'];
+                        }
+                    } while (!empty($cursor2));
+                } catch (\Exception $th) {
+                    //throw $th;
+                }
+            }
+        }
         return $res;
     }
 
     // 获取企业群发成员执行结果
     public function getGroupMsgSendResult($msgid, $userid, $limit = 1000, $cursor = "")
     {
+        $modelGroupMsgSendResult = new \App\Qyweixin\Models\ExternalContact\GroupMsgSendResult();
         $res = $this->getQyWeixinObject()
             ->getExternalContactManager()
             ->getGroupMsgManager()->getGroupMsgSendResult($msgid, $userid, $limit, $cursor);
@@ -951,7 +1071,6 @@ trait ExternalContactTrait
         // 同步数据到结果表
         // 同步detail_list
         if (!empty($res['send_list'])) {
-            $modelGroupMsgSendResult = new \App\Qyweixin\Models\ExternalContact\GroupMsgSendResult();
             $modelGroupMsgSendResult->syncDetailList($msgid, $userid, $this->authorizer_appid, $this->provider_appid, $this->agentid, $res, time());
         }
         return $res;
