@@ -38,7 +38,6 @@ class MomentTaskUser extends \App\Common\Models\Qyweixin\ExternalContact\MomentT
         if (!empty($res['task_list'])) {
             foreach ($res['task_list'] as $task) {
                 $userid = $task['userid'];
-                $moment_id = $task['moment_id'];
                 $publish_status = $task['publish_status'];
                 $info = $this->getInfoByUserIdAndMomentId($userid, $moment_id, $authorizer_appid, $provider_appid);
                 $data = array();
