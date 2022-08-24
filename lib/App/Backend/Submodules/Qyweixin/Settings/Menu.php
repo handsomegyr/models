@@ -731,6 +731,16 @@ class Menu
         );
         $tree[] = $item;
 
+        // 企业标签组
+        $item = array(
+            'menu_name' => '企业标签组',
+            'menu_model' => 'qyweixin-externalcontactcorptaggroup',
+            'level' => '企业标签管理',
+            'icon' => '',
+            'model' => '\App\Backend\Submodules\Qyweixin\Models\ExternalContact\CorpTagGroup'
+        );
+        $tree[] = $item;
+
         // 企业标签
         $item = array(
             'menu_name' => '企业标签',

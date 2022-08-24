@@ -36,6 +36,32 @@ class CorpTag extends \App\Common\Models\Qyweixin\ExternalContact\CorpTag
 
     public function syncCorpTagList($authorizer_appid, $provider_appid, $res, $now)
     {
+        // {
+        //     "errcode": 0,
+        //     "errmsg": "ok",
+        //     "tag_group": [{
+        //         "group_id": "TAG_GROUPID1",
+        //         "group_name": "GOURP_NAME",
+        //         "create_time": 1557838797,
+        //         "order": 1,
+        //         "deleted": false,
+        //         "tag": [{
+        //                 "id": "TAG_ID1",
+        //                 "name": "NAME1",
+        //                 "create_time": 1557838797,
+        //                 "order": 1,
+        //                 "deleted": false
+        //             },
+        //             {
+        //                 "id": "TAG_ID2",
+        //                 "name": "NAME2",
+        //                 "create_time": 1557838797,
+        //                 "order": 2,
+        //                 "deleted": true
+        //             }
+        //         ]
+        //     }]
+        // }
         if (!empty($res['tag_group'])) {
             foreach ($res['tag_group'] as $tagGroupInfo) {
 
