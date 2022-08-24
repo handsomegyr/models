@@ -191,6 +191,7 @@ trait ContactTrait
     public function getDepartmentList($dep_id)
     {
         $modelDepartment = new \App\Qyweixin\Models\Contact\Department();
+        $modelDepartmentUser = new \App\Qyweixin\Models\Contact\DepartmentUser();
         $res = $this->getQyWeixinObject()
             ->getDepartmentManager()
             ->getDepartmentList($dep_id);
@@ -222,7 +223,8 @@ trait ContactTrait
         // 如果从跟部门进行同步的话 那么先将所有的记录is_exist改成0
         $now = time();
         if (empty($dep_id)) {
-            $modelDepartment->clearExist($this->authorizer_appid, $this->provider_appid, $now);
+            $modelDepartment->clearExist($this->authorizer_appid, $this->provider_appid, $now);            
+            $modelDepartmentUser->clearExist($this->authorizer_appid, $this->provider_appid, $now);
         }
         $modelDepartment->syncDepartmentList($this->authorizer_appid, $this->provider_appid, $res, $now);
         return $res;
@@ -237,6 +239,10 @@ trait ContactTrait
             ->getUserManager()
             ->simplelist($dep_id, $fetch_child);
         if (!empty($res['errcode'])) {
+            //https://open.work.weixin.qq.com/devtool/query?e=60003
+            if ($res['errcode'] == 60003) {
+                return $res;
+            }
             throw new \Exception($res['errmsg'], $res['errcode']);
         }
         /**
@@ -271,6 +277,10 @@ trait ContactTrait
             ->getUserManager()
             ->userlist($dep_id, $fetch_child);
         if (!empty($res['errcode'])) {
+            //https://open.work.weixin.qq.com/devtool/query?e=60003
+            if ($res['errcode'] == 60003) {
+                return $res;
+            }
             throw new \Exception($res['errmsg'], $res['errcode']);
         }
 

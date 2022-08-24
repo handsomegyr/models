@@ -24,7 +24,7 @@ class MomentCustomer extends \App\Common\Models\Qyweixin\ExternalContact\MomentC
         return $info;
     }
 
-    public function syncMomentCustomerList($moment_id, $authorizer_appid, $provider_appid, $res, $now)
+    public function syncMomentCustomerList($userid, $moment_id, $authorizer_appid, $provider_appid, $res, $now)
     {
         // {
         //     "errcode":0,
@@ -32,14 +32,12 @@ class MomentCustomer extends \App\Common\Models\Qyweixin\ExternalContact\MomentC
         //     "next_cursor":"CURSOR",
         //     "customer_list":[
         //         {
-        //             "userid":"xxx",
         //             "external_userid":"woAJ2GCAAAXtWyujaWJHDDGi0mACCCC  "
         //         }
         //     ]
         // }
         if (!empty($res['customer_list'])) {
             foreach ($res['customer_list'] as $customer) {
-                $userid = $customer['userid'];
                 $external_userid = $customer['external_userid'];
                 $info = $this->getInfoByUserIdAndMomentId($userid, $external_userid, $moment_id, $authorizer_appid, $provider_appid);
                 $data = array();

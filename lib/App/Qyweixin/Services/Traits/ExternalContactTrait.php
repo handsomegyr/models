@@ -692,6 +692,9 @@ trait ExternalContactTrait
          * "moment_list":[
          *     {
          *        "moment_id":"momxxx",
+         *         "creator":"xxxx",
+         *         "create_time":"xxxx",
+         *         "create_type":1,
          *     }
          * ]
          * }
@@ -699,19 +702,59 @@ trait ExternalContactTrait
         if (!empty($res['moment_list'])) {
             foreach ($res['moment_list'] as $momentInfo) {
                 $moment_id = $momentInfo['moment_id'];
-                try {
-                    $cursor2 = "";
-                    do {
-                        $res4MomentTask = $this->getMomentTask($moment_id, 1000, $cursor2);
-                        // 分页游标，下次请求时填写以获取之后分页的记录，如果已经没有更多的数据则返回空
-                        if (empty($res4MomentTask['next_cursor'])) {
-                            $cursor2 = "";
-                        } else {
-                            $cursor2 = $res4MomentTask['next_cursor'];
-                        }
-                    } while (!empty($cursor2));
-                } catch (\Exception $th) {
-                    //throw $th;
+                $create_type = intval($momentInfo['create_type']); //朋友圈创建来源。0：企业 1：个人
+                if ($create_type == 0) { //仅支持企业发表的朋友圈id
+                    try {
+                        $cursor2 = "";
+                        do {
+                            $res4MomentTask = $this->getMomentTask($moment_id, 1000, $cursor2);
+                            // 分页游标，下次请求时填写以获取之后分页的记录，如果已经没有更多的数据则返回空
+                            if (empty($res4MomentTask['next_cursor'])) {
+                                $cursor2 = "";
+                            } else {
+                                $cursor2 = $res4MomentTask['next_cursor'];
+                            }
+                        } while (!empty($cursor2));
+                    } catch (\Exception $th) {
+                        //throw $th;
+                    }
+                } else {
+                    $userid = $momentInfo['creator'];
+                    try {
+                        $cursor2 = "";
+                        do {
+                            $res4CustomerList = $this->getMomentCustomerList($moment_id, $userid, 1000, $cursor2);
+                            // 分页游标，下次请求时填写以获取之后分页的记录，如果已经没有更多的数据则返回空
+                            if (empty($res4CustomerList['next_cursor'])) {
+                                $cursor2 = "";
+                            } else {
+                                $cursor2 = $res4CustomerList['next_cursor'];
+                            }
+                        } while (!empty($cursor2));
+                    } catch (\Exception $th) {
+                        //throw $th;
+                    }
+
+                    try {
+                        $cursor3 = "";
+                        do {
+                            $res4SendResult = $this->getMomentSendResult($moment_id, $userid, 5000, $cursor3);
+                            // 分页游标，下次请求时填写以获取之后分页的记录，如果已经没有更多的数据则返回空
+                            if (empty($res4SendResult['next_cursor'])) {
+                                $cursor3 = "";
+                            } else {
+                                $cursor3 = $res4SendResult['next_cursor'];
+                            }
+                        } while (!empty($cursor3));
+                    } catch (\Exception $th) {
+                        //throw $th;
+                    }
+
+                    try {
+                        $res4SendResult = $this->getMomentComments($moment_id, $userid);
+                    } catch (\Exception $th) {
+                        //throw $th;
+                    }
                 }
             }
         }
@@ -721,7 +764,7 @@ trait ExternalContactTrait
     // 获取客户朋友圈企业发表的列表
     public function getMomentTask($moment_id, $limit = 1000, $cursor = "")
     {
-        $modelMomentTaskUser = new \App\Qyweixin\Models\ExternalContact\MomentTaskUser();;
+        $modelMomentTaskUser = new \App\Qyweixin\Models\ExternalContact\MomentTaskUser();
         $res = $this->getQyWeixinObject()
             ->getExternalContactManager()
             ->getMomentManager()->getMomentTask($moment_id, $limit, $cursor);
@@ -740,6 +783,134 @@ trait ExternalContactTrait
         //     ]
         // }
         $modelMomentTaskUser->syncMomentTaskList($moment_id, $this->authorizer_appid, $this->provider_appid, $res, time());
+
+        if (!empty($res['task_list'])) {
+            foreach ($res['task_list'] as $task) {
+                $userid = $task['userid'];
+                try {
+                    $cursor2 = "";
+                    do {
+                        $res4CustomerList = $this->getMomentCustomerList($moment_id, $userid, 1000, $cursor2);
+                        // 分页游标，下次请求时填写以获取之后分页的记录，如果已经没有更多的数据则返回空
+                        if (empty($res4CustomerList['next_cursor'])) {
+                            $cursor2 = "";
+                        } else {
+                            $cursor2 = $res4CustomerList['next_cursor'];
+                        }
+                    } while (!empty($cursor2));
+                } catch (\Exception $th) {
+                    //throw $th;
+                }
+
+                try {
+                    $cursor3 = "";
+                    do {
+                        $res4SendResult = $this->getMomentSendResult($moment_id, $userid, 5000, $cursor3);
+                        // 分页游标，下次请求时填写以获取之后分页的记录，如果已经没有更多的数据则返回空
+                        if (empty($res4SendResult['next_cursor'])) {
+                            $cursor3 = "";
+                        } else {
+                            $cursor3 = $res4SendResult['next_cursor'];
+                        }
+                    } while (!empty($cursor3));
+                } catch (\Exception $th) {
+                    //throw $th;
+                }
+
+                try {
+                    $res4SendResult = $this->getMomentComments($moment_id, $userid);
+                } catch (\Exception $th) {
+                    //throw $th;
+                }
+            }
+        }
+
+        return $res;
+    }
+
+    // 获取客户朋友圈发表时选择的可见范围
+    public function getMomentCustomerList($moment_id, $userid, $limit = 1000, $cursor = "")
+    {
+        $modelMomentCustomer = new \App\Qyweixin\Models\ExternalContact\MomentCustomer();
+        $res = $this->getQyWeixinObject()
+            ->getExternalContactManager()
+            ->getMomentManager()->getMomentCustomerList($moment_id, $userid, $limit, $cursor);
+        if (!empty($res['errcode'])) {
+            throw new \Exception($res['errmsg'], $res['errcode']);
+        }
+        // {
+        //     "errcode":0,
+        //     "errmsg":"ok",
+        //     "next_cursor":"CURSOR",
+        //     "customer_list":[
+        //         {
+        //             "external_userid":"woAJ2GCAAAXtWyujaWJHDDGi0mACCCC  "
+        //         }
+        //     ]
+        // }
+        $modelMomentCustomer->syncMomentCustomerList($userid, $moment_id, $this->authorizer_appid, $this->provider_appid, $res, time());
+        return $res;
+    }
+
+    // 获取客户朋友圈发表后的可见客户列表
+    public function getMomentSendResult($moment_id, $userid, $limit = 5000, $cursor = "")
+    {
+        $modelMomentSendResult = new \App\Qyweixin\Models\ExternalContact\MomentSendResult();
+        $res = $this->getQyWeixinObject()
+            ->getExternalContactManager()
+            ->getMomentManager()->getMomentSendResult($moment_id, $userid, $limit, $cursor);
+        if (!empty($res['errcode'])) {
+            throw new \Exception($res['errmsg'], $res['errcode']);
+        }
+        // {
+        //     "errcode":0,
+        //     "errmsg":"ok",
+        //     "next_cursor":"CURSOR",
+        //     "customer_list":[
+        //         {
+        //             "external_userid":"woAJ2GCAAAXtWyujaWJHDDGi0mACCCC"
+        //         }
+        //     ]
+        // }
+        $modelMomentSendResult->syncMomentCustomerList($userid, $moment_id, $this->authorizer_appid, $this->provider_appid, $res, time());
+        return $res;
+    }
+
+    // 获取客户朋友圈的互动数据
+    public function getMomentComments($moment_id, $userid)
+    {
+        $modelMomentComment = new \App\Qyweixin\Models\ExternalContact\MomentComment();
+        $res = $this->getQyWeixinObject()
+            ->getExternalContactManager()
+            ->getMomentManager()->getMomentComments($moment_id, $userid);
+        if (!empty($res['errcode'])) {
+            throw new \Exception($res['errmsg'], $res['errcode']);
+        }
+        // {
+        //     "errcode":0,
+        //     "errmsg":"ok",
+        //     "comment_list":[
+        //         {
+        //             "external_userid":"woAJ2GCAAAXtWyujaWJHDDGi0mACAAAA ",
+        //             "create_time":1605172726
+        //         },
+        //         {
+        //             "userid":"zhangshan ",
+        //             "create_time":1605172729
+        //         }
+        //     ],
+        //     "like_list":[
+        //         {
+        //             "external_userid":"woAJ2GCAAAXtWyujaWJHDDGi0mACBBBB ",
+        //             "create_time":1605172726
+        //         },
+        //         {
+        //             "userid":"zhangshan ",
+        //             "create_time":1605172720
+        //         }
+        //     ]
+        // }
+        $modelMomentComment->syncMomentBehaviorList($userid, $moment_id, $this->authorizer_appid, $this->provider_appid, $res, time());
         return $res;
     }
 
