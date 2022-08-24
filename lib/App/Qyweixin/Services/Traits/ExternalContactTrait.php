@@ -148,6 +148,21 @@ trait ExternalContactTrait
         );
     }
 
+    // 获取企业已配置的「联系我」方式
+    public function getContactWay($contactWayInfo)
+    {
+        $modelContactWay = new \App\Qyweixin\Models\ExternalContact\ContactWay();
+        $res = $this->getQyWeixinObject()
+            ->getExternalContactManager()
+            ->getContactWayManager()
+            ->get($contactWayInfo['config_id']);
+        if (!empty($res['errcode'])) {
+            throw new \Exception($res['errmsg'], $res['errcode']);
+        }
+        $modelContactWay->recordContactWayInfo($contactWayInfo, $res, time());
+        return $res;
+    }
+
     // 配置客户联系「联系我」方式
     public function addContactWay($contactWayInfo)
     {

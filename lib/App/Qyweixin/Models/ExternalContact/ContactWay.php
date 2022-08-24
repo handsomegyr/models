@@ -97,4 +97,79 @@ class ContactWay extends \App\Common\Models\Qyweixin\ExternalContact\ContactWay
             }
         }
     }
+
+    public function recordContactWayInfo($contactWayInfo, $res, $now)
+    {
+        // {
+        //     "errcode": 0,
+        //     "errmsg": "ok",
+        //     "contact_way":
+        //      {
+        //          "config_id":"42b34949e138eb6e027c123cba77fAAA",
+        //          "type":1,
+        //          "scene":1,
+        //          "style":2,
+        //          "remark":"test remark",
+        //          "skip_verify":true,
+        //          "state":"teststate",
+        //          "qr_code":"http://p.qpic.cn/wwhead/duc2TvpEgSdicZ9RrdUtBkv2UiaA/0",
+        //          "user" : ["zhangsan", "lisi", "wangwu"],
+        //          "party" : [2, 3],
+        //          "is_temp":true,
+        //          "expires_in":86400,
+        //          "chat_expires_in":86400,
+        //          "unionid":"oxTWIuGaIt6gTKsQRLau2M0AAAA",
+        //          "conclusions":
+        //      }
+        //  }
+        $updateData = array();
+        if (isset($res['contact_way']['config_id'])) {
+            $updateData['config_id'] = $res['contact_way']['config_id'];
+        }
+        if (isset($res['contact_way']['type'])) {
+            $updateData['type'] = intval($res['contact_way']['type']);
+        }
+        if (isset($res['contact_way']['scene'])) {
+            $updateData['scene'] = intval($res['contact_way']['scene']);
+        }
+        if (isset($res['contact_way']['style'])) {
+            $updateData['style'] = intval($res['contact_way']['style']);
+        }
+        if (isset($res['contact_way']['remark'])) {
+            $updateData['remark'] = $res['contact_way']['remark'];
+        }
+        if (isset($res['contact_way']['skip_verify'])) {
+            $updateData['skip_verify'] = intval($res['contact_way']['skip_verify']);
+        }
+        if (isset($res['contact_way']['state'])) {
+            $updateData['state'] = $res['contact_way']['state'];
+        }
+        if (isset($res['contact_way']['qr_code'])) {
+            $updateData['qr_code'] = $res['contact_way']['qr_code'];
+        }
+        if (isset($res['contact_way']['user'])) {
+            $updateData['user'] = \App\Common\Utils\Helper::myJsonEncode($res['contact_way']['user']);
+        }
+        if (isset($res['contact_way']['party'])) {
+            $updateData['party'] = \App\Common\Utils\Helper::myJsonEncode($res['contact_way']['party']);
+        }
+        if (isset($res['contact_way']['is_temp'])) {
+            $updateData['is_temp'] = intval($res['contact_way']['is_temp']);
+        }
+        if (isset($res['contact_way']['expires_in'])) {
+            $updateData['expires_in'] = $res['contact_way']['expires_in'];
+        }
+        if (isset($res['contact_way']['chat_expires_in'])) {
+            $updateData['chat_expires_in'] = $res['contact_way']['chat_expires_in'];
+        }
+        if (isset($res['contact_way']['unionid'])) {
+            $updateData['unionid'] = $res['contact_way']['unionid'];
+        }
+        if (isset($res['contact_way']['conclusions'])) {
+            $updateData['conclusions'] = \App\Common\Utils\Helper::myJsonEncode($res['contact_way']['conclusions']);
+        }
+        $updateData['is_exist'] = 1;
+        $updateData['sync_time'] = date("Y-m-d H:i:s", $now);
+        return $this->update(array('_id' => $contactWayInfo['_id']), array('$set' => $updateData));
+    }
 }
