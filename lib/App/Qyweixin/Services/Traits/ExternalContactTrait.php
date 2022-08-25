@@ -192,41 +192,95 @@ trait ExternalContactTrait
             $contactWay->chat_expires_in = $contactWayInfo['chat_expires_in'];
             $contactWay->unionid = $contactWayInfo['unionid'];
 
-            $conclusion = new \Qyweixin\Model\ExternalContact\Conclusion();
-            $text = new \Qyweixin\Model\ExternalContact\Conclusion\Text($contactWayInfo['conclusions_text_content']);
-            $conclusion->text = $text;
-
-            if (!empty($contactWayInfo['conclusions_image_media'])) {
-                if (!empty($contactWayInfo['conclusions_image_pic_url'])) {
-                    $image = new \Qyweixin\Model\ExternalContact\Conclusion\Image("", $contactWayInfo['conclusions_image_pic_url']);
+            $conclusions4Config = array();
+            if (!empty($contactWayInfo['conclusions'])) {
+                if (is_string($contactWayInfo['conclusions'])) {
+                    $conclusions4Config = \json_decode($contactWayInfo['conclusions'], true);
                 } else {
-                    $res = $this->uploadMediaByApi($contactWayInfo['conclusions_image_media'], "image", $contactWayInfo['conclusions_image_media_id'], $contactWayInfo['conclusions_image_media_created_at']);
-                    // 发生了改变就更新
-                    if ($res['media_id'] != $contactWayInfo['conclusions_image_media_id']) {
-                        $modelContactWay->recordMediaId($contactWayInfo['_id'], $res, time());
-                    }
-                    $image = new \Qyweixin\Model\ExternalContact\Conclusion\Image($res['media_id'], "");
+                    $conclusions4Config = $contactWayInfo['conclusions'];
                 }
-                $conclusion->image = $image;
             }
+            if (!empty($conclusions4Config)) {
+                // {
+                //     "text": 
+                //     {
+                //         "content":"文本消息内容"
+                //     },
+                //     "image": 
+                //     {
+                //         "media_id": "MEDIA_ID"
+                //     },
+                //     "link":
+                //     {
+                //         "title": "消息标题",
+                //         "picurl": "https://example.pic.com/path",
+                //         "desc": "消息描述",
+                //         "url": "https://example.link.com/path"
+                //     },
+                //     "miniprogram":
+                //     {
+                //         "title": "消息标题",
+                //         "pic_media_id": "MEDIA_ID",
+                //         "appid": "wx8bd80126147dfAAA",
+                //         "page": "/path/index.html"
+                //     }
+                // }
 
-            if (!empty($contactWayInfo['conclusions_link_url'])) {
-                $link = new \Qyweixin\Model\ExternalContact\Conclusion\Link($contactWayInfo['conclusions_link_title'], $contactWayInfo['conclusions_link_picurl'], $contactWayInfo['conclusions_link_desc'], $contactWayInfo['conclusions_link_url']);
-                $conclusion->link = $link;
-            }
-
-            if (!empty($contactWayInfo['conclusions_miniprogram_appid'])) {
-                if (!empty($contactWayInfo['conclusions_miniprogram_pic_media'])) {
-                    $res2 = $this->uploadMediaByApi($contactWayInfo['conclusions_miniprogram_pic_media'], "image", $contactWayInfo['conclusions_miniprogram_pic_media_id'], $contactWayInfo['conclusions_miniprogram_pic_media_created_at']);
-                    // 发生了改变就更新
-                    if ($res2['media_id'] != $contactWayInfo['conclusions_miniprogram_pic_media_id']) {
-                        $modelContactWay->recordMediaId4Miniprogram($contactWayInfo['_id'], $res2, time());
+                $conclusion = new \Qyweixin\Model\ExternalContact\Conclusion();
+                if (isset($conclusions4Config['text']['content'])) {
+                    $text = new \Qyweixin\Model\ExternalContact\Conclusion\Text($conclusions4Config['text']['content']);
+                    $conclusion->text = $text;
+                }
+                if (isset($conclusions4Config['image'])) {
+                    //构造结束语使用image消息时，只能填写meida_id字段,获取含有image结构的联系我方式时，返回pic_url字段。
+                    if (!empty($conclusions4Config['image']['pic_url'])) {
+                        if (empty($conclusions4Config['image']['local_image_media'])) {
+                            $conclusions4Config['image']['local_image_media'] = $conclusions4Config['image']['pic_url'];
+                        }
+                    }
+                    if (!empty($conclusions4Config['image']['local_image_media'])) {
+                        $media_id = empty($conclusions4Config['image']['media_id']) ? '' : $conclusions4Config['image']['media_id'];
+                        $name = empty($conclusions4Config['image']['local_image_media_name']) ? '联系我' . \uniqid() : $conclusions4Config['image']['local_image_media_name'];
+                        $type = 'image';
+                        $res = $this->getOrCreateMediaByMediaId($media_id, $name, $type, $conclusions4Config['image']['local_image_media']);
+                        $image = new \Qyweixin\Model\ExternalContact\Conclusion\Image($res['media_id'], "");
+                    } else {
+                        throw new \Exception('请本地上传一张图片');
+                    }
+                    if (!empty($image)) {
+                        $conclusion->image = $image;
                     }
                 }
-                $miniprogram = new \Qyweixin\Model\ExternalContact\Conclusion\Miniprogram($contactWayInfo['conclusions_miniprogram_title'], $res2['media_id'], $contactWayInfo['conclusions_miniprogram_appid'], $contactWayInfo['conclusions_miniprogram_page']);
-                $conclusion->miniprogram = $miniprogram;
+                if (isset($conclusions4Config['link'])) {
+                    $link = new \Qyweixin\Model\ExternalContact\Conclusion\Link(
+                        $conclusions4Config['link']['title'],
+                        $conclusions4Config['link']['picurl'],
+                        $conclusions4Config['link']['desc'],
+                        $conclusions4Config['link']['url']
+                    );
+                    $conclusion->link = $link;
+                }
+                if (isset($conclusions4Config['miniprogram'])) {
+                    $pic_media_id = "";
+                    if (!empty($conclusions4Config['miniprogram']['local_image_media'])) {
+                        $media_id = empty($conclusions4Config['miniprogram']['media_id']) ? '' : $conclusions4Config['miniprogram']['media_id'];
+                        $name = empty($conclusions4Config['miniprogram']['local_image_media_name']) ? '联系我' . \uniqid() : $conclusions4Config['miniprogram']['local_image_media_name'];
+                        $type = 'image';
+                        $res = $this->getOrCreateMediaByMediaId($media_id, $name, $type, $conclusions4Config['miniprogram']['local_image_media']);
+                        $pic_media_id = $res['media_id'];
+                    } else {
+                        throw new \Exception('请本地上传一张图片');
+                    }
+                    $miniprogram = new \Qyweixin\Model\ExternalContact\Conclusion\Miniprogram(
+                        $conclusions4Config['miniprogram']['title'],
+                        $pic_media_id,
+                        $conclusions4Config['miniprogram']['appid'],
+                        $conclusions4Config['miniprogram']['page']
+                    );
+                    $conclusion->miniprogram = $miniprogram;
+                }
+                $contactWay->conclusion = $conclusion;
             }
-            $contactWay->conclusion = $conclusion;
         }
 
         $res = $this->getQyWeixinObject()
@@ -237,7 +291,7 @@ trait ExternalContactTrait
         }
 
         // "config_id":"42b34949e138eb6e027c123cba77fAAA"
-        $modelContactWay->recordConfigId($contactWayInfo['_id'], $res, time());
+        $modelContactWay->recordConfigId($contactWayInfo['id'], $res, time());
         return $res;
     }
 
