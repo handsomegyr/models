@@ -99,8 +99,12 @@ class Authorizer extends \App\Common\Models\Qyweixin\Authorize\Authorizer
     public function updateAccessToken($id, $access_token, $refresh_token, $expires_in, $permanent_code, $extInfo, $memo = array())
     {
         $updateData = array();
-        $updateData['access_token'] = $access_token;
-        $updateData['refresh_token'] = $refresh_token;
+        if (!empty($access_token)) {
+            $updateData['access_token'] = $access_token;
+        }
+        if (!empty($refresh_token)) {
+            $updateData['refresh_token'] = $refresh_token;
+        }
         if (!empty($permanent_code)) {
             $updateData['permanent_code'] = $permanent_code;
         }
