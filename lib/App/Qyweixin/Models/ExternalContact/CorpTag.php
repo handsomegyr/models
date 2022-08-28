@@ -21,8 +21,47 @@ class CorpTag extends \App\Common\Models\Qyweixin\ExternalContact\CorpTag
         return $info;
     }
 
+    public function clearExist($authorizer_appid, $provider_appid, $now)
+    {
+        $updateData = array('is_exist' => 0);
+        $updateData['get_time'] = \App\Common\Utils\Helper::getCurrentTime($now);
+        return $this->update(
+            array(
+                'authorizer_appid' => $authorizer_appid,
+                'provider_appid' => $provider_appid
+            ),
+            array('$set' => $updateData)
+        );
+    }
+
     public function syncCorpTagList($authorizer_appid, $provider_appid, $res, $now)
     {
+        // {
+        //     "errcode": 0,
+        //     "errmsg": "ok",
+        //     "tag_group": [{
+        //         "group_id": "TAG_GROUPID1",
+        //         "group_name": "GOURP_NAME",
+        //         "create_time": 1557838797,
+        //         "order": 1,
+        //         "deleted": false,
+        //         "tag": [{
+        //                 "id": "TAG_ID1",
+        //                 "name": "NAME1",
+        //                 "create_time": 1557838797,
+        //                 "order": 1,
+        //                 "deleted": false
+        //             },
+        //             {
+        //                 "id": "TAG_ID2",
+        //                 "name": "NAME2",
+        //                 "create_time": 1557838797,
+        //                 "order": 2,
+        //                 "deleted": true
+        //             }
+        //         ]
+        //     }]
+        // }
         if (!empty($res['tag_group'])) {
             foreach ($res['tag_group'] as $tagGroupInfo) {
 
@@ -51,6 +90,8 @@ class CorpTag extends \App\Common\Models\Qyweixin\ExternalContact\CorpTag
                     $data['tag_group_order'] = $tagGroupInfo['order'];
                     $data['tag_group_deleted'] = (isset($tagGroupInfo['deleted']) ? intval($tagGroupInfo['deleted']) : 0);
                     $data['provider_appid'] = $provider_appid;
+                    // 通过这个字段来表明企业微信那边有这条记录
+                    $data['is_exist'] = 1;
                     $data['get_time'] = \App\Common\Utils\Helper::getCurrentTime($now);
                     if (!empty($info)) {
                         $this->update(array('_id' => $info['_id']), array('$set' => $data));

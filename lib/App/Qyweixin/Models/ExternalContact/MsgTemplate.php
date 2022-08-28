@@ -11,12 +11,13 @@ class MsgTemplate extends \App\Common\Models\Qyweixin\ExternalContact\MsgTemplat
      * @param string $authorizer_appid              
      * @param string $agentid         
      */
-    public function getInfoByMomentId($msgid, $authorizer_appid, $agentid)
+    public function getInfoByMsgid($msgid, $authorizer_appid, $provider_appid, $agentid)
     {
         $query = array();
         $query['msgid'] = $msgid;
-        $query['authorizer_appid'] = $authorizer_appid;
         $query['agentid'] = $agentid;
+        $query['authorizer_appid'] = $authorizer_appid;
+        // $query['provider_appid'] = $provider_appid;
         $info = $this->findOne($query);
 
         return $info;
@@ -63,7 +64,7 @@ class MsgTemplate extends \App\Common\Models\Qyweixin\ExternalContact\MsgTemplat
             foreach ($res['group_msg_list'] as $groupmsgInfo) {
                 $msgid = $groupmsgInfo['msgid'];
                 $create_time = $groupmsgInfo['create_time'];
-                $info = $this->getInfoByMomentId($msgid, $authorizer_appid, $agentid);
+                $info = $this->getInfoByMsgid($msgid, $authorizer_appid, $provider_appid, $agentid);
                 $data = array();
                 $data['chat_type'] = $chat_type;
                 $data['provider_appid'] = $provider_appid;

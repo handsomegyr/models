@@ -22,9 +22,10 @@ class TagUser extends \App\Common\Models\Qyweixin\Contact\TagUser
         return $info;
     }
 
-    public function clearExist($tagid, $authorizer_appid, $provider_appid)
+    public function clearExist($tagid, $authorizer_appid, $provider_appid, $now)
     {
         $updateData = array('is_exist' => 0);
+        $updateData['get_time'] = \App\Common\Utils\Helper::getCurrentTime($now);
         return $this->update(
             array(
                 'tagid' => $tagid,
@@ -37,7 +38,7 @@ class TagUser extends \App\Common\Models\Qyweixin\Contact\TagUser
 
     public function syncTagUserList($tagid, $authorizer_appid, $provider_appid, $res, $now)
     {
-        $this->clearExist($tagid, $authorizer_appid, $provider_appid);
+        $this->clearExist($tagid, $authorizer_appid, $provider_appid, $now);
         /**
          * {
          * "errcode": 0,

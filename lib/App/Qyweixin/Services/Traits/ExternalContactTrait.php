@@ -148,6 +148,21 @@ trait ExternalContactTrait
         );
     }
 
+    // 获取企业已配置的「联系我」方式
+    public function getContactWay($contactWayInfo)
+    {
+        $modelContactWay = new \App\Qyweixin\Models\ExternalContact\ContactWay();
+        $res = $this->getQyWeixinObject()
+            ->getExternalContactManager()
+            ->getContactWayManager()
+            ->get($contactWayInfo['config_id']);
+        if (!empty($res['errcode'])) {
+            throw new \Exception($res['errmsg'], $res['errcode']);
+        }
+        $modelContactWay->recordContactWayInfo($contactWayInfo, $res, time());
+        return $res;
+    }
+
     // 配置客户联系「联系我」方式
     public function addContactWay($contactWayInfo)
     {
@@ -177,41 +192,95 @@ trait ExternalContactTrait
             $contactWay->chat_expires_in = $contactWayInfo['chat_expires_in'];
             $contactWay->unionid = $contactWayInfo['unionid'];
 
-            $conclusion = new \Qyweixin\Model\ExternalContact\Conclusion();
-            $text = new \Qyweixin\Model\ExternalContact\Conclusion\Text($contactWayInfo['conclusions_text_content']);
-            $conclusion->text = $text;
-
-            if (!empty($contactWayInfo['conclusions_image_media'])) {
-                if (!empty($contactWayInfo['conclusions_image_pic_url'])) {
-                    $image = new \Qyweixin\Model\ExternalContact\Conclusion\Image("", $contactWayInfo['conclusions_image_pic_url']);
+            $conclusions4Config = array();
+            if (!empty($contactWayInfo['conclusions'])) {
+                if (is_string($contactWayInfo['conclusions'])) {
+                    $conclusions4Config = \json_decode($contactWayInfo['conclusions'], true);
                 } else {
-                    $res = $this->uploadMediaByApi($contactWayInfo['conclusions_image_media'], "image", $contactWayInfo['conclusions_image_media_id'], $contactWayInfo['conclusions_image_media_created_at']);
-                    // 发生了改变就更新
-                    if ($res['media_id'] != $contactWayInfo['conclusions_image_media_id']) {
-                        $modelContactWay->recordMediaId($contactWayInfo['_id'], $res, time());
-                    }
-                    $image = new \Qyweixin\Model\ExternalContact\Conclusion\Image($res['media_id'], "");
+                    $conclusions4Config = $contactWayInfo['conclusions'];
                 }
-                $conclusion->image = $image;
             }
+            if (!empty($conclusions4Config)) {
+                // {
+                //     "text": 
+                //     {
+                //         "content":"文本消息内容"
+                //     },
+                //     "image": 
+                //     {
+                //         "media_id": "MEDIA_ID"
+                //     },
+                //     "link":
+                //     {
+                //         "title": "消息标题",
+                //         "picurl": "https://example.pic.com/path",
+                //         "desc": "消息描述",
+                //         "url": "https://example.link.com/path"
+                //     },
+                //     "miniprogram":
+                //     {
+                //         "title": "消息标题",
+                //         "pic_media_id": "MEDIA_ID",
+                //         "appid": "wx8bd80126147dfAAA",
+                //         "page": "/path/index.html"
+                //     }
+                // }
 
-            if (!empty($contactWayInfo['conclusions_link_url'])) {
-                $link = new \Qyweixin\Model\ExternalContact\Conclusion\Link($contactWayInfo['conclusions_link_title'], $contactWayInfo['conclusions_link_picurl'], $contactWayInfo['conclusions_link_desc'], $contactWayInfo['conclusions_link_url']);
-                $conclusion->link = $link;
-            }
-
-            if (!empty($contactWayInfo['conclusions_miniprogram_appid'])) {
-                if (!empty($contactWayInfo['conclusions_miniprogram_pic_media'])) {
-                    $res2 = $this->uploadMediaByApi($contactWayInfo['conclusions_miniprogram_pic_media'], "image", $contactWayInfo['conclusions_miniprogram_pic_media_id'], $contactWayInfo['conclusions_miniprogram_pic_media_created_at']);
-                    // 发生了改变就更新
-                    if ($res2['media_id'] != $contactWayInfo['conclusions_miniprogram_pic_media_id']) {
-                        $modelContactWay->recordMediaId4Miniprogram($contactWayInfo['_id'], $res2, time());
+                $conclusion = new \Qyweixin\Model\ExternalContact\Conclusion();
+                if (isset($conclusions4Config['text']['content'])) {
+                    $text = new \Qyweixin\Model\ExternalContact\Conclusion\Text($conclusions4Config['text']['content']);
+                    $conclusion->text = $text;
+                }
+                if (isset($conclusions4Config['image'])) {
+                    //构造结束语使用image消息时，只能填写meida_id字段,获取含有image结构的联系我方式时，返回pic_url字段。
+                    if (!empty($conclusions4Config['image']['pic_url'])) {
+                        if (empty($conclusions4Config['image']['local_image_media'])) {
+                            $conclusions4Config['image']['local_image_media'] = $conclusions4Config['image']['pic_url'];
+                        }
+                    }
+                    if (!empty($conclusions4Config['image']['local_image_media'])) {
+                        $media_id = empty($conclusions4Config['image']['media_id']) ? '' : $conclusions4Config['image']['media_id'];
+                        $name = empty($conclusions4Config['image']['local_image_media_name']) ? '联系我' . \uniqid() : $conclusions4Config['image']['local_image_media_name'];
+                        $type = 'image';
+                        $res = $this->getOrCreateMediaByMediaId($media_id, $name, $type, $conclusions4Config['image']['local_image_media']);
+                        $image = new \Qyweixin\Model\ExternalContact\Conclusion\Image($res['media_id'], "");
+                    } else {
+                        throw new \Exception('请本地上传一张图片');
+                    }
+                    if (!empty($image)) {
+                        $conclusion->image = $image;
                     }
                 }
-                $miniprogram = new \Qyweixin\Model\ExternalContact\Conclusion\Miniprogram($contactWayInfo['conclusions_miniprogram_title'], $res2['media_id'], $contactWayInfo['conclusions_miniprogram_appid'], $contactWayInfo['conclusions_miniprogram_page']);
-                $conclusion->miniprogram = $miniprogram;
+                if (isset($conclusions4Config['link'])) {
+                    $link = new \Qyweixin\Model\ExternalContact\Conclusion\Link(
+                        $conclusions4Config['link']['title'],
+                        $conclusions4Config['link']['picurl'],
+                        $conclusions4Config['link']['desc'],
+                        $conclusions4Config['link']['url']
+                    );
+                    $conclusion->link = $link;
+                }
+                if (isset($conclusions4Config['miniprogram'])) {
+                    $pic_media_id = "";
+                    if (!empty($conclusions4Config['miniprogram']['local_image_media'])) {
+                        $media_id = empty($conclusions4Config['miniprogram']['media_id']) ? '' : $conclusions4Config['miniprogram']['media_id'];
+                        $name = empty($conclusions4Config['miniprogram']['local_image_media_name']) ? '联系我' . \uniqid() : $conclusions4Config['miniprogram']['local_image_media_name'];
+                        $type = 'image';
+                        $res = $this->getOrCreateMediaByMediaId($media_id, $name, $type, $conclusions4Config['miniprogram']['local_image_media']);
+                        $pic_media_id = $res['media_id'];
+                    } else {
+                        throw new \Exception('请本地上传一张图片');
+                    }
+                    $miniprogram = new \Qyweixin\Model\ExternalContact\Conclusion\Miniprogram(
+                        $conclusions4Config['miniprogram']['title'],
+                        $pic_media_id,
+                        $conclusions4Config['miniprogram']['appid'],
+                        $conclusions4Config['miniprogram']['page']
+                    );
+                    $conclusion->miniprogram = $miniprogram;
+                }
+                $contactWay->conclusion = $conclusion;
             }
-            $contactWay->conclusion = $conclusion;
         }
 
         $res = $this->getQyWeixinObject()
@@ -222,7 +291,7 @@ trait ExternalContactTrait
         }
 
         // "config_id":"42b34949e138eb6e027c123cba77fAAA"
-        $modelContactWay->recordConfigId($contactWayInfo['_id'], $res, time());
+        $modelContactWay->recordConfigId($contactWayInfo['id'], $res, time());
         return $res;
     }
 
@@ -352,7 +421,9 @@ trait ExternalContactTrait
          *  ]
          * }
          */
-        $modelFollowUser->syncFollowUserList($this->authorizer_appid, $this->provider_appid, $res, time());
+        $now = time();
+        $modelFollowUser->clearExist($this->authorizer_appid, $this->provider_appid, $now);
+        $modelFollowUser->syncFollowUserList($this->authorizer_appid, $this->provider_appid, $res, $now);
         return $res;
     }
 
@@ -364,7 +435,12 @@ trait ExternalContactTrait
             ->getExternalContactManager()
             ->getExternalContactList($userid);
         if (!empty($res['errcode'])) {
-            throw new \Exception($res['errmsg'], $res['errcode']);
+            // 不存在外部联系人的关系 https://open.work.weixin.qq.com/devtool/query?e=84061
+            if ($res['errcode'] == 84061) {
+            } elseif ($res['errcode'] == 60111) { //https://open.work.weixin.qq.com/devtool/query?e=60111
+            } else {
+                throw new \Exception($res['errmsg'], $res['errcode']);
+            }
         }
         /**
          * {
@@ -386,12 +462,16 @@ trait ExternalContactTrait
     {
         $modelExternalUser = new \App\Qyweixin\Models\ExternalContact\ExternalUser();
         $external_userid = $userInfo['external_userid'];
-
+        $cursor = "";
         $res = $this->getQyWeixinObject()
             ->getExternalContactManager()
-            ->get($external_userid);
+            ->get($external_userid, $cursor);
         if (!empty($res['errcode'])) {
-            throw new \Exception($res['errmsg'], $res['errcode']);
+            // {"errcode":84061,"errmsg":"not external contact, hint: [1646594702057801817545474], from ip: 115.29.169.68, more info at https://open.work.weixin.qq.com/devtool/query?e=84061","follow_user":[]}
+            if ($res['errcode'] == 84061) {
+            } else {
+                throw new \Exception($res['errmsg'], $res['errcode']);
+            }
         }
         /**
          * {
@@ -404,14 +484,34 @@ trait ExternalContactTrait
            
          * }
          */
-        $modelExternalUser->updateExternalUserInfoByApi($userInfo, $res, time());
+        $now = time();
+        $modelExternalUser->updateExternalUserInfoByApi($userInfo, $res, $now);
 
         // 同步follow_user
+        $modelExternalUserFollowUser = new \App\Qyweixin\Models\ExternalContact\ExternalUserFollowUser();
+        $modelExternalUserFollowUser->clearExist($external_userid, $this->authorizer_appid, $this->provider_appid, $now);
+
         if (!empty($res['follow_user'])) {
-            $modelExternalUserFollowUser = new \App\Qyweixin\Models\ExternalContact\ExternalUserFollowUser();
-            $modelExternalUserFollowUser->syncFollowUserList($external_userid, $this->authorizer_appid, $this->provider_appid, $res, time());
+            $modelExternalUserFollowUser->syncFollowUserList($external_userid, $this->authorizer_appid, $this->provider_appid, $res, $now);
         }
 
+        if (!empty($res['next_cursor'])) {
+            do {
+                $cursor = $res['next_cursor'];
+                $res = $this->getQyWeixinObject()
+                    ->getExternalContactManager()
+                    ->get($external_userid, $cursor);
+                if (!empty($res['errcode'])) {
+                    throw new \Exception($res['errmsg'], $res['errcode']);
+                }
+                if (!empty($res['follow_user'])) {
+                    $modelExternalUserFollowUser->syncFollowUserList($external_userid, $this->authorizer_appid, $this->provider_appid, $res, $now);
+                }
+                if (empty($res['next_cursor'])) {
+                    break;
+                }
+            } while ($res['next_cursor']);
+        }
         return $res;
     }
 
@@ -454,12 +554,12 @@ trait ExternalContactTrait
     }
 
     //获取企业标签库
-    public function getCorpTagList($tag_id)
+    public function getCorpTagList($tag_id = array(), $group_id = array())
     {
         $modelCorpTag = new \App\Qyweixin\Models\ExternalContact\CorpTag();
         $res = $this->getQyWeixinObject()
             ->getExternalContactManager()
-            ->getCorpTagList($tag_id);
+            ->getCorpTagList($tag_id, $group_id);
         if (!empty($res['errcode'])) {
             throw new \Exception($res['errmsg'], $res['errcode']);
         }
@@ -497,7 +597,11 @@ trait ExternalContactTrait
          *    ]
          * }
          */
-        $modelCorpTag->syncCorpTagList($this->authorizer_appid, $this->provider_appid, $res, time());
+        $now = time();
+        if (empty($tag_id) && empty($group_id)) {
+            $modelCorpTag->clearExist($this->authorizer_appid, $this->provider_appid, $now);
+        }
+        $modelCorpTag->syncCorpTagList($this->authorizer_appid, $this->provider_appid, $res, $now);
         return $res;
     }
 
@@ -535,13 +639,13 @@ trait ExternalContactTrait
     }
 
     //获取客户群列表
-    public function getGroupChatList($status_filter = 0, $owner_filter = array(), $offset = 0, $limit = 1000)
+    public function getGroupChatList($status_filter = 0, $owner_filter = array(), $cursor = '', $limit = 1000)
     {
         $modelGroupChat = new \App\Qyweixin\Models\ExternalContact\GroupChat();
         $res = $this->getQyWeixinObject()
             ->getExternalContactManager()
             ->getGroupChatManager()
-            ->getGroupchatList($status_filter, $owner_filter, $offset, $limit);
+            ->getGroupchatList($status_filter, $owner_filter, $cursor, $limit);
         if (!empty($res['errcode'])) {
             throw new \Exception($res['errmsg'], $res['errcode']);
         }
@@ -558,12 +662,29 @@ trait ExternalContactTrait
          *  }]
          * }
          */
-        $modelGroupChat->syncGroupChatList($this->authorizer_appid, $this->provider_appid, $res, time());
+        $now = time();
+        $modelGroupChat->syncGroupChatList($this->authorizer_appid, $this->provider_appid, $res, $now);
+        if (!empty($res['next_cursor'])) {
+            do {
+                $cursor = $res['next_cursor'];
+                $res = $this->getQyWeixinObject()
+                    ->getExternalContactManager()
+                    ->getGroupChatManager()
+                    ->getGroupchatList($status_filter, $owner_filter, $cursor, $limit);
+                if (!empty($res['errcode'])) {
+                    throw new \Exception($res['errmsg'], $res['errcode']);
+                }
+                $modelGroupChat->syncGroupChatList($this->authorizer_appid, $this->provider_appid, $res, $now);
+                if (empty($res['next_cursor'])) {
+                    break;
+                }
+            } while ($res['next_cursor']);
+        }
         return $res;
     }
 
     //获取客户群详情
-    public function getGroupChatInfo($groupChatInfo)
+    public function getGroupChatInfo($groupChatInfo, $need_name = 1)
     {
         $modelGroupChat = new \App\Qyweixin\Models\ExternalContact\GroupChat();
         $chatid = $groupChatInfo['chat_id'];
@@ -571,9 +692,14 @@ trait ExternalContactTrait
         $res = $this->getQyWeixinObject()
             ->getExternalContactManager()
             ->getGroupChatManager()
-            ->get($chatid);
+            ->get($chatid, $need_name);
         if (!empty($res['errcode'])) {
-            throw new \Exception($res['errmsg'], $res['errcode']);
+            //chatid不存在 https://open.work.weixin.qq.com/devtool/query?e=40050
+            if ($res['errcode'] == 40050) {
+            } else if ($res['errcode'] == 49008) { //群已经解散 https://open.work.weixin.qq.com/devtool/query?e=49008
+            } else {
+                throw new \Exception($res['errmsg'], $res['errcode']);
+            }
         }
         /**
          * {
@@ -603,12 +729,14 @@ trait ExternalContactTrait
          *      }]
          *  }
          */
-        $modelGroupChat->updateGroupChatInfoByApi($groupChatInfo, $res, time());
+        $now = time();
+        $modelGroupChat->updateGroupChatInfoByApi($groupChatInfo, $res, $now);
 
         // 同步member_list
+        $modelGroupChatMember = new \App\Qyweixin\Models\ExternalContact\GroupChatMember();
+        $modelGroupChatMember->clearExist($chatid, $this->authorizer_appid, $this->provider_appid, $now);
         if (!empty($res['group_chat']['member_list'])) {
-            $modelGroupChatMember = new \App\Qyweixin\Models\ExternalContact\GroupChatMember();
-            $modelGroupChatMember->syncMemberList($chatid, $this->authorizer_appid, $this->provider_appid, $res, time());
+            $modelGroupChatMember->syncMemberList($chatid, $this->authorizer_appid, $this->provider_appid, $res, $now);
         }
 
         return $res;
@@ -625,6 +753,233 @@ trait ExternalContactTrait
             throw new \Exception($res['errmsg'], $res['errcode']);
         }
         $modelMoment->syncMomentList($this->authorizer_appid, $this->provider_appid, $res, time());
+        /**
+         * {
+         * "errcode":0,
+         * "errmsg":"ok",
+         * "next_cursor":"CURSOR",
+         * "moment_list":[
+         *     {
+         *        "moment_id":"momxxx",
+         *         "creator":"xxxx",
+         *         "create_time":"xxxx",
+         *         "create_type":1,
+         *     }
+         * ]
+         * }
+         */
+        if (!empty($res['moment_list'])) {
+            foreach ($res['moment_list'] as $momentInfo) {
+                $moment_id = $momentInfo['moment_id'];
+                $create_type = intval($momentInfo['create_type']); //朋友圈创建来源。0：企业 1：个人
+                if ($create_type == 0) { //仅支持企业发表的朋友圈id
+                    try {
+                        $cursor2 = "";
+                        do {
+                            $res4MomentTask = $this->getMomentTask($moment_id, 1000, $cursor2);
+                            // 分页游标，下次请求时填写以获取之后分页的记录，如果已经没有更多的数据则返回空
+                            if (empty($res4MomentTask['next_cursor'])) {
+                                $cursor2 = "";
+                            } else {
+                                $cursor2 = $res4MomentTask['next_cursor'];
+                            }
+                        } while (!empty($cursor2));
+                    } catch (\Exception $th) {
+                        //throw $th;
+                    }
+                } else {
+                    $userid = $momentInfo['creator'];
+                    try {
+                        $cursor2 = "";
+                        do {
+                            $res4CustomerList = $this->getMomentCustomerList($moment_id, $userid, 1000, $cursor2);
+                            // 分页游标，下次请求时填写以获取之后分页的记录，如果已经没有更多的数据则返回空
+                            if (empty($res4CustomerList['next_cursor'])) {
+                                $cursor2 = "";
+                            } else {
+                                $cursor2 = $res4CustomerList['next_cursor'];
+                            }
+                        } while (!empty($cursor2));
+                    } catch (\Exception $th) {
+                        //throw $th;
+                    }
+
+                    try {
+                        $cursor3 = "";
+                        do {
+                            $res4SendResult = $this->getMomentSendResult($moment_id, $userid, 5000, $cursor3);
+                            // 分页游标，下次请求时填写以获取之后分页的记录，如果已经没有更多的数据则返回空
+                            if (empty($res4SendResult['next_cursor'])) {
+                                $cursor3 = "";
+                            } else {
+                                $cursor3 = $res4SendResult['next_cursor'];
+                            }
+                        } while (!empty($cursor3));
+                    } catch (\Exception $th) {
+                        //throw $th;
+                    }
+
+                    try {
+                        $res4SendResult = $this->getMomentComments($moment_id, $userid);
+                    } catch (\Exception $th) {
+                        //throw $th;
+                    }
+                }
+            }
+        }
+        return $res;
+    }
+
+    // 获取客户朋友圈企业发表的列表
+    public function getMomentTask($moment_id, $limit = 1000, $cursor = "")
+    {
+        $modelMomentTaskUser = new \App\Qyweixin\Models\ExternalContact\MomentTaskUser();
+        $res = $this->getQyWeixinObject()
+            ->getExternalContactManager()
+            ->getMomentManager()->getMomentTask($moment_id, $limit, $cursor);
+        if (!empty($res['errcode'])) {
+            throw new \Exception($res['errmsg'], $res['errcode']);
+        }
+        // {
+        //     "errcode":0,
+        //     "errmsg":"ok",
+        //     "next_cursor":"CURSOR",
+        //     "task_list":[
+        //         {
+        //             "userid":"zhangsan",
+        //             "publish_status":1
+        //         }
+        //     ]
+        // }
+        $modelMomentTaskUser->syncMomentTaskList($moment_id, $this->authorizer_appid, $this->provider_appid, $res, time());
+
+        if (!empty($res['task_list'])) {
+            foreach ($res['task_list'] as $task) {
+                $userid = $task['userid'];
+                try {
+                    $cursor2 = "";
+                    do {
+                        $res4CustomerList = $this->getMomentCustomerList($moment_id, $userid, 1000, $cursor2);
+                        // 分页游标，下次请求时填写以获取之后分页的记录，如果已经没有更多的数据则返回空
+                        if (empty($res4CustomerList['next_cursor'])) {
+                            $cursor2 = "";
+                        } else {
+                            $cursor2 = $res4CustomerList['next_cursor'];
+                        }
+                    } while (!empty($cursor2));
+                } catch (\Exception $th) {
+                    //throw $th;
+                }
+
+                try {
+                    $cursor3 = "";
+                    do {
+                        $res4SendResult = $this->getMomentSendResult($moment_id, $userid, 5000, $cursor3);
+                        // 分页游标，下次请求时填写以获取之后分页的记录，如果已经没有更多的数据则返回空
+                        if (empty($res4SendResult['next_cursor'])) {
+                            $cursor3 = "";
+                        } else {
+                            $cursor3 = $res4SendResult['next_cursor'];
+                        }
+                    } while (!empty($cursor3));
+                } catch (\Exception $th) {
+                    //throw $th;
+                }
+
+                try {
+                    $res4SendResult = $this->getMomentComments($moment_id, $userid);
+                } catch (\Exception $th) {
+                    //throw $th;
+                }
+            }
+        }
+
+        return $res;
+    }
+
+    // 获取客户朋友圈发表时选择的可见范围
+    public function getMomentCustomerList($moment_id, $userid, $limit = 1000, $cursor = "")
+    {
+        $modelMomentCustomer = new \App\Qyweixin\Models\ExternalContact\MomentCustomer();
+        $res = $this->getQyWeixinObject()
+            ->getExternalContactManager()
+            ->getMomentManager()->getMomentCustomerList($moment_id, $userid, $limit, $cursor);
+        if (!empty($res['errcode'])) {
+            throw new \Exception($res['errmsg'], $res['errcode']);
+        }
+        // {
+        //     "errcode":0,
+        //     "errmsg":"ok",
+        //     "next_cursor":"CURSOR",
+        //     "customer_list":[
+        //         {
+        //             "external_userid":"woAJ2GCAAAXtWyujaWJHDDGi0mACCCC  "
+        //         }
+        //     ]
+        // }
+        $modelMomentCustomer->syncMomentCustomerList($userid, $moment_id, $this->authorizer_appid, $this->provider_appid, $res, time());
+        return $res;
+    }
+
+    // 获取客户朋友圈发表后的可见客户列表
+    public function getMomentSendResult($moment_id, $userid, $limit = 5000, $cursor = "")
+    {
+        $modelMomentSendResult = new \App\Qyweixin\Models\ExternalContact\MomentSendResult();
+        $res = $this->getQyWeixinObject()
+            ->getExternalContactManager()
+            ->getMomentManager()->getMomentSendResult($moment_id, $userid, $limit, $cursor);
+        if (!empty($res['errcode'])) {
+            throw new \Exception($res['errmsg'], $res['errcode']);
+        }
+        // {
+        //     "errcode":0,
+        //     "errmsg":"ok",
+        //     "next_cursor":"CURSOR",
+        //     "customer_list":[
+        //         {
+        //             "external_userid":"woAJ2GCAAAXtWyujaWJHDDGi0mACCCC"
+        //         }
+        //     ]
+        // }
+        $modelMomentSendResult->syncMomentCustomerList($userid, $moment_id, $this->authorizer_appid, $this->provider_appid, $res, time());
+        return $res;
+    }
+
+    // 获取客户朋友圈的互动数据
+    public function getMomentComments($moment_id, $userid)
+    {
+        $modelMomentComment = new \App\Qyweixin\Models\ExternalContact\MomentComment();
+        $res = $this->getQyWeixinObject()
+            ->getExternalContactManager()
+            ->getMomentManager()->getMomentComments($moment_id, $userid);
+        if (!empty($res['errcode'])) {
+            throw new \Exception($res['errmsg'], $res['errcode']);
+        }
+        // {
+        //     "errcode":0,
+        //     "errmsg":"ok",
+        //     "comment_list":[
+        //         {
+        //             "external_userid":"woAJ2GCAAAXtWyujaWJHDDGi0mACAAAA ",
+        //             "create_time":1605172726
+        //         },
+        //         {
+        //             "userid":"zhangshan ",
+        //             "create_time":1605172729
+        //         }
+        //     ],
+        //     "like_list":[
+        //         {
+        //             "external_userid":"woAJ2GCAAAXtWyujaWJHDDGi0mACBBBB ",
+        //             "create_time":1605172726
+        //         },
+        //         {
+        //             "userid":"zhangshan ",
+        //             "create_time":1605172720
+        //         }
+        //     ]
+        // }
+        $modelMomentComment->syncMomentBehaviorList($userid, $moment_id, $this->authorizer_appid, $this->provider_appid, $res, time());
         return $res;
     }
 
@@ -759,13 +1114,13 @@ trait ExternalContactTrait
     }
 
     //获取客户群统计数据
-    public function getGroupChatStatistic($day_begin_time, array $owner_filter, $order_by = 1, $order_asc = 0, $offset = 0, $limit = 1000)
+    public function getGroupChatStatistic($day_begin_time, $day_end_time, array $owner_filter, $order_by = 1, $order_asc = 0, $offset = 0, $limit = 1000)
     {
         $modelGroupChatStatisticByUserid = new \App\Qyweixin\Models\ExternalContact\GroupChatStatisticByUserid();
         $res = $this->getQyWeixinObject()
             ->getExternalContactManager()
             ->getGroupChatManager()
-            ->statistic($day_begin_time, $owner_filter, $order_by, $order_asc, $offset, $limit);
+            ->statistic($day_begin_time, $day_end_time, $owner_filter, $order_by, $order_asc, $offset, $limit);
         if (!empty($res['errcode'])) {
             throw new \Exception($res['errmsg'], $res['errcode']);
         }
@@ -793,17 +1148,94 @@ trait ExternalContactTrait
         return $res;
     }
 
+    // 获取客户群统计数据 按自然日聚合的方式
+    public function getGroupChatStatisticGroupByDay($userid, $day_begin_time, $day_end_time)
+    {
+        $modelGroupChatStatisticByUserid = new \App\Qyweixin\Models\ExternalContact\GroupChatStatisticByUserid();
+        $owner_filter = array();
+        $owner_filter['userid_list'] = array($userid);
+        $res = $this->getQyWeixinObject()
+            ->getExternalContactManager()
+            ->getGroupChatManager()
+            ->statisticGroupByDay($day_begin_time, $day_end_time, $owner_filter);
+        if (!empty($res['errcode'])) {
+            throw new \Exception($res['errmsg'], $res['errcode']);
+        }
+        // {
+        //     "errcode": 0,
+        //     "errmsg": "ok",
+        //     "items": [{
+        //             "stat_time": 1600272000,
+        //             "data": {
+        //                 "new_chat_cnt": 2,
+        //                 "chat_total": 2,
+        //                 "chat_has_msg": 0,
+        //                 "new_member_cnt": 0,
+        //                 "member_total": 6,
+        //                 "member_has_msg": 0,
+        //                 "msg_total": 0,
+        //                 "migrate_trainee_chat_cnt": 3
+        //             }
+        //         },
+        //         {
+        //             "stat_time": 1600358400,
+        //             "data": {
+        //                 "new_chat_cnt": 2,
+        //                 "chat_total": 2,
+        //                 "chat_has_msg": 0,
+        //                 "new_member_cnt": 0,
+        //                 "member_total": 6,
+        //                 "member_has_msg": 0,
+        //                 "msg_total": 0,
+        //                 "migrate_trainee_chat_cnt": 3
+        //             }
+        //         }
+        //     ]
+        // }
+        $modelGroupChatStatisticByUserid->syncGroupchatStatisticListGroupByDay($userid, $this->authorizer_appid, $this->provider_appid, $res, time());
+        return $res;
+    }
+
     // 获取企业的全部群发记录
     public function getGroupmsgList($chat_type, $start_time, $end_time, $creator = "", $filter_type = 2, $limit = 100, $cursor = "")
     {
-        $modelMsgTemplate = new \App\Qyweixin\Models\ExternalContact\MsgTemplate();
+        $modelGroupMsg = new \App\Qyweixin\Models\ExternalContact\GroupMsg();
         $res = $this->getQyWeixinObject()
             ->getExternalContactManager()
             ->getGroupMsgManager()->getGroupmsgList($chat_type, $start_time, $end_time, $creator, $filter_type, $limit, $cursor);
         if (!empty($res['errcode'])) {
             throw new \Exception($res['errmsg'], $res['errcode']);
         }
-        $modelMsgTemplate->syncGroupmsgList($this->authorizer_appid, $this->provider_appid, $this->agentid, $chat_type, $res, time());
+        $modelGroupMsg->syncGroupmsgList($this->authorizer_appid, $this->provider_appid, $this->agentid, $chat_type, $res, time());
+        // {
+        //     "errcode":0,
+        //     "errmsg":"ok",
+        //     "next_cursor":"CURSOR",
+        //     "group_msg_list":[
+        //         {
+        //             "msgid":"msgGCAAAXtWyujaWJHDDGi0mAAAA",
+        //         }
+        //     ]
+        // }
+        if (!empty($res['group_msg_list'])) {
+            foreach ($res['group_msg_list'] as $groupmsgInfo) {
+                $msgid = $groupmsgInfo['msgid'];
+                try {
+                    $cursor2 = "";
+                    do {
+                        $res4GroupmsgTask = $this->getGroupmsgTask($msgid, 1000, $cursor2);
+                        // 分页游标，下次请求时填写以获取之后分页的记录，如果已经没有更多的数据则返回空
+                        if (empty($res4GroupmsgTask['next_cursor'])) {
+                            $cursor2 = "";
+                        } else {
+                            $cursor2 = $res4GroupmsgTask['next_cursor'];
+                        }
+                    } while (!empty($cursor2));
+                } catch (\Exception $th) {
+                    //throw $th;
+                }
+            }
+        }
         return $res;
     }
 
@@ -818,12 +1250,46 @@ trait ExternalContactTrait
             throw new \Exception($res['errmsg'], $res['errcode']);
         }
         $modelGroupMsgTask->syncTaskList($msgid, $this->authorizer_appid, $this->provider_appid, $this->agentid, $res, time());
+        /**
+         *{
+         *"errcode": 0,
+         *"errmsg": "ok",
+         *"next_cursor":"CURSOR",
+         *"task_list": [
+         *    {
+         *        "userid": "zhangsan",
+         *        "status": 1,
+         *        "send_time": 1552536375
+         *    }
+         *]
+         *}
+         */
+        if (!empty($res['task_list'])) {
+            foreach ($res['task_list'] as $useridInfo) {
+                $userid = $useridInfo['userid'];
+                try {
+                    $cursor2 = "";
+                    do {
+                        $res4SendResult = $this->getGroupMsgSendResult($msgid, $userid, 1000, $cursor2);
+                        // 分页游标，下次请求时填写以获取之后分页的记录，如果已经没有更多的数据则返回空
+                        if (empty($res4SendResult['next_cursor'])) {
+                            $cursor2 = "";
+                        } else {
+                            $cursor2 = $res4SendResult['next_cursor'];
+                        }
+                    } while (!empty($cursor2));
+                } catch (\Exception $th) {
+                    //throw $th;
+                }
+            }
+        }
         return $res;
     }
 
     // 获取企业群发成员执行结果
     public function getGroupMsgSendResult($msgid, $userid, $limit = 1000, $cursor = "")
     {
+        $modelGroupMsgSendResult = new \App\Qyweixin\Models\ExternalContact\GroupMsgSendResult();
         $res = $this->getQyWeixinObject()
             ->getExternalContactManager()
             ->getGroupMsgManager()->getGroupMsgSendResult($msgid, $userid, $limit, $cursor);
@@ -845,7 +1311,6 @@ trait ExternalContactTrait
         // 同步数据到结果表
         // 同步detail_list
         if (!empty($res['send_list'])) {
-            $modelGroupMsgSendResult = new \App\Qyweixin\Models\ExternalContact\GroupMsgSendResult();
             $modelGroupMsgSendResult->syncDetailList($msgid, $userid, $this->authorizer_appid, $this->provider_appid, $this->agentid, $res, time());
         }
         return $res;

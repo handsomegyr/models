@@ -32,6 +32,19 @@ class User extends \App\Common\Models\Qyweixin\Contact\User
         return $info;
     }
 
+    public function clearExist($authorizer_appid, $provider_appid, $now)
+    {
+        $updateData = array('is_exist' => 0);
+        $updateData['sync_time'] = \App\Common\Utils\Helper::getCurrentTime($now);
+        return $this->update(
+            array(
+                'authorizer_appid' => $authorizer_appid,
+                'provider_appid' => $provider_appid
+            ),
+            array('$set' => $updateData)
+        );
+    }
+
     /**
      * 通过活动授权更新用户个人信息
      *
@@ -43,7 +56,7 @@ class User extends \App\Common\Models\Qyweixin\Contact\User
     public function updateUserInfoBySns($userid, $authorizer_appid, $provider_appid, $userInfo)
     {
         $checkInfo = $this->getInfoByUserId($userid, $authorizer_appid, $provider_appid);
-        $data = $this->getPrepareData($userInfo, $authorizer_appid, $provider_appid, $checkInfo);
+        $data = $this->getPrepareData($userInfo, $authorizer_appid, $provider_appid, $checkInfo, time());
         if (!empty($checkInfo)) {
             $affectRows = $this->update(array('_id' => $checkInfo['_id']), array('$set' => $data));
             return array_merge($checkInfo, $data);
@@ -97,7 +110,7 @@ class User extends \App\Common\Models\Qyweixin\Contact\User
                 $userInfo['error_msg'] = $e->getMessage();
             }
 
-            $data = $this->getPrepareData($userInfo, $authorizer_appid, $provider_appid, $checkInfo);
+            $data = $this->getPrepareData($userInfo, $authorizer_appid, $provider_appid, $checkInfo, time());
 
             if (!empty($checkInfo)) {
                 $affectRows = $this->update(array('_id' => $checkInfo['_id']), array('$set' => $data));
@@ -112,11 +125,18 @@ class User extends \App\Common\Models\Qyweixin\Contact\User
         return $checkInfo;
     }
 
-    public function updateUserInfoById($checkInfo, $userInfo)
+    public function updateUserInfoById($checkInfo, $userInfo, $now)
     {
+        // [errmsg] => userid not found, hint: [1646185148234890469598501], from ip: 115.29.169.68, more info at https://open.work.weixin.qq.com/devtool/query?e=60111
+        if (!empty($userInfo['errcode']) && $userInfo['errcode'] == 60111) {
+            $data = array();
+            $data['is_exist'] = 0;
+            $data['sync_time'] = \App\Common\Utils\Helper::getCurrentTime($now);
+            return $this->update(array('_id' => $checkInfo['_id']), array('$set' => $data));
+        }
         $authorizer_appid = $checkInfo['authorizer_appid'];
         $provider_appid = $checkInfo['provider_appid'];
-        $data = $this->getPrepareData($userInfo, $authorizer_appid, $provider_appid, $checkInfo);
+        $data = $this->getPrepareData($userInfo, $authorizer_appid, $provider_appid, $checkInfo, time());
         return $this->update(array('_id' => $checkInfo['_id']), array('$set' => $data));
     }
 
@@ -143,7 +163,7 @@ class User extends \App\Common\Models\Qyweixin\Contact\User
                     continue;
                 }
                 $checkInfo = $this->getInfoByUserId($userid, $authorizer_appid, $provider_appid);
-                $data = $this->getPrepareData($userInfo, $authorizer_appid, $provider_appid, $checkInfo);
+                $data = $this->getPrepareData($userInfo, $authorizer_appid, $provider_appid, $checkInfo, $now);
 
                 if (!empty($checkInfo)) {
                     return $this->update(array('_id' => $checkInfo['_id']), array('$set' => $data));
@@ -157,7 +177,7 @@ class User extends \App\Common\Models\Qyweixin\Contact\User
         }
     }
 
-    private function getPrepareData($userInfo, $authorizer_appid, $provider_appid, $checkInfo)
+    private function getPrepareData($userInfo, $authorizer_appid, $provider_appid, $checkInfo, $now)
     {
         /**
          * "errcode": 0, 
@@ -198,6 +218,7 @@ class User extends \App\Common\Models\Qyweixin\Contact\User
             $data['thumb_avatar'] = isset($userInfo['thumb_avatar']) ? $userInfo['thumb_avatar'] : '';
             $data['avatar'] = isset($userInfo['avatar']) ? $userInfo['avatar'] : '';
             $data['email'] = isset($userInfo['email']) ? $userInfo['email'] : '';
+            $data['biz_mail'] = isset($userInfo['biz_mail']) ? $userInfo['biz_mail'] : '';
             $data['telephone'] = isset($userInfo['telephone']) ? $userInfo['telephone'] : '';
             $data['department'] = isset($userInfo['department']) ? \App\Common\Utils\Helper::myJsonEncode($userInfo['department']) : '';
             $data['enable'] = isset($userInfo['enable']) ? intval($userInfo['enable']) : 0;
@@ -205,6 +226,7 @@ class User extends \App\Common\Models\Qyweixin\Contact\User
             $data['status'] = isset($userInfo['status']) ? intval($userInfo['status']) : 0;
             $data['qr_code'] = isset($userInfo['qr_code']) ? $userInfo['qr_code'] : '';
             $data['is_leader_in_dept'] = isset($userInfo['is_leader_in_dept']) ? \App\Common\Utils\Helper::myJsonEncode($userInfo['is_leader_in_dept']) : '';
+            $data['direct_leader'] = isset($userInfo['direct_leader']) ? \App\Common\Utils\Helper::myJsonEncode($userInfo['direct_leader']) : '';
             $data['department_order'] = isset($userInfo['order']) ? \App\Common\Utils\Helper::myJsonEncode($userInfo['order']) : '';
             $data['open_userid'] = isset($userInfo['open_userid']) ? $userInfo['open_userid'] : '';
             $data['hide_mobile'] = isset($userInfo['hide_mobile']) ? $userInfo['hide_mobile'] : '0';
@@ -250,6 +272,9 @@ class User extends \App\Common\Models\Qyweixin\Contact\User
             if (isset($userInfo['email'])) {
                 $data['email'] = $userInfo['email'];
             }
+            if (isset($userInfo['biz_mail'])) {
+                $data['biz_mail'] = $userInfo['biz_mail'];
+            }
             if (isset($userInfo['telephone'])) {
                 $data['telephone'] = $userInfo['telephone'];
             }
@@ -270,6 +295,9 @@ class User extends \App\Common\Models\Qyweixin\Contact\User
             }
             if (isset($userInfo['is_leader_in_dept'])) {
                 $data['is_leader_in_dept'] = \App\Common\Utils\Helper::myJsonEncode($userInfo['is_leader_in_dept']);
+            }
+            if (isset($userInfo['direct_leader'])) {
+                $data['direct_leader'] = \App\Common\Utils\Helper::myJsonEncode($userInfo['direct_leader']);
             }
             if (isset($userInfo['order'])) {
                 $data['department_order'] = \App\Common\Utils\Helper::myJsonEncode($userInfo['order']);
@@ -317,6 +345,8 @@ class User extends \App\Common\Models\Qyweixin\Contact\User
                 $data['main_department'] = $userInfo['main_department'];
             }
         }
+        $data['is_exist'] = 1;
+        $data['sync_time'] = \App\Common\Utils\Helper::getCurrentTime($now);
         return $data;
     }
 }

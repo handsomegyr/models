@@ -4,6 +4,20 @@ namespace App\Qyweixin\Services\Traits;
 
 trait MediaTrait
 {
+    // 根据media_id生成或获取对应的媒体信息
+    public function getOrCreateMediaByMediaId($media_id, $name, $type, $media)
+    {
+        $modelMedia = new \App\Qyweixin\Models\Media\Media();
+        if (!empty($media_id)) {
+            $mediaInfo = $modelMedia->getInfoByMediaId($media_id, $this->authorizer_appid);
+        }
+        if (empty($mediaInfo)) {
+            $mediaInfo = $modelMedia->createMedia($this->provider_appid, $this->authorizer_appid, $this->agentid, $name, $type, $media);
+        }
+        $res = $this->uploadMedia($mediaInfo);
+        return $res;
+    }
+
     /**
      * 所有文件size必须大于5个字节
      * 图片（image）：2MB，支持JPG,PNG格式

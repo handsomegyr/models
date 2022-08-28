@@ -12,6 +12,7 @@ class QyService
     use \App\Qyweixin\Services\Traits\MediaTrait;
     use \App\Qyweixin\Services\Traits\MenuTrait;
     use \App\Qyweixin\Services\Traits\ReplyMsgTrait;
+    use \App\Qyweixin\Services\Traits\TransferTrait;
 
     private $authorizer_appid = "";
 
@@ -90,17 +91,25 @@ class QyService
 
     public function getQyWeixinObject()
     {
-        if (empty($this->agentid)) {
-            $this->getToken4Authorizer();
-            $this->objQyWeixin = new \Qyweixin\Client($this->authorizerConfig['appid'], $this->authorizerConfig['appsecret']);
-            if (!empty($this->authorizerConfig['access_token'])) {
-                $this->objQyWeixin->setAccessToken($this->authorizerConfig['access_token']);
+        if (!empty($this->provider_appid)) {
+            $this->getToken4Provider();
+            $this->objQyWeixin = new \Qyweixin\Client($this->providerConfig['appid'], $this->providerConfig['appsecret']);
+            if (!empty($this->providerConfig['access_token'])) {
+                $this->objQyWeixin->setAccessToken($this->providerConfig['access_token']);
             }
         } else {
-            $agentInfo = $this->modelQyweixinAgent->getTokenByAppid($this->provider_appid, $this->authorizer_appid, $this->agentid);
-            $this->objQyWeixin = new \Qyweixin\Client($agentInfo['authorizer_appid'], $agentInfo['secret']);
-            if (!empty($agentInfo['access_token'])) {
-                $this->objQyWeixin->setAccessToken($agentInfo['access_token']);
+            if (empty($this->agentid)) {
+                $this->getToken4Authorizer();
+                $this->objQyWeixin = new \Qyweixin\Client($this->authorizerConfig['appid'], $this->authorizerConfig['appsecret']);
+                if (!empty($this->authorizerConfig['access_token'])) {
+                    $this->objQyWeixin->setAccessToken($this->authorizerConfig['access_token']);
+                }
+            } else {
+                $agentInfo = $this->modelQyweixinAgent->getTokenByAppid($this->provider_appid, $this->authorizer_appid, $this->agentid);
+                $this->objQyWeixin = new \Qyweixin\Client($agentInfo['authorizer_appid'], $agentInfo['secret']);
+                if (!empty($agentInfo['access_token'])) {
+                    $this->objQyWeixin->setAccessToken($agentInfo['access_token']);
+                }
             }
         }
 
@@ -115,6 +124,16 @@ class QyService
                 throw new \Exception("provider_appid:{$this->provider_appid}所对应的记录不存在");
             }
         }
+    }
+
+    public function getAccessToken4Provider()
+    {
+        $modelProvider = new \App\Qyweixin\Models\Provider\Provider();
+        $providerInfo = $modelProvider->getTokenByAppid($this->provider_appid);
+        if (empty($providerInfo)) {
+            throw new \Exception("对应的第三方服务商不存在");
+        }
+        return $providerInfo;
     }
 
     protected function getToken4Authorizer()
@@ -199,16 +218,20 @@ class QyService
     }
 
     //获取应用的jsapi_ticket
-    public function getJsapiTicket4Agent()
+    public function getJsapiTicket4Agent($is_agent_jsapi_ticket = 0)
     {
         $agentInfo = $this->getAccessToken4Agent();
-        return $agentInfo['jsapi_ticket'];
+        if ($is_agent_jsapi_ticket != 0) {
+            return $agentInfo['agent_jsapi_ticket'];
+        } else {
+            return $agentInfo['jsapi_ticket'];
+        }
     }
 
     //获取应用的JS-SDK使用权限签名
-    public function getSignPackage($url)
+    public function getSignPackage($url, $is_agent_jsapi_ticket = 0)
     {
-        $jsapi_ticket = $this->getJsapiTicket4Agent();
+        $jsapi_ticket = $this->getJsapiTicket4Agent($is_agent_jsapi_ticket);
         $objJssdk = new \Qyweixin\Jssdk();
         return $objJssdk->getSignPackage($url, $jsapi_ticket);
     }

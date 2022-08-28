@@ -20,6 +20,19 @@ class ExternalUser extends \App\Common\Models\Qyweixin\ExternalContact\ExternalU
         return $info;
     }
 
+    public function clearExist($authorizer_appid, $provider_appid, $now)
+    {
+        $updateData = array('is_exist' => 0);
+        $updateData['get_time'] = \App\Common\Utils\Helper::getCurrentTime($now);
+        return $this->update(
+            array(
+                'authorizer_appid' => $authorizer_appid,
+                'provider_appid' => $provider_appid
+            ),
+            array('$set' => $updateData)
+        );
+    }
+
     public function syncExternalUserList($authorizer_appid, $provider_appid, $res, $now)
     {
         if (!empty($res['external_userid'])) {
@@ -27,6 +40,8 @@ class ExternalUser extends \App\Common\Models\Qyweixin\ExternalContact\ExternalU
                 $info = $this->getInfoByExternalUserId($external_userid, $authorizer_appid);
                 $data = array();
                 $data['provider_appid'] = $provider_appid;
+                // 通过这个字段来表明企业微信那边有这条记录
+                $data['is_exist'] = 1;
                 $data['get_time'] = \App\Common\Utils\Helper::getCurrentTime($now);
                 if (!empty($info)) {
                     $this->update(array('_id' => $info['_id']), array('$set' => $data));
@@ -41,14 +56,22 @@ class ExternalUser extends \App\Common\Models\Qyweixin\ExternalContact\ExternalU
 
     public function updateExternalUserInfoByApi($checkInfo, $userInfo, $now)
     {
+        // {"errcode":84061,"errmsg":"not external contact, hint: [1646594702057801817545474], from ip: 115.29.169.68, more info at https://open.work.weixin.qq.com/devtool/query?e=84061","follow_user":[]}
+        if (!empty($userInfo['errcode']) && $userInfo['errcode'] == 84061) {
+            $data = array();
+            // 通过这个字段来表明企业微信那边有这条记录
+            $data['is_exist'] = 1;
+            $data['get_time'] = \App\Common\Utils\Helper::getCurrentTime($now);
+            return $this->update(array('_id' => $checkInfo['_id']), array('$set' => $data));
+        }
         $authorizer_appid = $checkInfo['authorizer_appid'];
         $provider_appid = $checkInfo['provider_appid'];
-        $data = $this->getPrepareData($userInfo, $authorizer_appid, $provider_appid, $checkInfo);
+        $data = $this->getPrepareData($userInfo, $authorizer_appid, $provider_appid, $checkInfo, $now);
         $data['get_time'] = \App\Common\Utils\Helper::getCurrentTime($now);
         return $this->update(array('_id' => $checkInfo['_id']), array('$set' => $data));
     }
 
-    private function getPrepareData($userInfo, $authorizer_appid, $provider_appid, $checkInfo)
+    private function getPrepareData($userInfo, $authorizer_appid, $provider_appid, $checkInfo, $now)
     {
         $externalContactInfo = $userInfo['external_contact'];
 
@@ -124,6 +147,8 @@ class ExternalUser extends \App\Common\Models\Qyweixin\ExternalContact\ExternalU
                 $data['follow_user'] = \App\Common\Utils\Helper::myJsonEncode($userInfo['follow_user']);
             }
         }
+        $data['is_exist'] = 1;
+        $data['get_time'] = \App\Common\Utils\Helper::getCurrentTime($now);
         return $data;
     }
 }

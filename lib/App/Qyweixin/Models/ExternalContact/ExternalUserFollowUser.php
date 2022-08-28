@@ -22,6 +22,20 @@ class ExternalUserFollowUser extends \App\Common\Models\Qyweixin\ExternalContact
         return $info;
     }
 
+    public function clearExist($external_userid, $authorizer_appid, $provider_appid, $now)
+    {
+        $updateData = array('is_exist' => 0);
+        $updateData['get_time'] = \App\Common\Utils\Helper::getCurrentTime($now);
+        return $this->update(
+            array(
+                'external_userid' => $external_userid,
+                'authorizer_appid' => $authorizer_appid,
+                'provider_appid' => $provider_appid
+            ),
+            array('$set' => $updateData)
+        );
+    }
+
     public function syncFollowUserList($external_userid, $authorizer_appid, $provider_appid, $res, $now)
     {
         /**
@@ -64,6 +78,8 @@ class ExternalUserFollowUser extends \App\Common\Models\Qyweixin\ExternalContact
                 $data['oper_userid'] = isset($useridInfo['oper_userid']) ? \App\Common\Utils\Helper::myJsonEncode($useridInfo['oper_userid']) : '';
                 $data['add_way'] = isset($useridInfo['add_way']) ? intval($useridInfo['add_way']) : 0;
                 $data['state'] = isset($useridInfo['state']) ? $useridInfo['state'] : '';
+                // 通过这个字段来表明企业微信那边有这条记录
+                $data['is_exist'] = 1;
 
                 $info = $this->getInfoByUserId($external_userid, $userid, $authorizer_appid);
 
