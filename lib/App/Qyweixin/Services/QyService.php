@@ -97,6 +97,20 @@ class QyService
             if (!empty($this->providerConfig['access_token'])) {
                 $this->objQyWeixin->setAccessToken($this->providerConfig['access_token']);
             }
+            if (!empty($this->authorizer_appid)) {
+                $this->getToken4Authorizer();
+                $this->objQyWeixin = new \Qyweixin\Client($this->authorizerConfig['appid'], $this->authorizerConfig['appsecret']);
+                if (!empty($this->authorizerConfig['access_token'])) {
+                    $this->objQyWeixin->setAccessToken($this->authorizerConfig['access_token']);
+                }
+            }
+            if (!empty($this->agentid)) {
+                $agentInfo = $this->modelQyweixinAgent->getTokenByAppid($this->provider_appid, $this->authorizer_appid, $this->agentid);
+                $this->objQyWeixin = new \Qyweixin\Client($agentInfo['authorizer_appid'], $agentInfo['secret']);
+                if (!empty($agentInfo['access_token'])) {
+                    $this->objQyWeixin->setAccessToken($agentInfo['access_token']);
+                }
+            }
         } else {
             if (empty($this->agentid)) {
                 $this->getToken4Authorizer();
