@@ -59,6 +59,16 @@ class Menu
         );
         $tree[] = $item;
 
+        // 授权方企业信息
+        $item = array(
+            'menu_name' => '授权方企业信息',
+            'menu_model' => 'qyweixin-authcorp',
+            'level' => '企业平台应用管理',
+            'icon' => '',
+            'model' => '\App\Backend\Submodules\Qyweixin\Models\Auth\Corp'
+        );
+        $tree[] = $item;
+
         // 登录授权发起执行时间跟踪统计
         $item = array(
             'menu_name' => '登录授权发起执行时间跟踪统计',

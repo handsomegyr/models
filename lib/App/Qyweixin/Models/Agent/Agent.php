@@ -156,6 +156,79 @@ class Agent extends \App\Common\Models\Qyweixin\Agent\Agent
         return $affectRows;
     }
 
+    public function createAndUpdateAuthAgentInfo($provider_appid, $authorizer_appid, $secret, $access_token, $expires_in, $authAgentInfo, $memo = array())
+    {
+        //         {
+        //             "agentid": 1000017, 
+        //             "name": "企微助手", 
+        //             "square_logo_url": "https://wework.qpic.cn/wwpic/809268_NV47ah_dT3OIIyZ_1661491101/0", 
+        //             "privilege": {
+        //                 "level": 0, 
+        //                 "allow_party": [ ], 
+        //                 "allow_user": [ ], 
+        //                 "allow_tag": [ ], 
+        //                 "extra_party": [ ], 
+        //                 "extra_user": [ ], 
+        //                 "extra_tag": [ ]
+        //             }, 
+        //             "is_customized_app": true
+        //         }
+        $agentid = $authAgentInfo['agentid'];
+        $name = $authAgentInfo['name'];
+        $square_logo_url = $authAgentInfo['square_logo_url'];
+        $lockKey = $this->getCacheKey4Appid($provider_appid, $authorizer_appid, $agentid);
+        $objLock = new \iLock($lockKey);
+        if (!$objLock->lock()) {
+            $token = $this->getInfoByAppid($provider_appid, $authorizer_appid, $agentid);
+            if (empty($token)) {
+                // 创建
+                $datas = array(
+                    'provider_appid' => $provider_appid,
+                    'authorizer_appid' => $authorizer_appid,
+                    'agent_type' => 1,
+                    'agentid' => $agentid,
+                    'name' => $name,
+                    'secret' => $secret,
+                    'secret_type' => 3,
+                    'access_token' => $access_token,
+                    'access_token_expire' => \App\Common\Utils\Helper::getCurrentTime(time() + $expires_in - 1800),
+                    'jsapi_ticket' => '',
+                    'jsapi_ticket_expire' => \App\Common\Utils\Helper::getCurrentTime(time() + $expires_in - 1800),
+                    'agent_jsapi_ticket' => '',
+                    'agent_jsapi_ticket_expire' => \App\Common\Utils\Helper::getCurrentTime(time() + $expires_in - 1800),
+                    'square_logo_url' => $square_logo_url,
+                    'memo' => $memo
+                );
+                return $this->insert($datas);
+            } else {
+                $memo = array_merge($token['memo'], $memo);
+                $updateData = array();
+                $updateData['name'] = $name;
+                $updateData['secret'] = $secret;
+                $updateData['access_token'] = $access_token;
+                $updateData['access_token_expire'] = \App\Common\Utils\Helper::getCurrentTime(time() + $expires_in - 1800);
+                $updateData['jsapi_ticket'] = '';
+                $updateData['jsapi_ticket_expire'] = \App\Common\Utils\Helper::getCurrentTime(time() + $expires_in - 1800);
+                $updateData['agent_jsapi_ticket'] = '';
+                $updateData['agent_jsapi_ticket_expire'] = \App\Common\Utils\Helper::getCurrentTime(time() + $expires_in - 1800);
+
+                $updateData['square_logo_url'] = $square_logo_url;
+                if (!empty($memo)) {
+                    $updateData["memo"] = $memo;
+                }
+                $affectRows = $this->update(array('_id' => $token['_id']), array('$set' => $updateData));
+                // 重新获取数据
+                $newInfo = $this->getInfoById($token['_id']);
+                if (!empty($newInfo)) {
+                    $expire_time = 5 * 60;
+                    $cache = $this->getDI()->get('cache');
+                    $cache->save($this->getCacheKey4Appid($newInfo['provider_appid'], $newInfo['authorizer_appid'], $newInfo['agentid']), $newInfo, $expire_time);
+                }
+                return $newInfo;
+            }
+        }
+    }
+
     public function getSignKey($openid, $secretKey, $timestamp = 0)
     {
         return sha1($openid . "|" . $secretKey . "|" . $timestamp);
