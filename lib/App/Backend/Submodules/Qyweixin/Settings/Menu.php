@@ -65,7 +65,7 @@ class Menu
             'menu_model' => 'qyweixin-authcorp',
             'level' => '企业平台应用管理',
             'icon' => '',
-            'model' => '\App\Backend\Submodules\Qyweixin\Models\Auth\Corp'
+            'model' => '\App\Backend\Submodules\Qyweixin\Models\Auth\AuthCorp'
         );
         $tree[] = $item;
 

@@ -2,14 +2,9 @@
 
 namespace App\Components\Qyweixin\Services\Models\Auth;
 
-use Cache;
-use App\Services\LockService;
-use App\Services\Lock\MemcacheLock;
-use App\Components\Qyweixin\Services\Models\BaseModel;
-
 namespace App\Qyweixin\Models\Auth;
 
-class Corp extends \App\Common\Models\Qyweixin\Auth\Corp
+class AuthCorp extends \App\Common\Models\Qyweixin\Auth\AuthCorp
 {
 
     /**

@@ -2,7 +2,7 @@
 
 namespace App\Backend\Submodules\Qyweixin\Models\Auth;
 
-class Corp extends \App\Common\Models\Qyweixin\Auth\Corp
+class AuthCorp extends \App\Common\Models\Qyweixin\Auth\AuthCorp
 {
 
     use \App\Backend\Models\Base;
