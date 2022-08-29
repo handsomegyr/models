@@ -285,7 +285,8 @@ trait ExternalContactTrait
 
         $res = $this->getQyWeixinObject()
             ->getExternalContactManager()
-            ->addContactWay($contactWay);
+            ->getContactWayManager()
+            ->add($contactWay);
         if (!empty($res['errcode'])) {
             throw new \Exception($res['errmsg'], $res['errcode']);
         }

@@ -176,6 +176,7 @@ class Agent extends \App\Common\Models\Qyweixin\Agent\Agent
         $agentid = $authAgentInfo['agentid'];
         $name = $authAgentInfo['name'];
         $square_logo_url = $authAgentInfo['square_logo_url'];
+        $is_customized_app = empty($authAgentInfo['is_customized_app']) ? 0 : 1;
         $lockKey = $this->getCacheKey4Appid($provider_appid, $authorizer_appid, $agentid);
         $objLock = new \iLock($lockKey);
         if (!$objLock->lock()) {
@@ -186,6 +187,7 @@ class Agent extends \App\Common\Models\Qyweixin\Agent\Agent
                     'provider_appid' => $provider_appid,
                     'authorizer_appid' => $authorizer_appid,
                     'agent_type' => 1,
+                    'is_customized_app' => $is_customized_app,
                     'agentid' => $agentid,
                     'name' => $name,
                     'secret' => $secret,
@@ -205,6 +207,7 @@ class Agent extends \App\Common\Models\Qyweixin\Agent\Agent
                 $updateData = array();
                 $updateData['name'] = $name;
                 $updateData['secret'] = $secret;
+                $updateData['is_customized_app'] = $is_customized_app;
                 $updateData['access_token'] = $access_token;
                 $updateData['access_token_expire'] = \App\Common\Utils\Helper::getCurrentTime(time() + $expires_in - 1800);
                 $updateData['jsapi_ticket'] = '';
