@@ -16,6 +16,7 @@ class InterceptRule extends \App\Common\Models\Qyweixin\ExternalContact\Intercep
     {
         $query = array();
         $query['rule_id'] = $rule_id;
+        $query['agentid'] = $agentid;
         $query['authorizer_appid'] = $authorizer_appid;
         $query['provider_appid'] = $provider_appid;
         $info = $this->findOne($query);
@@ -27,6 +28,7 @@ class InterceptRule extends \App\Common\Models\Qyweixin\ExternalContact\Intercep
         $updateData = array('is_exist' => 0, 'sync_time' => \App\Common\Utils\Helper::getCurrentTime($now));
         return $this->update(
             array(
+                'agentid' => $agentid,
                 'authorizer_appid' => $authorizer_appid,
                 'provider_appid' => $provider_appid
             ),
@@ -54,7 +56,6 @@ class InterceptRule extends \App\Common\Models\Qyweixin\ExternalContact\Intercep
                 $rule_id = $info['rule_id'];
                 $info = $this->getInfoByRuleId($rule_id, $agentid, $authorizer_appid, $provider_appid);
                 $data = array();
-                $data['provider_appid'] = $provider_appid;
                 $data['rule_name'] = $info['rule_name'];
                 $data['create_time'] = \App\Common\Utils\Helper::getCurrentTime($info['create_time']);
                 $data['is_exist'] = 1;
@@ -62,8 +63,9 @@ class InterceptRule extends \App\Common\Models\Qyweixin\ExternalContact\Intercep
                 if (!empty($info)) {
                     $this->update(array('_id' => $info['_id']), array('$set' => $data));
                 } else {
-                    // $data['agentid'] = $agentid;
+                    $data['agentid'] = $agentid;
                     $data['authorizer_appid'] = $authorizer_appid;
+                    $data['provider_appid'] = $provider_appid;
                     $data['rule_id'] = $rule_id;
                     $this->insert($data);
                 }
