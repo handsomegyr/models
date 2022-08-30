@@ -9,14 +9,16 @@ class Chatdata extends \App\Common\Models\Qyweixin\MsgAudit\Chatdata
      *
      * @param string $msgid    
      * @param string $mixed_item_idx         
+     * @param string $agentid         
      * @param string $authorizer_appid            
      * @param string $provider_appid            
      */
-    public function getInfoByMsgid($msgid, $mixed_item_idx, $authorizer_appid, $provider_appid)
+    public function getInfoByMsgid($msgid, $mixed_item_idx, $agentid, $authorizer_appid, $provider_appid)
     {
         $query = array(
             'msgid' => $msgid,
             'mixed_item_idx' => $mixed_item_idx,
+            'agentid' => $agentid,
             'authorizer_appid' => $authorizer_appid,
             'provider_appid' => $provider_appid
         );
@@ -24,12 +26,12 @@ class Chatdata extends \App\Common\Models\Qyweixin\MsgAudit\Chatdata
         return $info;
     }
 
-    public function saveChatdataInfo($chatdataInfo, $authorizer_appid, $provider_appid)
+    public function saveChatdataInfo($chatdataInfo, $agentid, $authorizer_appid, $provider_appid)
     {
         $msgid = $chatdataInfo['msgid'];
         $mixed_item_idx = $chatdataInfo['mixed_item_idx'];
-        $checkInfo = $this->getInfoByMsgid($msgid, $mixed_item_idx, $authorizer_appid, $provider_appid);
-        $data = $this->getPrepareData($chatdataInfo, $authorizer_appid, $provider_appid, $checkInfo);
+        $checkInfo = $this->getInfoByMsgid($msgid, $mixed_item_idx, $agentid, $authorizer_appid, $provider_appid);
+        $data = $this->getPrepareData($chatdataInfo, $agentid, $authorizer_appid, $provider_appid, $checkInfo);
         // print_r($data);
         // die('saveChatdataInfo');
         if (!empty($checkInfo)) {
@@ -41,7 +43,7 @@ class Chatdata extends \App\Common\Models\Qyweixin\MsgAudit\Chatdata
         return $chatdataInfo;
     }
 
-    private function getPrepareData($chatdataInfo, $authorizer_appid, $provider_appid, $checkInfo)
+    private function getPrepareData($chatdataInfo, $agentid, $authorizer_appid, $provider_appid, $checkInfo)
     {
         $data = array();
         $msgtype = $data['msgtype'] = (isset($chatdataInfo['msgtype']) ? $chatdataInfo['msgtype'] : '');
@@ -49,6 +51,7 @@ class Chatdata extends \App\Common\Models\Qyweixin\MsgAudit\Chatdata
         $msgtype = $this->checkAndGetMsgType($msgtype, $mixed_item_msgtype);
 
         if (empty($checkInfo)) {
+            $data['agentid'] = $agentid;
             $data['authorizer_appid'] = $authorizer_appid;
             $data['provider_appid'] = $provider_appid;
 

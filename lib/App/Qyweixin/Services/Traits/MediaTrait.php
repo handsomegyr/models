@@ -9,7 +9,7 @@ trait MediaTrait
     {
         $modelMedia = new \App\Qyweixin\Models\Media\Media();
         if (!empty($media_id)) {
-            $mediaInfo = $modelMedia->getInfoByMediaId($media_id, $this->authorizer_appid);
+            $mediaInfo = $modelMedia->getInfoByMediaId($media_id, $this->provider_appid, $this->authorizer_appid, $this->agentid);
         }
         if (empty($mediaInfo)) {
             $mediaInfo = $modelMedia->createMedia($this->provider_appid, $this->authorizer_appid, $this->agentid, $name, $type, $media);

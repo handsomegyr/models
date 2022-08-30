@@ -9,11 +9,13 @@ class Attachment extends \App\Common\Models\Qyweixin\Attachment\Attachment
      *
      * @return array
      */
-    public function getInfoByMediaId($media_id, $authorizer_appid)
+    public function getInfoByMediaId($media_id, $provider_appid, $authorizer_appid, $agentid)
     {
         $info = $this->findOne(array(
             'media_id' => $media_id,
-            'authorizer_appid' => $authorizer_appid
+            'agentid' => $agentid,
+            'authorizer_appid' => $authorizer_appid,
+            'provider_appid' => $provider_appid
         ));
         return $info;
     }
