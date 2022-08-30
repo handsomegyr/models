@@ -80,7 +80,7 @@ trait TransferTrait
         //   ],
         //   "next_cursor":"NEXT_CURSOR"
         // }
-        $modelResignedTransferResult->syncTransferResult($handover_userid, $takeover_userid, $this->authorizer_appid, $this->provider_appid, $res, time());
+        $modelResignedTransferResult->syncTransferResult($handover_userid, $takeover_userid, $this->agentid, $this->authorizer_appid, $this->provider_appid, $res, time());
         return $res;
     }
 }

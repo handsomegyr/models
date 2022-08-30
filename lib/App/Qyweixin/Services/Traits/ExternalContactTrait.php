@@ -1013,7 +1013,7 @@ trait ExternalContactTrait
          * "is_last":false
          *}
          */
-        $modelUnassigned->syncUnassignedList($this->authorizer_appid, $this->provider_appid, $res, time());
+        $modelUnassigned->syncUnassignedList($this->agentid, $this->authorizer_appid, $this->provider_appid, $res, time());
         return $res;
     }
 
