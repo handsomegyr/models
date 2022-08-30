@@ -17,7 +17,7 @@ class MsgTemplate extends \App\Common\Models\Qyweixin\ExternalContact\MsgTemplat
         $query['msgid'] = $msgid;
         $query['agentid'] = $agentid;
         $query['authorizer_appid'] = $authorizer_appid;
-        // $query['provider_appid'] = $provider_appid;
+        $query['provider_appid'] = $provider_appid;
         $info = $this->findOne($query);
 
         return $info;
@@ -67,7 +67,6 @@ class MsgTemplate extends \App\Common\Models\Qyweixin\ExternalContact\MsgTemplat
                 $info = $this->getInfoByMsgid($msgid, $authorizer_appid, $provider_appid, $agentid);
                 $data = array();
                 $data['chat_type'] = $chat_type;
-                $data['provider_appid'] = $provider_appid;
                 $data['creator'] = $groupmsgInfo['creator'];
                 $data['create_type'] = $groupmsgInfo['create_type'];
                 $data['text_content'] = !isset($groupmsgInfo['text']['content']) ? "" : $groupmsgInfo['text']['content'];
@@ -86,6 +85,7 @@ class MsgTemplate extends \App\Common\Models\Qyweixin\ExternalContact\MsgTemplat
                 if (!empty($info)) {
                     $this->update(array('_id' => $info['_id']), array('$set' => $data));
                 } else {
+                    $data['provider_appid'] = $provider_appid;
                     $data['authorizer_appid'] = $authorizer_appid;
                     $data['agentid'] = $agentid;
                     $data['msgid'] = $msgid;

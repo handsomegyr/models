@@ -9,17 +9,19 @@ class GroupMsgTask extends \App\Common\Models\Qyweixin\ExternalContact\GroupMsgT
      * 根据userid获取信息
      *
      * @param string $msgid
-     * @param string $userid              
-     * @param string $authorizer_appid               
+     * @param string $userid
+     * @param string $authorizer_appid
+     * @param string $provider_appid
      * @param string $agentid         
      */
-    public function getInfoByMsgIdAndUser($msgid, $userid, $authorizer_appid, $agentid)
+    public function getInfoByMsgIdAndUser($msgid, $userid, $authorizer_appid, $provider_appid, $agentid)
     {
         $query = array();
         $query['msgid'] = $msgid;
         $query['userid'] = $userid;
-        $query['authorizer_appid'] = $authorizer_appid;
         $query['agentid'] = $agentid;
+        $query['authorizer_appid'] = $authorizer_appid;
+        $query['provider_appid'] = $provider_appid;
         $info = $this->findOne($query);
 
         return $info;
@@ -47,16 +49,16 @@ class GroupMsgTask extends \App\Common\Models\Qyweixin\ExternalContact\GroupMsgT
                 $userid = $useridInfo['userid'];
 
                 $data = array();
-                $data['provider_appid'] = $provider_appid;
                 $data['status'] = isset($useridInfo['status']) ? intval($useridInfo['status']) : 0;
                 if (isset($useridInfo['send_time'])) {
                     $data['send_time'] = \App\Common\Utils\Helper::getCurrentTime($useridInfo['send_time']);
                 }
-                $info = $this->getInfoByMsgIdAndUser($msgid, $userid, $authorizer_appid, $agentid);
+                $info = $this->getInfoByMsgIdAndUser($msgid, $userid, $authorizer_appid, $provider_appid, $agentid);
 
                 if (!empty($info)) {
                     $this->update(array('_id' => $info['_id']), array('$set' => $data));
                 } else {
+                    $data['provider_appid'] = $provider_appid;
                     $data['authorizer_appid'] = $authorizer_appid;
                     $data['agentid'] = $agentid;
                     $data['msgid'] = $msgid;
