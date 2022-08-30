@@ -9,21 +9,25 @@ class GroupChatStatisticByUserid extends \App\Common\Models\Qyweixin\ExternalCon
      * 根据userid获取信息
      * 
      * @param string $owner
-     * @param string $day_begin_time        
-     * @param string $authorizer_appid          
+     * @param string $day_begin_time
+     * @param string $authorizer_appid
+     * @param string $provider_appid
+     * @param string $agentid
      */
-    public function getInfoByUserId($owner, $day_begin_time, $authorizer_appid)
+    public function getInfoByUserId($owner, $day_begin_time, $authorizer_appid, $provider_appid, $agentid)
     {
         $query = array();
         $query['owner'] = $owner;
         $query['day_begin_time'] = \App\Common\Utils\Helper::getCurrentTime($day_begin_time);
+        $query['agentid'] = $agentid;
         $query['authorizer_appid'] = $authorizer_appid;
+        $query['provider_appid'] = $provider_appid;
         $info = $this->findOne($query);
 
         return $info;
     }
 
-    public function syncGroupchatStatisticList($day_begin_time, $authorizer_appid, $provider_appid, $res, $now)
+    public function syncGroupchatStatisticList($day_begin_time, $authorizer_appid, $provider_appid, $agentid, $res, $now)
     {
         // "items": [{
         //     "owner": "zhangsan",
@@ -42,12 +46,12 @@ class GroupChatStatisticByUserid extends \App\Common\Models\Qyweixin\ExternalCon
             foreach ($res['items'] as $groupchatstatistic) {
                 $owner = $groupchatstatistic['owner'];
                 $statisticInfo = $groupchatstatistic['data'];
-                $this->syncStatisticInfo($owner, $day_begin_time, $authorizer_appid, $provider_appid, $statisticInfo, $now);
+                $this->syncStatisticInfo($owner, $day_begin_time, $authorizer_appid, $provider_appid, $agentid, $statisticInfo, $now);
             }
         }
     }
 
-    public function syncGroupchatStatisticListGroupByDay($owner, $authorizer_appid, $provider_appid, $res, $now)
+    public function syncGroupchatStatisticListGroupByDay($owner, $authorizer_appid, $provider_appid, $agentid, $res, $now)
     {
         //     "items": [{
         //             "stat_time": 1600272000,
@@ -82,16 +86,15 @@ class GroupChatStatisticByUserid extends \App\Common\Models\Qyweixin\ExternalCon
             foreach ($res['items'] as $groupchatstatistic) {
                 $statisticInfo = $groupchatstatistic['data'];
                 $day_begin_time = \App\Common\Utils\Helper::getCurrentTime($groupchatstatistic['stat_time']);
-                $this->syncStatisticInfo($owner, $day_begin_time, $authorizer_appid, $provider_appid, $statisticInfo, $now);
+                $this->syncStatisticInfo($owner, $day_begin_time, $authorizer_appid, $provider_appid, $agentid, $statisticInfo, $now);
             }
         }
     }
 
-    private function syncStatisticInfo($owner, $day_begin_time, $authorizer_appid, $provider_appid, $statisticInfo, $now)
+    private function syncStatisticInfo($owner, $day_begin_time, $authorizer_appid, $provider_appid, $agentid, $statisticInfo, $now)
     {
-        $info = $this->getInfoByUserId($owner, $day_begin_time, $authorizer_appid);
+        $info = $this->getInfoByUserId($owner, $day_begin_time, $authorizer_appid, $provider_appid, $agentid);
         $data = array();
-        $data['provider_appid'] = $provider_appid;
         $data['get_time'] = \App\Common\Utils\Helper::getCurrentTime($now);
 
         $data['new_chat_cnt'] = $statisticInfo['new_chat_cnt'];
@@ -111,8 +114,10 @@ class GroupChatStatisticByUserid extends \App\Common\Models\Qyweixin\ExternalCon
         if (!empty($info)) {
             $this->update(array('_id' => $info['_id']), array('$set' => $data));
         } else {
-            $data['day_begin_time'] = \App\Common\Utils\Helper::getCurrentTime($day_begin_time);
+            $data['provider_appid'] = $provider_appid;
             $data['authorizer_appid'] = $authorizer_appid;
+            $data['agentid'] = $agentid;
+            $data['day_begin_time'] = \App\Common\Utils\Helper::getCurrentTime($day_begin_time);
             $data['owner'] = $owner;
             $this->insert($data);
         }

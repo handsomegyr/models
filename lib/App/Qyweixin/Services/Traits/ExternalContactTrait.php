@@ -664,7 +664,7 @@ trait ExternalContactTrait
          * }
          */
         $now = time();
-        $modelGroupChat->syncGroupChatList($this->authorizer_appid, $this->provider_appid, $res, $now);
+        $modelGroupChat->syncGroupChatList($this->authorizer_appid, $this->provider_appid, $this->agentid, $res, $now);
         if (!empty($res['next_cursor'])) {
             do {
                 $cursor = $res['next_cursor'];
@@ -675,7 +675,7 @@ trait ExternalContactTrait
                 if (!empty($res['errcode'])) {
                     throw new \Exception($res['errmsg'], $res['errcode']);
                 }
-                $modelGroupChat->syncGroupChatList($this->authorizer_appid, $this->provider_appid, $res, $now);
+                $modelGroupChat->syncGroupChatList($this->authorizer_appid, $this->provider_appid, $this->agentid, $res, $now);
                 if (empty($res['next_cursor'])) {
                     break;
                 }
@@ -735,9 +735,9 @@ trait ExternalContactTrait
 
         // 同步member_list
         $modelGroupChatMember = new \App\Qyweixin\Models\ExternalContact\GroupChatMember();
-        $modelGroupChatMember->clearExist($chatid, $this->authorizer_appid, $this->provider_appid, $now);
+        $modelGroupChatMember->clearExist($chatid, $this->authorizer_appid, $this->provider_appid, $this->agentid, $now);
         if (!empty($res['group_chat']['member_list'])) {
-            $modelGroupChatMember->syncMemberList($chatid, $this->authorizer_appid, $this->provider_appid, $res, $now);
+            $modelGroupChatMember->syncMemberList($chatid, $this->authorizer_appid, $this->provider_appid, $this->agentid, $res, $now);
         }
 
         return $res;
@@ -1145,7 +1145,7 @@ trait ExternalContactTrait
          *        }
          *    }]
          */
-        $modelGroupChatStatisticByUserid->syncGroupchatStatisticList($day_begin_time, $this->authorizer_appid, $this->provider_appid, $res, time());
+        $modelGroupChatStatisticByUserid->syncGroupchatStatisticList($day_begin_time, $this->authorizer_appid, $this->provider_appid, $this->agentid, $res, time());
         return $res;
     }
 
@@ -1193,7 +1193,7 @@ trait ExternalContactTrait
         //         }
         //     ]
         // }
-        $modelGroupChatStatisticByUserid->syncGroupchatStatisticListGroupByDay($userid, $this->authorizer_appid, $this->provider_appid, $res, time());
+        $modelGroupChatStatisticByUserid->syncGroupchatStatisticListGroupByDay($userid, $this->authorizer_appid, $this->provider_appid, $this->agentid, $res, time());
         return $res;
     }
 
