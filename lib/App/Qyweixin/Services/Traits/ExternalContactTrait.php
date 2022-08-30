@@ -852,7 +852,7 @@ trait ExternalContactTrait
         //         }
         //     ]
         // }
-        $modelMomentTaskUser->syncMomentTaskList($moment_id, $this->authorizer_appid, $this->provider_appid, $res, time());
+        $modelMomentTaskUser->syncMomentTaskList($moment_id, $this->agentid, $this->authorizer_appid, $this->provider_appid, $res, time());
 
         if (!empty($res['task_list'])) {
             foreach ($res['task_list'] as $task) {

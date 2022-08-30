@@ -9,20 +9,23 @@ class MomentTaskUser extends \App\Common\Models\Qyweixin\ExternalContact\MomentT
      *
      * @param string $userid 
      * @param string $moment_id
+     * @param string $agentid
      * @param string $authorizer_appid
      * @param string $provider_appid         
      */
-    public function getInfoByUserIdAndMomentId($userid, $moment_id, $authorizer_appid, $provider_appid)
+    public function getInfoByUserIdAndMomentId($userid, $moment_id, $agentid, $authorizer_appid, $provider_appid)
     {
         $query = array();
         $query['userid'] = $userid;
         $query['moment_id'] = $moment_id;
+        $query['agentid'] = $agentid;
         $query['authorizer_appid'] = $authorizer_appid;
+        $query['provider_appid'] = $provider_appid;
         $info = $this->findOne($query);
         return $info;
     }
 
-    public function syncMomentTaskList($moment_id, $authorizer_appid, $provider_appid, $res, $now)
+    public function syncMomentTaskList($moment_id, $agentid, $authorizer_appid, $provider_appid, $res, $now)
     {
         // {
         //     "errcode":0,
@@ -39,15 +42,16 @@ class MomentTaskUser extends \App\Common\Models\Qyweixin\ExternalContact\MomentT
             foreach ($res['task_list'] as $task) {
                 $userid = $task['userid'];
                 $publish_status = $task['publish_status'];
-                $info = $this->getInfoByUserIdAndMomentId($userid, $moment_id, $authorizer_appid, $provider_appid);
+                $info = $this->getInfoByUserIdAndMomentId($userid, $moment_id, $agentid, $authorizer_appid, $provider_appid);
                 $data = array();
-                $data['provider_appid'] = $provider_appid;
                 $data['publish_status'] = $publish_status;
                 $data['get_time'] = \App\Common\Utils\Helper::getCurrentTime($now);
                 if (!empty($info)) {
                     $this->update(array('_id' => $info['_id']), array('$set' => $data));
                 } else {
+                    $data['provider_appid'] = $provider_appid;
                     $data['authorizer_appid'] = $authorizer_appid;
+                    $data['agentid'] = $agentid;
                     $data['moment_id'] = $moment_id;
                     $data['userid'] = $userid;
                     $this->insert($data);
