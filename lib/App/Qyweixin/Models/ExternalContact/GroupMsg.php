@@ -8,9 +8,10 @@ class GroupMsg extends \App\Common\Models\Qyweixin\ExternalContact\GroupMsg
     /**
      * 根据消息id获取信息
      *
-     * @param string $msgid            
-     * @param string $authorizer_appid              
-     * @param string $agentid         
+     * @param string $msgid
+     * @param string $authorizer_appid
+     * @param string $provider_appid
+     * @param string $agentid
      */
     public function getInfoByMsgid($msgid, $authorizer_appid, $provider_appid, $agentid)
     {
@@ -18,7 +19,7 @@ class GroupMsg extends \App\Common\Models\Qyweixin\ExternalContact\GroupMsg
         $query['msgid'] = $msgid;
         $query['agentid'] = $agentid;
         $query['authorizer_appid'] = $authorizer_appid;
-        // $query['provider_appid'] = $provider_appid;
+        $query['provider_appid'] = $provider_appid;
         $info = $this->findOne($query);
 
         return $info;
@@ -87,7 +88,6 @@ class GroupMsg extends \App\Common\Models\Qyweixin\ExternalContact\GroupMsg
                 $create_time = $groupmsgInfo['create_time'];
                 $info = $this->getInfoByMsgid($msgid, $authorizer_appid, $provider_appid, $agentid);
                 $data = array();
-                $data['provider_appid'] = $provider_appid;
                 $data['creator'] = $groupmsgInfo['creator'];
                 $data['create_time'] = \App\Common\Utils\Helper::getCurrentTime($create_time);
                 $data['create_type'] = $groupmsgInfo['create_type'];
@@ -96,6 +96,7 @@ class GroupMsg extends \App\Common\Models\Qyweixin\ExternalContact\GroupMsg
                 if (!empty($info)) {
                     $this->update(array('_id' => $info['_id']), array('$set' => $data));
                 } else {
+                    $data['provider_appid'] = $provider_appid;
                     $data['authorizer_appid'] = $authorizer_appid;
                     $data['agentid'] = $agentid;
                     $data['msgid'] = $msgid;
