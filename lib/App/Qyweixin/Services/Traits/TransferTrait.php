@@ -45,7 +45,7 @@ trait TransferTrait
         //   ],
         //   "next_cursor":"NEXT_CURSOR"
         // }
-        $modelOnjobTransferResult->syncTransferResult($handover_userid, $takeover_userid, $this->authorizer_appid, $this->provider_appid, $res, time());
+        $modelOnjobTransferResult->syncTransferResult($handover_userid, $takeover_userid, $this->authorizer_appid, $this->agentid, $this->provider_appid, $res, time());
         return $res;
     }
 
