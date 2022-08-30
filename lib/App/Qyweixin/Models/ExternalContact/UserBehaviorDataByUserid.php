@@ -9,29 +9,31 @@ class UserBehaviorDataByUserid extends \App\Common\Models\Qyweixin\ExternalConta
      * 根据userid获取信息
      *
      * @param string $userid 
-     * @param string $stat_time           
-     * @param string $authorizer_appid          
+     * @param string $stat_time
+     * @param string $agentid
+     * @param string $authorizer_appid
+     * @param string $provider_appid
      */
-    public function getInfoByUserId($userid, $stat_time, $authorizer_appid)
+    public function getInfoByUserId($userid, $stat_time, $agentid, $authorizer_appid, $provider_appid)
     {
         $query = array();
         $query['userid'] = $userid;
         $query['stat_time'] = \App\Common\Utils\Helper::getCurrentTime($stat_time);
+        $query['agentid'] = $agentid;
         $query['authorizer_appid'] = $authorizer_appid;
+        $query['provider_appid'] = $provider_appid;
         $info = $this->findOne($query);
 
         return $info;
     }
 
-    public function syncBehaviorDataList($userid, $authorizer_appid, $provider_appid, $res, $now)
+    public function syncBehaviorDataList($userid, $agentid, $authorizer_appid, $provider_appid, $res, $now)
     {
         if (!empty($res['behavior_data'])) {
             foreach ($res['behavior_data'] as $behavior_data_info) {
-                $info = $this->getInfoByUserId($userid, $behavior_data_info['stat_time'], $authorizer_appid);
+                $info = $this->getInfoByUserId($userid, $behavior_data_info['stat_time'], $agentid, $authorizer_appid, $provider_appid);
                 $data = array();
-                $data['provider_appid'] = $provider_appid;
                 $data['get_time'] = \App\Common\Utils\Helper::getCurrentTime($now);
-
                 $data['chat_cnt'] = $behavior_data_info['chat_cnt'];
                 $data['message_cnt'] = $behavior_data_info['message_cnt'];
                 if (isset($behavior_data_info['reply_percentage'])) {
@@ -46,7 +48,9 @@ class UserBehaviorDataByUserid extends \App\Common\Models\Qyweixin\ExternalConta
                 if (!empty($info)) {
                     $this->update(array('_id' => $info['_id']), array('$set' => $data));
                 } else {
+                    $data['provider_appid'] = $provider_appid;
                     $data['authorizer_appid'] = $authorizer_appid;
+                    $data['agentid'] = $agentid;
                     $data['userid'] = $userid;
                     $data['stat_time'] = \App\Common\Utils\Helper::getCurrentTime($behavior_data_info['stat_time']);
                     $this->insert($data);

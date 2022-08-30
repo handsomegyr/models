@@ -161,7 +161,7 @@ trait InterceptRuleTrait
         $data = array();
         $data['is_exist'] = 0;
         $data['sync_time'] = \App\Common\Utils\Helper::getCurrentTime(time());
-        $this->update(array('_id' => $interceptRuleInfo['_id']), array('$set' => $data));
+        $modelInterceptRule->update(array('_id' => $interceptRuleInfo['_id']), array('$set' => $data));
         return $res;
     }
 }

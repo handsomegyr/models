@@ -16,6 +16,7 @@ class ProductAlbum extends \App\Common\Models\Qyweixin\ExternalContact\ProductAl
     {
         $query = array();
         $query['product_id'] = $product_id;
+        $query['agentid'] = $agentid;
         $query['authorizer_appid'] = $authorizer_appid;
         $query['provider_appid'] = $provider_appid;
         $info = $this->findOne($query);
@@ -27,6 +28,7 @@ class ProductAlbum extends \App\Common\Models\Qyweixin\ExternalContact\ProductAl
         $updateData = array('is_exist' => 0, 'sync_time' => \App\Common\Utils\Helper::getCurrentTime($now));
         return $this->update(
             array(
+                'agentid' => $agentid,
                 'authorizer_appid' => $authorizer_appid,
                 'provider_appid' => $provider_appid
             ),
@@ -64,7 +66,6 @@ class ProductAlbum extends \App\Common\Models\Qyweixin\ExternalContact\ProductAl
                 $product_id = $info['product_id'];
                 $info = $this->getInfoByProductId($product_id, $agentid, $authorizer_appid, $provider_appid);
                 $data = array();
-                $data['provider_appid'] = $provider_appid;
                 $data['description'] = $info['description'];
                 $data['product_sn'] = $info['product_sn'];
                 $data['price'] = $info['price'];
@@ -74,8 +75,9 @@ class ProductAlbum extends \App\Common\Models\Qyweixin\ExternalContact\ProductAl
                 if (!empty($info)) {
                     $this->update(array('_id' => $info['_id']), array('$set' => $data));
                 } else {
-                    // $data['agentid'] = $agentid;
+                    $data['agentid'] = $agentid;
                     $data['authorizer_appid'] = $authorizer_appid;
+                    $data['provider_appid'] = $provider_appid;
                     $data['product_id'] = $product_id;
                     $this->insert($data);
                 }
