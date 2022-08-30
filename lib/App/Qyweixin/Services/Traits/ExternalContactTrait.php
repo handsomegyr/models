@@ -753,7 +753,7 @@ trait ExternalContactTrait
         if (!empty($res['errcode'])) {
             throw new \Exception($res['errmsg'], $res['errcode']);
         }
-        $modelMoment->syncMomentList($this->authorizer_appid, $this->provider_appid, $res, time());
+        $modelMoment->syncMomentList($this->agentid, $this->authorizer_appid, $this->provider_appid, $res, time());
         /**
          * {
          * "errcode":0,
@@ -980,7 +980,7 @@ trait ExternalContactTrait
         //         }
         //     ]
         // }
-        $modelMomentComment->syncMomentBehaviorList($userid, $moment_id, $this->authorizer_appid, $this->provider_appid, $res, time());
+        $modelMomentComment->syncMomentBehaviorList($userid, $moment_id, $this->agentid, $this->authorizer_appid, $this->provider_appid, $res, time());
         return $res;
     }
 
@@ -1110,7 +1110,7 @@ trait ExternalContactTrait
          *          }
          *      ]
          */
-        $modelUserBehaviorDataByUserid->syncBehaviorDataList($userid, $this->authorizer_appid, $this->provider_appid, $res, time());
+        $modelUserBehaviorDataByUserid->syncBehaviorDataList($userid, $this->agentid, $this->authorizer_appid, $this->provider_appid, $res, time());
         return $res;
     }
 
