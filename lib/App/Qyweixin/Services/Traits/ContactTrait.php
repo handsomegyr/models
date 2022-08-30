@@ -444,7 +444,7 @@ trait ContactTrait
          * "active_cnt":100
          * }
          */
-        $modelUserActiveStat->syncActiveStat($start_time, $this->authorizer_appid, $this->provider_appid, $res, time());
+        $modelUserActiveStat->syncActiveStat($start_time, $this->agentid, $this->authorizer_appid, $this->provider_appid, $res, time());
         return $res;
     }
 }
