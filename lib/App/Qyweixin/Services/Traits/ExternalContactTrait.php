@@ -918,7 +918,7 @@ trait ExternalContactTrait
         //         }
         //     ]
         // }
-        $modelMomentCustomer->syncMomentCustomerList($userid, $moment_id, $this->authorizer_appid, $this->provider_appid, $res, time());
+        $modelMomentCustomer->syncMomentCustomerList($userid, $moment_id, $this->agentid, $this->authorizer_appid, $this->provider_appid, $res, time());
         return $res;
     }
 
@@ -942,7 +942,7 @@ trait ExternalContactTrait
         //         }
         //     ]
         // }
-        $modelMomentSendResult->syncMomentCustomerList($userid, $moment_id, $this->authorizer_appid, $this->provider_appid, $res, time());
+        $modelMomentSendResult->syncMomentCustomerList($userid, $moment_id, $this->agentid, $this->authorizer_appid, $this->provider_appid, $res, time());
         return $res;
     }
 
