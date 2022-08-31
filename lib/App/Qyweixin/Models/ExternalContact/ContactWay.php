@@ -9,6 +9,7 @@ class ContactWay extends \App\Common\Models\Qyweixin\ExternalContact\ContactWay
     {
         $updateData = array();
         $updateData['config_id'] = $res['config_id'];
+        $updateData['is_exist'] = 1;
         $updateData['sync_time'] = \App\Common\Utils\Helper::getCurrentTime($now);
         if (isset($res['qr_code'])) {
             $updateData['qr_code'] = $res['qr_code'];
@@ -38,23 +39,27 @@ class ContactWay extends \App\Common\Models\Qyweixin\ExternalContact\ContactWay
      * @param string $config_id
      * @param string $authorizer_appid
      * @param string $provider_appid
+     * @param string $agentid
      */
-    public function getInfoByConfigId($config_id, $authorizer_appid, $provider_appid)
+    public function getInfoByConfigId($config_id, $authorizer_appid, $provider_appid, $agentid)
     {
         $query = array();
         $query['config_id'] = $config_id;
+        $query['agentid'] = $agentid;
         $query['authorizer_appid'] = $authorizer_appid;
+        $query['provider_appid'] = $provider_appid;
         $info = $this->findOne($query);
 
         return $info;
     }
 
-    public function clearExist($authorizer_appid, $provider_appid, $now)
+    public function clearExist($authorizer_appid, $provider_appid, $agentid, $now)
     {
         $updateData = array('is_exist' => 0);
         $updateData['sync_time'] = \App\Common\Utils\Helper::getCurrentTime($now);
         return $this->update(
             array(
+                'agentid' => $agentid,
                 'authorizer_appid' => $authorizer_appid,
                 'provider_appid' => $provider_appid
             ),
@@ -62,7 +67,7 @@ class ContactWay extends \App\Common\Models\Qyweixin\ExternalContact\ContactWay
         );
     }
 
-    public function syncContactWayList($authorizer_appid, $provider_appid, $res, $now)
+    public function syncContactWayList($authorizer_appid, $provider_appid, $agentid, $res, $now)
     {
         // {
         //     "errcode": 0,
@@ -81,16 +86,17 @@ class ContactWay extends \App\Common\Models\Qyweixin\ExternalContact\ContactWay
         if (!empty($res['contact_way'])) {
             foreach ($res['contact_way'] as $contactwayInfo) {
                 $config_id = $contactwayInfo['config_id'];
-                $info = $this->getInfoByConfigId($config_id, $authorizer_appid, $provider_appid);
+                $info = $this->getInfoByConfigId($config_id, $authorizer_appid, $provider_appid, $agentid);
                 $data = array();
-                $data['provider_appid'] = $provider_appid;
                 $data['sync_time'] = \App\Common\Utils\Helper::getCurrentTime($now);
                 // 通过这个字段来表明企业微信那边有这条记录
                 $data['is_exist'] = 1;
                 if (!empty($info)) {
                     $this->update(array('_id' => $info['_id']), array('$set' => $data));
                 } else {
+                    $data['provider_appid'] = $provider_appid;
                     $data['authorizer_appid'] = $authorizer_appid;
+                    $data['agentid'] = $agentid;
                     $data['config_id'] = $config_id;
                     $this->insert($data);
                 }
@@ -169,7 +175,7 @@ class ContactWay extends \App\Common\Models\Qyweixin\ExternalContact\ContactWay
             $updateData['conclusions'] = \App\Common\Utils\Helper::myJsonEncode($res['contact_way']['conclusions']);
         }
         $updateData['is_exist'] = 1;
-        $updateData['sync_time'] = date("Y-m-d H:i:s", $now);
+        $updateData['sync_time'] = \App\Common\Utils\Helper::getCurrentTime($now);
         return $this->update(array('_id' => $contactWayInfo['_id']), array('$set' => $updateData));
     }
 }

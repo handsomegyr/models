@@ -148,6 +148,35 @@ trait ExternalContactTrait
         );
     }
 
+    // 获取企业已配置的「联系我」列表
+    public function listContactWay($start_time, $end_time, $cursor = "", $limit = 1000)
+    {
+        $modelContactWay = new \App\Qyweixin\Models\ExternalContact\ContactWay();
+        $res = $this->getQyWeixinObject()
+            ->getExternalContactManager()
+            ->getContactWayManager()
+            ->getList($start_time, $end_time, $cursor, $limit);
+        if (!empty($res['errcode'])) {
+            throw new \Exception($res['errmsg'], $res['errcode']);
+        }
+        // {
+        //     "errcode": 0,
+        //     "errmsg": "ok",
+        //      "contact_way":
+        //      [
+        //          {
+        //              "config_id":"534b63270045c9ABiKEE814ef56d91c62f"
+        //          }，
+        //          {
+        //              "config_id":"87bBiKEE811c62f63270041c62f5c9A4ef"
+        //          }
+        //      ],
+        //      "next_cursor":"NEXT_CURSOR"
+        //  }
+        $modelContactWay->syncContactWayList($this->authorizer_appid, $this->provider_appid, $this->agentid, $res, time());
+        return $res;
+    }
+
     // 获取企业已配置的「联系我」方式
     public function getContactWay($contactWayInfo)
     {
@@ -601,10 +630,10 @@ trait ExternalContactTrait
          */
         $now = time();
         if (empty($tag_id) && empty($group_id)) {
-            $modelCorpTag->clearExist($this->authorizer_appid, $this->provider_appid, $now);
+            $modelCorpTag->clearExist($this->authorizer_appid, $this->provider_appid, $this->agentid, $now);
             $modelCorpTagGroup->clearExist($this->authorizer_appid, $this->provider_appid, $this->agentid, $now);
         }
-        $modelCorpTag->syncCorpTagList($this->authorizer_appid, $this->provider_appid, $res, $now);
+        $modelCorpTag->syncCorpTagList($this->authorizer_appid, $this->provider_appid, $this->agentid, $res, $now);
         $modelCorpTagGroup->syncCorpTagGroupList($this->authorizer_appid, $this->provider_appid, $this->agentid, $res, $now);
         return $res;
     }
