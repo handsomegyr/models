@@ -8,25 +8,30 @@ class CorpTag extends \App\Common\Models\Qyweixin\ExternalContact\CorpTag
     /**
      * 根据tag_id获取信息
      *
-     * @param string $tag_id            
-     * @param string $authorizer_appid          
+     * @param string $tag_id
+     * @param string $authorizer_appid
+     * @param string $provider_appid
+     * @param string $agentid
      */
-    public function getInfoByCorpTag($tag_id, $authorizer_appid)
+    public function getInfoByCorpTag($tag_id, $authorizer_appid, $provider_appid, $agentid)
     {
         $query = array();
         $query['tag_id'] = $tag_id;
+        $query['agentid'] = $agentid;
         $query['authorizer_appid'] = $authorizer_appid;
+        $query['provider_appid'] = $provider_appid;
         $info = $this->findOne($query);
 
         return $info;
     }
 
-    public function clearExist($authorizer_appid, $provider_appid, $now)
+    public function clearExist($authorizer_appid, $provider_appid, $agentid, $now)
     {
         $updateData = array('is_exist' => 0);
         $updateData['get_time'] = \App\Common\Utils\Helper::getCurrentTime($now);
         return $this->update(
             array(
+                'agentid' => $agentid,
                 'authorizer_appid' => $authorizer_appid,
                 'provider_appid' => $provider_appid
             ),
@@ -34,7 +39,7 @@ class CorpTag extends \App\Common\Models\Qyweixin\ExternalContact\CorpTag
         );
     }
 
-    public function syncCorpTagList($authorizer_appid, $provider_appid, $res, $now)
+    public function syncCorpTagList($authorizer_appid, $provider_appid, $agentid, $res, $now)
     {
         // {
         //     "errcode": 0,
@@ -78,7 +83,7 @@ class CorpTag extends \App\Common\Models\Qyweixin\ExternalContact\CorpTag
                     // "order": 1,
                     // "deleted": false
                     $tag_id = $tagInfo['id'];
-                    $info = $this->getInfoByCorpTag($tag_id, $authorizer_appid);
+                    $info = $this->getInfoByCorpTag($tag_id, $authorizer_appid, $provider_appid, $agentid);
                     $data = array();
                     $data['tag_name'] = $tagInfo['name'];
                     $data['tag_create_time'] = \App\Common\Utils\Helper::getCurrentTime($tagInfo['create_time']);
@@ -89,14 +94,16 @@ class CorpTag extends \App\Common\Models\Qyweixin\ExternalContact\CorpTag
                     $data['tag_group_create_time'] = \App\Common\Utils\Helper::getCurrentTime($tagGroupInfo['create_time']);
                     $data['tag_group_order'] = $tagGroupInfo['order'];
                     $data['tag_group_deleted'] = (isset($tagGroupInfo['deleted']) ? intval($tagGroupInfo['deleted']) : 0);
-                    $data['provider_appid'] = $provider_appid;
+
                     // 通过这个字段来表明企业微信那边有这条记录
                     $data['is_exist'] = 1;
                     $data['get_time'] = \App\Common\Utils\Helper::getCurrentTime($now);
                     if (!empty($info)) {
                         $this->update(array('_id' => $info['_id']), array('$set' => $data));
                     } else {
+                        $data['provider_appid'] = $provider_appid;
                         $data['authorizer_appid'] = $authorizer_appid;
+                        $data['agentid'] = $agentid;
                         $data['tag_id'] = $tag_id;
                         $this->insert($data);
                     }

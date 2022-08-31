@@ -454,7 +454,7 @@ trait ExternalContactTrait
          * ]
          * }
          */
-        $modelExternalUser->syncExternalUserList($this->authorizer_appid, $this->provider_appid, $res, time());
+        $modelExternalUser->syncExternalUserList($this->authorizer_appid, $this->provider_appid, $this->agentid, $res, time());
         return $res;
     }
 
@@ -490,10 +490,10 @@ trait ExternalContactTrait
 
         // 同步follow_user
         $modelExternalUserFollowUser = new \App\Qyweixin\Models\ExternalContact\ExternalUserFollowUser();
-        $modelExternalUserFollowUser->clearExist($external_userid, $this->authorizer_appid, $this->provider_appid, $now);
+        $modelExternalUserFollowUser->clearExist($external_userid, $this->authorizer_appid, $this->provider_appid, $this->agentid, $now);
 
         if (!empty($res['follow_user'])) {
-            $modelExternalUserFollowUser->syncFollowUserList($external_userid, $this->authorizer_appid, $this->provider_appid, $res, $now);
+            $modelExternalUserFollowUser->syncFollowUserList($external_userid, $this->authorizer_appid, $this->provider_appid, $this->agentid, $res, $now);
         }
 
         if (!empty($res['next_cursor'])) {
@@ -506,7 +506,7 @@ trait ExternalContactTrait
                     throw new \Exception($res['errmsg'], $res['errcode']);
                 }
                 if (!empty($res['follow_user'])) {
-                    $modelExternalUserFollowUser->syncFollowUserList($external_userid, $this->authorizer_appid, $this->provider_appid, $res, $now);
+                    $modelExternalUserFollowUser->syncFollowUserList($external_userid, $this->authorizer_appid, $this->provider_appid, $this->agentid, $res, $now);
                 }
                 if (empty($res['next_cursor'])) {
                     break;
@@ -558,6 +558,7 @@ trait ExternalContactTrait
     public function getCorpTagList($tag_id = array(), $group_id = array())
     {
         $modelCorpTag = new \App\Qyweixin\Models\ExternalContact\CorpTag();
+        $modelCorpTagGroup = new \App\Qyweixin\Models\ExternalContact\CorpTagGroup();
         $res = $this->getQyWeixinObject()
             ->getExternalContactManager()
             ->getCorpTagList($tag_id, $group_id);
@@ -601,8 +602,10 @@ trait ExternalContactTrait
         $now = time();
         if (empty($tag_id) && empty($group_id)) {
             $modelCorpTag->clearExist($this->authorizer_appid, $this->provider_appid, $now);
+            $modelCorpTagGroup->clearExist($this->authorizer_appid, $this->provider_appid, $this->agentid, $now);
         }
         $modelCorpTag->syncCorpTagList($this->authorizer_appid, $this->provider_appid, $res, $now);
+        $modelCorpTagGroup->syncCorpTagGroupList($this->authorizer_appid, $this->provider_appid, $this->agentid, $res, $now);
         return $res;
     }
 

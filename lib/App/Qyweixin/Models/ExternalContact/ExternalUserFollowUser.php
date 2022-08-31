@@ -8,27 +8,32 @@ class ExternalUserFollowUser extends \App\Common\Models\Qyweixin\ExternalContact
      * 根据客户ID获取信息
      *
      * @param string $external_userid 
-     * @param string $userid              
-     * @param string $authorizer_appid          
+     * @param string $userid
+     * @param string $authorizer_appid
+     * @param string $provider_appid
+     * @param string $agentid
      */
-    public function getInfoByUserId($external_userid, $userid, $authorizer_appid)
+    public function getInfoByUserId($external_userid, $userid, $authorizer_appid, $provider_appid, $agentid)
     {
         $query = array();
         $query['external_userid'] = $external_userid;
         $query['userid'] = $userid;
+        $query['agentid'] = $agentid;
         $query['authorizer_appid'] = $authorizer_appid;
+        $query['provider_appid'] = $provider_appid;
         $info = $this->findOne($query);
 
         return $info;
     }
 
-    public function clearExist($external_userid, $authorizer_appid, $provider_appid, $now)
+    public function clearExist($external_userid, $authorizer_appid, $provider_appid, $agentid, $now)
     {
         $updateData = array('is_exist' => 0);
         $updateData['get_time'] = \App\Common\Utils\Helper::getCurrentTime($now);
         return $this->update(
             array(
                 'external_userid' => $external_userid,
+                'agentid' => $agentid,
                 'authorizer_appid' => $authorizer_appid,
                 'provider_appid' => $provider_appid
             ),
@@ -36,7 +41,7 @@ class ExternalUserFollowUser extends \App\Common\Models\Qyweixin\ExternalContact
         );
     }
 
-    public function syncFollowUserList($external_userid, $authorizer_appid, $provider_appid, $res, $now)
+    public function syncFollowUserList($external_userid, $authorizer_appid, $provider_appid, $agentid, $res, $now)
     {
         /**
          * {
@@ -67,7 +72,6 @@ class ExternalUserFollowUser extends \App\Common\Models\Qyweixin\ExternalContact
 
                 $userid = isset($useridInfo['userid']) ? $useridInfo['userid'] : '';
                 $data = array();
-                $data['provider_appid'] = $provider_appid;
                 $data['get_time'] = \App\Common\Utils\Helper::getCurrentTime($now);
                 $data['remark'] = isset($useridInfo['remark']) ? $useridInfo['remark'] : '';
                 $data['description'] = isset($useridInfo['description']) ? $useridInfo['description'] : '';
@@ -81,12 +85,14 @@ class ExternalUserFollowUser extends \App\Common\Models\Qyweixin\ExternalContact
                 // 通过这个字段来表明企业微信那边有这条记录
                 $data['is_exist'] = 1;
 
-                $info = $this->getInfoByUserId($external_userid, $userid, $authorizer_appid);
+                $info = $this->getInfoByUserId($external_userid, $userid, $authorizer_appid, $provider_appid, $agentid);
 
                 if (!empty($info)) {
                     $this->update(array('_id' => $info['_id']), array('$set' => $data));
                 } else {
+                    $data['provider_appid'] = $provider_appid;
                     $data['authorizer_appid'] = $authorizer_appid;
+                    $data['agentid'] = $agentid;
                     $data['external_userid'] = $external_userid;
                     $data['userid'] = $userid;
                     $this->insert($data);
