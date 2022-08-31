@@ -70,6 +70,11 @@ class QyService
         return $this->provider_appid;
     }
 
+    public function getAgentid()
+    {
+        return $this->agentid;
+    }
+
     public function getAppConfig4Provider()
     {
         $this->getToken4Provider();
