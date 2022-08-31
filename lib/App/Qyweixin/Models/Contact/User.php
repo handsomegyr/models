@@ -18,26 +18,29 @@ class User extends \App\Common\Models\Qyweixin\Contact\User
     /**
      * 获取用户信息
      *
-     * @param string $userid            
-     * @param string $authorizer_appid            
-     * @param string $provider_appid            
+     * @param string $userid
+     * @param string $authorizer_appid
+     * @param string $provider_appid
+     * @param string $agentid
      */
-    public function getInfoByUserId($userid, $authorizer_appid, $provider_appid)
+    public function getInfoByUserId($userid, $authorizer_appid, $provider_appid, $agentid)
     {
         $info = $this->findOne(array(
             'userid' => $userid,
+            'agentid' => $agentid,
             'authorizer_appid' => $authorizer_appid,
             'provider_appid' => $provider_appid
         ));
         return $info;
     }
 
-    public function clearExist($authorizer_appid, $provider_appid, $now)
+    public function clearExist($authorizer_appid, $provider_appid, $agentid, $now)
     {
         $updateData = array('is_exist' => 0);
         $updateData['sync_time'] = \App\Common\Utils\Helper::getCurrentTime($now);
         return $this->update(
             array(
+                'agentid' => $agentid,
                 'authorizer_appid' => $authorizer_appid,
                 'provider_appid' => $provider_appid
             ),
@@ -48,15 +51,16 @@ class User extends \App\Common\Models\Qyweixin\Contact\User
     /**
      * 通过活动授权更新用户个人信息
      *
-     * @param string $userid            
-     * @param string $authorizer_appid            
-     * @param string $provider_appid            
-     * @param array $userInfo            
+     * @param string $userid
+     * @param string $authorizer_appid
+     * @param string $provider_appid
+     * @param string $agentid
+     * @param array $userInfo
      */
-    public function updateUserInfoBySns($userid, $authorizer_appid, $provider_appid, $userInfo)
+    public function updateUserInfoBySns($userid, $authorizer_appid, $provider_appid, $agentid, $userInfo)
     {
-        $checkInfo = $this->getInfoByUserId($userid, $authorizer_appid, $provider_appid);
-        $data = $this->getPrepareData($userInfo, $authorizer_appid, $provider_appid, $checkInfo, time());
+        $checkInfo = $this->getInfoByUserId($userid, $authorizer_appid, $provider_appid, $agentid);
+        $data = $this->getPrepareData($userInfo, $authorizer_appid, $provider_appid, $agentid, $checkInfo, time());
         if (!empty($checkInfo)) {
             $affectRows = $this->update(array('_id' => $checkInfo['_id']), array('$set' => $data));
             return array_merge($checkInfo, $data);
@@ -71,16 +75,18 @@ class User extends \App\Common\Models\Qyweixin\Contact\User
     /**
      * 获取用户信息 最新有效的
      *
-     * @param string $userid            
-     * @param string $authorizer_appid            
-     * @param string $provider_appid            
+     * @param string $userid
+     * @param string $authorizer_appid
+     * @param string $provider_appid
+     * @param string $agentid
      */
-    public function getUserInfoByIdLastWeek($userid, $authorizer_appid, $provider_appid, $now)
+    public function getUserInfoByIdLastWeek($userid, $authorizer_appid, $provider_appid, $agentid, $now)
     {
         $info = $this->findOne(array(
             'userid' => $userid,
+            'agentid' => $agentid,
             'authorizer_appid' => $authorizer_appid,
-            'provider_appid' =>  $provider_appid,
+            'provider_appid' => $provider_appid,
             'updated_at' => array('$gt' => \App\Common\Utils\Helper::getCurrentTime($now - 7 * 86400))
         ));
         return $info;
@@ -90,13 +96,13 @@ class User extends \App\Common\Models\Qyweixin\Contact\User
      * 根据用户的互动行为，通过服务器端token获取该用户的个人信息
      * userid不存在或者随机100次执行一次更新用户信息
      */
-    public function updateUserInfoByAction($userid, $authorizer_appid, $provider_appid, $range = true)
+    public function updateUserInfoByAction($userid, $authorizer_appid, $provider_appid, $agentid, $range = true)
     {
         if (empty($userid) || $userid == 'sys') {
             return array();
         }
 
-        $checkInfo = $this->getInfoByUserId($userid, $authorizer_appid, $provider_appid);
+        $checkInfo = $this->getInfoByUserId($userid, $authorizer_appid, $provider_appid, $agentid);
         // $range = (rand(0, 100) === 1);
         if (empty($checkInfo) || $range) { // || empty($checkInfo['subscribe'])
             try {
@@ -110,7 +116,7 @@ class User extends \App\Common\Models\Qyweixin\Contact\User
                 $userInfo['error_msg'] = $e->getMessage();
             }
 
-            $data = $this->getPrepareData($userInfo, $authorizer_appid, $provider_appid, $checkInfo, time());
+            $data = $this->getPrepareData($userInfo, $authorizer_appid, $provider_appid, $agentid, $checkInfo, time());
 
             if (!empty($checkInfo)) {
                 $affectRows = $this->update(array('_id' => $checkInfo['_id']), array('$set' => $data));
@@ -136,11 +142,12 @@ class User extends \App\Common\Models\Qyweixin\Contact\User
         }
         $authorizer_appid = $checkInfo['authorizer_appid'];
         $provider_appid = $checkInfo['provider_appid'];
-        $data = $this->getPrepareData($userInfo, $authorizer_appid, $provider_appid, $checkInfo, time());
+        $agentid = $checkInfo['agentid'];
+        $data = $this->getPrepareData($userInfo, $authorizer_appid, $provider_appid, $agentid, $checkInfo, time());
         return $this->update(array('_id' => $checkInfo['_id']), array('$set' => $data));
     }
 
-    public function syncUserList($authorizer_appid, $provider_appid, $res, $now)
+    public function syncUserList($authorizer_appid, $provider_appid, $agentid, $res, $now)
     {
         /**
          * {
@@ -162,8 +169,8 @@ class User extends \App\Common\Models\Qyweixin\Contact\User
                 if (empty($userid)) {
                     continue;
                 }
-                $checkInfo = $this->getInfoByUserId($userid, $authorizer_appid, $provider_appid);
-                $data = $this->getPrepareData($userInfo, $authorizer_appid, $provider_appid, $checkInfo, $now);
+                $checkInfo = $this->getInfoByUserId($userid, $authorizer_appid, $provider_appid, $agentid);
+                $data = $this->getPrepareData($userInfo, $authorizer_appid, $provider_appid, $agentid, $checkInfo, $now);
 
                 if (!empty($checkInfo)) {
                     return $this->update(array('_id' => $checkInfo['_id']), array('$set' => $data));
@@ -177,7 +184,7 @@ class User extends \App\Common\Models\Qyweixin\Contact\User
         }
     }
 
-    private function getPrepareData($userInfo, $authorizer_appid, $provider_appid, $checkInfo, $now)
+    private function getPrepareData($userInfo, $authorizer_appid, $provider_appid, $agentid, $checkInfo, $now)
     {
         /**
          * "errcode": 0, 
@@ -209,6 +216,7 @@ class User extends \App\Common\Models\Qyweixin\Contact\User
             $data = array();
             $data['authorizer_appid'] = $authorizer_appid;
             $data['provider_appid'] = $provider_appid;
+            $data['agentid'] = $agentid;
             $data['userid'] = isset($userInfo['userid']) ? $userInfo['userid'] : '';
             $data['name'] = isset($userInfo['name']) ? $userInfo['name'] : '';
             $data['gender'] = isset($userInfo['gender']) ? $userInfo['gender'] : '0';
