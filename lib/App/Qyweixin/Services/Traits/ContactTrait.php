@@ -263,7 +263,7 @@ trait ContactTrait
             $modelDepartmentUser->clearExist($this->authorizer_appid, $this->provider_appid, $this->agentid, $now);
         }
         $modelDepartmentUser->syncDepartmentUserList($this->authorizer_appid, $this->provider_appid, $this->agentid, $res, $now);
-        $modelUser->syncUserList($this->authorizer_appid, $this->provider_appid, $res, $now);
+        $modelUser->syncUserList($this->authorizer_appid, $this->provider_appid, $this->agentid, $res, $now);
 
         return $res;
     }
@@ -365,7 +365,7 @@ trait ContactTrait
             $modelDepartmentUser->clearExist($this->authorizer_appid, $this->provider_appid, $this->agentid, $now);
         }
         $modelDepartmentUser->syncDepartmentUserList($this->authorizer_appid, $this->provider_appid, $this->agentid, $res, $now);
-        $modelUser->syncUserList($this->authorizer_appid, $this->provider_appid, $res, $now);
+        $modelUser->syncUserList($this->authorizer_appid, $this->provider_appid, $this->agentid, $res, $now);
 
         return $res;
     }
@@ -421,7 +421,7 @@ trait ContactTrait
         $modelTagParty = new \App\Qyweixin\Models\Contact\TagParty();
         $modelTagUser = new \App\Qyweixin\Models\Contact\TagUser();
         $now = time();
-        $modelTagParty->syncTagDepartmentList($tagid, $this->authorizer_appid, $this->provider_appid, $res, $now);
+        $modelTagParty->syncTagDepartmentList($tagid, $this->authorizer_appid, $this->provider_appid, $this->agentid, $res, $now);
         $modelTagUser->syncTagUserList($tagid, $this->authorizer_appid, $this->provider_appid, $this->agentid, $res, $now);
         return $res;
     }
