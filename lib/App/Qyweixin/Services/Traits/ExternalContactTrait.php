@@ -423,8 +423,8 @@ trait ExternalContactTrait
          * }
          */
         $now = time();
-        $modelFollowUser->clearExist($this->authorizer_appid, $this->provider_appid, $now);
-        $modelFollowUser->syncFollowUserList($this->authorizer_appid, $this->provider_appid, $res, $now);
+        $modelFollowUser->clearExist($this->authorizer_appid, $this->provider_appid, $this->agentid, $now);
+        $modelFollowUser->syncFollowUserList($this->authorizer_appid, $this->provider_appid, $this->agentid, $res, $now);
         return $res;
     }
 
