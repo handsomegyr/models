@@ -224,7 +224,7 @@ trait ContactTrait
         $now = time();
         if (empty($dep_id)) {
             $modelDepartment->clearExist($this->authorizer_appid, $this->provider_appid, $this->agentid, $now);
-            $modelDepartmentUser->clearExist($this->authorizer_appid, $this->provider_appid, $this->agentid, $now);
+            // $modelDepartmentUser->clearExist($this->authorizer_appid, $this->provider_appid, $this->agentid, $now);
         }
         $modelDepartment->syncDepartmentList($this->authorizer_appid, $this->provider_appid, $this->agentid, $res, $now);
         return $res;
