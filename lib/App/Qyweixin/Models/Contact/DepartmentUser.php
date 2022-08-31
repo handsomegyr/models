@@ -8,26 +8,31 @@ class DepartmentUser extends \App\Common\Models\Qyweixin\Contact\DepartmentUser
     /**
      * 根据部门ID获取信息
      *
-     * @param string $userid   
-     * @param string $deptid          
-     * @param string $authorizer_appid          
+     * @param string $userid
+     * @param string $deptid
+     * @param string $authorizer_appid
+     * @param string $provider_appid
+     * @param string $agentid
      */
-    public function getInfoByUserIdAndDepartmentId($userid, $department_id, $authorizer_appid)
+    public function getInfoByUserIdAndDepartmentId($userid, $department_id, $authorizer_appid, $provider_appid, $agentid)
     {
         $query = array();
         $query['userid'] = $userid;
         $query['department_id'] = $department_id;
+        $query['agentid'] = $agentid;
         $query['authorizer_appid'] = $authorizer_appid;
+        $query['provider_appid'] = $provider_appid;
         $info = $this->findOne($query);
         return $info;
     }
 
-    public function clearExist($authorizer_appid, $provider_appid, $now)
+    public function clearExist($authorizer_appid, $provider_appid, $agentid, $now)
     {
         $updateData = array('is_exist' => 0);
         $updateData['get_time'] = \App\Common\Utils\Helper::getCurrentTime($now);
         return $this->update(
             array(
+                'agentid' => $agentid,
                 'authorizer_appid' => $authorizer_appid,
                 'provider_appid' => $provider_appid
             ),
@@ -35,7 +40,7 @@ class DepartmentUser extends \App\Common\Models\Qyweixin\Contact\DepartmentUser
         );
     }
 
-    public function syncDepartmentUserList($authorizer_appid, $provider_appid, $res, $now)
+    public function syncDepartmentUserList($authorizer_appid, $provider_appid, $agentid, $res, $now)
     {
         /**
          * {
@@ -56,9 +61,8 @@ class DepartmentUser extends \App\Common\Models\Qyweixin\Contact\DepartmentUser
                 if (!empty($departmentUserInfo['department'])) {
                     foreach ($departmentUserInfo['department'] as $department_id) {
                         $userid = $departmentUserInfo['userid'];
-                        $info = $this->getInfoByUserIdAndDepartmentId($userid, $department_id, $authorizer_appid);
+                        $info = $this->getInfoByUserIdAndDepartmentId($userid, $department_id, $authorizer_appid, $provider_appid, $agentid);
                         $data = array();
-                        $data['provider_appid'] = $provider_appid;
                         $data['name'] = $departmentUserInfo['name'];
                         if (isset($departmentUserInfo['department'])) {
                             $data['department'] = \App\Common\Utils\Helper::myJsonEncode($departmentUserInfo['department']);
@@ -71,7 +75,9 @@ class DepartmentUser extends \App\Common\Models\Qyweixin\Contact\DepartmentUser
                         if (!empty($info)) {
                             $this->update(array('_id' => $info['_id']), array('$set' => $data));
                         } else {
+                            $data['provider_appid'] = $provider_appid;
                             $data['authorizer_appid'] = $authorizer_appid;
+                            $data['agentid'] = $agentid;
                             $data['userid'] = $userid;
                             $data['department_id'] = $department_id;
                             $this->insert($data);

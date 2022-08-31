@@ -90,7 +90,7 @@ trait ContactTrait
                 throw new \Exception($res['errmsg'], $res['errcode']);
             }
         }
-        $modelUser->updateUserInfoById($userInfo, $res);
+        $modelUser->updateUserInfoById($userInfo, $res, time());
         return $res;
     }
 
@@ -223,10 +223,10 @@ trait ContactTrait
         // 如果从跟部门进行同步的话 那么先将所有的记录is_exist改成0
         $now = time();
         if (empty($dep_id)) {
-            $modelDepartment->clearExist($this->authorizer_appid, $this->provider_appid, $now);            
-            $modelDepartmentUser->clearExist($this->authorizer_appid, $this->provider_appid, $now);
+            $modelDepartment->clearExist($this->authorizer_appid, $this->provider_appid, $this->agentid, $now);
+            $modelDepartmentUser->clearExist($this->authorizer_appid, $this->provider_appid, $this->agentid, $now);
         }
-        $modelDepartment->syncDepartmentList($this->authorizer_appid, $this->provider_appid, $res, $now);
+        $modelDepartment->syncDepartmentList($this->authorizer_appid, $this->provider_appid, $this->agentid, $res, $now);
         return $res;
     }
 
@@ -260,9 +260,9 @@ trait ContactTrait
          */
         $now = time();
         if (!empty($is_root) && !empty($fetch_child)) {
-            $modelDepartmentUser->clearExist($this->authorizer_appid, $this->provider_appid, $now);
+            $modelDepartmentUser->clearExist($this->authorizer_appid, $this->provider_appid, $this->agentid, $now);
         }
-        $modelDepartmentUser->syncDepartmentUserList($this->authorizer_appid, $this->provider_appid, $res, $now);
+        $modelDepartmentUser->syncDepartmentUserList($this->authorizer_appid, $this->provider_appid, $this->agentid, $res, $now);
         $modelUser->syncUserList($this->authorizer_appid, $this->provider_appid, $res, $now);
 
         return $res;
@@ -362,9 +362,9 @@ trait ContactTrait
          */
         $now = time();
         if (!empty($is_root) && !empty($fetch_child)) {
-            $modelDepartmentUser->clearExist($this->authorizer_appid, $this->provider_appid, $now);
+            $modelDepartmentUser->clearExist($this->authorizer_appid, $this->provider_appid, $this->agentid, $now);
         }
-        $modelDepartmentUser->syncDepartmentUserList($this->authorizer_appid, $this->provider_appid, $res, $now);
+        $modelDepartmentUser->syncDepartmentUserList($this->authorizer_appid, $this->provider_appid, $this->agentid, $res, $now);
         $modelUser->syncUserList($this->authorizer_appid, $this->provider_appid, $res, $now);
 
         return $res;

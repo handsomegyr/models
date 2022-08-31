@@ -8,24 +8,29 @@ class Department extends \App\Common\Models\Qyweixin\Contact\Department
     /**
      * 根据部门ID获取信息
      *
-     * @param string $deptid            
-     * @param string $authorizer_appid          
+     * @param string $deptid
+     * @param string $authorizer_appid
+     * @param string $provider_appid
+     * @param string $agentid
      */
-    public function getInfoByDepartmentId($deptid, $authorizer_appid)
+    public function getInfoByDepartmentId($deptid, $authorizer_appid, $provider_appid, $agentid)
     {
         $query = array();
         $query['deptid'] = $deptid;
+        $query['agentid'] = $agentid;
         $query['authorizer_appid'] = $authorizer_appid;
+        $query['provider_appid'] = $provider_appid;
         $info = $this->findOne($query);
         return $info;
     }
 
-    public function clearExist($authorizer_appid, $provider_appid, $now)
+    public function clearExist($authorizer_appid, $provider_appid, $agentid, $now)
     {
         $updateData = array('is_exist' => 0);
         $updateData['sync_time'] = \App\Common\Utils\Helper::getCurrentTime($now);
         return $this->update(
             array(
+                'agentid' => $agentid,
                 'authorizer_appid' => $authorizer_appid,
                 'provider_appid' => $provider_appid
             ),
@@ -33,7 +38,7 @@ class Department extends \App\Common\Models\Qyweixin\Contact\Department
         );
     }
 
-    public function syncDepartmentList($authorizer_appid, $provider_appid, $res, $now)
+    public function syncDepartmentList($authorizer_appid, $provider_appid, $agentid, $res, $now)
     {
         /**
          * {
@@ -62,9 +67,8 @@ class Department extends \App\Common\Models\Qyweixin\Contact\Department
         if (!empty($res['department'])) {
             foreach ($res['department'] as $departmentInfo) {
                 $deptid = $departmentInfo['id'];
-                $info = $this->getInfoByDepartmentId($deptid, $authorizer_appid);
+                $info = $this->getInfoByDepartmentId($deptid, $authorizer_appid, $provider_appid, $agentid);
                 $data = array();
-                $data['provider_appid'] = $provider_appid;
                 $data['name'] = $departmentInfo['name'];
                 if (isset($departmentInfo['name_en'])) {
                     $data['name_en'] = $departmentInfo['name_en'];
@@ -80,7 +84,9 @@ class Department extends \App\Common\Models\Qyweixin\Contact\Department
                 if (!empty($info)) {
                     $this->update(array('_id' => $info['_id']), array('$set' => $data));
                 } else {
+                    $data['provider_appid'] = $provider_appid;
                     $data['authorizer_appid'] = $authorizer_appid;
+                    $data['agentid'] = $agentid;
                     $data['deptid'] = $deptid;
                     $this->insert($data);
                 }
