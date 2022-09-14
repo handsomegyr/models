@@ -156,7 +156,7 @@ class Agent extends \App\Common\Models\Qyweixin\Agent\Agent
         return $affectRows;
     }
 
-    public function createAndUpdateAuthAgentInfo($provider_appid, $authorizer_appid, $secret, $access_token, $expires_in, $authAgentInfo, $memo = array())
+    public function createAndUpdateAuthAgentInfo($provider_appid, $authorizer_appid, $secret, $access_token, $expires_in, $authAgentInfo, $authCorpInfo, $memo = array())
     {
         //         {
         //             "agentid": 1000017, 
@@ -173,6 +173,7 @@ class Agent extends \App\Common\Models\Qyweixin\Agent\Agent
         //             }, 
         //             "is_customized_app": true
         //         }
+        $auth_corpid = $authCorpInfo['corpid'];
         $agentid = $authAgentInfo['agentid'];
         $name = $authAgentInfo['name'];
         $square_logo_url = $authAgentInfo['square_logo_url'];
@@ -189,6 +190,7 @@ class Agent extends \App\Common\Models\Qyweixin\Agent\Agent
                     'agent_type' => 1,
                     'is_customized_app' => $is_customized_app,
                     'agentid' => $agentid,
+                    'auth_corpid' => $auth_corpid,
                     'name' => $name,
                     'secret' => $secret,
                     'secret_type' => 3,
@@ -205,6 +207,7 @@ class Agent extends \App\Common\Models\Qyweixin\Agent\Agent
             } else {
                 $memo = array_merge($token['memo'], $memo);
                 $updateData = array();
+                $updateData['auth_corpid'] = $auth_corpid;
                 $updateData['name'] = $name;
                 $updateData['secret'] = $secret;
                 $updateData['is_customized_app'] = $is_customized_app;
@@ -263,7 +266,8 @@ class Agent extends \App\Common\Models\Qyweixin\Agent\Agent
                 $lockKey = \App\Common\Utils\Helper::myCacheKey(__CLASS__, __METHOD__, __LINE__, $token['provider_appid'], $token['authorizer_appid'], $token['agentid']);
                 $objLock = new \iLock($lockKey);
                 if (!$objLock->lock()) {
-                    $objToken = new \Qyweixin\Token\Server($token['authorizer_appid'], $token['secret']);
+                    $corpid = empty($token['provider_appid']) ? $token['authorizer_appid'] : $token['auth_corpid']; //$token['provider_appid'];
+                    $objToken = new \Qyweixin\Token\Server($corpid, $token['secret']);
                     $arrToken = $objToken->getAccessToken();
                     if (!isset($arrToken['access_token'])) {
                         throw new \Exception(\App\Common\Utils\Helper::myJsonEncode($arrToken));
