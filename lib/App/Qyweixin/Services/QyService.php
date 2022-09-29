@@ -13,6 +13,7 @@ class QyService
     use \App\Qyweixin\Services\Traits\MenuTrait;
     use \App\Qyweixin\Services\Traits\ReplyMsgTrait;
     use \App\Qyweixin\Services\Traits\TransferTrait;
+    use \App\Qyweixin\Services\Traits\InterceptRuleTrait;
 
     private $authorizer_appid = "";
 
