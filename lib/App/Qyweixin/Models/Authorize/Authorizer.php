@@ -74,6 +74,9 @@ class Authorizer extends \App\Common\Models\Qyweixin\Authorize\Authorizer
                     $datas['dealer_corp_info'] = \App\Common\Utils\Helper::myJsonEncode($extInfo['dealer_corp_info']);
                 }
                 if (!empty($extInfo['auth_corp_info'])) {
+                    if (!empty($extInfo['auth_corp_info']['corpid'])) {
+                        $datas['auth_corpid'] = $extInfo['auth_corp_info']['corpid'];
+                    }
                     $datas['auth_corp_info'] = \App\Common\Utils\Helper::myJsonEncode($extInfo['auth_corp_info']);
                 }
                 if (!empty($extInfo['auth_info'])) {
@@ -114,6 +117,9 @@ class Authorizer extends \App\Common\Models\Qyweixin\Authorize\Authorizer
                 $updateData['dealer_corp_info'] = \App\Common\Utils\Helper::myJsonEncode($extInfo['dealer_corp_info']);
             }
             if (!empty($extInfo['auth_corp_info'])) {
+                if (!empty($extInfo['auth_corp_info']['corpid'])) {
+                    $updateData['auth_corpid'] = $extInfo['auth_corp_info']['corpid'];
+                }
                 $updateData['auth_corp_info'] = \App\Common\Utils\Helper::myJsonEncode($extInfo['auth_corp_info']);
             }
             if (!empty($extInfo['auth_info'])) {
