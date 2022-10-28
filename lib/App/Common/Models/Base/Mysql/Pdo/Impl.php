@@ -71,7 +71,7 @@ class Impl extends Base
 
     public function getDI()
     {
-        $di = \Phalcon\DI::getDefault();
+        $di = \Phalcon\Di\Di::getDefault();
         return $di;
     }
 

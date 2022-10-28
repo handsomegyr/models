@@ -57,7 +57,7 @@ class Robot
         $this->server = $server;
         $objServer = ($this->server->protocol);
         $this->storer = $objServer->getStorer();
-        $this->redis = \Phalcon\DI::getDefault()->get('redis');
+        $this->redis = \Phalcon\Di\Di::getDefault()->get('redis');
         
         $this->modelResource = new \App\Live\Models\Resource();
         $this->modelRoom = new \App\Live\Models\Room();

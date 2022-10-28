@@ -25,7 +25,7 @@ class Redis
     {
         $this->service_id = $id;
         $this->config = $config;
-        $this->redis = \Phalcon\DI::getDefault()->get('redis');
+        $this->redis = \Phalcon\Di\Di::getDefault()->get('redis');
     }
 
     /**

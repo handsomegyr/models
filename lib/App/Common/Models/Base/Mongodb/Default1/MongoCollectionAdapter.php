@@ -196,7 +196,7 @@ class MongoCollectionAdapter
             throw new \Exception('请安装MongoCollection');
         }
 
-        $config = \Phalcon\DI::getDefault()->getConfig();
+        $config = \Phalcon\Di\Di::getDefault()->getConfig();
         $database = $config->mongodb->dbname;
 
         if ($collection === null) {
