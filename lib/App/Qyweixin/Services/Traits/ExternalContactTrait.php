@@ -503,6 +503,35 @@ trait ExternalContactTrait
                 throw new \Exception($res['errmsg'], $res['errcode']);
             }
         }
+        // 根据自建应用来获取客户的信息 主要是获取unionid
+        if (trim($userInfo['agentid']) == \uniqid() && !empty($res['external_contact']) && empty($res['external_contact']['unionid'])) {
+            // 创建service
+            $weixinopenService = new \App\Qyweixin\Services\QyService("xxxx", "", 9999999);
+            $res4FromServiceExternalUserid = $weixinopenService->getQyWeixinObject()
+                ->getExternalContactManager()
+                ->fromServiceExternalUserid($external_userid, $userInfo['agentid']);
+            $originalExternalUserId = empty($res4FromServiceExternalUserid['external_userid']) ? '' : $res4FromServiceExternalUserid['external_userid'];
+            if (!empty($originalExternalUserId)) {
+                $res4OriginalExternalUser = $weixinopenService->getQyWeixinObject()
+                    ->getExternalContactManager()
+                    ->get($originalExternalUserId);
+                // 如果成功的话
+                if (empty($res4OriginalExternalUser['errcode'])) {
+                    if (!empty($res4OriginalExternalUser['external_contact']['unionid'])) {
+                        $res['external_contact']['unionid'] = $res4OriginalExternalUser['external_contact']['unionid'];
+                    }
+                    if (!empty($res4OriginalExternalUser['external_contact']['position'])) {
+                        $res['external_contact']['position'] = $res4OriginalExternalUser['external_contact']['position'];
+                    }
+                    if (!empty($res4OriginalExternalUser['external_contact']['corp_name'])) {
+                        $res['external_contact']['corp_name'] = $res4OriginalExternalUser['external_contact']['corp_name'];
+                    }
+                    if (!empty($res4OriginalExternalUser['external_contact']['corp_full_name'])) {
+                        $res['external_contact']['corp_full_name'] = $res4OriginalExternalUser['external_contact']['corp_full_name'];
+                    }
+                }
+            }
+        }
         /**
          * {
          * "errcode": 0,
@@ -769,6 +798,32 @@ trait ExternalContactTrait
         $modelGroupChatMember = new \App\Qyweixin\Models\ExternalContact\GroupChatMember();
         $modelGroupChatMember->clearExist($chatid, $this->authorizer_appid, $this->provider_appid, $this->agentid, $now);
         if (!empty($res['group_chat']['member_list'])) {
+            foreach ($res['group_chat']['member_list'] as $key => $memberInfo) {
+                // 根据自建应用来获取客户的信息 主要是获取unionid
+                if (trim($this->agentid) == \uniqid() && !empty($memberInfo['userid']) && empty($memberInfo['unionid'])) {
+                    // 外部联系人
+                    if (intval($memberInfo['type']) == 2) {
+                        // 创建service
+                        $weixinopenService = new \App\Qyweixin\Services\QyService("xxxxxx", "", 9999999);
+                        $res4FromServiceExternalUserid = $weixinopenService->getQyWeixinObject()
+                            ->getExternalContactManager()
+                            ->fromServiceExternalUserid($memberInfo['userid'], $this->agentid);
+                        $originalExternalUserId = empty($res4FromServiceExternalUserid['external_userid']) ? '' : $res4FromServiceExternalUserid['external_userid'];
+                        if (!empty($originalExternalUserId)) {
+                            $res4OriginalExternalUser = $weixinopenService->getQyWeixinObject()
+                                ->getExternalContactManager()
+                                ->get($originalExternalUserId);
+                            // 只要成功
+                            if (empty($res4OriginalExternalUser['errcode'])) {
+                                if (!empty($res4OriginalExternalUser['external_contact']['unionid'])) {
+                                    $memberInfo['unionid'] = $res4OriginalExternalUser['external_contact']['unionid'];
+                                    $res['group_chat']['member_list'][$key] = $memberInfo;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
             $modelGroupChatMember->syncMemberList($chatid, $this->authorizer_appid, $this->provider_appid, $this->agentid, $res, $now);
         }
 
