@@ -23,7 +23,7 @@ trait CustomMsgsTrait
         $custommsg = array();
         $is_ok = false;
         try {
-            switch ($match['custom_msg_type']) {
+            switch ($customMsgInfo['msg_type']) {
                 case 'news':
                     $kf_account = empty($customMsgInfo['kf_account']) ? "" : $customMsgInfo['kf_account'];
                     $articles = array();

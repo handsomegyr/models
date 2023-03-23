@@ -21,7 +21,7 @@ trait ReplyMsgsTrait
         $ToUserName = $FromUserName;
         $FromUserName = $tmp1;
 
-        switch ($match['reply_msg_type']) {
+        switch ($replyMsgs[0]['msg_type']) {
             case 'news':
                 $articles = array();
                 // 获取图文列表

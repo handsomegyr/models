@@ -37,12 +37,15 @@ class CustomMsg extends \App\Common\Models\Weixin2\CustomMsg\CustomMsg
 
     public function getListByIdsAndCustomMsgType($ids, $authorizer_appid, $component_appid, $msg_type)
     {
-        $ret = $this->findAll(array(
+        $query = array(
             '_id' => array('$in' => $ids),
             'authorizer_appid' => $authorizer_appid,
-            'component_appid' => $component_appid,
-            'msg_type' => $msg_type
-        ), array('priority' => -1, '_id' => -1));
+            'component_appid' => $component_appid
+        );
+        if (!empty($msg_type)) {
+            $query['msg_type'] = $msg_type;
+        }
+        $ret = $this->findAll($query, array('priority' => -1, '_id' => -1));
         return $ret;
     }
 }
