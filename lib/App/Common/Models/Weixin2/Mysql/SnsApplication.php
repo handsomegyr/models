@@ -25,6 +25,9 @@ class SnsApplication extends Base
         $data['is_active'] = $this->changeToBoolean($data['is_active']);
         $data['is_ip_check'] = $this->changeToBoolean($data['is_ip_check']);
         $data['is_cb_url_check'] = $this->changeToBoolean($data['is_cb_url_check']);
+
+        $data['ip_list'] = $this->changeToArray($data['ip_list']);
+        $data['cb_url_list'] = $this->changeToArray($data['cb_url_list']);
         return $data;
     }
 }

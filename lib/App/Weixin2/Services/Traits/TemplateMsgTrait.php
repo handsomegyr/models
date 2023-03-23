@@ -97,7 +97,27 @@ trait TemplateMsgTrait
 
         // 记录日志
         $modelTemplateMsgSendLog = new \App\Weixin2\Models\TemplateMsg\SendLog();
-        $modelTemplateMsgSendLog->record($templateMsgInfo['component_appid'], $templateMsgInfo['authorizer_appid'], $templateMsgInfo['_id'], $templateMsgInfo['name'], $templateMsgInfo['template_id'], $templateMsgInfo['url'], $templateMsgInfo['data'], $templateMsgInfo['color'], $templateMsgInfo['appid'], $templateMsgInfo['pagepath'], $match['_id'], $match['keyword'], $ToUserName, $FromUserName, \App\Common\Utils\Helper::myJsonEncode($templatemsg), time(), 0);
+        $modelTemplateMsgSendLog->record(
+            $templateMsgInfo['component_appid'],
+            $templateMsgInfo['authorizer_appid'],
+            $templateMsgInfo['_id'],
+            $templateMsgInfo['name'],
+            $templateMsgInfo['template_id'],
+            $templateMsgInfo['url'],
+            $templateMsgInfo['data'],
+            $templateMsgInfo['color'],
+            $templateMsgInfo['appid'],
+            $templateMsgInfo['pagepath'],
+            $match['_id'],
+            $match['keyword'],
+            $ToUserName,
+            $FromUserName,
+            \App\Common\Utils\Helper::myJsonEncode($templatemsg),
+            time(),
+            0,
+            \App\Common\Utils\Helper::myJsonEncode($templatemsg),
+            $is_ok
+        );
 
         return array(
             'is_ok' => $is_ok,

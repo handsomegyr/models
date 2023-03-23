@@ -2,8 +2,6 @@
 
 namespace App\Weixin2\Models;
 
-
-
 class SnsApplication extends \App\Common\Models\Weixin2\SnsApplication
 {
 
@@ -46,6 +44,57 @@ class SnsApplication extends \App\Common\Models\Weixin2\SnsApplication
             return false;
         }
         return true;
+    }
+
+    public function checkIsIpValid($appConfig, $ip)
+    {
+        // 是否开启
+        if (empty($appConfig['is_ip_check'])) {
+            return true;
+        }
+
+        if (empty($appConfig['ip_list'])) {
+            return false;
+        } else {
+            $ip_list = $appConfig['ip_list'];
+            if (!is_array($ip_list)) {
+                $ip_list = \json_decode($ip_list, true);
+            }
+            if (empty($ip_list)) {
+                return false;
+            }
+            if (in_array(trim($ip), $ip_list)) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+    }
+
+    public function checkIsCbUrlValid($appConfig, $url)
+    {
+        // 是否开启
+        if (empty($appConfig['is_cb_url_check'])) {
+            return true;
+        }
+
+        if (empty($appConfig['cb_url_list'])) {
+            return false;
+        } else {
+            $cb_url_list = $appConfig['cb_url_list'];
+            if (!is_array($cb_url_list)) {
+                $cb_url_list = \json_decode($cb_url_list, true);
+            }
+            if (empty($cb_url_list)) {
+                return false;
+            }
+            if (in_array(trim($url), $cb_url_list)) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+        return false;
     }
 
     public function getSignKey($openid, $secretKey, $timestamp = 0)
