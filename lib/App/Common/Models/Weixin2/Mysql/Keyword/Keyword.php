@@ -19,6 +19,9 @@ class Keyword extends Base
     {
         $data = parent::reorganize($data);
         $data['is_fuzzy'] = $this->changeToBoolean($data['is_fuzzy']);
+        $data['start_time'] = $this->changeToValidDate($data['start_time']);
+        $data['end_time'] = $this->changeToValidDate($data['end_time']);
+        $data['is_actived'] = $this->changeToBoolean($data['is_actived']);
         return $data;
     }
 }

@@ -20,9 +20,9 @@ class Keyword extends Base
     public function getAll($field_type = '')
     {
         $query = array();
-        if (!empty($field_type)) {
-            $query[$field_type] = array('$ne' => '');
-        }
+        // if (!empty($field_type)) {
+        //     $query[$field_type] = array('$ne' => '');
+        // }
         $list = $this->findAll($query, array('_id' => 1));
         $options = array();
         foreach ($list as $item) {
