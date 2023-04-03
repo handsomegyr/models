@@ -17,6 +17,8 @@ class WeixinService
     use \App\Weixin2\Services\Traits\ShorturlTrait;
     use \App\Weixin2\Services\Traits\TemplateMsgTrait;
     use \App\Weixin2\Services\Traits\UserTrait;
+    use \App\Weixin2\Services\Traits\DraftTrait;
+    use \App\Weixin2\Services\Traits\FreePublishTrait;
 
     use \App\Weixin2\Services\Traits\Miniprogram\QrcodeTrait;
     use \App\Weixin2\Services\Traits\Miniprogram\SubscribeMsgTrait;

@@ -429,6 +429,46 @@ class Menu
         );
         $tree[] = $item;
 
+        // 草稿箱
+        $item = array(
+            'menu_name' => '草稿箱',
+            'menu_model' => 'weixin2-draft',
+            'level' => '草稿箱管理',
+            'icon' => '',
+            'model' => '\App\Backend\Submodules\Weixin2\Models\Draft\Draft'
+        );
+        $tree[] = $item;
+
+        // 草稿箱图文设置
+        $item = array(
+            'menu_name' => '草稿箱图文设置',
+            'menu_model' => 'weixin2-draftnews',
+            'level' => '草稿箱管理',
+            'icon' => '',
+            'model' => '\App\Backend\Submodules\Weixin2\Models\Draft\News'
+        );
+        $tree[] = $item;
+
+        // 草稿箱发布
+        $item = array(
+            'menu_name' => '草稿箱发布',
+            'menu_model' => 'weixin2-freepublish',
+            'level' => '草稿箱管理',
+            'icon' => '',
+            'model' => '\App\Backend\Submodules\Weixin2\Models\FreePublish\FreePublish'
+        );
+        $tree[] = $item;
+
+        // 已发布文章
+        $item = array(
+            'menu_name' => '已发布文章',
+            'menu_model' => 'weixin2-freepublisharticle',
+            'level' => '草稿箱管理',
+            'icon' => '',
+            'model' => '\App\Backend\Submodules\Weixin2\Models\FreePublish\Article'
+        );
+        $tree[] = $item;
+
         // 自定义菜单相关管理
         $item = array(
             'menu_name' => '自定义菜单相关管理',

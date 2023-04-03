@@ -8,8 +8,34 @@ class SendLog extends \App\Common\Models\Weixin2\CustomMsg\SendLog
     /**
      * 记录
      */
-    public function record($component_appid, $authorizer_appid, $custom_msg_id, $custom_msg_name, $msg_type, $media, $media_id, $thumb_media, $thumb_media_id, $title, $description, $music, $hqmusic, $appid, $pagepath, $card_id, $card_ext, $kf_account, $keyword_id, $keyword, $keyword_custom_msg_type, $ToUserName, $FromUserName, $custom_msg_content, $log_time)
-    {
+    public function record(
+        $component_appid,
+        $authorizer_appid,
+        $custom_msg_id,
+        $custom_msg_name,
+        $msg_type,
+        $media,
+        $media_id,
+        $thumb_media,
+        $thumb_media_id,
+        $title,
+        $description,
+        $music,
+        $hqmusic,
+        $appid,
+        $pagepath,
+        $card_id,
+        $card_ext,
+        $article_id,
+        $kf_account,
+        $keyword_id,
+        $keyword,
+        $keyword_custom_msg_type,
+        $ToUserName,
+        $FromUserName,
+        $custom_msg_content,
+        $log_time
+    ) {
         $datas = array(
             'component_appid' => $component_appid,
             'authorizer_appid' => $authorizer_appid,
@@ -28,6 +54,7 @@ class SendLog extends \App\Common\Models\Weixin2\CustomMsg\SendLog
             'pagepath' => empty($pagepath) ? "" : $pagepath,
             'card_id' => empty($card_id) ? "" : $card_id,
             'card_ext' => empty($card_ext) ? "" : $card_ext,
+            'article_id' => empty($article_id) ? "" : $article_id,
             'kf_account' => empty($kf_account) ? "" : $kf_account,
             'keyword_id' => empty($keyword_id) ? "" : $keyword_id,
             'keyword' => empty($keyword) ? "" : $keyword,

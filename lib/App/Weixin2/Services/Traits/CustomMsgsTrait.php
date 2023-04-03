@@ -13,8 +13,13 @@ trait CustomMsgsTrait
             return false;
         }
 
-        $sendRet = $this->sendCustomMsg($ToUserName, $FromUserName,  $customMsgs[0], $match);
-        return $sendRet['is_ok'];
+        // 最多发3条
+        foreach ($customMsgs as $idx => $customMsgInfo) {
+            if ($idx < 3) {
+                $sendRet = $this->sendCustomMsg($ToUserName, $FromUserName, $customMsgInfo, $match);
+            }
+        }
+        return true;
     }
 
     public function sendCustomMsg($FromUserName, $ToUserName, $customMsgInfo, $match)
@@ -87,6 +92,14 @@ trait CustomMsgsTrait
                         ->setKfAccount($kf_account)
                         ->sendMpNews($ToUserName, $media_id);
                     break;
+                case 'mpnewsarticle':
+                    $kf_account = empty($customMsgInfo['kf_account']) ? "" : $customMsgInfo['kf_account'];
+                    $article_id = $customMsgInfo['article_id'];
+                    $custommsg = $objWeixin->getMsgManager()
+                        ->getCustomSender()
+                        ->setKfAccount($kf_account)
+                        ->sendMpNewsArticle($ToUserName, $article_id);
+                    break;
                 case 'msgmenu':
                     $kf_account = empty($customMsgInfo['kf_account']) ? "" : $customMsgInfo['kf_account'];
                     $msgmenu = empty($customMsgInfo['description']) ? array() : \json_decode($customMsgInfo['description'], true);
@@ -127,7 +140,34 @@ trait CustomMsgsTrait
         }
         // 记录日志
         $modelCustomMsgSendLog = new \App\Weixin2\Models\CustomMsg\SendLog();
-        $modelCustomMsgSendLog->record($customMsgInfo['component_appid'], $customMsgInfo['authorizer_appid'], $customMsgInfo['_id'], $customMsgInfo['name'], $customMsgInfo['msg_type'], $customMsgInfo['media'], $customMsgInfo['media_id'], $customMsgInfo['thumb_media'], $customMsgInfo['thumb_media_id'], $customMsgInfo['title'], $customMsgInfo['description'], $customMsgInfo['music'], $customMsgInfo['hqmusic'], $customMsgInfo['appid'], $customMsgInfo['pagepath'], $customMsgInfo['card_id'], $customMsgInfo['card_ext'], $customMsgInfo['kf_account'], $match['_id'], $match['keyword'], $match['custom_msg_type'], $ToUserName, $FromUserName, \App\Common\Utils\Helper::myJsonEncode($custommsg), time());
+        $modelCustomMsgSendLog->record(
+            $customMsgInfo['component_appid'],
+            $customMsgInfo['authorizer_appid'],
+            $customMsgInfo['_id'],
+            $customMsgInfo['name'],
+            $customMsgInfo['msg_type'],
+            $customMsgInfo['media'],
+            $customMsgInfo['media_id'],
+            $customMsgInfo['thumb_media'],
+            $customMsgInfo['thumb_media_id'],
+            $customMsgInfo['title'],
+            $customMsgInfo['description'],
+            $customMsgInfo['music'],
+            $customMsgInfo['hqmusic'],
+            $customMsgInfo['appid'],
+            $customMsgInfo['pagepath'],
+            $customMsgInfo['card_id'],
+            $customMsgInfo['card_ext'],
+            $customMsgInfo['article_id'],
+            $customMsgInfo['kf_account'],
+            $match['_id'],
+            $match['keyword'],
+            $match['custom_msg_type'],
+            $ToUserName,
+            $FromUserName,
+            \App\Common\Utils\Helper::myJsonEncode($custommsg),
+            time()
+        );
 
         return array(
             'is_ok' => $is_ok,
