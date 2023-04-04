@@ -17,7 +17,7 @@ trait DraftTrait
             }
         }
         $draft_id = $draftInfo['_id'];
-        $draftArticles = $modelDraftNews->getArticlesByDraftId($draft_id);
+        $draftArticles = $modelDraftNews->getArticlesByDraftId($draft_id, $draftInfo['authorizer_appid'], $draftInfo['component_appid']);
 
         if (empty($draftArticles)) {
             return new \Exception("草稿图文为空");
@@ -58,13 +58,17 @@ trait DraftTrait
         if (!empty($res['errcode'])) {
             throw new \Exception($res['errmsg'], $res['errcode']);
         }
-        $modelDraft->recordMediaId($draft_id, $res, time());
+
+        $now = time();
+        $modelDraft->recordMediaId($draft_id, $res, $now);
+        $modelDraftNews->recordMediaId($draft_id, $draftInfo['authorizer_appid'], $draftInfo['component_appid'], $res, $now);
         return $res;
     }
 
     public function deleteDraft($draftInfo)
     {
         $modelDraft = new \App\Weixin2\Models\Draft\Draft();
+        $modelDraftNews = new \App\Weixin2\Models\Draft\News();
         //标量变量是指那些包含了 integer、float、string 或 boolean的变量
         if (is_scalar($draftInfo)) {
             $draft_id = $draftInfo;
@@ -83,8 +87,25 @@ trait DraftTrait
         if (!empty($res['errcode'])) {
             throw new \Exception($res['errmsg'], $res['errcode']);
         }
-        $modelDraft->removeMediaId($draft_id, $res, time());
+        $now = time();
+        $modelDraft->removeMediaId($draft_id, $res, $now);
+        $modelDraftNews->removeMediaId($draft_id, $draftInfo['authorizer_appid'], $draftInfo['component_appid']);
 
+        return $res;
+    }
+
+    public function batchgetDraftNews($offset)
+    {        
+        $modelDraftNews = new \App\Weixin2\Models\Draft\News();
+        $count = 20;
+        $no_content = 0;
+        $res = $this->getWeixinObject()
+            ->getDraftManager()
+            ->batchget($offset, $count, $no_content);
+        if (!empty($res['errcode'])) {
+            throw new \Exception($res['errmsg'], $res['errcode']);
+        }
+        $modelDraftNews->syncDraftNews($this->authorizer_appid, $this->component_appid, $res, time());
         return $res;
     }
 }

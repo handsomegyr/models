@@ -22,6 +22,10 @@ class News extends Base
         $data['show_cover_pic'] = $this->changeToBoolean($data['show_cover_pic']);
         $data['need_open_comment'] = $this->changeToBoolean($data['need_open_comment']);
         // $data['only_fans_can_comment'] = $this->changeToBoolean($data['only_fans_can_comment']);
+        $data['update_time'] = $this->changeToValidDate($data['update_time']);
+        $data['create_time'] = $this->changeToValidDate($data['create_time']);
+        $data['is_exist'] = $this->changeToBoolean($data['is_exist']);
+        $data['sync_time'] = $this->changeToValidDate($data['sync_time']);
         return $data;
     }
 }
