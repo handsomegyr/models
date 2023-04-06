@@ -16,6 +16,7 @@ class Conditional extends \App\Common\Models\Weixin2\Menu\Conditional
             'matchrule' => $matchrule_id,
             'authorizer_appid' => $authorizer_appid,
             'component_appid' => $component_appid,
+            'is_show' => 1
         ), array('priority' => 1, '_id' => -1));
         return $ret;
     }
@@ -189,6 +190,16 @@ class Conditional extends \App\Common\Models\Weixin2\Menu\Conditional
             if (!empty($l['sub_button'])) {
                 $item['name'] = $l['name'];
                 $item['sub_button'] = $l['sub_button'];
+            } elseif (in_array($type, array(
+                'article_id',
+                'article_view_limited'
+            ))) {
+                // "type": "article_id",
+                // "name": "发布后的图文消息",
+                // "article_id": "ARTICLE_ID1"
+                $item["type"] = $l['type'];
+                $item["name"] = $l['name'];
+                $item["article_id"] = $l['article_id'];
             } elseif (in_array($type, array(
                 'media_id',
                 'view_limited'
